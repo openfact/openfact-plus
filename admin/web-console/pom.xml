@@ -65,35 +65,6 @@
             <artifactId>keycloak-adapter-spi</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <!-- Primefaces -->
-        <dependency>
-            <groupId>org.primefaces</groupId>
-            <artifactId>primefaces</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.primefaces.extensions</groupId>-->
-            <!--<artifactId>primefaces-extensions</artifactId>-->
-            <!--<scope>compile</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.primefaces.extensions</groupId>-->
-            <!--<artifactId>all-themes</artifactId>-->
-        <!--</dependency>-->
-
-        <dependency>
-            <groupId>net.bootsfaces</groupId>
-            <artifactId>bootsfaces</artifactId>
-            <version>1.0.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.omnifaces</groupId>
-            <artifactId>omnifaces</artifactId>
-            <version>2.6</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
