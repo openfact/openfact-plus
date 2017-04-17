@@ -24,13 +24,6 @@
             <artifactId>openfact-syncing-core</artifactId>
         </dependency>
 
-        <!--Resteasy-->
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- Apache Http -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

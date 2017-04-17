@@ -13,8 +13,9 @@
         <product.name>Openfact Syncing</product.name>
         <product.name-html>\u003Cdiv class="of-logo-text"\u003E\u003Cspan\u003EOpenfact\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E</product.name-html>
         <product.version>${project.version}</product.version>
-        <product.build-time>${timestamp}</product.build-time>
         <product.default-profile>community</product.default-profile>
+
+        <version.wildfly.swarm>2017.4.0</version.wildfly.swarm>
 
         <!-- WildFly -->
         <eap.version>7.0.0.Beta</eap.version>
@@ -95,7 +96,11 @@
 
         <!-- Test -->
         <junit.version>4.12</junit.version>
+
+        <!--Jdbc-->
         <h2.version>1.4.187</h2.version>
+        <version.postgresql>9.4.1212</version.postgresql>
+        <version.mysql>5.1.38</version.mysql>
 
         <!-- Others -->
         <freemarker.version>2.3.23</freemarker.version>
@@ -119,7 +124,7 @@
         <module>server-spi-private</module>
         <module>integration</module>
         <module>services</module>
-        <module>admin</module>
+        <module>distribution</module>
     </modules>
 
     <scm>
@@ -442,11 +447,22 @@
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
+
+            <!--jdbc-->
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>${h2.version}</version>
-                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${version.postgresql}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${version.mysql}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

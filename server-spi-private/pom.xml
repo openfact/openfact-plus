@@ -37,24 +37,6 @@
             <artifactId>ph-ubl21</artifactId>
         </dependency>
 
-        <!-- JSON -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.odysseus.staxon</groupId>
-            <artifactId>staxon-gson</artifactId>
-            <version>${version.odysseus-staxon}</version>
-        </dependency>
-
-        <!-- Jackson -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- Jboss logging -->
         <dependency>
             <groupId>org.jboss.logging</groupId>
