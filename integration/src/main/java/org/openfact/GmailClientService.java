@@ -26,9 +26,9 @@ import java.util.List;
 
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-public class GmailStartup {
+public class GmailClientService {
 
-    private static final Logger logger = Logger.getLogger(OpenfactStartup.class);
+    private static final Logger logger = Logger.getLogger(OpenfactService.class);
 
     private static final String APPLICATION_NAME = "OpenfactSyn Gmail API";
     private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.home"), ".credentials/gmail-openfact");
@@ -37,7 +37,7 @@ public class GmailStartup {
     private static HttpTransport HTTP_TRANSPORT;
     private static final List<String> SCOPES = Arrays.asList(GmailScopes.GMAIL_LABELS, GmailScopes.GMAIL_READONLY);
 
-    private Gmail service;
+    private Gmail clientService;
 
     @Resource
     private ManagedExecutorService managedExecutorService;
@@ -55,7 +55,7 @@ public class GmailStartup {
     @PostConstruct
     private void init() {
         try {
-            service = getGmailService();
+            clientService = getGmailService();
         } catch (IOException e) {
             logger.error("Cloud not start Google GMAIL API Service", e);
             System.exit(1);
@@ -63,8 +63,8 @@ public class GmailStartup {
     }
 
     @Lock(LockType.READ)
-    public Gmail getService() {
-        return this.service;
+    public Gmail getClientService() {
+        return this.clientService;
     }
 
     /**
@@ -75,7 +75,7 @@ public class GmailStartup {
      */
     private Credential authorize() throws IOException {
         // Load client secrets.
-        InputStream in = OpenfactStartup.class.getResourceAsStream("/META-INF/client_secret.json");
+        InputStream in = OpenfactService.class.getResourceAsStream("/META-INF/client_secret.json");
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
@@ -91,9 +91,9 @@ public class GmailStartup {
     }
 
     /**
-     * Build and return an authorized Gmail client service.
+     * Build and return an authorized Gmail client clientService.
      *
-     * @return an authorized Gmail client service
+     * @return an authorized Gmail client clientService
      * @throws IOException
      */
     private Gmail getGmailService() throws IOException {

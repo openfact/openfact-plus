@@ -18,7 +18,7 @@ public class JpaOpenfactProvider implements OpenfactProvider {
 
     @Override
     public SyncronizationModel getSyncronizationModel() {
-        return null;
+        return new SyncronizationAdapter(em);
     }
 
 }

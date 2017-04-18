@@ -35,7 +35,7 @@ public class JpaDocumentQuery implements DocumentQuery {
     }
 
     private DocumentModel toModel(DocumentEntity entity) {
-        return new DocumentAdapter(customerParty, em, entity);
+        return new DocumentAdapter(em, entity);
     }
 
     @Override

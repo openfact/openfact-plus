@@ -55,11 +55,9 @@ public class DocumentEntity {
     @Column(name = "DOCUMENT_TYPE")
     private String documentType;
 
-    @NotNull
     @Column(name = "ACCOUNTING_CUSTOMER_PARTY_ID")
     private String accountingCustomerPartyId;
 
-    @NotNull
     @Column(name = "XML_FILE_ID")
     private String xmlFileId;
 

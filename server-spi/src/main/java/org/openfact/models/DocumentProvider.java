@@ -22,7 +22,7 @@ public interface DocumentProvider {
 
     DocumentQuery createQuery(AccountingCustomerPartyModel customerParty);
 
-    DocumentModel addDocument(String documentType, String documentId, String xmlFileId, AccountingCustomerPartyModel customerParty) throws ModelException;
+    DocumentModel addDocument(String documentType, String documentId) throws ModelException;
 
     DocumentModel getDocumentById(String id, AccountingCustomerPartyModel customerParty);
 

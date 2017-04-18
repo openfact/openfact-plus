@@ -21,12 +21,10 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
 
     private static final Logger logger = Logger.getLogger(DocumentAdapter.class);
 
-    private AccountingCustomerPartyModel accountingCustomerPartyModel;
     private DocumentEntity document;
     private EntityManager em;
 
-    public DocumentAdapter(AccountingCustomerPartyModel accountingCustomerPartyModel, EntityManager em, DocumentEntity document) {
-        this.accountingCustomerPartyModel = accountingCustomerPartyModel;
+    public DocumentAdapter(EntityManager em, DocumentEntity document) {
         this.em = em;
         this.document = document;
     }
@@ -61,7 +59,7 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
 
     @Override
     public AccountingCustomerPartyModel getCustomerParty() {
-        return accountingCustomerPartyModel;
+        return null;
     }
 
     @Override

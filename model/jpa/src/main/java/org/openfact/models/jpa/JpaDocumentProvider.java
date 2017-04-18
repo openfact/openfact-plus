@@ -9,9 +9,7 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Stateless
 public class JpaDocumentProvider implements DocumentProvider {
@@ -46,16 +44,14 @@ public class JpaDocumentProvider implements DocumentProvider {
     }
 
     @Override
-    public DocumentModel addDocument(String documentType, String documentId, String xmlFileId, AccountingCustomerPartyModel customerParty) throws ModelException {
+    public DocumentModel addDocument(String documentType, String documentId) throws ModelException {
         DocumentEntity entity = new DocumentEntity();
         entity.setDocumentType(documentType.toUpperCase());
         entity.setDocumentId(documentId.toUpperCase());
-        entity.setXmlFileId(xmlFileId);
-        entity.setAccountingCustomerPartyId(customerParty.getId());
         em.persist(entity);
         em.flush();
 
-        final DocumentModel adapter = new DocumentAdapter(customerParty, em, entity);
+        final DocumentModel adapter = new DocumentAdapter(em, entity);
         event.fire(adapter);
 
         logger.debug("Document documentId[" + documentId + "] created");
@@ -64,9 +60,10 @@ public class JpaDocumentProvider implements DocumentProvider {
 
     @Override
     public DocumentModel getDocumentById(String id, AccountingCustomerPartyModel customerParty) {
-        DocumentEntity entity = em.find(DocumentEntity.class, id);
+        /*DocumentEntity entity = em.find(DocumentEntity.class, id);
         if (entity == null) return null;
-        return new DocumentAdapter(customerParty, em, entity);
+        return new DocumentAdapter(customerParty, em, entity);*/
+        return null;
     }
 
     @Override
@@ -92,7 +89,7 @@ public class JpaDocumentProvider implements DocumentProvider {
 
     @Override
     public List<DocumentModel> getDocuments(AccountingCustomerPartyModel customerParty, int firstResult, int maxResults) {
-        TypedQuery<DocumentEntity> query = em.createNamedQuery("getAllDocumentsByAccountingCustomerParty", DocumentEntity.class);
+        /*TypedQuery<DocumentEntity> query = em.createNamedQuery("getAllDocumentsByAccountingCustomerParty", DocumentEntity.class);
         query.setParameter("accountingCustomerPartyId", customerParty.getId());
         if (firstResult != -1) {
             query.setFirstResult(firstResult);
@@ -102,6 +99,7 @@ public class JpaDocumentProvider implements DocumentProvider {
         }
         return query.getResultList().stream()
                 .map(entity -> new DocumentAdapter(customerParty, em, entity))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
+        return null;
     }
 }
