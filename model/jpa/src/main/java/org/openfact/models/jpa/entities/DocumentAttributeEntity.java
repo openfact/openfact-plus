@@ -24,26 +24,26 @@
 package org.openfact.models.jpa.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "DOCUMENT_ATTRIBUTE")
+@IdClass(DocumentAttributeEntity.Key.class)
 @NamedQueries({
         @NamedQuery(name = "getDocumentAttributesByNameAndValue", query = "select attr from DocumentAttributeEntity attr where attr.name = :name and attr.value = :value"),
-        @NamedQuery(name = "deleteDocumentAttributesByAccountingCustomerParty", query = "delete from DocumentAttributeEntity attr where attr.document IN (select doc from DocumentEntity doc where doc.accountingCustomerPartyId=:accountingCustomerPartyId)"),
+        @NamedQuery(name = "deleteDocumentAttributesByAccountingSupplierParty", query = "delete from DocumentAttributeEntity attr where attr.document IN (select doc from DocumentEntity doc where doc.supplierPartyAssignedAccountId=:supplierPartyAssignedAccountId)"),
+        @NamedQuery(name = "deleteDocumentAttributesByAccountingCustomerParty", query = "delete from DocumentAttributeEntity attr where attr.document IN (select doc from DocumentEntity doc where doc.customerPartyAssignedAccountId=:customerPartyAssignedAccountId)"),
         @NamedQuery(name = "deleteDocumentAttributesByNameAndDocumentPkId", query = "delete from  DocumentAttributeEntity attr where attr.document.id = :documentPkId and attr.name = :name"),
         @NamedQuery(name = "deleteDocumentAttributesByNameAndDocumentPkIdOtherThan", query = "delete from  DocumentAttributeEntity attr where attr.document.id = :documentPkId and attr.name = :name and attr.id <> :attrId")
 })
 public class DocumentAttributeEntity {
 
     @Id
-    @Column(name = "ID", length = 36)
-    @Access(AccessType.PROPERTY)
-    private String id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey, name = "DOCUMENT_ID")
     private DocumentEntity document;
 
+    @Id
     @Column(name = "NAME")
     private String name;
 
@@ -53,12 +53,12 @@ public class DocumentAttributeEntity {
     @Column(name = "className")
     private String className;
 
-    public String getId() {
-        return id;
+    public DocumentEntity getDocument() {
+        return document;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setDocument(DocumentEntity document) {
+        this.document = document;
     }
 
     public String getName() {
@@ -77,14 +77,6 @@ public class DocumentAttributeEntity {
         this.value = value;
     }
 
-    public DocumentEntity getDocument() {
-        return document;
-    }
-
-    public void setDocument(DocumentEntity document) {
-        this.document = document;
-    }
-
     public String getClassName() {
         return className;
     }
@@ -93,22 +85,48 @@ public class DocumentAttributeEntity {
         this.className = className;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        if (!(o instanceof DocumentAttributeEntity)) return false;
+    public static class Key implements Serializable {
 
-        DocumentAttributeEntity that = (DocumentAttributeEntity) o;
+        protected DocumentEntity document;
 
-        if (!id.equals(that.getId())) return false;
+        protected String name;
 
-        return true;
-    }
+        public Key() {
+        }
 
-    @Override
-    public int hashCode() {
-        return id.hashCode();
+        public Key(DocumentEntity document, String name) {
+            this.document = document;
+            this.name = name;
+        }
+
+        public DocumentEntity getDocument() {
+            return document;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            DocumentAttributeEntity.Key key = (DocumentAttributeEntity.Key) o;
+
+            if (name != null ? !name.equals(key.name) : key.name != null) return false;
+            if (document != null ? !document.getId().equals(key.document != null ? key.document.getId() : null) : key.document != null)
+                return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = document != null ? document.getId().hashCode() : 0;
+            result = 31 * result + (name != null ? name.hashCode() : 0);
+            return result;
+        }
     }
 
 }

@@ -31,7 +31,8 @@ import java.io.Serializable;
 @IdClass(DocumentLineAttributeEntity.Key.class)
 @NamedQueries({
         @NamedQuery(name = "getDocumentLineAttributesByNameAndValue", query = "select attr from DocumentLineAttributeEntity attr where attr.name = :name and attr.value = :value"),
-        @NamedQuery(name = "deleteDocumentLineAttributesByAccountingCustomerParty", query = "delete from DocumentLineAttributeEntity attr where attr.documentLine IN (select line from DocumentLineEntity line join line.document doc where doc.accountingCustomerPartyId=:accountingCustomerPartyId)")
+        @NamedQuery(name = "deleteDocumentLineAttributesByAccountingSupplierParty", query = "delete from DocumentLineAttributeEntity attr where attr.documentLine IN (select line from DocumentLineEntity line join line.document doc where doc.supplierPartyAssignedAccountId=:supplierPartyAssignedAccountId)"),
+        @NamedQuery(name = "deleteDocumentLineAttributesByAccountingCustomerParty", query = "delete from DocumentLineAttributeEntity attr where attr.documentLine IN (select line from DocumentLineEntity line join line.document doc where doc.customerPartyAssignedAccountId=:customerPartyAssignedAccountId)")
 })
 public class DocumentLineAttributeEntity {
 

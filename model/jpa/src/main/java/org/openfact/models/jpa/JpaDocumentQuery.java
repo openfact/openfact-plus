@@ -1,6 +1,5 @@
 package org.openfact.models.jpa;
 
-import org.openfact.models.AccountingCustomerPartyModel;
 import org.openfact.models.Constants;
 import org.openfact.models.DocumentModel;
 import org.openfact.models.DocumentQuery;
@@ -22,16 +21,13 @@ public class JpaDocumentQuery implements DocumentQuery {
     private DocumentCriteria<DocumentEntity, DocumentEntity> query;
     private DocumentCriteria<DocumentEntity, Long> queryCount;
 
-    private AccountingCustomerPartyModel customerParty;
     private EntityManager em;
 
-
-    public JpaDocumentQuery(EntityManager em, AccountingCustomerPartyModel customerParty) {
+    public JpaDocumentQuery(EntityManager em, String assignedAccountId, boolean isSupplierParty) {
         this.em = em;
-        this.customerParty = customerParty;
 
-        this.query = new DocumentCriteria<>(customerParty, em, DocumentEntity.class, DocumentEntity.class);
-        this.queryCount = new DocumentCriteria<>(customerParty, em, DocumentEntity.class, Long.class);
+        this.query = new DocumentCriteria<>(assignedAccountId, isSupplierParty, em, DocumentEntity.class, DocumentEntity.class);
+        this.queryCount = new DocumentCriteria<>(assignedAccountId, isSupplierParty, em, DocumentEntity.class, Long.class);
     }
 
     private DocumentModel toModel(DocumentEntity entity) {
@@ -40,16 +36,6 @@ public class JpaDocumentQuery implements DocumentQuery {
 
     @Override
     public DocumentQuery filterText(String filterText) {
-        return null;
-    }
-
-    @Override
-    public DocumentQuery supplier(String supplierAssignedAccountId) {
-        return null;
-    }
-
-    @Override
-    public DocumentQuery supplier(String supplierAssignedAccountId, String supplierAddtionalAccountId) {
         return null;
     }
 

@@ -1,12 +1,12 @@
 package org.openfact.models.jpa;
 
-import org.openfact.models.jpa.entities.SyncronizationEntity;
+import org.openfact.models.jpa.entities.SynchronizationEntity;
 import org.openfact.syncronization.SyncronizationModel;
 
 import javax.persistence.EntityManager;
 import java.math.BigInteger;
 
-public class SyncronizationAdapter implements SyncronizationModel{
+public class SyncronizationAdapter implements SyncronizationModel {
 
     private EntityManager em;
 
@@ -16,21 +16,21 @@ public class SyncronizationAdapter implements SyncronizationModel{
 
     @Override
     public BigInteger getHistoryId() {
-        SyncronizationEntity entity = em.find(SyncronizationEntity.class, SyncronizationEntity.SINGLETON_ID);
+        SynchronizationEntity entity = em.find(SynchronizationEntity.class, SynchronizationEntity.SINGLETON_ID);
         if (entity == null) return null;
-        return entity.getHistoryId();
+        return entity.getStartHistoryId();
     }
 
     @Override
     public void setHistoryId(BigInteger historyId) {
-        SyncronizationEntity entity = em.find(SyncronizationEntity.class, SyncronizationEntity.SINGLETON_ID);
+        SynchronizationEntity entity = em.find(SynchronizationEntity.class, SynchronizationEntity.SINGLETON_ID);
         if (entity == null) {
-            entity = new SyncronizationEntity();
-            entity.setId(SyncronizationEntity.SINGLETON_ID);
-            entity.setHistoryId(historyId);
+            entity = new SynchronizationEntity();
+            entity.setId(SynchronizationEntity.SINGLETON_ID);
+            entity.setStartHistoryId(historyId);
             em.persist(entity);
         } else {
-            entity.setHistoryId(historyId);
+            entity.setStartHistoryId(historyId);
             em.flush();
         }
     }

@@ -35,8 +35,10 @@ import java.util.Collection;
 @Entity
 @Table(name = "DOCUMENT")
 @NamedQueries({
-        @NamedQuery(name = "getAllDocumentsByAccountingCustomerParty", query = "select d from DocumentEntity d where d.accountingCustomerPartyId =:accountingCustomerPartyId"),
-        @NamedQuery(name = "deleteDocumentsByAccountingCustomerParty", query = "delete from DocumentEntity d where d.accountingCustomerPartyId=:accountingCustomerPartyId")
+        @NamedQuery(name = "getAllDocumentsByAccountingSupplierParty", query = "select d from DocumentEntity d where d.supplierPartyAssignedAccountId =:supplierPartyAssignedAccountId"),
+        @NamedQuery(name = "getAllDocumentsByAccountingCustomerParty", query = "select d from DocumentEntity d where d.customerPartyAssignedAccountId =:customerPartyAssignedAccountId"),
+        @NamedQuery(name = "deleteDocumentsByAccountingSupplierParty", query = "delete from DocumentEntity d where d.supplierPartyAssignedAccountId =:supplierPartyAssignedAccountId"),
+        @NamedQuery(name = "deleteDocumentsByAccountingCustomerParty", query = "delete from DocumentEntity d where d.customerPartyAssignedAccountId =:customerPartyAssignedAccountId")
 })
 public class DocumentEntity {
 
@@ -55,12 +57,6 @@ public class DocumentEntity {
     @Column(name = "DOCUMENT_TYPE")
     private String documentType;
 
-    @Column(name = "ACCOUNTING_CUSTOMER_PARTY_ID")
-    private String accountingCustomerPartyId;
-
-    @Column(name = "XML_FILE_ID")
-    private String xmlFileId;
-
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @Column(name = "CREATED_TIMESTAMP")
     private LocalDateTime issueDate;
@@ -68,18 +64,18 @@ public class DocumentEntity {
     @Column(name = "DOCUMENT_CURRENCY_CODE")
     private String documentCurrencyCode;
 
-    @Column(name = "SUPPLIER_ASSIGNED_ACCOUNT_ID")
-    private String supplierAssignedAccountId;
+    @NotNull
+    @Column(name = "SUPPLIER_PARTY_ASSIGNED_ACCOUNT_ID")
+    private String supplierPartyAssignedAccountId;
 
-    @Column(name = "SUPPLIER_ADDITIONAL_ACCOUNT_ID")
-    private String supplierAdditonalAccountId;
+    @Column(name = "CUSTOMER_PARTY_ASSIGNED_ACCOUNT_ID")
+    private String customerPartyAssignedAccountId;
 
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "document")
+    @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true, mappedBy = "document", fetch = FetchType.LAZY)
     private Collection<DocumentAttributeEntity> attributes = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true, mappedBy = "document", fetch = FetchType.LAZY)
     private Collection<DocumentLineEntity> lines = new ArrayList<>();
-
 
     public String getId() {
         return id;
@@ -105,22 +101,6 @@ public class DocumentEntity {
         this.documentType = documentType;
     }
 
-    public String getAccountingCustomerPartyId() {
-        return accountingCustomerPartyId;
-    }
-
-    public void setAccountingCustomerPartyId(String accountingCustomerPartyId) {
-        this.accountingCustomerPartyId = accountingCustomerPartyId;
-    }
-
-    public String getXmlFileId() {
-        return xmlFileId;
-    }
-
-    public void setXmlFileId(String xmlFileId) {
-        this.xmlFileId = xmlFileId;
-    }
-
     public LocalDateTime getIssueDate() {
         return issueDate;
     }
@@ -137,20 +117,20 @@ public class DocumentEntity {
         this.documentCurrencyCode = documentCurrencyCode;
     }
 
-    public String getSupplierAssignedAccountId() {
-        return supplierAssignedAccountId;
+    public String getSupplierPartyAssignedAccountId() {
+        return supplierPartyAssignedAccountId;
     }
 
-    public void setSupplierAssignedAccountId(String supplierAssignedAccountId) {
-        this.supplierAssignedAccountId = supplierAssignedAccountId;
+    public void setSupplierPartyAssignedAccountId(String supplierPartyAssignedAccountId) {
+        this.supplierPartyAssignedAccountId = supplierPartyAssignedAccountId;
     }
 
-    public String getSupplierAdditonalAccountId() {
-        return supplierAdditonalAccountId;
+    public String getCustomerPartyAssignedAccountId() {
+        return customerPartyAssignedAccountId;
     }
 
-    public void setSupplierAdditonalAccountId(String supplierAdditonalAccountId) {
-        this.supplierAdditonalAccountId = supplierAdditonalAccountId;
+    public void setCustomerPartyAssignedAccountId(String customerPartyAssignedAccountId) {
+        this.customerPartyAssignedAccountId = customerPartyAssignedAccountId;
     }
 
     public Collection<DocumentAttributeEntity> getAttributes() {
@@ -168,4 +148,5 @@ public class DocumentEntity {
     public void setLines(Collection<DocumentLineEntity> lines) {
         this.lines = lines;
     }
+
 }

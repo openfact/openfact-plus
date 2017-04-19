@@ -5,7 +5,7 @@ import java.math.BigInteger;
 
 @Entity
 @Table(name = "SYNCRONIZATION")
-public class SyncronizationEntity {
+public class SynchronizationEntity {
 
     public static final String SINGLETON_ID = "SINGLETON";
 
@@ -15,7 +15,7 @@ public class SyncronizationEntity {
     private String id;
 
     @Column(name = "HISTORY_ID")
-    private BigInteger historyId;
+    private BigInteger startHistoryId;
 
     public String getId() {
         return id;
@@ -25,21 +25,21 @@ public class SyncronizationEntity {
         this.id = id;
     }
 
-    public BigInteger getHistoryId() {
-        return historyId;
+    public BigInteger getStartHistoryId() {
+        return startHistoryId;
     }
 
-    public void setHistoryId(BigInteger historyId) {
-        this.historyId = historyId;
+    public void setStartHistoryId(BigInteger historyId) {
+        this.startHistoryId = historyId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        if (!(o instanceof SyncronizationEntity)) return false;
+        if (!(o instanceof SynchronizationEntity)) return false;
 
-        SyncronizationEntity that = (SyncronizationEntity) o;
+        SynchronizationEntity that = (SynchronizationEntity) o;
 
         if (!id.equals(that.id)) return false;
 

@@ -11,9 +11,6 @@ public interface DocumentQuery {
 
     DocumentQuery filterText(String filterText);
 
-    DocumentQuery supplier(String supplierAssignedAccountId);
-    DocumentQuery supplier(String supplierAssignedAccountId, String supplierAddtionalAccountId);
-
     DocumentQuery currencyCode(String... currencyCode);
     DocumentQuery documentType(String... documentType);
 

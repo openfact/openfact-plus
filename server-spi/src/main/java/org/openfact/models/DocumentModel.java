@@ -7,30 +7,26 @@ import java.util.Map;
 
 public interface DocumentModel {
 
-    String ACCOUNTING_CUSTOMER_PARTY_ID = "accountingCustomerPartyId";
     String DOCUMENT_TYPE = "documentType";
     String DOCUMENT_CURRENCY_CODE = "documentCurrencyCode";
-    String CUSTOMER_REGISTRATION_NAME = "customerRegistrationName";
-    String CUSTOMER_ASSIGNED_ACCOUNT_ID = "customerAssignedAccountId";
     String ISSUE_DATE = "issueDate";
 
     String getId();
 
     String getDocumentId();
     String getDocumentType();
-    AccountingCustomerPartyModel getCustomerParty();
 
     LocalDateTime getIssueDate();
     void setIssueDate(LocalDateTime issueDate);
 
-    String getXmlFileId();
-    void setXmlFileId(String xmlFileId);
+    String getDocumentCurrencyCode();
+    void setDocumentCurrencyCode(String documentCurrencyCode);
 
     String getSupplierAssignedAccountId();
     void setSupplierAssignedAccountId(String supplierAssignedAccountId);
 
-    String getSupplierAdditionalAcountId();
-    void setSupplierAdditionalAccountId(String supplierAdditionalAccountId);
+    String getCustomerAssignedAccountId();
+    void setCustomerAssignedAccountId(String customerAssignedAccountId);
 
     /**
      * Attributes

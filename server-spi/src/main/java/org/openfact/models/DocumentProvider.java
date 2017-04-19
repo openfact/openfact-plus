@@ -1,37 +1,22 @@
-/*******************************************************************************
- * Copyright 2016 Sistcoop, Inc. and/or its affiliates
- * and other contributors as indicated by the @author tags.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 package org.openfact.models;
 
 import java.util.List;
 
 public interface DocumentProvider {
 
-    DocumentQuery createQuery(AccountingCustomerPartyModel customerParty);
+    DocumentQuery createQueryBySupplier(String supplierAssignedAccountId);
+    DocumentQuery createQueryByCustomer(String customerAssignedAccountId);
 
-    DocumentModel addDocument(String documentType, String documentId) throws ModelException;
+    DocumentModel addDocument(String documentType, String documentId, String supplierAssignedAccountId) throws ModelException;
 
-    DocumentModel getDocumentById(String id, AccountingCustomerPartyModel customerParty);
-
-    void preRemove(AccountingCustomerPartyModel customerParty);
+    DocumentModel getDocumentById(String id);
 
     boolean removeDocument(String id);
 
-    List<DocumentModel> getDocuments(AccountingCustomerPartyModel customerParty);
+    List<DocumentModel> getDocumentsBySupplier(String supplierAssignedAccountId);
+    List<DocumentModel> getDocumentsBySupplier(String supplierAssignedAccountId, int firstResult, int maxResults);
 
-    List<DocumentModel> getDocuments(AccountingCustomerPartyModel customerParty, int firstResult, int maxResults);
+    List<DocumentModel> getDocumentsByCustomer(String customerAssignedAccountId);
+    List<DocumentModel> getDocumentsByCustomer(String customerAssignedAccountId, int firstResult, int maxResults);
 
 }

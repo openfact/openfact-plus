@@ -1,6 +1,5 @@
 package org.openfact.models.jpa;
 
-import org.openfact.models.AccountingCustomerPartyModel;
 import org.openfact.models.DocumentModel;
 import org.openfact.models.search.SearchCriteriaFilterOperator;
 
@@ -20,7 +19,7 @@ public class DocumentCriteria<R, Q> {
     private final ArrayList<Predicate> predicates;
     private Map<String, Boolean> orderBy;
 
-    public DocumentCriteria(AccountingCustomerPartyModel customerParty, EntityManager em, Class<R> rClass, Class<Q> qClass) {
+    public DocumentCriteria(String assignedAccountId, boolean isSupplierParty, EntityManager em, Class<R> rClass, Class<Q> qClass) {
         this.em = em;
 
         cb = em.getCriteriaBuilder();
@@ -30,7 +29,11 @@ public class DocumentCriteria<R, Q> {
 
         orderBy = new HashMap<>();
 
-        this.predicates.add(cb.equal(root.get(JpaDocumentProvider.ACCOUNTING_CUSTOMER_PARTY_ID), customerParty.getId()));
+        if (isSupplierParty) {
+            this.predicates.add(cb.equal(root.get(JpaDocumentProvider.SUPPLIER_PARTY_ASSIGNED_ACCOUNT_ID), assignedAccountId));
+        } else {
+            this.predicates.add(cb.equal(root.get(JpaDocumentProvider.CUSTOMER_PARTY_ASSIGNED_ACCOUNT_ID), assignedAccountId));
+        }
     }
 
     public DocumentCriteria<R, Q> currencyCode(String... currencyCode) {
@@ -61,41 +64,18 @@ public class DocumentCriteria<R, Q> {
         return this;
     }
 
-    public void customerSendEventFailures(int numberFailures, boolean greatherThan) {
-        if (greatherThan) {
-            predicates.add(cb.greaterThan(root.get(JpaDocumentProvider.CUSTOMER_SEND_EVENT_FAILURES), numberFailures));
-        } else {
-            predicates.add(cb.lessThan(root.get(JpaDocumentProvider.CUSTOMER_SEND_EVENT_FAILURES), numberFailures));
-        }
-    }
-
-    public void thirdPartySendEventFailures(int numberFailures, boolean greatherThan) {
-        if (greatherThan) {
-            predicates.add(cb.greaterThan(root.get(JpaDocumentProvider.THIRD_PARTY_SEND_EVENT_FAILURES), numberFailures));
-        } else {
-            predicates.add(cb.lessThan(root.get(JpaDocumentProvider.THIRD_PARTY_SEND_EVENT_FAILURES), numberFailures));
-        }
-    }
-
     public void enabled(boolean isEnabled) {
         this.predicates.add(cb.equal(root.get(JpaDocumentProvider.ENABLED), isEnabled));
     }
 
     public DocumentCriteria<R, Q> addFilter(String key, String value) {
-        if (key.equals(DocumentModel.ACCOUNTING_CUSTOMER_PARTY_ID)) {
-            predicates.add(cb.equal(cb.upper(root.get(JpaDocumentProvider.DOCUMENT_ID)), value.toUpperCase()));
-        } else if (key.equals(DocumentModel.DOCUMENT_TYPE)) {
+        if (key.equals(DocumentModel.DOCUMENT_TYPE)) {
             predicates.add(cb.equal(cb.upper(root.get(JpaDocumentProvider.DOCUMENT_TYPE)), value.toUpperCase()));
         } else if (key.equals(DocumentModel.DOCUMENT_CURRENCY_CODE)) {
             predicates.add(cb.equal(cb.upper(root.get(JpaDocumentProvider.DOCUMENT_CURRENCY_CODE)), value.toUpperCase()));
-        } else if (key.equals(DocumentModel.CUSTOMER_ASSIGNED_ACCOUNT_ID)) {
-            predicates.add(cb.equal(cb.upper(root.get(JpaDocumentProvider.CUSTOMER_ASSIGNED_ACCOUNT_ID)), value.toUpperCase()));
-        } else if (key.equals(DocumentModel.CUSTOMER_REGISTRATION_NAME)) {
-            predicates.add(cb.equal(cb.upper(root.get(JpaDocumentProvider.CUSTOMER_REGISTRATION_NAME)), value.toUpperCase()));
         } else {
             predicates.add(cb.equal(cb.upper(root.get(key)), value.toUpperCase()));
         }
-
         return this;
     }
 
@@ -103,7 +83,6 @@ public class DocumentCriteria<R, Q> {
         for (Map.Entry<String, String> entry : filters.entrySet()) {
             addFilter(entry.getKey(), entry.getValue());
         }
-
         return this;
     }
 

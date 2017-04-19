@@ -1,7 +1,6 @@
 package org.openfact.models.jpa;
 
 import org.jboss.logging.Logger;
-import org.openfact.models.AccountingCustomerPartyModel;
 import org.openfact.models.DocumentLineModel;
 import org.openfact.models.DocumentModel;
 import org.openfact.models.jpa.entities.DocumentAttributeEntity;
@@ -58,11 +57,6 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public AccountingCustomerPartyModel getCustomerParty() {
-        return null;
-    }
-
-    @Override
     public LocalDateTime getIssueDate() {
         return document.getIssueDate();
     }
@@ -73,35 +67,37 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public String getXmlFileId() {
-        return document.getXmlFileId();
+    public String getDocumentCurrencyCode() {
+        return document.getDocumentCurrencyCode();
     }
 
     @Override
-    public void setXmlFileId(String xmlFileId) {
-        document.setXmlFileId(xmlFileId);
+    public void setDocumentCurrencyCode(String documentCurrencyCode) {
+        document.setDocumentCurrencyCode(documentCurrencyCode);
     }
 
     @Override
     public String getSupplierAssignedAccountId() {
-        return document.getSupplierAssignedAccountId();
+        return document.getSupplierPartyAssignedAccountId();
     }
 
     @Override
     public void setSupplierAssignedAccountId(String supplierAssignedAccountId) {
-        document.setSupplierAssignedAccountId(supplierAssignedAccountId);
+        document.setSupplierPartyAssignedAccountId(supplierAssignedAccountId);
     }
 
     @Override
-    public String getSupplierAdditionalAcountId() {
-        return document.getSupplierAdditonalAccountId();
+    public String getCustomerAssignedAccountId() {
+        return document.getCustomerPartyAssignedAccountId();
     }
 
     @Override
-    public void setSupplierAdditionalAccountId(String supplierAdditionalAccountId) {
-        document.setSupplierAdditonalAccountId(supplierAdditionalAccountId);
+    public void setCustomerAssignedAccountId(String customerAssignedAccountId) {
+        document.setCustomerPartyAssignedAccountId(customerAssignedAccountId);
     }
 
+    /*
+    * Attributes*/
     public void setAttribute(String name, String value, String className) {
         for (DocumentAttributeEntity attr : document.getAttributes()) {
             if (attr.getName().equals(name)) {

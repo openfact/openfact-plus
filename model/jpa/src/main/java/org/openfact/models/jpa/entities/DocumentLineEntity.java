@@ -9,7 +9,8 @@ import java.util.Collection;
 @Entity
 @Table(name = "DOCUMENT_LINE")
 @NamedQueries(value = {
-        @NamedQuery(name = "deleteDocumentLinesByAccountingCustomerParty", query = "delete from DocumentLineEntity l where l.document IN (select doc from DocumentEntity doc where doc.accountingCustomerPartyId=:accountingCustomerPartyId)")
+        @NamedQuery(name = "deleteDocumentLinesByAccountingSupplierParty", query = "delete from DocumentLineEntity l where l.document IN (select doc from DocumentEntity doc where doc.supplierPartyAssignedAccountId=:supplierPartyAssignedAccountId)"),
+        @NamedQuery(name = "deleteDocumentLinesByAccountingCustomerParty", query = "delete from DocumentLineEntity l where l.document IN (select doc from DocumentEntity doc where doc.customerPartyAssignedAccountId=:customerPartyAssignedAccountId)")
 })
 public class DocumentLineEntity {
 
@@ -50,4 +51,5 @@ public class DocumentLineEntity {
     public void setAttributes(Collection<DocumentLineAttributeEntity> attributes) {
         this.attributes = attributes;
     }
+
 }
