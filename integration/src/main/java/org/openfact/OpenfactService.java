@@ -4,15 +4,25 @@ import com.google.api.client.googleapis.batch.BatchRequest;
 import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
 import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.http.HttpHeaders;
+import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
+import com.google.api.services.gmail.model.MessagePart;
+import com.google.api.services.gmail.model.MessagePartBody;
 import com.google.common.collect.Lists;
+import com.helger.ubl21.UBL21Reader;
+import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
+import oasis.names.specification.ubl.schema.xsd.debitnote_21.DebitNoteType;
+import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
 import org.jboss.logging.Logger;
+import org.openfact.common.converts.DocumentUtils;
 import org.openfact.models.DocumentProvider;
 import org.openfact.models.ModelException;
 import org.openfact.models.OpenfactProvider;
+import org.openfact.services.managers.DocumentManager;
 import org.openfact.syncronization.SyncronizationModel;
-import org.openfact.util.FindMaxHistoryIdTask;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -30,7 +40,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -55,6 +64,9 @@ public class OpenfactService {
     @Inject
     private DocumentProvider documentProvider;
 
+    @Inject
+    private DocumentManager documentManager;
+
     @PostConstruct
     private void init() {
         SyncronizationModel syncronizationModel = openfactProvider.getSyncronizationModel();
@@ -69,6 +81,8 @@ public class OpenfactService {
     public Optional<BigInteger> synchronize(BigInteger startHistoryId) throws ModelException {
         Gmail gmailClient = gmailService.getClientService();
 
+        String query = "filename:xml";
+
         GmailSync gmailSync = new GmailSync(gmailClient);
         GmailSync.WrapperMessage messages;
         if (startHistoryId != null) {
@@ -76,9 +90,9 @@ public class OpenfactService {
                 messages = gmailSync.getMessages(startHistoryId);
             } catch (IOException e) {
                 logger.warn("Could not retrieve messages from Partial Sync StartHistoryId[" + startHistoryId + "]");
-                logger.info("Trying to retrieve messages on Full Sync mode...");
                 try {
-                    messages = gmailSync.getMessages();
+                    logger.info("Trying to retrieve messages on Full Sync mode...");
+                    messages = gmailSync.getMessages(query);
                 } catch (IOException e1) {
                     logger.error("Could not retrieve messages from Full Sync mode");
                     throw new ModelException("Could not read messages on both Full and Partial Sync modes");
@@ -86,7 +100,7 @@ public class OpenfactService {
             }
         } else {
             try {
-                messages = gmailSync.getMessages();
+                messages = gmailSync.getMessages(query);
             } catch (IOException e) {
                 logger.error("Could not retrieve messages from Full Sync mode");
                 throw new ModelException("Could not read messages on Full Sync mode");
@@ -104,29 +118,16 @@ public class OpenfactService {
         }
 
         try {
-            CompletableFuture[] addedCompletableFutures = addedFutures.toArray(new CompletableFuture[addedFutures.size()]);
-            List<Message> addedMessages = CompletableFuture.allOf(addedCompletableFutures)
-                    .thenApply(v -> addedFutures.stream()
-                            .map(CompletableFuture::join)
-                            .collect(Collectors.toList())
-                    ).get().stream()
+            List<Message> addedMessages = asyn(addedFutures).get().stream()
                     .flatMap(Collection::stream)
                     .collect(Collectors.toList());
 
-            // Finding last historyId
-            ForkJoinPool pool = new ForkJoinPool();
-            FindMaxHistoryIdTask task = new FindMaxHistoryIdTask(addedMessages, 0, addedMessages.size()-1, addedMessages.size()/16);
-
-            CompletableFuture[] deletedCompletableFutures = deletedFutures.toArray(new CompletableFuture[deletedFutures.size()]);
-            List<Message> deletedMessages = CompletableFuture.allOf(addedCompletableFutures)
-                    .thenApply(v -> deletedFutures.stream()
-                            .map(CompletableFuture::join)
-                            .collect(Collectors.toList())
-                    ).get().stream()
+            List<Message> deletedMessages = asyn(deletedFutures).get().stream()
                     .flatMap(Collection::stream)
                     .collect(Collectors.toList());
 
-
+            processAddedMessages(addedMessages);
+            processDeletedMessages(deletedMessages);
         } catch (InterruptedException | ExecutionException e) {
             logger.error("Batch execution exception, could not complete reading messages", e);
             throw new ModelException("Batch execution exception, could not complete reading messages", e);
@@ -135,45 +136,64 @@ public class OpenfactService {
         return null;
     }
 
-   /* private static void findLargestFuture(List<Message> messages) throws Exception {
-        List<Future<Long>> futures = new ArrayList<>();
+    private void processAddedMessages(List<Message> messages) throws ModelException {
+        try {
+            for (Message message : messages) {
+                List<MessagePart> parts = message.getPayload().getParts();
+                for (MessagePart part : parts) {
+                    String filename = part.getFilename();
+                    if (filename != null && filename.length() > 0 && filename.endsWith(".xml")) {
+                        String attachmentId = part.getBody().getAttachmentId();
+                        MessagePartBody messagePartBody = gmailService.getClientService().users().messages().attachments().get("me", message.getId(), attachmentId).execute();
 
-        for (int start = 0; start < messages.size(); start++) {
-            final int s = start;
-            if (messages.get(s).getHistoryId().compareTo(BigInteger.ZERO) > 0) {
-                futures.add(CompletableFuture.supplyAsync(() -> {
-                    BigInteger maxresult = messages.get(s).getHistoryId(); //seed
-                    for (int end = s; end < messages.size(); end++) {
-                        BigInteger testvalue = messages.get(end).getHistoryId();
-                        if (testvalue.compareTo(BigInteger.ZERO) > 0) {
-                            List<Message> tester = messages.subList(s, end + 1);
-                            long testresult = sum(tester);
-                            numTries.increment();
-                            if (maxresult < testresult) {
-                                maxresult = testresult;
-                            }
-                        } else if (testvalue > maxresult) {
-                            maxresult = testvalue;
+                        Base64 base64url = new Base64(true);
+                        byte[] fileByteArray = base64url.decodeBase64(messagePartBody.getData());
+
+                        Document xml;
+                        try {
+                            xml = DocumentUtils.byteToDocument(fileByteArray);
+                        } catch (Exception e) {
+                            logger.error("Error transforming bytes to xml");
+                            continue;
+                        }
+                        Element documentElement = xml.getDocumentElement();
+                        String documentType = documentElement.getTagName();
+                        switch (documentType) {
+                            case "Invoice":
+                                InvoiceType invoiceType = UBL21Reader.invoice().read(fileByteArray);
+                                documentManager.addDocument(invoiceType);
+                                break;
+                            case "CreditNote":
+                                CreditNoteType creditNoteType = UBL21Reader.creditNote().read(fileByteArray);
+                                documentManager.addDocument(creditNoteType);
+                                break;
+                            case "DebitNote":
+                                DebitNoteType debitNoteType = UBL21Reader.debitNote().read(fileByteArray);
+                                documentManager.addDocument(debitNoteType);
+                                break;
+                            default:
+                                logger.warn("Invalid DocumentType to read");
                         }
                     }
-                    return maxresult;
-                });
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        long result = futures.stream()
-                .map(f -> {
-                    try {
-                        return f.get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        throw new RuntimeException(e);
-                    }
-                }).max(Long::compare)
-                // if all values are negative, get the biggest one
-                .orElseGet(() ->(long)messages.stream().max(Integer::compare).get());
-        System.out.println("Total execution time: " + (System.currentTimeMillis() - starttime));
-        System.out.println("Largest Sum: " + result);
-        System.out.println("Number of searches " + numTries);
-    }*/
+    }
+
+    private void processDeletedMessages(List<Message> messages) {
+
+    }
+
+    private CompletableFuture<List<List<Message>>> asyn(List<CompletableFuture<List<Message>>> futures) throws ExecutionException, InterruptedException {
+        CompletableFuture[] completableFutures = futures.toArray(new CompletableFuture[futures.size()]);
+        return CompletableFuture.allOf(completableFutures)
+                .thenApply(v -> futures.stream()
+                        .map(CompletableFuture::join)
+                        .collect(Collectors.toList())
+                );
+    }
 
     private Supplier<List<Message>> execBatch(List<Message> messages, Gmail gmail) {
         return () -> {

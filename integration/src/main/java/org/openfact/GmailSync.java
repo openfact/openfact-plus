@@ -17,11 +17,12 @@ public class GmailSync {
         this.gmail = gmail;
     }
 
-    public WrapperMessage getMessages() throws IOException {
+    public WrapperMessage getMessages(String query) throws IOException {
         // Get all messages
         ListMessagesResponse response = gmail.users()
                 .messages()
                 .list("me")
+                .setQ(query)
                 .execute();
 
         List<Message> messages = new ArrayList<>();
@@ -32,6 +33,7 @@ public class GmailSync {
                 response = gmail.users()
                         .messages()
                         .list("me")
+                        .setQ(query)
                         .setPageToken(pageToken)
                         .execute();
             } else {
