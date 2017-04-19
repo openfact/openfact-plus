@@ -47,11 +47,12 @@ public class JpaDocumentProvider implements DocumentProvider {
     }
 
     @Override
-    public DocumentModel addDocument(String documentType, String documentId, String supplierAssignedAccountId) throws ModelException {
+    public DocumentModel addDocument(String documentType, String documentId, String supplierAssignedAccountId, String originUuid) throws ModelException {
         DocumentEntity entity = new DocumentEntity();
         entity.setDocumentType(documentType.toUpperCase());
         entity.setDocumentId(documentId.toUpperCase());
         entity.setSupplierPartyAssignedAccountId(supplierAssignedAccountId);
+        entity.setOriginUuid(originUuid);
         em.persist(entity);
         em.flush();
 
@@ -67,6 +68,36 @@ public class JpaDocumentProvider implements DocumentProvider {
         DocumentEntity entity = em.find(DocumentEntity.class, id);
         if (entity == null) return null;
         return new DocumentAdapter(em, entity);
+    }
+
+    @Override
+    public DocumentModel getDocumentByTypeIdAndSupplierAssignedAccountId(String documentType, String documentId, String supplierAssignedAccountId) throws ModelException {
+        TypedQuery<DocumentEntity> query = em.createNamedQuery("getDocumentByTypeIdAndSupplierAssignedAccountId", DocumentEntity.class);
+        query.setParameter("documentType", documentType);
+        query.setParameter("documentId", documentId);
+        query.setParameter("supplierPartyAssignedAccountId", supplierAssignedAccountId);
+        List<DocumentEntity> resultList = query.getResultList();
+        if (resultList.isEmpty()) {
+            return null;
+        } else if (resultList.size() > 1) {
+            throw new ModelException("More than one documents asserts the search conditions");
+        } else {
+            return new DocumentAdapter(em, resultList.get(0));
+        }
+    }
+
+    @Override
+    public DocumentModel getDocumentByOriginUuid(String originUuid) throws ModelException {
+        TypedQuery<DocumentEntity> query = em.createNamedQuery("getDocumentByOriginUuid", DocumentEntity.class);
+        query.setParameter("originUuid", originUuid);
+        List<DocumentEntity> resultList = query.getResultList();
+        if (resultList.isEmpty()) {
+            return null;
+        } else if (resultList.size() > 1) {
+            throw new ModelException("More than one documents asserts the search conditions");
+        } else {
+            return new DocumentAdapter(em, resultList.get(0));
+        }
     }
 
     @Override

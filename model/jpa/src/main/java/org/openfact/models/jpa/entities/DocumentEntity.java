@@ -33,8 +33,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
-@Table(name = "DOCUMENT")
+@Table(name = "DOCUMENT", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"DOCUMENT_ID", "DOCUMENT_TYPE", "SUPPLIER_PARTY_ASSIGNED_ACCOUNT_ID"}),
+        @UniqueConstraint(columnNames = {"ORIGIN_UUID"})
+})
 @NamedQueries({
+        @NamedQuery(name = "getDocumentByOriginUuid", query = "select d from DocumentEntity d where d.originUuid=:originUuid"),
+        @NamedQuery(name = "getDocumentByTypeIdAndSupplierAssignedAccountId", query = "select d from DocumentEntity d where d.documentType=:documentType and d.documentId=:documentId and d.supplierPartyAssignedAccountId=:supplierPartyAssignedAccountId"),
         @NamedQuery(name = "getAllDocumentsByAccountingSupplierParty", query = "select d from DocumentEntity d where d.supplierPartyAssignedAccountId =:supplierPartyAssignedAccountId"),
         @NamedQuery(name = "getAllDocumentsByAccountingCustomerParty", query = "select d from DocumentEntity d where d.customerPartyAssignedAccountId =:customerPartyAssignedAccountId"),
         @NamedQuery(name = "deleteDocumentsByAccountingSupplierParty", query = "delete from DocumentEntity d where d.supplierPartyAssignedAccountId =:supplierPartyAssignedAccountId"),
@@ -57,12 +62,9 @@ public class DocumentEntity {
     @Column(name = "DOCUMENT_TYPE")
     private String documentType;
 
-    @Type(type = "org.hibernate.type.LocalDateTimeType")
-    @Column(name = "CREATED_TIMESTAMP")
-    private LocalDateTime issueDate;
-
-    @Column(name = "DOCUMENT_CURRENCY_CODE")
-    private String documentCurrencyCode;
+    @NotNull
+    @Column(name = "ORIGIN_UUID")
+    private String originUuid;
 
     @NotNull
     @Column(name = "SUPPLIER_PARTY_ASSIGNED_ACCOUNT_ID")
@@ -70,6 +72,13 @@ public class DocumentEntity {
 
     @Column(name = "CUSTOMER_PARTY_ASSIGNED_ACCOUNT_ID")
     private String customerPartyAssignedAccountId;
+
+    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    @Column(name = "CREATED_TIMESTAMP")
+    private LocalDateTime issueDate;
+
+    @Column(name = "DOCUMENT_CURRENCY_CODE")
+    private String documentCurrencyCode;
 
     @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true, mappedBy = "document", fetch = FetchType.LAZY)
     private Collection<DocumentAttributeEntity> attributes = new ArrayList<>();
@@ -149,4 +158,11 @@ public class DocumentEntity {
         this.lines = lines;
     }
 
+    public String getOriginUuid() {
+        return originUuid;
+    }
+
+    public void setOriginUuid(String originUuid) {
+        this.originUuid = originUuid;
+    }
 }

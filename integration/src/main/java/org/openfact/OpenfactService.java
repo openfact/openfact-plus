@@ -16,11 +16,16 @@ import oasis.names.specification.ubl.schema.xsd.debitnote_21.DebitNoteType;
 import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
 import org.jboss.logging.Logger;
 import org.openfact.common.converts.DocumentUtils;
+import org.openfact.models.DocumentModel;
 import org.openfact.models.DocumentProvider;
 import org.openfact.models.ModelException;
 import org.openfact.models.OpenfactProvider;
+import org.openfact.models.types.DocumentType;
 import org.openfact.services.managers.DocumentManager;
+import org.openfact.services.managers.GmailManager;
+import org.openfact.services.managers.GmailWrappedMessage;
 import org.openfact.syncronization.SyncronizationModel;
+import org.openfact.util.FindMaxHistoryIdTask;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -40,6 +45,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -59,6 +65,9 @@ public class OpenfactService {
     private GmailClientService gmailService;
 
     @Inject
+    private GmailManager gmailManager;
+
+    @Inject
     private OpenfactProvider openfactProvider;
 
     @Inject
@@ -72,7 +81,8 @@ public class OpenfactService {
         SyncronizationModel syncronizationModel = openfactProvider.getSyncronizationModel();
         BigInteger startHistoryId = syncronizationModel.getHistoryId();
         try {
-            synchronize(startHistoryId);
+            Optional<BigInteger> lastHistoryId = synchronize(startHistoryId);
+            syncronizationModel.setHistoryId(lastHistoryId.orElseGet(() -> null));
         } catch (ModelException e) {
             logger.error("Startup error, could not read messages");
         }
@@ -83,16 +93,15 @@ public class OpenfactService {
 
         String query = "filename:xml";
 
-        GmailSync gmailSync = new GmailSync(gmailClient);
-        GmailSync.WrapperMessage messages;
+        GmailWrappedMessage messages;
         if (startHistoryId != null) {
             try {
-                messages = gmailSync.getMessages(startHistoryId);
+                messages = gmailManager.getMessages(startHistoryId);
             } catch (IOException e) {
                 logger.warn("Could not retrieve messages from Partial Sync StartHistoryId[" + startHistoryId + "]");
                 try {
                     logger.info("Trying to retrieve messages on Full Sync mode...");
-                    messages = gmailSync.getMessages(query);
+                    messages = gmailManager.getMessages(query);
                 } catch (IOException e1) {
                     logger.error("Could not retrieve messages from Full Sync mode");
                     throw new ModelException("Could not read messages on both Full and Partial Sync modes");
@@ -100,7 +109,7 @@ public class OpenfactService {
             }
         } else {
             try {
-                messages = gmailSync.getMessages(query);
+                messages = gmailManager.getMessages(query);
             } catch (IOException e) {
                 logger.error("Could not retrieve messages from Full Sync mode");
                 throw new ModelException("Could not read messages on Full Sync mode");
@@ -117,23 +126,34 @@ public class OpenfactService {
             deletedFutures.add(CompletableFuture.supplyAsync(execBatch(chunkMessages, gmailClient), executorService));
         }
 
+        List<Message> addedMessages;
+        List<Message> deletedMessages;
         try {
-            List<Message> addedMessages = asyn(addedFutures).get().stream()
+            addedMessages = asyn(addedFutures).get().stream()
                     .flatMap(Collection::stream)
                     .collect(Collectors.toList());
-
-            List<Message> deletedMessages = asyn(deletedFutures).get().stream()
+            deletedMessages = asyn(deletedFutures).get().stream()
                     .flatMap(Collection::stream)
                     .collect(Collectors.toList());
-
-            processAddedMessages(addedMessages);
-            processDeletedMessages(deletedMessages);
         } catch (InterruptedException | ExecutionException e) {
             logger.error("Batch execution exception, could not complete reading messages", e);
             throw new ModelException("Batch execution exception, could not complete reading messages", e);
         }
 
-        return null;
+        processAddedMessages(addedMessages);
+        processDeletedMessages(deletedMessages);
+
+        if (!addedMessages.isEmpty()) {
+            ForkJoinPool pool = new ForkJoinPool();
+            int threshold = addedMessages.size() > 100 ? addedMessages.size() / 16 : 1;
+            FindMaxHistoryIdTask task = new FindMaxHistoryIdTask(addedMessages, 0, addedMessages.size() - 1, threshold);
+            BigInteger maxHistoryid = pool.invoke(task);
+            if (maxHistoryid.compareTo(BigInteger.ZERO) > 0) {
+                return Optional.of(pool.invoke(task));
+            }
+        }
+
+        return Optional.empty();
     }
 
     private void processAddedMessages(List<Message> messages) throws ModelException {
@@ -161,15 +181,27 @@ public class OpenfactService {
                         switch (documentType) {
                             case "Invoice":
                                 InvoiceType invoiceType = UBL21Reader.invoice().read(fileByteArray);
-                                documentManager.addDocument(invoiceType);
+                                if (documentProvider.getDocumentByTypeIdAndSupplierAssignedAccountId(DocumentType.INVOICE.toString(), invoiceType.getIDValue(), DocumentManager.buildSupplierPartyAssignedAccountId(invoiceType)) == null) {
+                                    documentManager.addDocument(invoiceType, message.getId());
+                                } else {
+                                    logger.warn("Tried to create Invoice that already exists");
+                                }
                                 break;
                             case "CreditNote":
                                 CreditNoteType creditNoteType = UBL21Reader.creditNote().read(fileByteArray);
-                                documentManager.addDocument(creditNoteType);
+                                if (documentProvider.getDocumentByTypeIdAndSupplierAssignedAccountId(DocumentType.CREDIT_NOTE.toString(), creditNoteType.getIDValue(), DocumentManager.buildSupplierPartyAssignedAccountId(creditNoteType)) == null) {
+                                    documentManager.addDocument(creditNoteType, message.getId());
+                                } else {
+                                    logger.warn("Tried to create CreditNote that already exists");
+                                }
                                 break;
                             case "DebitNote":
                                 DebitNoteType debitNoteType = UBL21Reader.debitNote().read(fileByteArray);
-                                documentManager.addDocument(debitNoteType);
+                                if (documentProvider.getDocumentByTypeIdAndSupplierAssignedAccountId(DocumentType.DEBIT_NOTE.toString(), debitNoteType.getIDValue(), DocumentManager.buildSupplierPartyAssignedAccountId(debitNoteType)) == null) {
+                                    documentManager.addDocument(debitNoteType, message.getId());
+                                } else {
+                                    logger.warn("Tried to create DebitNote that already exists");
+                                }
                                 break;
                             default:
                                 logger.warn("Invalid DocumentType to read");
@@ -178,12 +210,25 @@ public class OpenfactService {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error reading attached data", e);
+            throw new ModelException("Error reading attached data", e);
         }
     }
 
     private void processDeletedMessages(List<Message> messages) {
-
+        for (Message message : messages) {
+            DocumentModel document = null;
+            try {
+                document = documentProvider.getDocumentByOriginUuid(message.getId());
+                if (document != null) {
+                    documentProvider.removeDocument(document.getId());
+                } else {
+                    logger.warn("Tried to delete a document that was not persisted");
+                }
+            } catch (ModelException e) {
+                logger.error("Error searching for document", e);
+            }
+        }
     }
 
     private CompletableFuture<List<List<Message>>> asyn(List<CompletableFuture<List<Message>>> futures) throws ExecutionException, InterruptedException {

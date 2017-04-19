@@ -7,6 +7,7 @@ import java.util.Map;
 
 public interface DocumentModel {
 
+    String DOCUMENT_ID = "documentId";
     String DOCUMENT_TYPE = "documentType";
     String DOCUMENT_CURRENCY_CODE = "documentCurrencyCode";
     String ISSUE_DATE = "issueDate";
@@ -15,6 +16,7 @@ public interface DocumentModel {
 
     String getDocumentId();
     String getDocumentType();
+    String getOriginUuid();
 
     LocalDateTime getIssueDate();
     void setIssueDate(LocalDateTime issueDate);

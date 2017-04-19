@@ -2,9 +2,7 @@ package org.openfact.services.managers;
 
 import com.helger.xsds.ccts.cct.schemamodule.IdentifierType;
 import com.helger.xsds.ccts.cct.schemamodule.TextType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.CustomerPartyType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.InvoiceLineType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.SupplierPartyType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.*;
 import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
 import oasis.names.specification.ubl.schema.xsd.debitnote_21.DebitNoteType;
 import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
@@ -28,31 +26,12 @@ public class DocumentManager {
     @Inject
     private DocumentProvider model;
 
-    public DocumentModel addDocument(InvoiceType invoiceType) throws ModelException {
-        // Supplier party
-        SupplierPartyType accountingSupplierParty = invoiceType.getAccountingSupplierParty();
-        Optional<String> supplierAssignedAccountIDValue = Optional.ofNullable(accountingSupplierParty.getCustomerAssignedAccountIDValue());
-        String supplierAdditionalAccountId = accountingSupplierParty.getAdditionalAccountID()
-                .stream()
-                .map(IdentifierType::getValue)
-                .collect(Collectors.joining("-"));
-        String supplierAssignedAccountId = supplierAssignedAccountIDValue.orElseThrow(() -> new ModelException("Invalid Supplier customerAssignedAccountIDValue"))
-                .concat("-")
-                .concat(supplierAdditionalAccountId);
-
-        // Customer party
-        CustomerPartyType accountingCustomerParty = invoiceType.getAccountingCustomerParty();
-        Optional<String> customerAssignedAccountIDValue = Optional.ofNullable(accountingCustomerParty.getCustomerAssignedAccountIDValue());
-        String customerAdditionalAccountId = accountingSupplierParty.getAdditionalAccountID()
-                .stream()
-                .map(IdentifierType::getValue)
-                .collect(Collectors.joining("-"));
-        String customerAssignedAccountId = supplierAssignedAccountIDValue.orElseThrow(() -> new ModelException("Invalid Customer customerAssignedAccountIDValue"))
-                .concat("-")
-                .concat(customerAdditionalAccountId);
+    public DocumentModel addDocument(InvoiceType invoiceType, String originUuid) throws ModelException {
+        String supplierAssignedAccountId = buildSupplierPartyAssignedAccountId(invoiceType);
+        String customerAssignedAccountId = buildCustomerPartyAssignedAccountId(invoiceType);
 
         // Create Model
-        DocumentModel document = model.addDocument(DocumentType.INVOICE.toString(), invoiceType.getIDValue(), supplierAssignedAccountId);
+        DocumentModel document = model.addDocument(DocumentType.INVOICE.toString(), invoiceType.getIDValue(), supplierAssignedAccountId, originUuid);
         document.setCustomerAssignedAccountId(customerAssignedAccountId);
         document.setDocumentCurrencyCode(invoiceType.getDocumentCurrencyCodeValue());
 
@@ -69,12 +48,120 @@ public class DocumentManager {
         return document;
     }
 
-    public DocumentModel addDocument(CreditNoteType creditNoteType) throws ModelException {
-        return null;
+    public DocumentModel addDocument(CreditNoteType creditNoteType, String originUuid) throws ModelException {
+        String supplierAssignedAccountId = buildSupplierPartyAssignedAccountId(creditNoteType);
+        String customerAssignedAccountId = buildCustomerPartyAssignedAccountId(creditNoteType);
+
+        // Create Model
+        DocumentModel document = model.addDocument(DocumentType.CREDIT_NOTE.toString(), creditNoteType.getIDValue(), supplierAssignedAccountId, originUuid);
+        document.setCustomerAssignedAccountId(customerAssignedAccountId);
+        document.setDocumentCurrencyCode(creditNoteType.getDocumentCurrencyCodeValue());
+
+        document.setAttribute("payableAmmount", creditNoteType.getLegalMonetaryTotal().getPayableAmountValue());
+
+        for (CreditNoteLineType creditNoteLineType : creditNoteType.getCreditNoteLine()) {
+            DocumentLineModel documentLine = document.addDocumentLine();
+            documentLine.setAttribute("description", creditNoteLineType.getItem().getDescription()
+                    .stream()
+                    .map(TextType::getValue)
+                    .collect(Collectors.joining(",")));
+        }
+
+        return document;
     }
 
-    public DocumentModel addDocument(DebitNoteType debitNoteType) throws ModelException {
-        return null;
+    public DocumentModel addDocument(DebitNoteType debitNoteType, String originUuid) throws ModelException {
+        String supplierAssignedAccountId = buildSupplierPartyAssignedAccountId(debitNoteType);
+        String customerAssignedAccountId = buildCustomerPartyAssignedAccountId(debitNoteType);
+
+        // Create Model
+        DocumentModel document = model.addDocument(DocumentType.CREDIT_NOTE.toString(), debitNoteType.getIDValue(), supplierAssignedAccountId, originUuid);
+        document.setCustomerAssignedAccountId(customerAssignedAccountId);
+        document.setDocumentCurrencyCode(debitNoteType.getDocumentCurrencyCodeValue());
+
+        document.setAttribute("payableAmmount", debitNoteType.getRequestedMonetaryTotal().getPayableAmountValue());
+
+        for (DebitNoteLineType debitNoteLineType : debitNoteType.getDebitNoteLine()) {
+            DocumentLineModel documentLine = document.addDocumentLine();
+            documentLine.setAttribute("description", debitNoteLineType.getItem().getDescription()
+                    .stream()
+                    .map(TextType::getValue)
+                    .collect(Collectors.joining(",")));
+        }
+
+        return document;
+    }
+
+    public static String buildSupplierPartyAssignedAccountId(InvoiceType invoiceType) {
+        SupplierPartyType accountingSupplierParty = invoiceType.getAccountingSupplierParty();
+        Optional<String> supplierAssignedAccountIDValue = Optional.ofNullable(accountingSupplierParty.getCustomerAssignedAccountIDValue());
+        String supplierAdditionalAccountId = accountingSupplierParty.getAdditionalAccountID()
+                .stream()
+                .map(IdentifierType::getValue)
+                .collect(Collectors.joining("-"));
+        return supplierAssignedAccountIDValue.orElseThrow(() -> new NullPointerException("Invalid Supplier customerAssignedAccountIDValue"))
+                .concat("-")
+                .concat(supplierAdditionalAccountId);
+    }
+
+    public static String buildCustomerPartyAssignedAccountId(InvoiceType invoiceType) {
+        CustomerPartyType accountingCustomerParty = invoiceType.getAccountingCustomerParty();
+        Optional<String> customerAssignedAccountIDValue = Optional.ofNullable(accountingCustomerParty.getCustomerAssignedAccountIDValue());
+        String customerAdditionalAccountId = accountingCustomerParty.getAdditionalAccountID()
+                .stream()
+                .map(IdentifierType::getValue)
+                .collect(Collectors.joining("-"));
+        return customerAssignedAccountIDValue.orElseThrow(() -> new NullPointerException("Invalid Customer customerAssignedAccountIDValue"))
+                .concat("-")
+                .concat(customerAdditionalAccountId);
+    }
+
+    public static String buildSupplierPartyAssignedAccountId(CreditNoteType creditNoteType) {
+        SupplierPartyType accountingSupplierParty = creditNoteType.getAccountingSupplierParty();
+        Optional<String> supplierAssignedAccountIDValue = Optional.ofNullable(accountingSupplierParty.getCustomerAssignedAccountIDValue());
+        String supplierAdditionalAccountId = accountingSupplierParty.getAdditionalAccountID()
+                .stream()
+                .map(IdentifierType::getValue)
+                .collect(Collectors.joining("-"));
+        return supplierAssignedAccountIDValue.orElseThrow(() -> new NullPointerException("Invalid Supplier customerAssignedAccountIDValue"))
+                .concat("-")
+                .concat(supplierAdditionalAccountId);
+    }
+
+    public static String buildCustomerPartyAssignedAccountId(CreditNoteType creditNoteType) {
+        CustomerPartyType accountingCustomerParty = creditNoteType.getAccountingCustomerParty();
+        Optional<String> customerAssignedAccountIDValue = Optional.ofNullable(accountingCustomerParty.getCustomerAssignedAccountIDValue());
+        String customerAdditionalAccountId = accountingCustomerParty.getAdditionalAccountID()
+                .stream()
+                .map(IdentifierType::getValue)
+                .collect(Collectors.joining("-"));
+        return customerAssignedAccountIDValue.orElseThrow(() -> new NullPointerException("Invalid Customer customerAssignedAccountIDValue"))
+                .concat("-")
+                .concat(customerAdditionalAccountId);
+    }
+
+    public static String buildSupplierPartyAssignedAccountId(DebitNoteType debitNoteType) {
+        SupplierPartyType accountingSupplierParty = debitNoteType.getAccountingSupplierParty();
+        Optional<String> supplierAssignedAccountIDValue = Optional.ofNullable(accountingSupplierParty.getCustomerAssignedAccountIDValue());
+        String supplierAdditionalAccountId = accountingSupplierParty.getAdditionalAccountID()
+                .stream()
+                .map(IdentifierType::getValue)
+                .collect(Collectors.joining("-"));
+        return supplierAssignedAccountIDValue.orElseThrow(() -> new NullPointerException("Invalid Supplier customerAssignedAccountIDValue"))
+                .concat("-")
+                .concat(supplierAdditionalAccountId);
+    }
+
+    public static String buildCustomerPartyAssignedAccountId(DebitNoteType debitNoteType) {
+        CustomerPartyType accountingCustomerParty = debitNoteType.getAccountingCustomerParty();
+        Optional<String> customerAssignedAccountIDValue = Optional.ofNullable(accountingCustomerParty.getCustomerAssignedAccountIDValue());
+        String customerAdditionalAccountId = accountingCustomerParty.getAdditionalAccountID()
+                .stream()
+                .map(IdentifierType::getValue)
+                .collect(Collectors.joining("-"));
+        return customerAssignedAccountIDValue.orElseThrow(() -> new NullPointerException("Invalid Customer customerAssignedAccountIDValue"))
+                .concat("-")
+                .concat(customerAdditionalAccountId);
     }
 
 }

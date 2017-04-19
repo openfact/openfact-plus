@@ -57,6 +57,11 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
+    public String getOriginUuid() {
+        return document.getOriginUuid();
+    }
+
+    @Override
     public LocalDateTime getIssueDate() {
         return document.getIssueDate();
     }
