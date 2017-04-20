@@ -14,7 +14,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 
 @Singleton
-@ServerEndpoint("/changes")
+@ServerEndpoint(value = "/changes", encoders = {JsonEncoder.class})
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class ServerEndpoing {
 
