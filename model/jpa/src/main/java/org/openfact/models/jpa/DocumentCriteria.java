@@ -19,7 +19,7 @@ public class DocumentCriteria<R, Q> {
     private final ArrayList<Predicate> predicates;
     private Map<String, Boolean> orderBy;
 
-    public DocumentCriteria(String assignedAccountId, boolean isSupplierParty, EntityManager em, Class<R> rClass, Class<Q> qClass) {
+    public DocumentCriteria(EntityManager em, Class<R> rClass, Class<Q> qClass) {
         this.em = em;
 
         cb = em.getCriteriaBuilder();
@@ -28,12 +28,6 @@ public class DocumentCriteria<R, Q> {
         predicates = new ArrayList<>();
 
         orderBy = new HashMap<>();
-
-        if (isSupplierParty) {
-            this.predicates.add(cb.equal(root.get(JpaDocumentProvider.SUPPLIER_PARTY_ASSIGNED_ACCOUNT_ID), assignedAccountId));
-        } else {
-            this.predicates.add(cb.equal(root.get(JpaDocumentProvider.CUSTOMER_PARTY_ASSIGNED_ACCOUNT_ID), assignedAccountId));
-        }
     }
 
     public DocumentCriteria<R, Q> currencyCode(String... currencyCode) {
@@ -66,6 +60,28 @@ public class DocumentCriteria<R, Q> {
 
     public void enabled(boolean isEnabled) {
         this.predicates.add(cb.equal(root.get(JpaDocumentProvider.ENABLED), isEnabled));
+    }
+
+    /**
+     * This does not affect the current query
+     */
+    public Predicate supplier(String assignedAccountId) {
+        return cb.equal(root.get(JpaDocumentProvider.SUPPLIER_PARTY_ASSIGNED_ACCOUNT_ID), assignedAccountId);
+    }
+
+    /**
+     * This does not affect the current query
+     */
+    public Predicate customer(String assignedAccountId) {
+        return cb.equal(root.get(JpaDocumentProvider.CUSTOMER_PARTY_ASSIGNED_ACCOUNT_ID), assignedAccountId);
+    }
+
+    public void applyAndPredicate(Predicate... p) {
+        this.predicates.add(cb.and(p));
+    }
+
+    public void applyOrPredicate(Predicate... p) {
+        this.predicates.add(cb.or(p));
     }
 
     public DocumentCriteria<R, Q> addFilter(String key, String value) {

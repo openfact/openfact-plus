@@ -48,6 +48,7 @@ public interface DocumentModel {
     Boolean getAttribute(String name, Boolean defaultValue);
 
     Map<String, String> getAttributes();
+    Map<String, Object> getAttributesFormated();
 
     /**
      * Lines

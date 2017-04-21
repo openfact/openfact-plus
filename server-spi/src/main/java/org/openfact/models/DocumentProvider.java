@@ -4,8 +4,7 @@ import java.util.List;
 
 public interface DocumentProvider {
 
-    DocumentQuery createQueryBySupplier(String supplierAssignedAccountId);
-    DocumentQuery createQueryByCustomer(String customerAssignedAccountId);
+    DocumentQuery createQuery();
 
     DocumentModel addDocument(String documentType, String documentId, String supplierAssignedAccountId, String originUuid) throws ModelException;
 

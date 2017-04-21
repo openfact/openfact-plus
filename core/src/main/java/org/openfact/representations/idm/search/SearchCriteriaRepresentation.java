@@ -26,6 +26,8 @@ public class SearchCriteriaRepresentation {
     private List<OrderByRepresentation> orders = new ArrayList<>();
     private PagingRepresentation paging;
 
+    private String query;
+
     public String getFilterText() {
         return filterText;
     }
@@ -58,4 +60,11 @@ public class SearchCriteriaRepresentation {
         this.paging = paging;
     }
 
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
 }

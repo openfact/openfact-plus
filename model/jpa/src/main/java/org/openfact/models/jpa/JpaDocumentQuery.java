@@ -10,6 +10,7 @@ import org.openfact.models.search.SearchResultsModel;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.Predicate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,11 +24,11 @@ public class JpaDocumentQuery implements DocumentQuery {
 
     private EntityManager em;
 
-    public JpaDocumentQuery(EntityManager em, String assignedAccountId, boolean isSupplierParty) {
+    public JpaDocumentQuery(EntityManager em) {
         this.em = em;
 
-        this.query = new DocumentCriteria<>(assignedAccountId, isSupplierParty, em, DocumentEntity.class, DocumentEntity.class);
-        this.queryCount = new DocumentCriteria<>(assignedAccountId, isSupplierParty, em, DocumentEntity.class, Long.class);
+        this.query = new DocumentCriteria<>(em, DocumentEntity.class, DocumentEntity.class);
+        this.queryCount = new DocumentCriteria<>(em, DocumentEntity.class, Long.class);
     }
 
     private DocumentModel toModel(DocumentEntity entity) {
@@ -51,6 +52,58 @@ public class JpaDocumentQuery implements DocumentQuery {
         query.documentType(documentType);
         queryCount.documentType(documentType);
         return this;
+    }
+
+    @Override
+    public SupplierQuery supplier(String assignedAccountId) {
+        Predicate supplier = query.supplier(assignedAccountId);
+        return new SupplierQuery() {
+            @Override
+            public BuildQuery andCustomer(String assignedAccountId) {
+                Predicate customer = query.customer(assignedAccountId);
+                query.applyAndPredicate(supplier, customer);
+                return () -> JpaDocumentQuery.this;
+            }
+
+            @Override
+            public BuildQuery orCustomer(String assignedAccountId) {
+                Predicate customer = query.customer(assignedAccountId);
+                query.applyOrPredicate(supplier, customer);
+                return () -> JpaDocumentQuery.this;
+            }
+
+            @Override
+            public DocumentQuery buildQuery() {
+                query.applyAndPredicate(supplier);
+                return JpaDocumentQuery.this;
+            }
+        };
+    }
+
+    @Override
+    public CustomerQuery customer(String assignedAccountId) {
+        Predicate customer = query.customer(assignedAccountId);
+        return new CustomerQuery() {
+            @Override
+            public BuildQuery andSupplier(String assignedAccountId) {
+                Predicate supplier = query.supplier(assignedAccountId);
+                query.applyAndPredicate(customer, supplier);
+                return () -> JpaDocumentQuery.this;
+            }
+
+            @Override
+            public BuildQuery orSupplier(String assignedAccountId) {
+                Predicate supplier = query.supplier(assignedAccountId);
+                query.applyOrPredicate(customer, supplier);
+                return () -> JpaDocumentQuery.this;
+            }
+
+            @Override
+            public DocumentQuery buildQuery() {
+                query.applyAndPredicate(customer);
+                return JpaDocumentQuery.this;
+            }
+        };
     }
 
     @Override

@@ -122,7 +122,7 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
 
     @Override
     public void setAttribute(String name, String value) {
-        setAttribute(name, value.toString(), String.class.getName());
+        setAttribute(name, value, String.class.getName());
     }
 
     @Override
@@ -142,7 +142,7 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
 
     @Override
     public void setAttribute(String name, BigDecimal value) {
-        setAttribute(name, value.toString());
+        setAttribute(name, value.toString(), BigDecimal.class.getName());
     }
 
     @Override
@@ -204,6 +204,27 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
             result.put(attr.getName(), attr.getValue());
         }
         return result;
+    }
+
+    @Override
+    public Map<String, Object> getAttributesFormated() {
+        Map<String, Object> attributes = new HashMap<>();
+        for (DocumentAttributeEntity attr : document.getAttributes()) {
+            if (attr.getClassName().equals(String.class.getName())) {
+                attributes.put(attr.getName(), attr.getValue());
+            } else if (attr.getClassName().equals(Integer.class.getName())) {
+                attributes.put(attr.getName(), Integer.parseInt(attr.getValue()));
+            } else if (attr.getClassName().equals(Long.class.getName())) {
+                attributes.put(attr.getName(), Long.parseLong(attr.getValue()));
+            } else if (attr.getClassName().equals(BigDecimal.class.getName())) {
+                attributes.put(attr.getName(), new BigDecimal(attr.getValue()));
+            } else if (attr.getClassName().equals(Boolean.class.getName())) {
+                attributes.put(attr.getName(), Boolean.parseBoolean(attr.getValue()));
+            } else {
+                attributes.put(attr.getName(), attr.getValue());
+            }
+        }
+        return attributes;
     }
 
     @Override

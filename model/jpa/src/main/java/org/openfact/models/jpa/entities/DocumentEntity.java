@@ -74,7 +74,7 @@ public class DocumentEntity {
     private String customerPartyAssignedAccountId;
 
     @Type(type = "org.hibernate.type.LocalDateTimeType")
-    @Column(name = "CREATED_TIMESTAMP")
+    @Column(name = "ISSUE_DATE")
     private LocalDateTime issueDate;
 
     @Column(name = "DOCUMENT_CURRENCY_CODE")
@@ -85,6 +85,10 @@ public class DocumentEntity {
 
     @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true, mappedBy = "document", fetch = FetchType.LAZY)
     private Collection<DocumentLineEntity> lines = new ArrayList<>();
+
+    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    @Column(name = "CREATED_TIMESTAMP")
+    private LocalDateTime createdTimestamp;
 
     public String getId() {
         return id;
@@ -164,5 +168,13 @@ public class DocumentEntity {
 
     public void setOriginUuid(String originUuid) {
         this.originUuid = originUuid;
+    }
+
+    public LocalDateTime getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    public void setCreatedTimestamp(LocalDateTime createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
     }
 }

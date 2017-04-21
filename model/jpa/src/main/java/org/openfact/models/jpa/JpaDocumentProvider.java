@@ -37,13 +37,8 @@ public class JpaDocumentProvider implements DocumentProvider {
     private Event<DocumentModel> event;
 
     @Override
-    public DocumentQuery createQueryBySupplier(String supplierAssignedAccountId) {
-        return new JpaDocumentQuery(em, supplierAssignedAccountId, true);
-    }
-
-    @Override
-    public DocumentQuery createQueryByCustomer(String customerAssignedAccountId) {
-        return new JpaDocumentQuery(em, customerAssignedAccountId, false);
+    public DocumentQuery createQuery() {
+        return new JpaDocumentQuery(em);
     }
 
     @Override
