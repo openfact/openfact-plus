@@ -45,6 +45,6 @@
     </dependencies>
 
     <build>
-        <finalName>openfact</finalName>
+        <finalName>openfactsync</finalName>
     </build>
 </project>
