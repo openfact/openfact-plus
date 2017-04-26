@@ -162,7 +162,7 @@ public class OpenfactService {
                 List<MessagePart> parts = message.getPayload().getParts();
                 for (MessagePart part : parts) {
                     String filename = part.getFilename();
-                    if (filename != null && filename.length() > 0 && filename.endsWith(".xml")) {
+                    if (filename != null && filename.length() > 0 && (filename.endsWith(".xml") || filename.endsWith(".XML"))) {
                         String attachmentId = part.getBody().getAttachmentId();
                         MessagePartBody messagePartBody = gmailService.getClientService().users().messages().attachments().get("me", message.getId(), attachmentId).execute();
 
@@ -177,34 +177,50 @@ public class OpenfactService {
                             continue;
                         }
                         Element documentElement = xml.getDocumentElement();
-                        String documentType = documentElement.getTagName();
-                        switch (documentType) {
-                            case "Invoice":
-                                InvoiceType invoiceType = UBL21Reader.invoice().read(fileByteArray);
-                                if (documentProvider.getDocumentByTypeIdAndSupplierAssignedAccountId(DocumentType.INVOICE.toString(), invoiceType.getIDValue(), DocumentManager.buildSupplierPartyAssignedAccountId(invoiceType)) == null) {
-                                    documentManager.addDocument(invoiceType, message.getId());
-                                } else {
-                                    logger.warn("Tried to create Invoice that already exists");
+                        int items = documentElement.getElementsByTagName("ds:Signature").getLength();
+                        if (items > 0) {
+                            boolean findId = ((Element) documentElement.getElementsByTagName("ds:Signature").item(0)).hasAttribute("Id");
+                            if (findId) {
+                                String id = ((Element) documentElement.getElementsByTagName("ds:Signature").item(0)).getAttributeNode("Id").getNodeValue();
+                                if (id.startsWith("#")) {
+                                    ((Element) documentElement.getElementsByTagName("ds:Signature").item(0)).getAttributeNode("Id").setNodeValue(id.substring(1));
                                 }
-                                break;
-                            case "CreditNote":
-                                CreditNoteType creditNoteType = UBL21Reader.creditNote().read(fileByteArray);
-                                if (documentProvider.getDocumentByTypeIdAndSupplierAssignedAccountId(DocumentType.CREDIT_NOTE.toString(), creditNoteType.getIDValue(), DocumentManager.buildSupplierPartyAssignedAccountId(creditNoteType)) == null) {
-                                    documentManager.addDocument(creditNoteType, message.getId());
-                                } else {
-                                    logger.warn("Tried to create CreditNote that already exists");
+                                String documentType = documentElement.getTagName();
+                                switch (documentType) {
+                                    case "Invoice":
+                                        InvoiceType invoiceType = UBL21Reader.invoice().read(xml);
+                                        if (invoiceType != null) {
+                                            if (documentProvider.getDocumentByTypeIdAndSupplierAssignedAccountId(DocumentType.INVOICE.toString(), invoiceType.getIDValue(), DocumentManager.buildSupplierPartyAssignedAccountId(invoiceType)) == null) {
+                                                documentManager.addDocument(invoiceType, message.getId());
+                                            } else {
+                                                logger.warn("Tried to create Invoice that already exists");
+                                            }
+                                        }
+                                        break;
+                                    case "CreditNote":
+                                        CreditNoteType creditNoteType = UBL21Reader.creditNote().read(xml);
+                                        if (creditNoteType != null) {
+                                            if (documentProvider.getDocumentByTypeIdAndSupplierAssignedAccountId(DocumentType.CREDIT_NOTE.toString(), creditNoteType.getIDValue(), DocumentManager.buildSupplierPartyAssignedAccountId(creditNoteType)) == null) {
+                                                documentManager.addDocument(creditNoteType, message.getId());
+                                            } else {
+                                                logger.warn("Tried to create CreditNote that already exists");
+                                            }
+                                        }
+                                        break;
+                                    case "DebitNote":
+                                        DebitNoteType debitNoteType = UBL21Reader.debitNote().read(xml);
+                                        if (debitNoteType != null) {
+                                            if (documentProvider.getDocumentByTypeIdAndSupplierAssignedAccountId(DocumentType.DEBIT_NOTE.toString(), debitNoteType.getIDValue(), DocumentManager.buildSupplierPartyAssignedAccountId(debitNoteType)) == null) {
+                                                documentManager.addDocument(debitNoteType, message.getId());
+                                            } else {
+                                                logger.warn("Tried to create DebitNote that already exists");
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        logger.warn("Invalid DocumentType to read");
                                 }
-                                break;
-                            case "DebitNote":
-                                DebitNoteType debitNoteType = UBL21Reader.debitNote().read(fileByteArray);
-                                if (documentProvider.getDocumentByTypeIdAndSupplierAssignedAccountId(DocumentType.DEBIT_NOTE.toString(), debitNoteType.getIDValue(), DocumentManager.buildSupplierPartyAssignedAccountId(debitNoteType)) == null) {
-                                    documentManager.addDocument(debitNoteType, message.getId());
-                                } else {
-                                    logger.warn("Tried to create DebitNote that already exists");
-                                }
-                                break;
-                            default:
-                                logger.warn("Invalid DocumentType to read");
+                            }
                         }
                     }
                 }
