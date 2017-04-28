@@ -25,6 +25,9 @@ import org.openfact.services.managers.DocumentManager;
 import org.openfact.services.managers.GmailManager;
 import org.openfact.services.managers.GmailWrappedMessage;
 import org.openfact.syncronization.SyncronizationModel;
+import org.openfact.ubl.pe.factories.SunatDocumentToType;
+import org.openfact.ubl.pe.perception.PerceptionType;
+import org.openfact.ubl.pe.retention.RetentionType;
 import org.openfact.util.FindMaxHistoryIdTask;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -216,6 +219,33 @@ public class OpenfactService {
                                                 logger.warn("Tried to create DebitNote that already exists");
                                             }
                                         }
+                                        break;
+                                    case "Perception":
+                                        PerceptionType perceptionType = SunatDocumentToType.toPerceptionType(xml);
+                                        if (perceptionType != null) {
+                                            if (documentProvider.getDocumentByTypeIdAndSupplierAssignedAccountId(DocumentType.PERCEPTION.toString(), perceptionType.getIdValue(), DocumentManager.buildSupplierPartyAssignedAccountId(perceptionType)) == null) {
+                                                documentManager.addDocument(perceptionType, message.getId());
+                                            } else {
+                                                logger.warn("Tried to create DebitNote that already exists");
+                                            }
+                                        }
+                                        break;
+                                    case "Retention":
+                                        RetentionType retentionType = SunatDocumentToType.toRetentionType(xml);
+                                        if (retentionType != null) {
+                                            if (documentProvider.getDocumentByTypeIdAndSupplierAssignedAccountId(DocumentType.RETENTION.toString(), retentionType.getIdValue(), DocumentManager.buildSupplierPartyAssignedAccountId(retentionType)) == null) {
+                                                documentManager.addDocument(retentionType, message.getId());
+                                            } else {
+                                                logger.warn("Tried to create DebitNote that already exists");
+                                            }
+                                        }
+                                        break;
+                                    case "VoidedDocuments":
+                                        logger.warn("This document does not contains AccountingCustomerParty");
+
+                                        break;
+                                    case "SummaryDocuments":
+                                        logger.warn("Invalid DocumentType to read");
                                         break;
                                     default:
                                         logger.warn("Invalid DocumentType to read");

@@ -2,7 +2,7 @@ package org.openfact.models.types;
 
 public enum DocumentType {
 
-    INVOICE("Invoice"), CREDIT_NOTE("CreditNote"), DEBIT_NOTE("DebitNote");
+    INVOICE("Invoice"), CREDIT_NOTE("CreditNote"), DEBIT_NOTE("DebitNote"), PERCEPTION("Perception"), RETENTION("Retention"), VOIDED("Voided"), SUMMARY("Summary");
 
     private String xmlWrapper;
 
