@@ -2,9 +2,7 @@ package org.openfact.models;
 
 public class ModelDuplicateException extends ModelException {
 
-	private static final long serialVersionUID = 1L;
-	
-	private String duplicateFieldName;
+    private String duplicateFieldName;
 
     public ModelDuplicateException() {
     }

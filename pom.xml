@@ -22,6 +22,8 @@
         <jboss.as.version>7.2.0.Final</jboss.as.version>
         <wildfly.version>10.0.0.Final</wildfly.version>
 
+        <version.jboss-logmanager>2.0.6.Final</version.jboss-logmanager>
+
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,10 +32,11 @@
         <version.jboss.bom>8.2.2.Final</version.jboss.bom>
 
         <!-- Wildfly Swarm -->
-        <version.wildfly-swarm>2017.3.3</version.wildfly-swarm>
+        <version.wildfly-swarm>2017.6.1</version.wildfly-swarm>
 
         <!-- Arquillian -->
         <version.arquillian>1.1.10.Final</version.arquillian>
+        <version.arquillian-container-chameleon>1.0.0.Beta2</version.arquillian-container-chameleon>
 
         <!-- Java EE 7 -->
         <javaee.version>7.0</javaee.version>
@@ -96,6 +99,8 @@
 
         <!-- Test -->
         <junit.version>4.12</junit.version>
+        <hamcrest.version>1.3</hamcrest.version>
+        <mockito.version>2.8.9</mockito.version>
 
         <!--Jdbc-->
         <h2.version>1.4.187</h2.version>
@@ -125,6 +130,7 @@
         <module>integration</module>
         <module>services</module>
         <module>distribution</module>
+        <module>testsuite</module>
     </modules>
 
     <scm>
@@ -151,6 +157,23 @@
                 <version>${version.arquillian}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.arquillian.container</groupId>
+                <artifactId>arquillian-container-chameleon</artifactId>
+                <version>${version.arquillian-container-chameleon}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.arquillian.extension</groupId>
+                <artifactId>arquillian-persistence-api</artifactId>
+                <version>1.0.0.Alpha7</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.extension</groupId>
+                <artifactId>arquillian-persistence-impl</artifactId>
+                <version>1.0.0.Alpha6</version>
             </dependency>
 
             <!-- Openfact -->
@@ -433,6 +456,12 @@
                 <version>${wildfly.core.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.jboss.logmanager</groupId>
+                <artifactId>jboss-logmanager</artifactId>
+                <version>${version.jboss-logmanager}</version>
+            </dependency>
+
             <!-- Others -->
             <dependency>
                 <groupId>org.freemarker</groupId>
@@ -446,6 +475,35 @@
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-all</artifactId>
+                <version>${hamcrest.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!--GMAIl API-->
+            <dependency>
+                <groupId>com.google.api-client</groupId>
+                <artifactId>google-api-client</artifactId>
+                <version>1.22.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.oauth-client</groupId>
+                <artifactId>google-oauth-client-jetty</artifactId>
+                <version>1.22.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.apis</groupId>
+                <artifactId>google-api-services-gmail</artifactId>
+                <version>v1-rev62-1.22.0</version>
             </dependency>
 
             <!--jdbc-->

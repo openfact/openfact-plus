@@ -1,10 +1,11 @@
 package org.openfact.models;
 
-public class ModelException extends Exception {
+import javax.ejb.ApplicationException;
 
-	private static final long serialVersionUID = 1L;
-	
-	private Object[] parameters;
+@ApplicationException(rollback = true)
+public class ModelException extends RuntimeException {
+
+    private Object[] parameters;
 
     public ModelException() {
     }
