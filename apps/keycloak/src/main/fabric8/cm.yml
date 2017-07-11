@@ -1,0 +1,145 @@
+metadata:
+  annotations:
+    expose.config.openfact.io/apiserver-url-key: apiserver.url
+    expose.service-key.config.openfact.io/openfact: openfact.url
+    expose.service-key.config.openfact.io/keycloak: keycloak.url
+    expose.service-key.config.openfact.io/jenkins: jenkins.url
+    expose-full.service-key.config.openfact.io/sync: sync.api.url
+data:
+  db.url: keycloak-db
+  db.port: "5432"
+  apiserver.url: http://kubernetes
+  openfact.url: http://openfact
+  jenkins.url: http://jenkins
+  keycloak.url: http://keycloak
+  sync.api.url: http://sync
+  openfact-realm.json: |-
+    {
+      "realm": "openfact",
+      "enabled": true,
+      "loginTheme": "openfact",
+      "privateKey": "${KEYCLOAK_PRIVATEKEY}",
+      "publicKey": "${KEYCLOAK_PUBLICKEY}",
+      "sslRequired": "external",
+      "accessTokenLifespan" : 2592000,
+      "accessTokenLifespanForImplicitFlow" : 1296000,
+      "ssoSessionIdleTimeout" : 2592000,
+      "accessCodeLifespanUserAction" : 36000,
+      "accessCodeLifespanLogin" : 2592000,
+      "ssoSessionMaxLifespan" : 2592000,
+      "offlineSessionIdleTimeout" : 2592000,
+      "accessCodeLifespan" : 60,
+      "clients": [
+        {
+          "clientId": "openfact-online-platform",
+          "enabled": true,
+          "standardFlowEnabled": true,
+          "implicitFlowEnabled": false,
+          "directAccessGrantsEnabled": true,
+          "authorizationServicesEnabled" : true,
+          "fullScopeAllowed": true,
+          "serviceAccountsEnabled": true,
+          "clientAuthenticatorType": "client-secret",
+          "secret": "${KEYCLOAK_CLIENTID_SECRET}",
+          "publicClient" : true,
+          "adminUrl" : "",
+          "baseUrl" : "",
+          "redirectUris": [
+            "http://localhost:8080/api/login/*",
+            "${SYNC_URL}*",
+            "${JENKINS_URL}/securityRealm/finishLogin",
+            "${KEYCLOAK_URL}/*"
+          ],
+          "webOrigins": [
+            "*"
+          ],
+          "defaultRoles": ["uma_protection"],
+          "authorizationSettings" : {
+            "allowRemoteResourceManagement" : true,
+            "policyEnforcementMode" : "ENFORCING",
+            "scopes" : [ {
+              "name" : "read:space"
+              }, {
+              "name" : "admin:space"
+            } ]
+          }
+        }
+      ],
+      "users": [{
+         "username": "service-account-openfact-online-platform",
+         "enabled": true,
+         "totp": false,
+         "emailVerified": false,
+         "email": "service-account-openfact-online-platform@placeholder.org",
+         "serviceAccountClientId": "openfact-online-platform",
+         "credentials": [],
+         "disableableCredentialTypes": [],
+         "requiredActions": [],
+         "realmRoles": ["offline_access", "uma_authorization"],
+         "clientRoles": {
+            "realm-management": ["view-users", "manage-authorization"],
+            "broker": ["read-token"],
+            "openfact-online-platform": ["uma_protection"],
+            "account": ["manage-account", "view-profile"]
+         },
+         "groups": []
+      }],
+      "clientScopeMappings": {
+        "realm-management": [
+            {
+                "client": "openfact-online-platform",
+                "roles": ["view-users"]
+            },
+            {
+                "client": "openfact-online-platform",
+                "roles": ["manage-authorization"]
+            }
+        ],
+        "broker": [
+            {
+                "client": "openfact-online-platform",
+                "roles": ["read-token"]
+            }
+        ]
+      },
+      "roles" : {
+        "realm" : [
+          {
+            "name": "read:space",
+            "description": "Read space"
+          },
+          {
+            "name": "admin:space",
+            "description": "Admin space"
+          }
+        ]
+      },
+      "identityProviders": [
+        {
+          "alias" : "google",
+          "providerId" : "google",
+          "enabled": true,
+          "updateProfileFirstLogin" : "true",
+          "storeToken" : "true",
+          "trustEmail": true,
+          "addReadTokenRoleOnCreate" : true,
+          "config": {
+            "clientSecret": "${GOOGLE_OAUTH_CLIENT_SECRET}",
+            "clientId": "${GOOGLE_OAUTH_CLIENT_ID}",
+            "defaultScope": "",
+            "useJwksUrl": "true"
+          }
+        }
+      ],
+      "identityProviderMappers" : [
+        {
+          "name" : "approved",
+          "identityProviderAlias" : "google",
+          "identityProviderMapper" : "hardcoded-attribute-idp-mapper",
+          "config" : {
+            "attribute.value" : "true",
+            "attribute" : "approved"
+          }
+        }
+      ]
+    }
