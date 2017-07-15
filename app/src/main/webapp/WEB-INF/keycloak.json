@@ -6,5 +6,7 @@
   "credentials": {
     "secret": "${sso.credentials.secret:openfact}"
   },
-  "policy-enforcer": {}
+  "policy-enforcer": {
+    "on-deny-redirect-to": "/error.jsp"
+  }
 }

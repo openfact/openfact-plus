@@ -7,6 +7,7 @@
 <%
     KeycloakSecurityContext keycloakSecurityContext = (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
     AuthorizationContext authzContext = keycloakSecurityContext.getAuthorizationContext();
+    authzContext.
 %>
 <html>
 <body>

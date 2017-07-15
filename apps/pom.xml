@@ -22,10 +22,9 @@
         <che-starter.version>7a6345</che-starter.version>
         <configmapcontroller.version>2.3.7</configmapcontroller.version>
         <exposecontroller.version>2.3.16</exposecontroller.version>
-        <!-- TODO replace with real releases ASAP -->
-        <fabric8-ui.version>v108c47b</fabric8-ui.version>
-        <forge.version>1.0.49</forge.version>
-        <init-tenant.version>v973b59b</init-tenant.version>
+        <fabric8-ui.version>ve4e563d</fabric8-ui.version>
+        <forge.version>1.0.51</forge.version>
+        <init-tenant.version>v5b78f51</init-tenant.version>
 
         <kubernetes-client.version>2.5.2</kubernetes-client.version>
         <fabric8.version>2.2.192</fabric8.version>
@@ -38,7 +37,7 @@
         <kubernetes.zipkin.version>0.1.8</kubernetes.zipkin.version>
         <mattermost.version>vbc557c5</mattermost.version>
         <gitea.version>vbc557c5</gitea.version>
-        <fabric8.maven.plugin.version>3.5.0</fabric8.maven.plugin.version>
+        <fabric8.maven.plugin.version>3.5.5</fabric8.maven.plugin.version>
         <maven.require.version>3.1.1</maven.require.version>
         <maven.enforcer.plugin.version>1.4</maven.enforcer.plugin.version>
         <maven.javadoc.plugin.version>2.10.3</maven.javadoc.plugin.version>

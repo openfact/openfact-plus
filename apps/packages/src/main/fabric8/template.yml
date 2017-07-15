@@ -3,7 +3,8 @@ parameters:
 - name: APISERVER_HOSTPORT
 - name: NODE_IP
 - name: EXPOSER
-  value: Route
 - name: DOMAIN
 - name: GOOGLE_OAUTH_CLIENT_SECRET
 - name: GOOGLE_OAUTH_CLIENT_ID
+- name: MICROSOFT_OAUTH_CLIENT_SECRET
+- name: MICROSOFT_OAUTH_CLIENT_ID

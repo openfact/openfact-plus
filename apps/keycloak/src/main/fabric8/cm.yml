@@ -55,40 +55,31 @@ data:
           ],
           "defaultRoles": ["uma_protection"],
           "authorizationSettings" : {
-            "allowRemoteResourceManagement" : true,
+            "allowRemoteResourceManagement" : false,
             "policyEnforcementMode" : "ENFORCING",
-            "resources": [
-              {
-                "name": "Default Resource",
-                "uri": "/*",
-                "type": "urn:hello-world-authz-service:resources:default"
-              }
-            ],
-            "policies": [
-              {
-                "name": "Default Policy",
-                "description": "A policy that grants access only for users within this realm",
-                "type": "js",
-                "logic": "POSITIVE",
-                "decisionStrategy": "AFFIRMATIVE",
-                "config": {
-                  "applyPolicies": "[]",
-                  "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-                }
-              },
-              {
-                "name": "Default Permission",
-                "description": "A permission that applies to the default resource type",
-                "type": "resource",
-                "logic": "POSITIVE",
-                "decisionStrategy": "UNANIMOUS",
-                "config": {
-                  "defaultResourceType": "urn:hello-world-authz-service:resources:default",
-                  "default": "true",
-                  "applyPolicies": "[\"Default Policy\"]"
-                }
-              }
-            ]
+            "resources": [ {
+              "name": "Default Resource",
+              "uri": "/*",
+              "type": "urn:openfact:resources:default"
+            } ],
+            "policies": [ {
+              "name": "Default Policy",
+              "description": "",
+              "type": "role",
+              "logic": "POSITIVE",
+              "decisionStrategy": "AFFIRMATIVE",
+              "config": {
+                "roles": "[{\"id\":\"uma_authorization\",\"required\":true}]"
+              } }, {
+              "name": "Default Permission",
+              "type": "resource",
+              "logic": "POSITIVE",
+              "decisionStrategy": "UNANIMOUS",
+              "config": {
+                "defaultResourceType": "urn:openfact:resources:default",
+                "default": "true",
+                "applyPolicies": "[\"Default Policy\"]"
+              } } ]
           }
         }
       ],
@@ -156,12 +147,35 @@ data:
             "defaultScope": "",
             "useJwksUrl": "true"
           }
+        },
+        {
+          "alias" : "microsoft",
+          "providerId" : "microsoft",
+          "enabled": true,
+          "updateProfileFirstLogin" : "true",
+          "storeToken" : "true",
+          "trustEmail": true,
+          "addReadTokenRoleOnCreate" : true,
+          "config": {
+            "clientSecret": "${MICROSOFT_OAUTH_CLIENT_SECRET}",
+            "clientId": "${MICROSOFT_OAUTH_CLIENT_ID}",
+            "defaultScope": "",
+            "useJwksUrl": "true"
+          }
         }
       ],
       "identityProviderMappers" : [
         {
           "name" : "approved",
           "identityProviderAlias" : "google",
+          "identityProviderMapper" : "hardcoded-attribute-idp-mapper",
+          "config" : {
+            "attribute.value" : "true",
+            "attribute" : "approved"
+          }
+        }, {
+          "name" : "approved",
+          "identityProviderAlias" : "microsoft",
           "identityProviderMapper" : "hardcoded-attribute-idp-mapper",
           "config" : {
             "attribute.value" : "true",
