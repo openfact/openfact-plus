@@ -44,6 +44,21 @@
         </dependency>
 
         <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>ejb</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>logging</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.wildfly.core</groupId>
             <artifactId>wildfly-controller-client</artifactId>
             <version>2.2.1.Final</version>
@@ -68,11 +83,37 @@
             <scope>test</scope>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.keycloak</groupId>-->
-            <!--<artifactId>keycloak-authz-client</artifactId>-->
-            <!--<version>2.5.5.Final</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.2.10.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-adapter-core</artifactId>
+            <version>2.5.5.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.8.9</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.196</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -88,7 +129,6 @@
                 <filtering>true</filtering>
             </testResource>
         </testResources>
-
         <plugins>
             <plugin>
                 <groupId>org.wildfly.swarm</groupId>
@@ -101,6 +141,11 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <properties>
+                        <swarm.debug.port>5005</swarm.debug.port>
+                    </properties>
+                </configuration>
             </plugin>
         </plugins>
     </build>

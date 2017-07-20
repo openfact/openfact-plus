@@ -1,4 +1,4 @@
-package org.openfact.services;
+package org.openfact;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;

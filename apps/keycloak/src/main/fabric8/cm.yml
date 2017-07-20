@@ -31,6 +31,22 @@ data:
       "accessCodeLifespan" : 60,
       "clients": [
         {
+          "clientId": "openfact-public-client",
+          "enabled": true,
+          "adminUrl": "",
+          "baseUrl": "",
+          "publicClient": true,
+          "consentRequired" : true,
+          "fullScopeAllowed" : true,
+          "redirectUris": [
+            "http://localhost:3000/*",
+            "${OPENFACT_URL}/*"
+          ],
+          "webOrigins": [
+            "*"
+          ]
+        },
+        {
           "clientId": "openfact-online-platform",
           "enabled": true,
           "standardFlowEnabled": true,
