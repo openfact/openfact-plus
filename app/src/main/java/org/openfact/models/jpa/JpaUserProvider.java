@@ -8,6 +8,8 @@ import org.openfact.models.utils.OpenfactModelUtils;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Stateless
 public class JpaUserProvider implements UserProvider {
@@ -17,7 +19,11 @@ public class JpaUserProvider implements UserProvider {
 
     @Override
     public UserModel getByUsername(String username) {
-        return null;
+        TypedQuery<UserEntity> query = em.createNamedQuery("getUserByUsername", UserEntity.class);
+        query.setParameter("username", username);
+        List<UserEntity> entities = query.getResultList();
+        if (entities.size() == 0) return null;
+        return new UserAdapter(em, entities.get(0));
     }
 
     @Override

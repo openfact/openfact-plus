@@ -9,5 +9,5 @@ public interface UserModel {
     void setOfflineToken(String token);
 
     boolean isRegistrationCompleted();
-    void setRegistrationCompleted(Boolean registrationCompleted);
+    void setRegistrationCompleted(boolean registrationCompleted);
 }

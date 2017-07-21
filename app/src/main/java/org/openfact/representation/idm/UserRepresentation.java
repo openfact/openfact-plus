@@ -4,7 +4,7 @@ public class UserRepresentation {
 
     private String id;
     private String type;
-    private UserDataAttributes attributes;
+    private UserDataAttributesRepresentation attributes;
     private GenericLinksRepresentation links;
 
     public String getId() {
@@ -23,11 +23,11 @@ public class UserRepresentation {
         this.type = type;
     }
 
-    public UserDataAttributes getAttributes() {
+    public UserDataAttributesRepresentation getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(UserDataAttributes attributes) {
+    public void setAttributes(UserDataAttributesRepresentation attributes) {
         this.attributes = attributes;
     }
 

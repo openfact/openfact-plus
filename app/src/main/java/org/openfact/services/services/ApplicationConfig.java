@@ -1,12 +1,8 @@
-package org.openfact.services;
+package org.openfact.services.services;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-/**
- * Resource entry point
- */
 @ApplicationPath("/api")
 public class ApplicationConfig extends Application {
-
 }

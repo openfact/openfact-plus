@@ -1,0 +1,9 @@
+version: '2'
+services:
+  redis:
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+    ports:
+      - "8180:8080"
+    image: "jboss:keycloak"

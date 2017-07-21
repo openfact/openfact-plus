@@ -1,5 +1,6 @@
-package org.openfact.services;
+package org.openfact.services.services;
 
+import org.jboss.logging.Logger;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
@@ -9,7 +10,10 @@ import org.keycloak.util.TokenUtil;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
+import org.openfact.representation.idm.UserDataAttributesRepresentation;
+import org.openfact.representation.idm.UserRepresentation;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -17,11 +21,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jboss.logging.Logger;
-import org.openfact.representation.idm.UserDataAttributes;
-import org.openfact.representation.idm.UserRepresentation;
-
 @Path("/user")
+@Stateless
 public class UserService {
 
     private static final Logger logger = Logger.getLogger(UserService.class);
@@ -34,7 +35,7 @@ public class UserService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCurrentUser(@Context final HttpServletRequest httpServletRequest) {
+    public Response getCurrentUser(@Context HttpServletRequest httpServletRequest) {
         KeycloakUtil kcUtil = new KeycloakUtil(httpServletRequest);
         String username = kcUtil.getUsername();
 
@@ -46,19 +47,16 @@ public class UserService {
 
         // Check offline token
         if (user.getOfflineToken() == null) {
-            RefreshableKeycloakSecurityContext ctx = (RefreshableKeycloakSecurityContext) httpServletRequest.getAttribute(KeycloakSecurityContext.class.getName());
-            String refreshToken = ctx.getRefreshToken();
             try {
-                RefreshToken refreshTokenDecoded = TokenUtil.getRefreshToken(refreshToken);
-                boolean isOfflineToken = refreshTokenDecoded.getType().equals(TokenUtil.TOKEN_TYPE_OFFLINE);
-                if (isOfflineToken) {
+                String refreshToken = kcUtil.getToken();
+                if (kcUtil.isOfflineToken(refreshToken)) {
                     user.setOfflineToken(refreshToken);
+                    user.setRegistrationCompleted(true);
                 } else {
-                    logger.warn("Was not possible to configure an offline token");
+                    logger.warn("The token used is not an offline token");
                 }
             } catch (JWSInputException e) {
-                logger.error("Could not read/refresh token");
-                logger.warn("Was not possible to configure an offline token");
+                logger.error("Could not read/refresh token", e);
             }
         }
 
@@ -76,7 +74,7 @@ public class UserService {
             throw new NotFoundException();
         }
 
-        UserDataAttributes attributes = representation.getAttributes();
+        UserDataAttributesRepresentation attributes = representation.getAttributes();
         if (attributes != null && attributes.isRegistrationCompleted() != null) {
             user.setRegistrationCompleted(attributes.isRegistrationCompleted());
         }

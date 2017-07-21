@@ -17,31 +17,65 @@ public class UserAdapter implements UserModel {
 
     @Override
     public String getId() {
-        return null;
+        return entity.getId();
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return entity.getUsername();
     }
 
     @Override
     public String getOfflineToken() {
-        return null;
+        return entity.getOfflineToken();
     }
 
     @Override
     public void setOfflineToken(String token) {
-
+        entity.setOfflineToken(token);
     }
 
     @Override
     public boolean isRegistrationCompleted() {
-        return false;
+        return entity.isRegistrationCompleted();
     }
 
     @Override
-    public void setRegistrationCompleted(Boolean registrationCompleted) {
-
+    public void setRegistrationCompleted(boolean registrationCompleted) {
+        entity.setRegistrationCompleted(registrationCompleted);
     }
+
+    @Override
+    public String toString() {
+        String result = getClass().getSimpleName() + " ";
+        if (getId() != null)
+            result += "id: " + getId();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof UserModel)) {
+            return false;
+        }
+        UserModel other = (UserModel) obj;
+        if (getId() != null) {
+            if (!getId().equals(other.getId())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        return result;
+    }
+
 }

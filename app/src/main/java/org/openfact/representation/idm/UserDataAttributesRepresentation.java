@@ -2,7 +2,7 @@ package org.openfact.representation.idm;
 
 import java.util.Date;
 
-public class UserDataAttributes {
+public class UserDataAttributesRepresentation {
 
     // The id of the corresponding User
     private String userID;

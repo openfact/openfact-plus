@@ -2,14 +2,15 @@ package org.openfact.models.jpa.entity;
 
 import org.hibernate.annotations.NaturalId;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Table
+@NamedQueries({
+        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username")
+})
 public class UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -22,6 +23,12 @@ public class UserEntity implements Serializable {
     @NotNull
     @Column(name = "USERNAME")
     private String username;
+
+    @Column(name = "OFFLINE_TOKEN")
+    private String offlineToken;
+
+    @Column(name = "REGISTRATION_COMPLETED")
+    private boolean registrationCompleted;
 
     @Version
     @Column(name = "VERSION")
@@ -41,6 +48,22 @@ public class UserEntity implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getOfflineToken() {
+        return offlineToken;
+    }
+
+    public void setOfflineToken(String offlineToken) {
+        this.offlineToken = offlineToken;
+    }
+
+    public boolean isRegistrationCompleted() {
+        return registrationCompleted;
+    }
+
+    public void setRegistrationCompleted(boolean registrationCompleted) {
+        this.registrationCompleted = registrationCompleted;
     }
 
     public int getVersion() {

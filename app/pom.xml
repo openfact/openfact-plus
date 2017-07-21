@@ -19,6 +19,7 @@
     <properties>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <version.resteasy>3.0.19.Final</version.resteasy>
+        <version.keycloak>2.5.5.Final</version.keycloak>
     </properties>
 
     <dependencies>
@@ -70,6 +71,12 @@
             <version>${version.resteasy}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson2-provider</artifactId>
+            <version>${version.resteasy}</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
@@ -92,7 +99,13 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-adapter-core</artifactId>
-            <version>2.5.5.Final</version>
+            <version>${version.keycloak}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-test-helper</artifactId>
+            <version>3.2.0.Final</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
