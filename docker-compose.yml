@@ -1,9 +1,55 @@
 version: '2'
+
 services:
-  redis:
+
+  keycloak:
+    image: jboss/keycloak
     environment:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin
     ports:
-      - "8180:8080"
-    image: "jboss:keycloak"
+      - 8180:8080
+    networks:
+      - sso
+
+  elasticsearch:
+      image: docker.elastic.co/elasticsearch/elasticsearch:5.5.0
+      volumes:
+        - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:z
+      ports:
+        - "9200:9200"
+        - "9300:9300"
+      environment:
+        ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      networks:
+        - elk
+
+  logstash:
+      image: docker.elastic.co/logstash/logstash:5.5.0
+      volumes:
+        - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:z
+        - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:z
+      ports:
+        - "5000:5000"
+      environment:
+        LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      networks:
+        - elk
+      depends_on:
+        - elasticsearch
+
+  kibana:
+      image: docker.elastic.co/kibana/kibana:5.5.0
+      volumes:
+        - ./elk/kibana/config/:/usr/share/kibana/config:z
+      ports:
+        - "5601:5601"
+      networks:
+        - elk
+      depends_on:
+        - elasticsearch
+
+networks:
+  sso:
+  elk:
+    driver: bridge
