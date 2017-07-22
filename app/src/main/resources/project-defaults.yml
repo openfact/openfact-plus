@@ -1,5 +1,0 @@
-swarm:
-  logstash:
-    hostname: "${elk.logstash.host}"
-    port: "${elk.logstash.port:9300}"
-    level: INFO
