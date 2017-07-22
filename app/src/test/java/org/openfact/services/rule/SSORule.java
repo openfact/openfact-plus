@@ -16,7 +16,7 @@ public class SSORule extends ExternalResource {
             TestsHelper.baseUrl = "http://localhost:8080";
             TestsHelper.keycloakBaseUrl = "http://localhost:8180/auth";
             try {
-                deleteRealm("admin", "admin", "test-realm.json");
+                deleteRealm("admin", "admin", "test-realm");
             } catch (Throwable e) {
             }
             importTestRealm("admin", "admin", "/test-realm.json");

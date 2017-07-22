@@ -18,7 +18,7 @@
             "credentials" : [
                 { "type" : "password", "value" : "password" }
             ],
-            "realmRoles": [ "user" ],
+            "realmRoles": [ "user", "offline_access" ],
             "clientRoles": {
                 "account": [ "manage-account" ]
             }
