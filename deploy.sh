@@ -10,4 +10,5 @@ mvn fabric8:deploy -DSSO_REALM=openfact \
     -DSSO_CLIENT_ID=openfact-online-platform \
     -DSSO_CREDENTIALS_SECRET=b7873f80-6ad7-44a5-97cb-bd210789eb41 \
     -Popenshift \
-    -DskipTests=true
+    -DskipTests=true \
+    -Dfabric8.debug.enabled=true

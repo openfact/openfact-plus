@@ -20,6 +20,10 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <version.resteasy>3.0.19.Final</version.resteasy>
         <version.keycloak>2.5.5.Final</version.keycloak>
+
+        <version.h2>1.4.187</version.h2>
+        <version.postgresql>9.4.1207</version.postgresql>
+        <version.mysql>5.1.38</version.mysql>
     </properties>
 
     <dependencies>
@@ -53,14 +57,19 @@
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>jpa</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>datasources</artifactId>
+        </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.wildfly.swarm</groupId>-->
-            <!--<artifactId>logging</artifactId>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>logstash</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>infinispan</artifactId>
         </dependency>
 
         <dependency>
@@ -97,6 +106,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
+            <scope>provided</scope>
             <version>5.2.10.Final</version>
         </dependency>
 
@@ -128,15 +138,28 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.196</version>
+            <version>${version.h2}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${version.postgresql}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${version.mysql}</version>
+        </dependency>
     </dependencies>
 
     <build>
         <resources>
             <resource>
                 <directory>src/main/fabric8</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>

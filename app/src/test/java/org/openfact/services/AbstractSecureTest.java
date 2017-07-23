@@ -39,7 +39,8 @@ public abstract class AbstractSecureTest {
                 .addAsWebInfResource(new StringAsset(createClient(ClientBuilder.create("arquillian-test")
                         .baseUrl(baseUrl).accessType(BEARER_ONLY))), "keycloak.json")
                 .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"))
-                .addAsResource(new File("src/main/resources", "META-INF/persistence.xml"), "META-INF/persistence.xml");
+                .addAsResource(new File("src/main/resources", "META-INF/persistence.xml"), "META-INF/persistence.xml")
+                .addAsResource("project-defaults.yml", "project-defaults.yml");
     }
 
 }
