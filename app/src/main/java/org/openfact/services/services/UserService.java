@@ -3,23 +3,28 @@ package org.openfact.services.services;
 import org.jboss.logging.Logger;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.keycloak.jose.jws.JWSInputException;
-import org.keycloak.representations.RefreshToken;
-import org.keycloak.util.TokenUtil;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.UserDataAttributesRepresentation;
 import org.openfact.representation.idm.UserRepresentation;
 
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @Path("/user")
 @Stateless
@@ -33,9 +38,12 @@ public class UserService {
     @Inject
     private ModelToRepresentation modelToRepresentation;
 
+    @Resource
+    private ManagedExecutorService mes;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCurrentUser(@Context HttpServletRequest httpServletRequest) {
+    public Response getCurrentUser(@Context HttpServletRequest httpServletRequest) throws ExecutionException, InterruptedException {
         KeycloakUtil kcUtil = new KeycloakUtil(httpServletRequest);
         String username = kcUtil.getUsername();
 
@@ -51,13 +59,28 @@ public class UserService {
                 String refreshToken = kcUtil.getToken();
                 if (kcUtil.isOfflineToken(refreshToken)) {
                     user.setOfflineToken(refreshToken);
-                    user.setRegistrationCompleted(true);
                 } else {
                     logger.warn("The token used is not an offline token");
                 }
             } catch (JWSInputException e) {
                 logger.error("Could not read/refresh token", e);
             }
+        }
+
+        if (user.getOfflineToken() != null) {
+            Map<String, Future<Boolean>> futures = new HashMap<>();
+            for (SupportedIDP idp : SupportedIDP.values()) {
+                futures.put(idp.getBrokerName(), mes.submit(new IDPBrokerChecker(kcUtil.getAuthServerBaseUrl(), kcUtil.getRealm(), kcUtil.getAccessToken(), idp.getBrokerName())));
+            }
+
+            Set<String> identities = new HashSet<>();
+            for (Map.Entry<String, Future<Boolean>> entry : futures.entrySet()) {
+                Boolean token = entry.getValue().get();
+                if (token != null && token.equals(true)) {
+                    identities.add(entry.getKey());
+                }
+            }
+            user.setIdentities(identities);
         }
 
         return Response.ok(modelToRepresentation.toRepresentation(user)).build();

@@ -4,6 +4,8 @@ import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -29,6 +31,11 @@ public class UserEntity implements Serializable {
 
     @Column(name = "REGISTRATION_COMPLETED")
     private boolean registrationCompleted;
+
+    @ElementCollection
+    @Column(name="VALUE")
+    @CollectionTable(name = "USER_IDENTITY", joinColumns={ @JoinColumn(name="USER_ID") })
+    private Set<String> identities = new HashSet<>();
 
     @Version
     @Column(name = "VERSION")
@@ -64,6 +71,14 @@ public class UserEntity implements Serializable {
 
     public void setRegistrationCompleted(boolean registrationCompleted) {
         this.registrationCompleted = registrationCompleted;
+    }
+
+    public Set<String> getIdentities() {
+        return identities;
+    }
+
+    public void setIdentities(Set<String> identities) {
+        this.identities = identities;
     }
 
     public int getVersion() {

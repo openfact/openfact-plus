@@ -1,5 +1,8 @@
 package org.openfact.models;
 
+import java.util.List;
+import java.util.Set;
+
 public interface UserModel {
 
     String getId();
@@ -10,4 +13,7 @@ public interface UserModel {
 
     boolean isRegistrationCompleted();
     void setRegistrationCompleted(boolean registrationCompleted);
+
+    Set<String> getIdentities();
+    void setIdentities(Set<String> identities);
 }

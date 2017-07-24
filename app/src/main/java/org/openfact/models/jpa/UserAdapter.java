@@ -4,6 +4,10 @@ import org.openfact.models.UserModel;
 import org.openfact.models.jpa.entity.UserEntity;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class UserAdapter implements UserModel {
 
@@ -43,6 +47,18 @@ public class UserAdapter implements UserModel {
     @Override
     public void setRegistrationCompleted(boolean registrationCompleted) {
         entity.setRegistrationCompleted(registrationCompleted);
+    }
+
+    @Override
+    public Set<String> getIdentities() {
+        Set<String> result = new HashSet<>();
+        result.addAll(entity.getIdentities());
+        return result;
+    }
+
+    @Override
+    public void setIdentities(Set<String> identities) {
+        entity.setIdentities(identities);
     }
 
     @Override
