@@ -9,7 +9,7 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table
+@Table(name = "USER")
 @NamedQueries({
         @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username")
 })
@@ -34,6 +34,9 @@ public class UserEntity implements Serializable {
 
     @Column(name = "REGISTRATION_COMPLETED")
     private boolean registrationCompleted;
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private Set<BookPublisher> publishers = new HashSet<BookPublisher>();
 
     @Version
     @Column(name = "VERSION")
@@ -62,7 +65,7 @@ public class UserEntity implements Serializable {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-    
+
     public String getOfflineToken() {
         return offlineToken;
     }
