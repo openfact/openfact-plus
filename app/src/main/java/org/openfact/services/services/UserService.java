@@ -68,7 +68,7 @@ public class UserService {
         }
 
         if (user.getOfflineToken() != null) {
-            Map<String, Future<Boolean>> futures = new HashMap<>();
+            /*Map<String, Future<Boolean>> futures = new HashMap<>();
             for (SupportedIDP idp : SupportedIDP.values()) {
                 futures.put(idp.getBrokerName(), mes.submit(new IDPBrokerChecker(kcUtil.getAuthServerBaseUrl(), kcUtil.getRealm(), kcUtil.getAccessToken(), idp.getBrokerName())));
             }
@@ -80,7 +80,7 @@ public class UserService {
                     identities.add(entry.getKey());
                 }
             }
-            user.setIdentities(identities);
+            user.setIdentities(identities);*/
         }
 
         return Response.ok(modelToRepresentation.toRepresentation(user)).build();

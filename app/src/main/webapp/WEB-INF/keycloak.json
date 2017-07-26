@@ -3,10 +3,7 @@
   "auth-server-url": "${sso.auth.server.url:http://localhost:8180/auth}",
   "resource": "${sso.clientId:openfact-online-platform}",
   "ssl-required": "external",
-  "credentials": {
-    "secret": "${sso.credentials.secret:openfact}"
-  },
-  "policy-enforcer": {
-    "on-deny-redirect-to": "/error.jsp"
-  }
+  "use-resource-role-mappings": true,
+  "bearer-only": true,
+  "enable-cors": true
 }

@@ -14,10 +14,10 @@ public class SSORule extends ExternalResource {
         try {
             TestsHelper.appName = "arquillian-test";
             TestsHelper.keycloakBaseUrl = "http://localhost:8180/auth"; // SSO url
-//            try {
-//                deleteRealm("admin", "admin", "test-realm");
-//            } catch (Throwable e) {
-//            }
+            try {
+                deleteRealm("admin", "admin", "test-realm");
+            } catch (Throwable e) {
+            }
             importTestRealm("admin", "admin", "/test-realm.json");
             createDirectGrantClient();
         } catch (Exception e) {

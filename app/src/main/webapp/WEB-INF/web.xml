@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
@@ -7,17 +8,18 @@
 
     <security-constraint>
         <web-resource-collection>
-            <url-pattern>/api/user/*</url-pattern>
             <web-resource-name>User resources</web-resource-name>
+            <url-pattern>/api/user/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>user</role-name>
         </auth-constraint>
     </security-constraint>
+
     <security-constraint>
         <web-resource-collection>
-            <url-pattern>/api/admin/*</url-pattern>
             <web-resource-name>Admin resources</web-resource-name>
+            <url-pattern>/api/admin/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>admin</role-name>
