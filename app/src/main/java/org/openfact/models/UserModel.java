@@ -14,4 +14,7 @@ public interface UserModel {
     boolean isRegistrationCompleted();
     void setRegistrationCompleted(boolean registrationCompleted);
 
+    String getFullName();
+    void setFullName(String fullName);
+    
 }

@@ -26,6 +26,9 @@ public class UserEntity implements Serializable {
     @Column(name = "USERNAME")
     private String username;
 
+    @Column(name = "FULL_NAME")
+    private String fullName;
+
     @Column(name = "OFFLINE_TOKEN", length = 2048)
     private String offlineToken;
 
@@ -52,6 +55,14 @@ public class UserEntity implements Serializable {
         this.username = username;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+    
     public String getOfflineToken() {
         return offlineToken;
     }
@@ -108,4 +119,5 @@ public class UserEntity implements Serializable {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
     }
+
 }

@@ -11,10 +11,12 @@ public class ModelToRepresentation {
 
     public UserRepresentation toRepresentation(UserModel model) {
         UserRepresentation representation = new UserRepresentation();
+        representation.setId(model.getId());
 
         UserDataAttributesRepresentation attributes = new UserDataAttributesRepresentation();
         attributes.setUsername(model.getUsername());
         attributes.setRegistrationCompleted(model.isRegistrationCompleted());
+        attributes.setFullName(model.getFullName());
 
         representation.setAttributes(attributes);
 

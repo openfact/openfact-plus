@@ -50,6 +50,16 @@ public class UserAdapter implements UserModel {
     }
 
     @Override
+    public String getFullName() {
+        return null;
+    }
+
+    @Override
+    public void setFullName(String fullName) {
+
+    }
+
+    @Override
     public String toString() {
         String result = getClass().getSimpleName() + " ";
         if (getId() != null)

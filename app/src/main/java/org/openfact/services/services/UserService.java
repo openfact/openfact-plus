@@ -45,6 +45,7 @@ public class UserService {
         UserModel user = this.userProvider.getByUsername(username);
         if (user == null) {
             user = this.userProvider.addUser(username);
+            user.setFullName(username);
         }
 
         return Response.ok(modelToRepresentation.toRepresentation(user)).build();
