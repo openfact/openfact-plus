@@ -50,18 +50,6 @@ public class UserAdapter implements UserModel {
     }
 
     @Override
-    public Set<String> getIdentities() {
-        Set<String> result = new HashSet<>();
-        result.addAll(entity.getIdentities());
-        return result;
-    }
-
-    @Override
-    public void setIdentities(Set<String> identities) {
-        entity.setIdentities(identities);
-    }
-
-    @Override
     public String toString() {
         String result = getClass().getSimpleName() + " ";
         if (getId() != null)

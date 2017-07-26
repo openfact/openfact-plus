@@ -14,6 +14,4 @@ public interface UserModel {
     boolean isRegistrationCompleted();
     void setRegistrationCompleted(boolean registrationCompleted);
 
-    Set<String> getIdentities();
-    void setIdentities(Set<String> identities);
 }

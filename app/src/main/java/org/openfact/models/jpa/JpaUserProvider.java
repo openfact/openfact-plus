@@ -31,6 +31,7 @@ public class JpaUserProvider implements UserProvider {
         UserEntity entity = new UserEntity();
         entity.setId(OpenfactModelUtils.generateId());
         entity.setUsername(username);
+        entity.setRegistrationCompleted(false);
         em.persist(entity);
         return new UserAdapter(em, entity);
     }

@@ -14,6 +14,7 @@ public class ModelToRepresentation {
 
         UserDataAttributesRepresentation attributes = new UserDataAttributesRepresentation();
         attributes.setUsername(model.getUsername());
+        attributes.setRegistrationCompleted(model.isRegistrationCompleted());
 
         representation.setAttributes(attributes);
 

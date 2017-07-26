@@ -26,16 +26,11 @@ public class UserEntity implements Serializable {
     @Column(name = "USERNAME")
     private String username;
 
-    @Column(name = "OFFLINE_TOKEN")
+    @Column(name = "OFFLINE_TOKEN", length = 2048)
     private String offlineToken;
 
     @Column(name = "REGISTRATION_COMPLETED")
     private boolean registrationCompleted;
-
-    @ElementCollection
-    @Column(name="VALUE")
-    @CollectionTable(name = "USER_IDENTITY", joinColumns={ @JoinColumn(name="USER_ID") })
-    private Set<String> identities = new HashSet<>();
 
     @Version
     @Column(name = "VERSION")
@@ -71,14 +66,6 @@ public class UserEntity implements Serializable {
 
     public void setRegistrationCompleted(boolean registrationCompleted) {
         this.registrationCompleted = registrationCompleted;
-    }
-
-    public Set<String> getIdentities() {
-        return identities;
-    }
-
-    public void setIdentities(Set<String> identities) {
-        this.identities = identities;
     }
 
     public int getVersion() {
