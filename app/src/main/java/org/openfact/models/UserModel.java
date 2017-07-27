@@ -1,7 +1,6 @@
 package org.openfact.models;
 
 import java.util.List;
-import java.util.Set;
 
 public interface UserModel {
 
@@ -16,5 +15,9 @@ public interface UserModel {
 
     String getFullName();
     void setFullName(String fullName);
-    
+
+    List<SpaceModel> getOwnedSpaces();
+    List<SpaceModel> getMemberSpaces();
+    List<SpaceModel> getMemberSpaces(RequestStatus requestStatus);
+
 }

@@ -1,6 +1,7 @@
 package org.openfact.representation.idm;
 
 import java.util.Date;
+import java.util.List;
 
 public class UserDataAttributesRepresentation {
 
@@ -43,6 +44,7 @@ public class UserDataAttributesRepresentation {
     // The IDP provided this identity
     private String providerType;
 
+    private List<SpaceRepresentation> spaces;
 
     public String getUserID() {
         return userID;
@@ -146,5 +148,13 @@ public class UserDataAttributesRepresentation {
 
     public void setProviderType(String providerType) {
         this.providerType = providerType;
+    }
+
+    public List<SpaceRepresentation> getSpaces() {
+        return spaces;
+    }
+
+    public void setSpaces(List<SpaceRepresentation> spaces) {
+        this.spaces = spaces;
     }
 }

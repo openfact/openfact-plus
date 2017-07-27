@@ -12,8 +12,8 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.keycloak.test.builders.ClientBuilder;
-import org.openfact.services.rule.JAXRSRule;
-import org.openfact.services.rule.SSORule;
+import org.openfact.services.rule.JAXRSRuleTest;
+import org.openfact.services.rule.SSORuleTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,10 +26,10 @@ import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 public abstract class AbstractSecureTest {
 
     @ClassRule
-    public static SSORule ssoProvider = new SSORule();
+    public static SSORuleTest ssoProvider = new SSORuleTest();
 
     @Rule
-    public JAXRSRule client = JAXRSRule.target("http://localhost:8080");
+    public JAXRSRuleTest client = JAXRSRuleTest.target("http://localhost:8080");
 
     @Deployment(testable = false)
     public static Archive<?> createTestArchive() throws IOException {

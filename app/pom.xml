@@ -109,6 +109,11 @@
             <scope>provided</scope>
             <version>5.2.10.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.4.1.Final</version>
+        </dependency>
 
         <dependency>
             <groupId>org.keycloak</groupId>

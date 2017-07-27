@@ -10,20 +10,19 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import java.util.BitSet;
 
-public class JAXRSRule implements TestRule {
+public class JAXRSRuleTest implements TestRule {
 
     private final Client client;
     private final WebTarget target;
 
-    private JAXRSRule(String uri) {
+    private JAXRSRuleTest(String uri) {
         this.client = ResteasyClientBuilder.newClient();
         this.target = client.target(uri);
     }
 
-    public static JAXRSRule target(String uri) {
-        return new JAXRSRule(uri);
+    public static JAXRSRuleTest target(String uri) {
+        return new JAXRSRuleTest(uri);
     }
 
     public WebTarget target() {

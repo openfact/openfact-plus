@@ -1,12 +1,17 @@
 package org.openfact.models.jpa.entity;
 
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "USER")
@@ -15,28 +20,35 @@ import javax.validation.constraints.NotNull;
 })
 public class UserEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
-    @Column(name = "ID", updatable = false, nullable = false)
+    @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
+    @Column(name = "ID", length = 36)
     private String id;
 
-    @NaturalId
     @NotNull
+    @NotEmpty
+    @NaturalId
     @Column(name = "USERNAME")
     private String username;
 
+    @Size(max = 255)
     @Column(name = "FULL_NAME")
     private String fullName;
 
-    @Column(name = "OFFLINE_TOKEN", length = 2048)
-    private String offlineToken;
-
+    @NotNull
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     @Column(name = "REGISTRATION_COMPLETED")
     private boolean registrationCompleted;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
-    private Set<BookPublisher> publishers = new HashSet<BookPublisher>();
+    @Size(max = 2048)
+    @Column(name = "OFFLINE_TOKEN", length = 2048)
+    private String offlineToken;
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    private List<SpaceEntity> ownedSpaces = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<UserSpaceEntity> memberSpaces = new HashSet<>();
 
     @Version
     @Column(name = "VERSION")
@@ -80,6 +92,22 @@ public class UserEntity implements Serializable {
 
     public void setRegistrationCompleted(boolean registrationCompleted) {
         this.registrationCompleted = registrationCompleted;
+    }
+
+    public Set<UserSpaceEntity> getMemberSpaces() {
+        return memberSpaces;
+    }
+
+    public void setMemberSpaces(Set<UserSpaceEntity> spaces) {
+        this.memberSpaces = spaces;
+    }
+
+    public List<SpaceEntity> getOwnedSpaces() {
+        return ownedSpaces;
+    }
+
+    public void setOwnedSpaces(List<SpaceEntity> ownedSpaces) {
+        this.ownedSpaces = ownedSpaces;
     }
 
     public int getVersion() {

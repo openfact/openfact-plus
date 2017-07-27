@@ -21,6 +21,9 @@
             "realmRoles": [ "user", "offline_access" ],
             "clientRoles": {
                 "account": [ "manage-account" ]
+            },
+            "attributes": {
+                "firstSpaceAccountIdClaimed": [ "00000000" ]
             }
         },
         {
@@ -32,6 +35,9 @@
             "realmRoles": [ "user", "offline_access"  ],
             "clientRoles": {
                 "account": [ "manage-account" ]
+            },
+            "attributes": {
+                "firstSpaceAccountIdClaimed": [ "00000000" ]
             }
         }
     ],

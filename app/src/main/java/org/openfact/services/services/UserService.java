@@ -3,8 +3,7 @@ package org.openfact.services.services;
 import org.jboss.logging.Logger;
 import org.keycloak.jose.jws.JWSInputException;
 import org.keycloak.util.TokenUtil;
-import org.openfact.models.UserModel;
-import org.openfact.models.UserProvider;
+import org.openfact.models.*;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.ContextInformationRepresentation;
 import org.openfact.representation.idm.ExtProfileRepresentation;
@@ -18,6 +17,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Path("/user")
@@ -28,6 +28,9 @@ public class UserService {
 
     @Inject
     private UserProvider userProvider;
+
+    @Inject
+    private SpaceProvider spaceProvider;
 
     @Inject
     private ModelToRepresentation modelToRepresentation;
@@ -45,7 +48,34 @@ public class UserService {
         UserModel user = this.userProvider.getByUsername(username);
         if (user == null) {
             user = this.userProvider.addUser(username);
-            user.setFullName(username);
+
+            Map<String, Object> userAttributes = kcUtil.getOtherClaims();
+            if (userAttributes.containsKey(Constants.KC_SPACE_ATTRIBUTE_NAME)) {
+                String claimedSpaceAccountId = null;
+
+                // Even if there is multiple spaces, at the first time we should use just the fist one
+                Object o = userAttributes.get(Constants.KC_SPACE_ATTRIBUTE_NAME);
+                if (o instanceof Collection) {
+                    Iterator it = ((Collection) o).iterator();
+                    while (it.hasNext()) {
+                        claimedSpaceAccountId = (String) it.next();
+                        break;
+                    }
+                } else {
+                    claimedSpaceAccountId = (String) o;
+                }
+
+                // Create space if no exists and claim to be a member if already exists
+                if (claimedSpaceAccountId != null) {
+                    SpaceModel space = spaceProvider.getByAccountId(claimedSpaceAccountId);
+                    if (space == null) {
+                        spaceProvider.addSpace(claimedSpaceAccountId, user);
+                    } else {
+                        System.out.println(claimedSpaceAccountId);
+                        space.requestMemberApproval(user);
+                    }
+                }
+            }
         }
 
         return Response.ok(modelToRepresentation.toRepresentation(user)).build();
