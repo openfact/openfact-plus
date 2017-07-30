@@ -46,6 +46,7 @@ public class UserDataAttributesRepresentation {
 
     private List<SpaceRepresentation> ownedSpaces;
     private List<SharedSpaceRepresentation> sharedSpaces;
+    private List<RequestAccessToSpaceRepresentation> spaceRequests;
 
     public String getUserID() {
         return userID;
@@ -165,5 +166,13 @@ public class UserDataAttributesRepresentation {
 
     public void setSharedSpaces(List<SharedSpaceRepresentation> sharedSpaces) {
         this.sharedSpaces = sharedSpaces;
+    }
+
+    public List<RequestAccessToSpaceRepresentation> getSpaceRequests() {
+        return spaceRequests;
+    }
+
+    public void setSpaceRequests(List<RequestAccessToSpaceRepresentation> spaceRequests) {
+        this.spaceRequests = spaceRequests;
     }
 }

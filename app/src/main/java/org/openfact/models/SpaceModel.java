@@ -5,6 +5,7 @@ import java.util.Set;
 public interface SpaceModel {
 
     String getId();
+    String getAssignedId();
 
     String getAlias();
     void setAlias(String alias);
@@ -15,5 +16,4 @@ public interface SpaceModel {
     Set<SharedSpaceModel> getSharedUsers();
 
     RequestAccessToSpaceModel requestAccess(UserModel user, Set<PermissionType> permissions);
-
 }

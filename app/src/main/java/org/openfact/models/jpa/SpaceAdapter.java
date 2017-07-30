@@ -37,6 +37,11 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
     }
 
     @Override
+    public String getAssignedId() {
+        return space.getAssignedId();
+    }
+
+    @Override
     public String getAlias() {
         return space.getAlias();
     }

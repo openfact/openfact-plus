@@ -3,6 +3,7 @@ package org.openfact.representation.idm;
 public class SpaceRepresentation {
 
     private String id;
+    private String assignedId;
     private String alias;
 
     public String getId() {
@@ -11,6 +12,14 @@ public class SpaceRepresentation {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getAssignedId() {
+        return assignedId;
+    }
+
+    public void setAssignedId(String assignedId) {
+        this.assignedId = assignedId;
     }
 
     public String getAlias() {
