@@ -3,7 +3,6 @@ package org.openfact.models.jpa;
 import org.openfact.models.SpaceModel;
 import org.openfact.models.SpaceProvider;
 import org.openfact.models.UserModel;
-import org.openfact.models.UserProvider;
 import org.openfact.models.jpa.entity.SpaceEntity;
 import org.openfact.models.jpa.entity.UserEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
@@ -21,12 +20,12 @@ public class JpaSpaceProvider implements SpaceProvider {
     private EntityManager em;
 
     @Override
-    public SpaceModel addSpace(String accountId, UserModel owner) {
+    public SpaceModel addSpace(String assignedId, UserModel owner) {
         UserEntity userEntity = UserAdapter.toEntity(owner, em);
 
         SpaceEntity entity = new SpaceEntity();
         entity.setId(OpenfactModelUtils.generateId());
-        entity.setAccountId(accountId);
+        entity.setAssignedId(assignedId);
         entity.setOwner(userEntity);
         em.persist(entity);
 
@@ -37,9 +36,9 @@ public class JpaSpaceProvider implements SpaceProvider {
     }
 
     @Override
-    public SpaceModel getByAccountId(String accountId) {
-        TypedQuery<SpaceEntity> query = em.createNamedQuery("getSpaceByAccountId", SpaceEntity.class);
-        query.setParameter("accountId", accountId);
+    public SpaceModel getByAssignedId(String assignedId) {
+        TypedQuery<SpaceEntity> query = em.createNamedQuery("getSpaceByAssignedId", SpaceEntity.class);
+        query.setParameter("assignedId", assignedId);
         List<SpaceEntity> entities = query.getResultList();
         if (entities.size() == 0) return null;
         return new SpaceAdapter(em, entities.get(0));

@@ -40,39 +40,39 @@ public class UserServiceTest extends AbstractSecureTest {
         assertThat(user2.getAttributes().getUsername(), equalTo("carlos"));
     }
 
-    @Test
-    public void testGetAndCreateUserWithSpaceClaimed() {
-        // Create user on database
-        Response response = client.buildWithAuth("esteban", "password", PATH).get();
-        UserRepresentation user = response.readEntity(UserRepresentation.class);
-        response.close();
+//    @Test
+//    public void testGetAndCreateUserWithSpaceClaimed() {
+//        // Create user on database
+//        Response response = client.buildWithAuth("esteban", "password", PATH).get();
+//        UserRepresentation user = response.readEntity(UserRepresentation.class);
+//        response.close();
+//
+//        assertThat(response.getStatus(), equalTo(200));
+//        assertThat(user.getAttributes().getUsername(), equalTo("esteban"));
+//        assertThat(user.getAttributes().getSpaces(), notNullValue());
+//        assertThat(user.getAttributes().getSpaces().size(), equalTo(1));
+//        assertThat(user.getAttributes().getSpaces().get(0).getType(), equalTo(Constants.USER_SPACE_TYPE_OWNER));
+//    }
 
-        assertThat(response.getStatus(), equalTo(200));
-        assertThat(user.getAttributes().getUsername(), equalTo("esteban"));
-        assertThat(user.getAttributes().getSpaces(), notNullValue());
-        assertThat(user.getAttributes().getSpaces().size(), equalTo(1));
-        assertThat(user.getAttributes().getSpaces().get(0).getType(), equalTo(Constants.USER_SPACE_TYPE_OWNER));
-    }
-
-    @Test
-    public void testGetAndCreateUserWithOwnedSpaceClaimed() {
-        // Create user on database
-        Response response = client.buildWithAuth("carlos", "password", PATH).get();
-        response.readEntity(UserRepresentation.class);
-        response.close();
-
-        assertThat(response.getStatus(), equalTo(200));
-
-        // Create user and claim space
-        response = client.buildWithAuth("esteban", "password", PATH).get();
-        UserRepresentation user2 = response.readEntity(UserRepresentation.class);
-        response.close();
-
-        assertThat(response.getStatus(), equalTo(200));
+//    @Test
+//    public void testGetAndCreateUserWithOwnedSpaceClaimed() {
+//        // Create user on database
+//        Response response = client.buildWithAuth("carlos", "password", PATH).get();
+//        response.readEntity(UserRepresentation.class);
+//        response.close();
+//
+//        assertThat(response.getStatus(), equalTo(200));
+//
+//        // Create user and claim space
+//        response = client.buildWithAuth("esteban", "password", PATH).get();
+//        UserRepresentation user2 = response.readEntity(UserRepresentation.class);
+//        response.close();
+//
+//        assertThat(response.getStatus(), equalTo(200));
 //        assertThat(user2.getAttributes().getUsername(), equalTo("esteban"));
 //        assertThat(user2.getAttributes().getSpaces(), notNullValue());
 //        assertThat(user2.getAttributes().getSpaces().size(), equalTo(1));
 //        assertThat(user2.getAttributes().getSpaces().get(0).getType(), equalTo(Constants.USER_SPACE_TYPE_MEMBER_REQUESTED));
-    }
+//    }
 
 }

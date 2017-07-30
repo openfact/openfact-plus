@@ -1,6 +1,7 @@
 package org.openfact.models.jpa.entity;
 
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "SPACE")
 @NamedQueries({
-        @NamedQuery(name = "getSpaceByAccountId", query = "select s from SpaceEntity s where s.accountId = :accountId")
+        @NamedQuery(name = "getSpaceByAssignedId", query = "select s from SpaceEntity s where s.assignedId = :assignedId")
 })
 public class SpaceEntity implements Serializable {
 
@@ -22,9 +23,10 @@ public class SpaceEntity implements Serializable {
     private String id;
 
     @NotNull
+    @NotEmpty
     @NaturalId
-    @Column(name = "ACCOUNT_ID")
-    private String accountId;
+    @Column(name = "ASSIGNED_ID")
+    private String assignedId;
 
     @Size(max = 255)
     @Column(name = "ALIAS")
@@ -36,7 +38,10 @@ public class SpaceEntity implements Serializable {
     private UserEntity owner;
 
     @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
-    private Set<UserSpaceEntity> members = new HashSet<>();
+    private Set<SharedSpaceEntity> sharedUsers = new HashSet<>();
+
+    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
+    private Set<RequestAccessToSpaceEntity> accessRequests = new HashSet<>();
 
     @Version
     @Column(name = "VERSION")
@@ -50,12 +55,12 @@ public class SpaceEntity implements Serializable {
         this.id = id;
     }
 
-    public String getAccountId() {
-        return accountId;
+    public String getAssignedId() {
+        return assignedId;
     }
 
-    public void setAccountId(String assignedAccountId) {
-        this.accountId = assignedAccountId;
+    public void setAssignedId(String assignedId) {
+        this.assignedId = assignedId;
     }
 
     public String getAlias() {
@@ -74,12 +79,20 @@ public class SpaceEntity implements Serializable {
         this.owner = owner;
     }
 
-    public Set<UserSpaceEntity> getMembers() {
-        return members;
+    public Set<SharedSpaceEntity> getSharedUsers() {
+        return sharedUsers;
     }
 
-    public void setMembers(Set<UserSpaceEntity> members) {
-        this.members = members;
+    public void setSharedUsers(Set<SharedSpaceEntity> sharedUsers) {
+        this.sharedUsers = sharedUsers;
+    }
+
+    public Set<RequestAccessToSpaceEntity> getAccessRequests() {
+        return accessRequests;
+    }
+
+    public void setAccessRequests(Set<RequestAccessToSpaceEntity> accessRequests) {
+        this.accessRequests = accessRequests;
     }
 
     public int getVersion() {
@@ -91,36 +104,18 @@ public class SpaceEntity implements Serializable {
     }
 
     @Override
-    public String toString() {
-        String result = getClass().getSimpleName() + " ";
-        if (getId() != null)
-            result += "id: " + getId();
-        return result;
-    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof SpaceEntity)) {
-            return false;
-        }
-        SpaceEntity other = (SpaceEntity) obj;
-        if (getId() != null) {
-            if (!getId().equals(other.getId())) {
-                return false;
-            }
-        }
-        return true;
+        SpaceEntity that = (SpaceEntity) o;
+
+        return getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        return result;
+        return getId().hashCode();
     }
 
 }

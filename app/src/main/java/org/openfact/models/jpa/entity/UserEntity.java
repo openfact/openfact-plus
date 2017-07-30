@@ -6,9 +6,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -45,20 +43,23 @@ public class UserEntity implements Serializable {
     private String offlineToken;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
-    private List<SpaceEntity> ownedSpaces = new ArrayList<>();
+    private Set<SpaceEntity> ownedSpaces = new HashSet<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<UserSpaceEntity> memberSpaces = new HashSet<>();
+    private Set<SharedSpaceEntity> sharedSpaces = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<RequestAccessToSpaceEntity> spaceRequests = new HashSet<>();
 
     @Version
     @Column(name = "VERSION")
     private int version;
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -78,14 +79,6 @@ public class UserEntity implements Serializable {
         this.fullName = fullName;
     }
 
-    public String getOfflineToken() {
-        return offlineToken;
-    }
-
-    public void setOfflineToken(String offlineToken) {
-        this.offlineToken = offlineToken;
-    }
-
     public boolean isRegistrationCompleted() {
         return registrationCompleted;
     }
@@ -94,61 +87,57 @@ public class UserEntity implements Serializable {
         this.registrationCompleted = registrationCompleted;
     }
 
-    public Set<UserSpaceEntity> getMemberSpaces() {
-        return memberSpaces;
+    public String getOfflineToken() {
+        return offlineToken;
     }
 
-    public void setMemberSpaces(Set<UserSpaceEntity> spaces) {
-        this.memberSpaces = spaces;
+    public void setOfflineToken(String offlineToken) {
+        this.offlineToken = offlineToken;
     }
 
-    public List<SpaceEntity> getOwnedSpaces() {
+    public Set<SpaceEntity> getOwnedSpaces() {
         return ownedSpaces;
     }
 
-    public void setOwnedSpaces(List<SpaceEntity> ownedSpaces) {
+    public void setOwnedSpaces(Set<SpaceEntity> ownedSpaces) {
         this.ownedSpaces = ownedSpaces;
     }
 
-    public int getVersion() {
-        return this.version;
+    public Set<SharedSpaceEntity> getSharedSpaces() {
+        return sharedSpaces;
     }
 
-    public void setVersion(final int version) {
+    public void setSharedSpaces(Set<SharedSpaceEntity> sharedSpaces) {
+        this.sharedSpaces = sharedSpaces;
+    }
+
+    public Set<RequestAccessToSpaceEntity> getSpaceRequests() {
+        return spaceRequests;
+    }
+
+    public void setSpaceRequests(Set<RequestAccessToSpaceEntity> spaceRequests) {
+        this.spaceRequests = spaceRequests;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
         this.version = version;
     }
 
     @Override
-    public String toString() {
-        String result = getClass().getSimpleName() + " ";
-        if (id != null)
-            result += "id: " + id;
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof UserEntity)) {
-            return false;
-        }
-        UserEntity other = (UserEntity) obj;
-        if (id != null) {
-            if (!id.equals(other.id)) {
-                return false;
-            }
-        }
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity that = (UserEntity) o;
+        return getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
+        return getId().hashCode();
     }
 
 }

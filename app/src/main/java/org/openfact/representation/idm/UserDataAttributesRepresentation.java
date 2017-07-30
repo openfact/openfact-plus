@@ -44,7 +44,8 @@ public class UserDataAttributesRepresentation {
     // The IDP provided this identity
     private String providerType;
 
-    private List<SpaceRepresentation> spaces;
+    private List<SpaceRepresentation> ownedSpaces;
+    private List<SharedSpaceRepresentation> sharedSpaces;
 
     public String getUserID() {
         return userID;
@@ -150,11 +151,19 @@ public class UserDataAttributesRepresentation {
         this.providerType = providerType;
     }
 
-    public List<SpaceRepresentation> getSpaces() {
-        return spaces;
+    public List<SpaceRepresentation> getOwnedSpaces() {
+        return ownedSpaces;
     }
 
-    public void setSpaces(List<SpaceRepresentation> spaces) {
-        this.spaces = spaces;
+    public void setOwnedSpaces(List<SpaceRepresentation> ownedSpaces) {
+        this.ownedSpaces = ownedSpaces;
+    }
+
+    public List<SharedSpaceRepresentation> getSharedSpaces() {
+        return sharedSpaces;
+    }
+
+    public void setSharedSpaces(List<SharedSpaceRepresentation> sharedSpaces) {
+        this.sharedSpaces = sharedSpaces;
     }
 }

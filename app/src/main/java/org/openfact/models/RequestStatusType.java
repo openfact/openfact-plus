@@ -1,5 +1,5 @@
 package org.openfact.models;
 
-public enum RequestStatus {
+public enum RequestStatusType {
     REQUESTED, ACCEPTED, REJECTED;
 }

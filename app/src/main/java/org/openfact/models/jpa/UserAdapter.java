@@ -1,13 +1,14 @@
 package org.openfact.models.jpa;
 
-import org.openfact.models.RequestStatus;
+import org.openfact.models.RequestAccessToSpaceModel;
+import org.openfact.models.SharedSpaceModel;
 import org.openfact.models.SpaceModel;
 import org.openfact.models.UserModel;
 import org.openfact.models.jpa.entity.UserEntity;
-import org.openfact.models.jpa.entity.UserSpaceEntity;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserAdapter implements UserModel, JpaModel<UserEntity> {
@@ -22,13 +23,13 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
 
     public static UserEntity toEntity(UserModel model, EntityManager em) {
         if (model instanceof UserAdapter) {
-            return ((UserAdapter) model).getUser();
+            return ((UserAdapter) model).getEntity();
         }
         return em.getReference(UserEntity.class, model.getId());
     }
 
     @Override
-    public UserEntity getUser() {
+    public UserEntity getEntity() {
         return user;
     }
 
@@ -73,26 +74,23 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     }
 
     @Override
-    public List<SpaceModel> getOwnedSpaces() {
+    public Set<SpaceModel> getOwnedSpaces() {
         return user.getOwnedSpaces().stream()
                 .map(f -> new SpaceAdapter(em, f))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public List<SpaceModel> getMemberSpaces() {
-        return user.getMemberSpaces().stream()
-                .map(UserSpaceEntity::getSpace)
-                .map(f -> new SpaceAdapter(em, f))
-                .collect(Collectors.toList());
+    public Set<SharedSpaceModel> getSharedSpaces() {
+        return user.getSharedSpaces().stream()
+                .map(f -> new SharedSpaceAdapter(em, f))
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public List<SpaceModel> getMemberSpaces(RequestStatus requestStatus) {
-        return user.getMemberSpaces().stream()
-                .filter(p -> p.getStatus().equals(requestStatus))
-                .map(UserSpaceEntity::getSpace)
-                .map(f -> new SpaceAdapter(em, f))
+    public List<RequestAccessToSpaceModel> getSpaceRequests() {
+        return user.getSpaceRequests().stream()
+                .map(f -> new RequestAccessToSpaceAdapter(em, f))
                 .collect(Collectors.toList());
     }
 

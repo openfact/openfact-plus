@@ -40,7 +40,7 @@ public class UserService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCurrentUser(@Context final HttpServletRequest httpServletRequest) throws ExecutionException, InterruptedException {
+    public Response getCurrentUser(@Context final HttpServletRequest httpServletRequest) {
         KeycloakUtil kcUtil = new KeycloakUtil(httpServletRequest);
         String username = kcUtil.getUsername();
 
@@ -67,12 +67,14 @@ public class UserService {
 
                 // Create space if no exists and claim to be a member if already exists
                 if (claimedSpaceAccountId != null) {
-                    SpaceModel space = spaceProvider.getByAccountId(claimedSpaceAccountId);
+                    SpaceModel space = spaceProvider.getByAssignedId(claimedSpaceAccountId);
                     if (space == null) {
                         spaceProvider.addSpace(claimedSpaceAccountId, user);
                     } else {
-                        System.out.println(claimedSpaceAccountId);
-                        space.requestMemberApproval(user);
+                        Set<PermissionType> permissions = new HashSet<>();
+                        permissions.add(PermissionType.READ);
+
+                        space.requestAccess(user, permissions);
                     }
                 }
             }

@@ -1,16 +1,15 @@
 package org.openfact.models.jpa;
 
-import org.openfact.models.RequestStatus;
-import org.openfact.models.SpaceModel;
-import org.openfact.models.UserModel;
+import org.openfact.models.*;
+import org.openfact.models.jpa.entity.RequestAccessToSpaceEntity;
 import org.openfact.models.jpa.entity.SpaceEntity;
 import org.openfact.models.jpa.entity.UserEntity;
-import org.openfact.models.jpa.entity.UserSpaceEntity;
-import org.openfact.models.jpa.entity.UserSpaceEntity.UserSpaceIdEntity;
 
 import javax.persistence.EntityManager;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class SpaceAdapter implements SpaceModel {
+public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
 
     private final EntityManager em;
     private final SpaceEntity space;
@@ -18,6 +17,18 @@ public class SpaceAdapter implements SpaceModel {
     public SpaceAdapter(EntityManager em, SpaceEntity entity) {
         this.em = em;
         this.space = entity;
+    }
+
+    public static SpaceEntity toEntity(SpaceModel model, EntityManager em) {
+        if (model instanceof SpaceAdapter) {
+            return ((SpaceAdapter) model).getEntity();
+        }
+        return em.getReference(SpaceEntity.class, model.getId());
+    }
+
+    @Override
+    public SpaceEntity getEntity() {
+        return space;
     }
 
     @Override
@@ -28,6 +39,11 @@ public class SpaceAdapter implements SpaceModel {
     @Override
     public String getAlias() {
         return space.getAlias();
+    }
+
+    @Override
+    public void setAlias(String alias) {
+        space.setAlias(alias);
     }
 
     @Override
@@ -43,20 +59,27 @@ public class SpaceAdapter implements SpaceModel {
     }
 
     @Override
-    public RequestStatus requestMemberApproval(UserModel user) {
-        RequestStatus requestStatus = RequestStatus.REQUESTED;
+    public Set<SharedSpaceModel> getSharedUsers() {
+        return space.getSharedUsers().stream()
+                .map(f -> new SharedSpaceAdapter(em, f))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public RequestAccessToSpaceModel requestAccess(UserModel user, Set<PermissionType> permissions) {
         UserEntity userEntity = UserAdapter.toEntity(user, em);
 
-        // Persist
-        UserSpaceEntity userSpaceEntity = new UserSpaceEntity(new UserSpaceIdEntity(userEntity, space));
-        userSpaceEntity.setStatus(requestStatus);
-        em.persist(userSpaceEntity);
+        RequestAccessToSpaceEntity entity = new RequestAccessToSpaceEntity(userEntity, space);
+        entity.setSpace(space);
+        entity.setUser(userEntity);
+        entity.setPermissions(permissions);
+        entity.setStatus(RequestStatusType.REQUESTED);
 
-        // Update cache
-        /*userEntity.getMemberSpaces().add(userSpaceEntity);
-        space.getMembers().add(userSpaceEntity);*/
+        // Cache
+        space.getAccessRequests().add(entity);
+        userEntity.getSpaceRequests().add(entity);
 
-        return requestStatus;
+        return new RequestAccessToSpaceAdapter(em, entity);
     }
 
 }

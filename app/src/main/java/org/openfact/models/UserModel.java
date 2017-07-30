@@ -1,23 +1,25 @@
 package org.openfact.models;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserModel {
 
     String getId();
     String getUsername();
 
-    String getOfflineToken();
-    void setOfflineToken(String token);
+    String getFullName();
+    void setFullName(String fullName);
 
     boolean isRegistrationCompleted();
     void setRegistrationCompleted(boolean registrationCompleted);
 
-    String getFullName();
-    void setFullName(String fullName);
+    String getOfflineToken();
+    void setOfflineToken(String token);
 
-    List<SpaceModel> getOwnedSpaces();
-    List<SpaceModel> getMemberSpaces();
-    List<SpaceModel> getMemberSpaces(RequestStatus requestStatus);
+    Set<SpaceModel> getOwnedSpaces();
+    Set<SharedSpaceModel> getSharedSpaces();
+
+    List<RequestAccessToSpaceModel> getSpaceRequests();
 
 }
