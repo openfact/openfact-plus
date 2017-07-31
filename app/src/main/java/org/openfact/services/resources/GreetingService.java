@@ -1,4 +1,4 @@
-package org.openfact.services.services;
+package org.openfact.services.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

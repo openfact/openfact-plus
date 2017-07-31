@@ -1,4 +1,4 @@
-package org.openfact.services.services;
+package org.openfact.services.resources;
 
 import org.jboss.logging.Logger;
 import org.keycloak.jose.jws.JWSInputException;
@@ -7,6 +7,8 @@ import org.openfact.models.*;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.ContextInformationRepresentation;
 import org.openfact.representation.idm.ExtProfileRepresentation;
+import org.openfact.services.ErrorResponse;
+import org.openfact.services.util.KeycloakUtil;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -18,7 +20,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 @Path("/user")
 @Stateless

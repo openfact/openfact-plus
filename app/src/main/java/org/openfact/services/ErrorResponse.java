@@ -1,4 +1,4 @@
-package org.openfact.services.services;
+package org.openfact.services;
 
 import org.openfact.representation.idm.ErrorRepresentation;
 

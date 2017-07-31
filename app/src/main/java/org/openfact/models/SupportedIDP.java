@@ -1,4 +1,4 @@
-package org.openfact.services.services;
+package org.openfact.models;
 
 public enum SupportedIDP {
 

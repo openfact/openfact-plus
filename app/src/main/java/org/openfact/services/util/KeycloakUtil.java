@@ -1,4 +1,4 @@
-package org.openfact.services.services;
+package org.openfact.services.util;
 
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
