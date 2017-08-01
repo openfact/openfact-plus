@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job id="idpJob" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/jobXML_1_0.xsd"
+     version="1.0">
+    <listeners>
+        <listener ref="loggerListener"></listener>
+    </listeners>
+    <flow id="flow1" next="step3">
+        <step id="step1">
+            <chunk>
+                <reader ref="readUserReader"/>
+                <writer ref="myItemWriter"/>
+            </chunk>
+        </step>
+    </flow>
+    <step id="step3">
+        <batchlet ref="myBatchlet2"/>
+    </step>
+</job>
