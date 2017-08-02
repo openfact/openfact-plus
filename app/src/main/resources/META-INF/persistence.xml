@@ -12,6 +12,12 @@
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.transaction.flush_before_completion" value="true"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+
+            <!--Hibernate search-->
+            <property name="hibernate.search.default.indexmanager elasticsearch" value="true"/>
+            <property name="hibernate.search.default.elasticsearch.host" value="http://127.0.0.1:9200"/>
+            <property name="hibernate.search.default.elasticsearch.username" value="username"/>
+            <property name="hibernate.search.default.elasticsearch.password" value="password"/>
         </properties>
     </persistence-unit>
 </persistence>

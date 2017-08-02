@@ -1,6 +1,7 @@
 package org.openfact.models.jpa;
 
 import org.openfact.models.UserRepositoryModel;
+import org.openfact.models.broker.BrokerType;
 import org.openfact.models.jpa.entity.UserRepositoryEntity;
 
 import javax.persistence.EntityManager;
@@ -26,6 +27,16 @@ public class UserRepositoryAdapter implements UserRepositoryModel, JpaModel<User
     @Override
     public String getId() {
         return userRepository.getId();
+    }
+
+    @Override
+    public BrokerType getType() {
+        return userRepository.getType();
+    }
+
+    @Override
+    public String getEmail() {
+        return userRepository.getEmail();
     }
 
     @Override

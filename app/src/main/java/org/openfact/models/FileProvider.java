@@ -8,6 +8,10 @@ public interface FileProvider {
      */
     FileModel addFile(byte[] file, String extension) throws StorageException;
 
+    /**
+     * @param file to be removed
+     * @return result of operation
+     */
     boolean removeFile(FileModel file) throws StorageException;
 
 }

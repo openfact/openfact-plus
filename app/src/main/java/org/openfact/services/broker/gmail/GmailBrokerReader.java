@@ -31,7 +31,7 @@ public class GmailBrokerReader implements BrokerReader {
                     .map(f -> new BrokerElementAdapter(userRepository, client, f))
                     .collect(Collectors.toList());
         } catch (IOException e) {
-            throw new ReadBrokerException("Could not read gmail messages", e);
+            throw new ReadBrokerException("Could not buildEntity gmail messages", e);
         }
         return result;
     }

@@ -5,15 +5,15 @@ import javax.batch.operations.JobOperator;
 import javax.batch.runtime.BatchRuntime;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.Stateless;
 import java.util.Properties;
 
-@Startup
-@Singleton
+@Stateless
 public class BatchStarter {
 
     public static final String JOB_NAME = "idpJob";
 
-    @PostConstruct
+//    @PostConstruct
     private void init() {
         JobOperator jobOperator = BatchRuntime.getJobOperator();
         Properties properties = new Properties();

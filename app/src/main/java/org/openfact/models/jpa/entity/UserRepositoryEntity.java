@@ -2,7 +2,9 @@ package org.openfact.models.jpa.entity;
 
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.openfact.models.broker.BrokerType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,6 +24,17 @@ public class UserRepositoryEntity {
     @NotEmpty
     @Column(name = "NAME")
     private String name;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TYPE")
+    private BrokerType type;
+
+    @NotNull
+    @NotEmpty
+    @Email
+    @Column(name = "TYPE")
+    private String email;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -76,5 +89,21 @@ public class UserRepositoryEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BrokerType getType() {
+        return type;
+    }
+
+    public void setType(BrokerType type) {
+        this.type = type;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

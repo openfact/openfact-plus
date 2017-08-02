@@ -6,6 +6,7 @@ import org.openfact.models.jpa.entity.UserRepositoryEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.persistence.EntityManager;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -112,6 +113,12 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
         return user.getRepositories().stream()
                 .map(f -> new UserRepositoryAdapter(em, f))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean removeAllRepositories() {
+        user.setRepositories(new HashSet<>());
+        return true;
     }
 
     @Override

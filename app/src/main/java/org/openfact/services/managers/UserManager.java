@@ -1,19 +1,13 @@
 package org.openfact.services.managers;
 
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.rest.RestStatus;
-import org.openfact.models.FileModel;
 import org.openfact.models.FileProvider;
 import org.openfact.models.ModelException;
-import org.openfact.models.utils.DocumentUtil;
-import org.openfact.services.resources.ElasticsearchConfig;
+import org.openfact.models.DocumentProvider;
 import org.w3c.dom.Document;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -21,16 +15,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 @Stateless
 public class UserManager {
 
     @Inject
-    private ElasticsearchConfig elasticsearchConfig;
-
-    @Inject
-    private DocumentUtil documentUtil;
+    private DocumentProvider documentUtil;
 
     @Inject
     private FileProvider fileProvider;
@@ -47,7 +37,7 @@ public class UserManager {
 //        FileModel file = fileProvider.addFile(bytes);
 //
 //        // Persist json
-//        XContentBuilder json = documentUtil.read(document);
+//        XContentBuilder json = documentUtil.buildEntity(document);
 //        IndexResponse response = null;
 //        try {
 //            response = elasticsearchConfig.getClient()

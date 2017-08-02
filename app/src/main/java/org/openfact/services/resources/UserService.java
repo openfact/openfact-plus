@@ -107,7 +107,7 @@ public class UserService {
                         return ErrorResponse.error("Invalid Token Type", Response.Status.BAD_REQUEST);
                     }
                 } catch (JWSInputException e) {
-                    logger.error("Could not read sended token", e);
+                    logger.error("Could not buildEntity sended token", e);
                 }
             }
         }
