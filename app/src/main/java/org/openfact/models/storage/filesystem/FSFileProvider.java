@@ -3,6 +3,7 @@ package org.openfact.models.storage.filesystem;
 import org.openfact.models.FileModel;
 import org.openfact.models.FileProvider;
 import org.openfact.models.StorageException;
+import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -31,7 +32,7 @@ public class FSFileProvider implements FileProvider {
 
     @Override
     public FileModel addFile(byte[] file, String extension) throws StorageException {
-        Path path = Paths.get(FILESYSTEM_CLUSTER_PATH, UUID.randomUUID().toString() + extension);
+        Path path = Paths.get(FILESYSTEM_CLUSTER_PATH, OpenfactModelUtils.generateId() + extension);
         try {
             path = Files.write(path, file);
         } catch (IOException e) {

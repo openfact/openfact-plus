@@ -1,12 +1,12 @@
-package org.openfact.batch;
+package org.openfact.batchs.read;
 
-public class MyOutputRecord {
+public class MyInputRecord {
     private int id;
 
-    public MyOutputRecord() {
+    public MyInputRecord() {
     }
 
-    public MyOutputRecord(int id) {
+    public MyInputRecord(int id) {
         this.id = id;
     }
 
@@ -20,6 +20,6 @@ public class MyOutputRecord {
 
     @Override
     public String toString() {
-        return "MyOutputRecord: " + id;
+        return "MyInputRecord: " + id;
     }
 }

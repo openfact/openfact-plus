@@ -1,4 +1,4 @@
-package org.openfact.batch;
+package org.openfact.batchs;
 
 import javax.annotation.PostConstruct;
 import javax.batch.operations.JobOperator;

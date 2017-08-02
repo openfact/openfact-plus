@@ -1,13 +1,13 @@
-package org.openfact.models;
+package org.openfact.models.broker;
 
-public enum SupportedIDP {
+public enum BrokerType {
 
     GOOGLE("google"),
     MICROSOFT("microsoft");
 
     private String microsoft;
 
-    private SupportedIDP(String microsoft) {
+    private BrokerType(String microsoft) {
         this.microsoft = microsoft;
     }
 

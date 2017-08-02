@@ -1,10 +1,9 @@
 package org.openfact.models.jpa;
 
-import org.openfact.models.RequestAccessToSpaceModel;
-import org.openfact.models.SharedSpaceModel;
-import org.openfact.models.SpaceModel;
-import org.openfact.models.UserModel;
+import org.openfact.models.*;
 import org.openfact.models.jpa.entity.UserEntity;
+import org.openfact.models.jpa.entity.UserRepositoryEntity;
+import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -44,13 +43,13 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     }
 
     @Override
-    public String getOfflineToken() {
+    public String getOfflineRefreshToken() {
         return user.getOfflineToken();
     }
 
     @Override
-    public void setOfflineToken(String token) {
-        user.setOfflineToken(token);
+    public void setOfflineRefreshToken(String refreshToken) {
+        user.setOfflineToken(refreshToken);
     }
 
     @Override
@@ -91,6 +90,27 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     public List<RequestAccessToSpaceModel> getSpaceRequests() {
         return user.getSpaceRequests().stream()
                 .map(f -> new RequestAccessToSpaceAdapter(em, f))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserRepositoryModel addRepository(String name) {
+        UserRepositoryEntity entity = new UserRepositoryEntity();
+        entity.setId(OpenfactModelUtils.generateId());
+        entity.setName(name);
+        entity.setUser(user);
+        em.persist(entity);
+
+        // Cache
+        user.getRepositories().add(entity);
+
+        return new UserRepositoryAdapter(em, entity);
+    }
+
+    @Override
+    public List<UserRepositoryModel> getRepositories() {
+        return user.getRepositories().stream()
+                .map(f -> new UserRepositoryAdapter(em, f))
                 .collect(Collectors.toList());
     }
 

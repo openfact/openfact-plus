@@ -1,4 +1,4 @@
-package org.openfact.batch;
+package org.openfact.batchs;
 
 import org.jboss.logging.Logger;
 import org.openfact.services.resources.DocumentsService;

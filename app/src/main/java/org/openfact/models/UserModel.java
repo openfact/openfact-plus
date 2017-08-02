@@ -14,12 +14,16 @@ public interface UserModel {
     boolean isRegistrationCompleted();
     void setRegistrationCompleted(boolean registrationCompleted);
 
-    String getOfflineToken();
-    void setOfflineToken(String token);
+    String getOfflineRefreshToken();
+    void setOfflineRefreshToken(String refreshToken);
 
     Set<SpaceModel> getOwnedSpaces();
     Set<SharedSpaceModel> getSharedSpaces();
 
     List<RequestAccessToSpaceModel> getSpaceRequests();
+
+    UserRepositoryModel addRepository(String name);
+    List<UserRepositoryModel> getRepositories();
+    boolean removeAllRepositories();
 
 }

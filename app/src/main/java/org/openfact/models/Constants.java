@@ -2,6 +2,8 @@ package org.openfact.models;
 
 public class Constants {
 
+    public static final String GMAIL_APPLICATION_NAME = "OpenfactSync";
+
     public static String KC_SPACE_ATTRIBUTE_NAME = "firstSpaceAccountIdClaimed";
 
     public static String USER_SPACE_TYPE_OWNER = "owner";

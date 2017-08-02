@@ -5,10 +5,12 @@
     <listeners>
         <listener ref="loggerListener"></listener>
     </listeners>
-    <flow id="processMailRepositoryFlow" next="endTask">
+    <flow id="refreshUserDataFlow" next="endTask">
         <step id="readUserStep">
             <chunk>
                 <reader ref="userWithOfflineTokenReader"/>
+                <processor ref="offlineRefreshTokenProcessor"/>
+                <writer ref="testWriter"/>
             </chunk>
         </step>
 

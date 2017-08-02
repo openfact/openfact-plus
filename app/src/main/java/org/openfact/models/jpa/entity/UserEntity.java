@@ -14,7 +14,8 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "USER")
 @NamedQueries({
-        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username")
+        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username"),
+        @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username")
 })
 public class UserEntity implements Serializable {
 
@@ -50,6 +51,9 @@ public class UserEntity implements Serializable {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<RequestAccessToSpaceEntity> spaceRequests = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<UserRepositoryEntity> repositories = new HashSet<>();
 
     @Version
     @Column(name = "VERSION")
@@ -117,6 +121,14 @@ public class UserEntity implements Serializable {
 
     public void setSpaceRequests(Set<RequestAccessToSpaceEntity> spaceRequests) {
         this.spaceRequests = spaceRequests;
+    }
+
+    public Set<UserRepositoryEntity> getRepositories() {
+        return repositories;
+    }
+
+    public void setRepositories(Set<UserRepositoryEntity> repositories) {
+        this.repositories = repositories;
     }
 
     public int getVersion() {

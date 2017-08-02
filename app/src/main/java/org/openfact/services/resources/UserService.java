@@ -102,7 +102,7 @@ public class UserService {
             if (offlineToken != null) {
                 try {
                     if (TokenUtil.isOfflineToken(offlineToken)) {
-                        user.setOfflineToken(offlineToken);
+                        user.setOfflineRefreshToken(offlineToken);
                     } else {
                         return ErrorResponse.error("Invalid Token Type", Response.Status.BAD_REQUEST);
                     }

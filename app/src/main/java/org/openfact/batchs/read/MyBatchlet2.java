@@ -1,4 +1,4 @@
-package org.openfact.batch;
+package org.openfact.batchs.read;
 
 import javax.batch.api.AbstractBatchlet;
 import javax.inject.Named;

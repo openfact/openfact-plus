@@ -1,4 +1,4 @@
-package org.openfact.batch;
+package org.openfact.batchs.read;
 
 import java.util.List;
 import javax.batch.api.chunk.AbstractItemWriter;

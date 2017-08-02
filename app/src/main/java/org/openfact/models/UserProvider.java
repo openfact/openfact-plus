@@ -6,4 +6,6 @@ public interface UserProvider {
 
     UserModel getByUsername(String username);
 
+    ScrollableResultsModel<UserModel> getUsers();
+
 }
