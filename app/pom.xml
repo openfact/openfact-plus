@@ -22,6 +22,7 @@
         <version.keycloak>2.5.5.Final</version.keycloak>
         <version.hibernate>5.2.10.Final</version.hibernate>
         <version.hibernate-validator>5.2.4.Final</version.hibernate-validator>
+        <version.hibernate-search>5.7.1.Final</version.hibernate-search>
 
         <version.h2>1.4.187</version.h2>
         <version.postgresql>9.4.1207</version.postgresql>
@@ -82,6 +83,11 @@
 
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
+            <artifactId>bean-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
             <artifactId>hibernate-search</artifactId>
         </dependency>
 
@@ -90,7 +96,6 @@
             <artifactId>infinispan</artifactId>
         </dependency>
 
-        <!--batch-->
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>batch-jberet</artifactId>
@@ -143,16 +148,18 @@
             <scope>provided</scope>
             <version>${version.hibernate}</version>
         </dependency>
-
-        <!--Hibernate validator-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>${version.hibernate-validator}</version>
             <scope>provided</scope>
         </dependency>
-
-        <!--Hibernate Search-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-orm</artifactId>
+            <version>${version.hibernate-search}</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!--Keycloak-->
         <dependency>
@@ -288,6 +295,15 @@
                                     <groupId>org.hibernate</groupId>
                                     <artifactId>hibernate-orm-modules</artifactId>
                                     <version>${version.hibernate}</version>
+                                    <classifier>wildfly-10-dist</classifier>
+                                    <type>zip</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}/modules</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.hibernate</groupId>
+                                    <artifactId>hibernate-search-modules</artifactId>
+                                    <version>${version.hibernate-search}</version>
                                     <classifier>wildfly-10-dist</classifier>
                                     <type>zip</type>
                                     <overWrite>false</overWrite>

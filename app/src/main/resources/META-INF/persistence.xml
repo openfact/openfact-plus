@@ -10,6 +10,7 @@
         <properties>
             <!--Hibernate upgrade-->
             <property name="jboss.as.jpa.providerModule" value="org.hibernate:5.2"/>
+            <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:5.7.1.Final"/>
 
             <!--Hibernrate properties-->
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
