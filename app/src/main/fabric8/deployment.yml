@@ -21,7 +21,7 @@ spec:
         - name: SSO_AUTH_SERVER_URL
           value: ${SSO_AUTH_SERVER_URL}
         - name: JAVA_OPTIONS
-          value: -Dsso.realm=${SSO_REALM} -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dsso.clientId=${SSO_CLIENT_ID} -Dsso.credentials.secret=${SSO_CREDENTIALS_SECRET}
+          value: -Dsso.realm=${SSO_REALM} -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dsso.clientId=${SSO_CLIENT_ID} -Dsso.credentials.secret=${SSO_CREDENTIALS_SECRET} -Des.host=${ES_SERVER_URL} -Des.username=${ES_USERNAME} -Des.password=${ES_PASSWORD}
         name: ${project.artifactId}
         image: ${project.artifactId}:latest
         imagePullPolicy: IfNotPresent

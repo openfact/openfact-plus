@@ -10,20 +10,20 @@
         <properties>
             <!--Hibernate upgrade-->
             <property name="jboss.as.jpa.providerModule" value="org.hibernate:5.2"/>
-            <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:5.7.1.Final"/>
+            <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:5.8.0.Beta4"/>
 
-            <!--Hibernrate properties-->
+            <!--Hibernate properties-->
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.transaction.flush_before_completion" value="true"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
 
             <!--Hibernate search-->
-            <!--<property name="hibernate.search.default.indexmanager elasticsearch" value="true"/>-->
-            <!--<property name="hibernate.search.default.elasticsearch.host" value="http://127.0.0.1:9200"/>-->
-            <!--<property name="hibernate.search.default.elasticsearch.username" value="username"/>-->
-            <!--<property name="hibernate.search.default.elasticsearch.password" value="password"/>-->
+            <property name="hibernate.search.default.indexmanager" value="elasticsearch"/>
+            <property name="hibernate.search.default.elasticsearch.host" value="${es.host}"/>
+            <property name="hibernate.search.default.elasticsearch.username" value="${es.username}"/>
+            <property name="hibernate.search.default.elasticsearch.password" value="${es.password}"/>
+            <property name="hibernate.search.default.elasticsearch.required_index_status" value="yellow"/>
         </properties>
     </persistence-unit>
 </persistence>
