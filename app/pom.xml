@@ -40,6 +40,17 @@
 
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jaxrs-multipart</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>resteasy-jaxrs</artifactId>
+                    <groupId>org.jboss.resteasy</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
             <artifactId>cdi</artifactId>
         </dependency>
 
@@ -72,7 +83,10 @@
             <artifactId>hibernate-search</artifactId>
         </dependency>
 
-        <!--Cluster-->
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>infinispan</artifactId>
+        </dependency>
 
         <!--batch-->
         <dependency>
@@ -87,12 +101,6 @@
         </dependency>
 
         <!--Resteasy-->
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-multipart-provider</artifactId>
-            <version>${version.resteasy}</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-client</artifactId>
