@@ -17,17 +17,17 @@ import java.security.GeneralSecurityException;
 @Stateless
 public class GmailClientFactory {
 
-//    private static HttpTransport HTTP_TRANSPORT;
-//    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+    private static HttpTransport HTTP_TRANSPORT;
+    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 //
 //    @PostConstruct
 //    private void init() throws GeneralSecurityException, IOException {
 //        HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 //    }
 //
-//    public Gmail getClientService(UserRepositoryModel repository) {
-//        return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, null)
-//                .setApplicationName(Constants.GMAIL_APPLICATION_NAME).build();
-//    }
+    public Gmail getClientService(UserRepositoryModel repository) {
+        return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, null)
+                .setApplicationName(Constants.GMAIL_APPLICATION_NAME).build();
+    }
 
 }

@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        version="2.1"
         xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+        http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+        version="2.1">
     <persistence-unit name="SyncPU" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/SyncDS</jta-data-source>
         <properties>
+            <!--Hibernate upgrade-->
+            <property name="jboss.as.jpa.providerModule" value="org.hibernate:5.2"/>
+
+            <!--Hibernrate properties-->
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
@@ -14,10 +19,10 @@
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
 
             <!--Hibernate search-->
-            <property name="hibernate.search.default.indexmanager elasticsearch" value="true"/>
-            <property name="hibernate.search.default.elasticsearch.host" value="http://127.0.0.1:9200"/>
-            <property name="hibernate.search.default.elasticsearch.username" value="username"/>
-            <property name="hibernate.search.default.elasticsearch.password" value="password"/>
+            <!--<property name="hibernate.search.default.indexmanager elasticsearch" value="true"/>-->
+            <!--<property name="hibernate.search.default.elasticsearch.host" value="http://127.0.0.1:9200"/>-->
+            <!--<property name="hibernate.search.default.elasticsearch.username" value="username"/>-->
+            <!--<property name="hibernate.search.default.elasticsearch.password" value="password"/>-->
         </properties>
     </persistence-unit>
 </persistence>

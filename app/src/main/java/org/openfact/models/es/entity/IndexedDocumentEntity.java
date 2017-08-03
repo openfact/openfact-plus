@@ -1,5 +1,6 @@
 package org.openfact.models.es.entity;
 
+import org.hibernate.search.annotations.Indexed;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
+@Indexed
 @Table(name = "INDEXED_DOCUMENT")
 public class IndexedDocumentEntity implements DocumentEntity {
 
