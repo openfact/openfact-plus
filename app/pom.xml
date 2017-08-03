@@ -72,20 +72,7 @@
             <artifactId>hibernate-search</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-elasticsearch</artifactId>
-        </dependency>
-
         <!--Cluster-->
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>jgroups</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>infinispan</artifactId>
-        </dependency>
 
         <!--batch-->
         <dependency>
@@ -104,6 +91,7 @@
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-multipart-provider</artifactId>
             <version>${version.resteasy}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
@@ -141,18 +129,8 @@
         <!--Hibernate-->
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.2.10.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <scope>provided</scope>
-            <version>5.2.10.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-envers</artifactId>
             <version>5.2.10.Final</version>
         </dependency>
 
@@ -164,11 +142,6 @@
         </dependency>
 
         <!--Hibernate Search-->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-search-orm</artifactId>
-            <version>5.8.0.Beta4</version>
-        </dependency>
 
         <!--Keycloak-->
         <dependency>
@@ -194,11 +167,6 @@
         </dependency>
 
         <!--Elasticsearch-->
-        <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>transport</artifactId>
-            <version>5.5.1</version>
-        </dependency>
 
         <!--Ubl21-->
         <dependency>

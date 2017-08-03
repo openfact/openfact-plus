@@ -33,7 +33,7 @@ public class UserRepositoryEntity {
     @NotNull
     @NotEmpty
     @Email
-    @Column(name = "TYPE")
+    @Column(name = "EMAIL")
     private String email;
 
     @NotNull
