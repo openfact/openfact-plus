@@ -42,6 +42,7 @@
         <maven.enforcer.plugin.version>1.4</maven.enforcer.plugin.version>
         <maven.javadoc.plugin.version>2.10.3</maven.javadoc.plugin.version>
 
+        <elasticsearch.version>5.5.1</elasticsearch.version>
         <!--
         TODO  these hacks work around issues with fabric8-maven-plugin
         we hopefully can remove them one day
@@ -53,6 +54,7 @@
     </properties>
 
     <modules>
+        <module>elasticsearch</module>
         <module>keycloak</module>
         <module>keycloak-db</module>
         <module>packages</module>

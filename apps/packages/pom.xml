@@ -16,6 +16,11 @@
     <dependencies>
         <dependency>
             <groupId>org.openfact.apps</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openfact.apps</groupId>
             <artifactId>keycloak</artifactId>
             <version>${project.version}</version>
         </dependency>
