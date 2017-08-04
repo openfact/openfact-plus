@@ -1,7 +1,7 @@
 metadata:
   annotations:
     configmap.openfact.io/update-on-change: "keycloak"
-    openfact.io/target-platform: "kubernetes"
+    fabric8.io/target-platform: "kubernetes"
 spec:
   replicas: 1
   strategy:

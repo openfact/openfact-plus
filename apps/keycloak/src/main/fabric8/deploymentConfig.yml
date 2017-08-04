@@ -1,7 +1,7 @@
 metadata:
   annotations:
     configmap.openfact.io/update-on-change: "keycloak"
-    openfact.io/target-platform: "openshift"
+    fabric8.io/target-platform: "openshift"
 spec:
   replicas: 1
   strategy:
