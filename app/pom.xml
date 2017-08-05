@@ -205,6 +205,13 @@
             <version>1.3.2</version>
         </dependency>
 
+        <!--Liquibase-->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>3.5.3</version>
+        </dependency>
+
         <!--Gmail-->
         <dependency>
             <groupId>com.google.api-client</groupId>

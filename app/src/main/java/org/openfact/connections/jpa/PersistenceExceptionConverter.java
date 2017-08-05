@@ -1,4 +1,4 @@
-package org.openfact.models.jpa.connections;
+package org.openfact.connections.jpa;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.openfact.models.ModelDuplicateException;
