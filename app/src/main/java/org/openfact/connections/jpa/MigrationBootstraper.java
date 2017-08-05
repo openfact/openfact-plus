@@ -7,13 +7,11 @@ import org.openfact.models.dblock.DBLockProvider;
 import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
-import javax.sql.DataSource;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -21,16 +19,13 @@ import java.sql.SQLException;
 @Singleton
 @Startup
 @TransactionManagement(TransactionManagementType.BEAN)
-public class DefaultJpaConnectionProvider {
+public class MigrationBootstraper {
 
-    private static final Logger logger = Logger.getLogger(DefaultJpaConnectionProvider.class);
+    private static final Logger logger = Logger.getLogger(MigrationBootstraper.class);
 
     enum MigrationStrategy {
         UPDATE, VALIDATE, MANUAL
     }
-
-    @Resource
-    private DataSource ds;
 
     @Inject
     private JpaUpdaterProvider updater;
@@ -38,24 +33,16 @@ public class DefaultJpaConnectionProvider {
     @Inject
     private DBLockProvider dbLock;
 
+    @Inject
+    private Connection connection;
+
     @PostConstruct
     private void init() {
-        logger.trace("Create JpaConnectionProvider");
-        lazyInit();
-    }
+        MigrationStrategy migrationStrategy = MigrationStrategy.UPDATE;
+        File databaseUpdateFile = new File("openfact-database-update.sql");
 
-    private void lazyInit() {
-        logger.debug("Initializing JPA connections");
-
-        String schema = getSchema();
-
-        MigrationStrategy migrationStrategy = getMigrationStrategy();
-        boolean initializeEmpty = true;
-        File databaseUpdateFile = getDatabaseUpdateFile();
-
-        Connection connection = getConnection();
         try {
-            migration(migrationStrategy, initializeEmpty, schema, databaseUpdateFile, connection);
+            migration(migrationStrategy, true, null, databaseUpdateFile, connection);
         } finally {
             // Close after creating EntityManagerFactory to prevent in-mem databases from closing
             if (connection != null) {
@@ -129,27 +116,6 @@ public class DefaultJpaConnectionProvider {
                 }
             });
         }
-    }
-
-    private String getSchema() {
-        return null;
-    }
-
-    private Connection getConnection() {
-        try {
-            return ds.getConnection();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to connect to database", e);
-        }
-    }
-
-    private MigrationStrategy getMigrationStrategy() {
-        return MigrationStrategy.UPDATE;
-    }
-
-    private File getDatabaseUpdateFile() {
-        String databaseUpdateFile = "sync-database-update.sql";
-        return new File(databaseUpdateFile);
     }
 
 }

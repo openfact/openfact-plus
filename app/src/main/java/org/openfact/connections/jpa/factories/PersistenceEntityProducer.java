@@ -1,5 +1,7 @@
-package org.openfact.connections.jpa;
+package org.openfact.connections.jpa.factories;
 
+
+import org.openfact.connections.jpa.PersistenceExceptionConverter;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Produces;

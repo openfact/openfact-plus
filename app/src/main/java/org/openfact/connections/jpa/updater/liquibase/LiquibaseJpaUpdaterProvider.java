@@ -154,7 +154,6 @@ public class LiquibaseJpaUpdaterProvider implements JpaUpdaterProvider {
     @Override
     public Status validate(Connection connection, String defaultSchema) {
         logger.debug("Validating if database is updated");
-        ThreadLocalSessionContext.setCurrentSession(session);
 
         try {
             // Validate with sync master changelog first
