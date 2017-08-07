@@ -1,0 +1,181 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="admin (generated)" id="1502148897082-1">
+        <createTable tableName="FILE">
+            <column name="FILENAME" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FILE" type="BLOB"/>
+            <column name="EXTENSION" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-2">
+        <createTable tableName="INDEXED_DOCUMENT">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ASSIGNED_ID" type="VARCHAR(255)"/>
+            <column name="FILE_ID" type="VARCHAR(255)"/>
+            <column name="TYPE" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-3">
+        <createTable tableName="MIGRATION_MODEL">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="VARCHAR(36)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-4">
+        <createTable tableName="PERMISSIONS">
+            <column name="USER_ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SPACE_ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VALUE" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-5">
+        <createTable tableName="REQUESTED_PERMISSIONS">
+            <column name="USER_ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SPACE_ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VALUE" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-6">
+        <createTable tableName="REQUEST_ACCESS">
+            <column name="MESSAGE" type="VARCHAR(255)"/>
+            <column name="STATUS" type="VARCHAR(255)"/>
+            <column name="VERSION" type="INT"/>
+            <column name="USER_ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SPACE_ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-7">
+        <createTable tableName="SHARED_SPACE">
+            <column name="USER_ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SPACE_ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-8">
+        <createTable tableName="SPACE">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ALIAS" type="VARCHAR(255)"/>
+            <column name="ASSIGNED_ID" type="VARCHAR(255)"/>
+            <column name="VERSION" type="INT"/>
+            <column name="OWNER_ID" type="VARCHAR(36)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-9">
+        <createTable tableName="USER">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FULL_NAME" type="VARCHAR(255)"/>
+            <column name="OFFLINE_TOKEN" type="VARCHAR(2048)"/>
+            <column name="REGISTRATION_COMPLETED" type="INT"/>
+            <column name="USERNAME" type="VARCHAR(255)"/>
+            <column name="VERSION" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-10">
+        <createTable tableName="USER_REPOSITORY">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EMAIL" type="VARCHAR(255)"/>
+            <column name="LAST_TIME_SYNCHRONIZED" type="TIMESTAMP"/>
+            <column name="NAME" type="VARCHAR(255)"/>
+            <column name="TYPE" type="VARCHAR(255)"/>
+            <column name="USER_ID" type="VARCHAR(36)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-11">
+        <createTable tableName="USER_REPOSITORY_CONFIG">
+            <column name="USER_REPOSITORY_ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-12">
+        <addPrimaryKey columnNames="USER_REPOSITORY_ID, name" tableName="USER_REPOSITORY_CONFIG"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-13">
+        <addPrimaryKey columnNames="FILENAME" constraintName="FILEPK" tableName="FILE"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-14">
+        <addPrimaryKey columnNames="ID" constraintName="INDEXED_DOCUMENTPK" tableName="INDEXED_DOCUMENT"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-15">
+        <addPrimaryKey columnNames="ID" constraintName="MIGRATION_MODELPK" tableName="MIGRATION_MODEL"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-16">
+        <addPrimaryKey columnNames="SPACE_ID, USER_ID" constraintName="REQUEST_ACCESSPK" tableName="REQUEST_ACCESS"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-17">
+        <addPrimaryKey columnNames="SPACE_ID, USER_ID" constraintName="SHARED_SPACEPK" tableName="SHARED_SPACE"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-18">
+        <addPrimaryKey columnNames="ID" constraintName="SPACEPK" tableName="SPACE"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-19">
+        <addPrimaryKey columnNames="ID" constraintName="USERPK" tableName="USER"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-20">
+        <addPrimaryKey columnNames="ID" constraintName="USER_REPOSITORYPK" tableName="USER_REPOSITORY"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-21">
+        <addUniqueConstraint columnNames="ASSIGNED_ID" constraintName="UK_2dn9cihpo1povounh65ijla0p" tableName="SPACE"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-22">
+        <addUniqueConstraint columnNames="USERNAME" constraintName="UK_31rmpfll2abii4qbefw4b6o2p" tableName="USER"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-23">
+        <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="USER_REPOSITORY" constraintName="FK1998i436d25b5pqirrjvygvsj" deferrable="false" initiallyDeferred="false" referencedColumnNames="ID" referencedTableName="USER"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-24">
+        <addForeignKeyConstraint baseColumnNames="SPACE_ID" baseTableName="SHARED_SPACE" constraintName="FK22k92g5784xa712s1l136btjb" deferrable="false" initiallyDeferred="false" referencedColumnNames="ID" referencedTableName="SPACE"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-25">
+        <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="SHARED_SPACE" constraintName="FKa24txjoj67wssklnideca2qku" deferrable="false" initiallyDeferred="false" referencedColumnNames="ID" referencedTableName="USER"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-26">
+        <addForeignKeyConstraint baseColumnNames="USER_ID,SPACE_ID" baseTableName="REQUESTED_PERMISSIONS" constraintName="FKc9x3tvmkbvht591t076fgfgy2" deferrable="false" initiallyDeferred="false" referencedColumnNames="SPACE_ID,USER_ID" referencedTableName="REQUEST_ACCESS"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-27">
+        <addForeignKeyConstraint baseColumnNames="USER_ID,SPACE_ID" baseTableName="PERMISSIONS" constraintName="FKfq64h9uoji5qj0dk8i5b211gq" deferrable="false" initiallyDeferred="false" referencedColumnNames="SPACE_ID,USER_ID" referencedTableName="SHARED_SPACE"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-28">
+        <addForeignKeyConstraint baseColumnNames="OWNER_ID" baseTableName="SPACE" constraintName="FKgnvk0126etodkardhj1x1j5b5" deferrable="false" initiallyDeferred="false" referencedColumnNames="ID" referencedTableName="USER"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-29">
+        <addForeignKeyConstraint baseColumnNames="USER_REPOSITORY_ID" baseTableName="USER_REPOSITORY_CONFIG" constraintName="FKhkcodk5t5n10f8vrofrkm492m" deferrable="false" initiallyDeferred="false" referencedColumnNames="ID" referencedTableName="USER_REPOSITORY"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-30">
+        <addForeignKeyConstraint baseColumnNames="SPACE_ID" baseTableName="REQUEST_ACCESS" constraintName="FKknonmy0dvs8gkyrd2ms4xjrqd" deferrable="false" initiallyDeferred="false" referencedColumnNames="ID" referencedTableName="SPACE"/>
+    </changeSet>
+    <changeSet author="admin (generated)" id="1502148897082-31">
+        <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="REQUEST_ACCESS" constraintName="FKksnqiw8oxmw89sekg5ps1fxny" deferrable="false" initiallyDeferred="false" referencedColumnNames="ID" referencedTableName="USER"/>
+    </changeSet>
+</databaseChangeLog>

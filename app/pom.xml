@@ -335,31 +335,26 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${version.liquibase-maven-plugin}</version>
                 <configuration>
-                    <changeLogFile>${project.build.directory}/changelog-master.xml</changeLogFile>
-                    <diffChangeLogFile>${project.build.directory}/changelog-diff.xml</diffChangeLogFile>
-                    <outputChangeLogFile>${project.build.directory}/changelog-output.xml</outputChangeLogFile>
                     <url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</url>
                     <driver>org.h2.Driver</driver>
                     <username>sa</username>
                     <password>sa</password>
-                    <referenceUrl>hibernate:spring:org.openfact?dialect=org.hibernate.dialect.H2Dialect</referenceUrl>
+                    <changeLogFile>${project.build.directory}/changelog-master.xml</changeLogFile>
+                    <diffChangeLogFile>${project.build.directory}/changelog-diff.xml</diffChangeLogFile>
+                    <outputChangeLogFile>${project.build.directory}/changelog-output.xml</outputChangeLogFile>
                     <dropFirst>true</dropFirst>
-                    <logging>debug</logging>
+                    <referenceUrl>hibernate:spring:org.openfact?dialect=org.hibernate.dialect.H2Dialect</referenceUrl>
+                    <!--<referenceUrl>hibernate:spring:org.openfact?dialect=org.hibernate.dialect.H2Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>-->
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>process-resources</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>diff</goal>
                         </goals>
                     </execution>
                 </executions>
                 <dependencies>
-                    <dependency>
-                        <groupId>org.javassist</groupId>
-                        <artifactId>javassist</artifactId>
-                        <version>3.18.2-GA</version>
-                    </dependency>
                     <dependency>
                         <groupId>org.liquibase.ext</groupId>
                         <artifactId>liquibase-hibernate5</artifactId>
@@ -376,14 +371,24 @@
                         <version>1.11.1.RELEASE</version>
                     </dependency>
                     <dependency>
-                        <groupId>org.hibernate.validator</groupId>
-                        <artifactId>hibernate-validator</artifactId>
-                        <version>6.0.0.Final</version>
+                        <groupId>javax.el</groupId>
+                        <artifactId>javax.el-api</artifactId>
+                        <version>3.0.0</version>
                     </dependency>
                     <dependency>
                         <groupId>com.h2database</groupId>
                         <artifactId>h2</artifactId>
                         <version>${version.h2}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hibernate</groupId>
+                        <artifactId>hibernate-search-orm</artifactId>
+                        <version>${version.hibernate-search}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hibernate</groupId>
+                        <artifactId>hibernate-validator</artifactId>
+                        <version>${version.hibernate-validator}</version>
                     </dependency>
                 </dependencies>
             </plugin>
