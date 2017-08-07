@@ -1,7 +1,4 @@
-package org.openfact.connections.jpa.factories;
-
-
-import org.openfact.connections.jpa.PersistenceExceptionConverter;
+package org.openfact.connections.jpa;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Produces;
@@ -10,13 +7,13 @@ import javax.persistence.PersistenceContext;
 import java.lang.reflect.Proxy;
 
 @Stateless
-public class PersistenceEntityProducer {
+public class DefaultJpaConnectionProvider implements JpaConnectionProvider {
 
     @PersistenceContext
     private EntityManager em;
 
     @Produces
-    public EntityManager create() {
+    public EntityManager getEntityManager() {
         return (EntityManager) Proxy.newProxyInstance(EntityManager.class.getClassLoader(), new Class[]{EntityManager.class}, new PersistenceExceptionConverter(em));
     }
 

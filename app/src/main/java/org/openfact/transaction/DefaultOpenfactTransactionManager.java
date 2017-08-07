@@ -64,25 +64,25 @@ public class DefaultOpenfactTransactionManager implements OpenfactTransactionMan
 
     @Override
     public void begin() {
-        if (active) {
-            throw new IllegalStateException("Transaction already active");
-        }
-
-        if (jtaPolicy == JTAPolicy.REQUIRES_NEW) {
-            JtaTransactionManagerLookup jtaLookup = session.getProvider(JtaTransactionManagerLookup.class);
-            if (jtaLookup != null) {
-                TransactionManager tm = jtaLookup.getTransactionManager();
-                if (tm != null) {
-                    enlist(new JtaTransactionWrapper(session.getOpenfactSessionFactory(), tm));
-                }
-            }
-        }
-
-        for (OpenfactTransaction tx : transactions) {
-            tx.begin();
-        }
-
-        active = true;
+//        if (active) {
+//            throw new IllegalStateException("Transaction already active");
+//        }
+//
+//        if (jtaPolicy == JTAPolicy.REQUIRES_NEW) {
+//            JtaTransactionManagerLookup jtaLookup = session.getProvider(JtaTransactionManagerLookup.class);
+//            if (jtaLookup != null) {
+//                TransactionManager tm = jtaLookup.getTransactionManager();
+//                if (tm != null) {
+//                    enlist(new JtaTransactionWrapper(session.getOpenfactSessionFactory(), tm));
+//                }
+//            }
+//        }
+//
+//        for (OpenfactTransaction tx : transactions) {
+//            tx.begin();
+//        }
+//
+//        active = true;
     }
 
     @Override

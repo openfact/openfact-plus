@@ -7,9 +7,7 @@ import org.jboss.logging.Logger;
 import org.openfact.connections.jpa.JpaConnectionProviderFactory;
 import org.openfact.connections.jpa.updater.liquibase.conn.LiquibaseConnectionProvider;
 import org.openfact.models.dblock.DBLockProvider;
-import org.openfact.models.utils.OpenfactModelUtils;
 
-import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -24,70 +22,63 @@ public class LiquibaseDBLockProvider implements DBLockProvider {
 
     private static final Logger logger = Logger.getLogger(LiquibaseDBLockProvider.class);
 
-    // True if this node has a lock acquired
-    private AtomicBoolean hasLock = new AtomicBoolean(false);
-
     // 3 should be sufficient (Potentially one failure for createTable and one for insert record)
-    private int DEFAULT_MAX_ATTEMPTS = 3;
+    private final static int DEFAULT_MAX_ATTEMPTS = 3;
 
-    private CustomLockService lockService;
-    private boolean initialized = false;
-
-    private int maxAttempts = DEFAULT_MAX_ATTEMPTS;
+    // True if this node has a lock acquired
+    private final AtomicBoolean hasLock = new AtomicBoolean(false);
 
     @Inject
-    private Connection connection;
+    private JpaConnectionProviderFactory jpaProviderFactory;
 
     @Inject
     private LiquibaseConnectionProvider liquibaseProvider;
 
-    private void lazyInit() {
-        if (!initialized) {
-            JpaConnectionProviderFactory jpaProviderFactory = (JpaConnectionProviderFactory) session.getKeycloakSessionFactory().getProviderFactory(JpaConnectionProvider.class);
+    private CustomLockService lazyInit(Connection dbConnection, String defaultSchema) {
+        CustomLockService lockService;
+        try {
+            Liquibase liquibase = liquibaseProvider.getLiquibase(dbConnection, defaultSchema);
 
-            try {
-                Liquibase liquibase = liquibaseProvider.getLiquibase(dbConnection, defaultSchema);
-
-                this.lockService = new CustomLockService();
-                lockService.setChangeLogLockWaitTime(((long) 900) * 1000);
-                lockService.setDatabase(liquibase.getDatabase());
-                initialized = true;
-            } catch (LiquibaseException exception) {
-                safeRollbackConnection();
-                safeCloseConnection();
-                throw new IllegalStateException(exception);
-            }
+            lockService = new CustomLockService();
+            lockService.setChangeLogLockWaitTime(((long) 900) * 1000);
+            lockService.setDatabase(liquibase.getDatabase());
+            return lockService;
+        } catch (LiquibaseException exception) {
+            safeRollbackConnection(dbConnection);
+            safeCloseConnection(dbConnection);
+            throw new IllegalStateException(exception);
         }
     }
 
     // Assumed transaction was rolled-back and we want to start with new DB connection
-    private void restart() {
-        safeCloseConnection();
-        this.dbConnection = null;
-        this.lockService = null;
-        initialized = false;
-        lazyInit();
+    private CustomLockService restart(Connection dbConnection, String defaultSchema) {
+        safeCloseConnection(dbConnection);
+        dbConnection = jpaProviderFactory.getConnection();
+        return lazyInit(dbConnection, defaultSchema);
     }
-
 
     @Override
     public void waitForLock() {
-        lazyInit();
+        Connection dbConnection = jpaProviderFactory.getConnection();
+        String defaultSchema = jpaProviderFactory.getSchema();
 
+        CustomLockService lockService = lazyInit(dbConnection, defaultSchema);
+
+        int maxAttempts = DEFAULT_MAX_ATTEMPTS;
         while (maxAttempts > 0) {
             try {
                 lockService.waitForLock();
                 hasLock.set(true);
-                this.maxAttempts = DEFAULT_MAX_ATTEMPTS;
+                maxAttempts = DEFAULT_MAX_ATTEMPTS;
                 return;
             } catch (LockRetryException le) {
                 // Indicates we should try to acquire lock again in different transaction
-                safeRollbackConnection();
-                restart();
+                safeRollbackConnection(dbConnection);
+                lockService = restart(dbConnection, defaultSchema);
                 maxAttempts--;
             } catch (RuntimeException re) {
-                safeRollbackConnection();
-                safeCloseConnection();
+                safeRollbackConnection(dbConnection);
+                safeCloseConnection(dbConnection);
                 throw re;
             }
         }
@@ -96,7 +87,10 @@ public class LiquibaseDBLockProvider implements DBLockProvider {
 
     @Override
     public void releaseLock() {
-        lazyInit();
+        Connection dbConnection = jpaProviderFactory.getConnection();
+        String defaultSchema = jpaProviderFactory.getSchema();
+
+        CustomLockService lockService = lazyInit(dbConnection, defaultSchema);
 
         lockService.releaseLock();
         lockService.reset();
@@ -120,29 +114,32 @@ public class LiquibaseDBLockProvider implements DBLockProvider {
 
     @Override
     public void destroyLockInfo() {
-        lazyInit();
+        Connection dbConnection = jpaProviderFactory.getConnection();
+        String defaultSchema = jpaProviderFactory.getSchema();
+
+        CustomLockService lockService = lazyInit(dbConnection, defaultSchema);
 
         try {
-            this.lockService.destroy();
+            lockService.destroy();
             dbConnection.commit();
             logger.debug("Destroyed lock table");
         } catch (DatabaseException | SQLException de) {
             logger.error("Failed to destroy lock table");
-            safeRollbackConnection();
+            safeRollbackConnection(dbConnection);
         }
     }
 
-    private void safeRollbackConnection() {
+    private void safeRollbackConnection(Connection dbConnection) {
         if (dbConnection != null) {
             try {
-                this.dbConnection.rollback();
+                dbConnection.rollback();
             } catch (SQLException se) {
                 logger.warn("Failed to rollback connection after error", se);
             }
         }
     }
 
-    private void safeCloseConnection() {
+    private void safeCloseConnection(Connection dbConnection) {
         // Close to prevent in-mem databases from closing
         if (dbConnection != null) {
             try {

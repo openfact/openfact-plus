@@ -3,25 +3,20 @@ package org.openfact.connections.jpa;
 import org.jboss.logging.Logger;
 import org.openfact.ServerStartupError;
 import org.openfact.connections.jpa.updater.JpaUpdaterProvider;
+import org.openfact.models.MigrationBootstraper;
 import org.openfact.models.dblock.DBLockProvider;
-import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
+import javax.ejb.*;
 import javax.inject.Inject;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@Singleton
-@Startup
-@TransactionManagement(TransactionManagementType.BEAN)
-public class MigrationBootstraper {
+@Stateless
+public class LiquibaseBootstraper implements MigrationBootstraper {
 
-    private static final Logger logger = Logger.getLogger(MigrationBootstraper.class);
+    private static final Logger logger = Logger.getLogger(LiquibaseBootstraper.class);
 
     enum MigrationStrategy {
         UPDATE, VALIDATE, MANUAL
@@ -34,13 +29,14 @@ public class MigrationBootstraper {
     private DBLockProvider dbLock;
 
     @Inject
-    private Connection connection;
+    private JpaConnectionProviderFactory connectionProvider;
 
-    @PostConstruct
-    private void init() {
+    @Override
+    public void init() {
         MigrationStrategy migrationStrategy = MigrationStrategy.UPDATE;
         File databaseUpdateFile = new File("openfact-database-update.sql");
 
+        Connection connection = connectionProvider.getConnection();
         try {
             migration(migrationStrategy, true, null, databaseUpdateFile, connection);
         } finally {
@@ -92,14 +88,12 @@ public class MigrationBootstraper {
         if (dbLock.hasLock()) {
             updater.update(connection, schema);
         } else {
-            OpenfactModelUtils.runJobInTransaction(() -> {
-                dbLock.waitForLock();
-                try {
-                    updater.update(connection, schema);
-                } finally {
-                    dbLock.releaseLock();
-                }
-            });
+            dbLock.waitForLock();
+            try {
+                updater.update(connection, schema);
+            } finally {
+                dbLock.releaseLock();
+            }
         }
     }
 
@@ -107,14 +101,12 @@ public class MigrationBootstraper {
         if (dbLock.hasLock()) {
             updater.export(connection, schema, databaseUpdateFile);
         } else {
-            OpenfactModelUtils.runJobInTransaction(() -> {
-                dbLock.waitForLock();
-                try {
-                    updater.export(connection, schema, databaseUpdateFile);
-                } finally {
-                    dbLock.releaseLock();
-                }
-            });
+            dbLock.waitForLock();
+            try {
+                updater.export(connection, schema, databaseUpdateFile);
+            } finally {
+                dbLock.releaseLock();
+            }
         }
     }
 

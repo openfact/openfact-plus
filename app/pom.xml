@@ -27,6 +27,9 @@
         <version.h2>1.4.187</version.h2>
         <version.postgresql>9.4.1207</version.postgresql>
         <version.mysql>5.1.38</version.mysql>
+
+        <!--plugins-->
+        <version.liquibase-maven-plugin>3.5.3</version.liquibase-maven-plugin>
     </properties>
 
     <dependencies>
@@ -326,6 +329,64 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${version.liquibase-maven-plugin}</version>
+                <configuration>
+                    <changeLogFile>${project.build.directory}/changelog-master.xml</changeLogFile>
+                    <diffChangeLogFile>${project.build.directory}/changelog-diff.xml</diffChangeLogFile>
+                    <outputChangeLogFile>${project.build.directory}/changelog-output.xml</outputChangeLogFile>
+                    <url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</url>
+                    <driver>org.h2.Driver</driver>
+                    <username>sa</username>
+                    <password>sa</password>
+                    <referenceUrl>hibernate:spring:org.openfact?dialect=org.hibernate.dialect.H2Dialect</referenceUrl>
+                    <dropFirst>true</dropFirst>
+                    <logging>debug</logging>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>diff</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.javassist</groupId>
+                        <artifactId>javassist</artifactId>
+                        <version>3.18.2-GA</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.liquibase.ext</groupId>
+                        <artifactId>liquibase-hibernate5</artifactId>
+                        <version>3.6</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                        <version>4.3.7.RELEASE</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework.data</groupId>
+                        <artifactId>spring-data-jpa</artifactId>
+                        <version>1.11.1.RELEASE</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hibernate.validator</groupId>
+                        <artifactId>hibernate-validator</artifactId>
+                        <version>6.0.0.Final</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>${version.h2}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
@@ -382,6 +443,39 @@
                                 <goals>
                                     <goal>integration-test</goal>
                                     <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>clean-jpa</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.liquibase</groupId>
+                        <artifactId>liquibase-maven-plugin</artifactId>
+                        <version>${version.liquibase-maven-plugin}</version>
+                        <configuration>
+                            <changeLogFile>META-INF/jpa-changelog-master.xml</changeLogFile>
+
+                            <url>${openfact.connectionsJpa.url}</url>
+                            <driver>${openfact.connectionsJpa.driver}</driver>
+                            <username>${openfact.connectionsJpa.user}</username>
+                            <password>${openfact.connectionsJpa.password}</password>
+
+                            <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+                            <databaseClass>${openfact.connectionsJpa.liquibaseDatabaseClass}</databaseClass>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>clean-jpa</id>
+                                <phase>clean</phase>
+                                <goals>
+                                    <goal>dropAll</goal>
                                 </goals>
                             </execution>
                         </executions>

@@ -60,9 +60,6 @@ public class LiquibaseJpaUpdaterProvider implements JpaUpdaterProvider {
     private void update(Connection connection, File file, String defaultSchema) {
         logger.debug("Starting database update");
 
-        // Need ThreadLocal as liquibase doesn't seem to have API to inject custom objects into tasks
-        ThreadLocalSessionContext.setCurrentSession(session);
-
         Writer exportWriter = null;
         try {
             // Run update with keycloak master changelog first
@@ -73,8 +70,7 @@ public class LiquibaseJpaUpdaterProvider implements JpaUpdaterProvider {
             updateChangeSet(liquibase, liquibase.getChangeLogFile(), exportWriter);
 
             // Run update for each custom JpaEntityProvider
-            Set<JpaEntityProvider> jpaProviders = session.getAllProviders(JpaEntityProvider.class);
-            for (JpaEntityProvider jpaProvider : jpaProviders) {
+            for (JpaEntityProvider jpaProvider : entityProviders) {
                 String customChangelog = jpaProvider.getChangelogLocation();
                 if (customChangelog != null) {
                     String factoryId = jpaProvider.getFactoryId();
@@ -86,7 +82,6 @@ public class LiquibaseJpaUpdaterProvider implements JpaUpdaterProvider {
         } catch (LiquibaseException | IOException e) {
             throw new RuntimeException("Failed to update database", e);
         } finally {
-            ThreadLocalSessionContext.removeCurrentSession();
             if (exportWriter != null) {
                 try {
                     exportWriter.close();

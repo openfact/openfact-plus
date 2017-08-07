@@ -4,6 +4,9 @@ import org.jboss.logging.Logger;
 import org.openfact.models.OpenfactSessionFactory;
 import org.openfact.provider.ExceptionConverter;
 
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 import javax.transaction.RollbackException;
 import javax.transaction.Status;
 import javax.transaction.Transaction;
@@ -18,29 +21,32 @@ public class JtaTransactionWrapper implements OpenfactTransaction {
     protected Exception ended;
     protected OpenfactSessionFactory factory;
 
-    public JtaTransactionWrapper(OpenfactSessionFactory factory, TransactionManager tm) {
-        this.tm = tm;
-        this.factory = factory;
-        try {
+    @Inject
+    @Any
+    private Instance<ExceptionConverter> exceptionConverter;
 
-            suspended = tm.suspend();
-            logger.debug("new JtaTransactionWrapper");
-            logger.debugv("was existing? {0}", suspended != null);
-            tm.begin();
-            ut = tm.getTransaction();
-            //ended = new Exception();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public JtaTransactionWrapper(OpenfactSessionFactory factory, TransactionManager tm) {
+//        this.tm = tm;
+//        this.factory = factory;
+//        try {
+//
+//            suspended = tm.suspend();
+//            logger.debug("new JtaTransactionWrapper");
+//            logger.debugv("was existing? {0}", suspended != null);
+//            tm.begin();
+//            ut = tm.getTransaction();
+//            //ended = new Exception();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     public void handleException(Throwable e) {
         if (e instanceof RollbackException) {
             e = e.getCause() != null ? e.getCause() : e;
         }
 
-        for (ProviderFactory factory : this.factory.getProviderFactories(ExceptionConverter.class)) {
-            ExceptionConverter converter = (ExceptionConverter)factory;
+        for (ExceptionConverter converter : exceptionConverter) {
             Throwable throwable = converter.convert(e);
             if (throwable == null) continue;
             if (throwable instanceof RuntimeException) {
