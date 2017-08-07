@@ -213,6 +213,12 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>3.5.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--Gmail-->
@@ -344,7 +350,6 @@
                     <outputChangeLogFile>${project.build.directory}/changelog-output.xml</outputChangeLogFile>
                     <dropFirst>true</dropFirst>
                     <referenceUrl>hibernate:spring:org.openfact?dialect=org.hibernate.dialect.H2Dialect</referenceUrl>
-                    <!--<referenceUrl>hibernate:spring:org.openfact?dialect=org.hibernate.dialect.H2Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>-->
                 </configuration>
                 <executions>
                     <execution>

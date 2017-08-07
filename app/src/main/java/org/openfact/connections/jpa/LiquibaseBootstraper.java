@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class LiquibaseBootstraper implements MigrationBootstraper {
 
     private static final Logger logger = Logger.getLogger(LiquibaseBootstraper.class);
