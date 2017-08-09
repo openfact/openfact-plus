@@ -22,7 +22,6 @@ import org.openfact.connections.jpa.updater.liquibase.lock.DummyLockService;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
-import javax.ejb.Stateless;
 import java.sql.Connection;
 
 @Singleton
@@ -31,11 +30,7 @@ public class DefaultLiquibaseConnectionProvider implements LiquibaseConnectionPr
     private static final Logger logger = Logger.getLogger(DefaultLiquibaseConnectionProvider.class);
 
     @PostConstruct
-    public void init() {
-        baseLiquibaseInitialization();
-    }
-
-    protected void baseLiquibaseInitialization() {
+    public void baseLiquibaseInitialization() {
         ServiceLocator sl = ServiceLocator.getInstance();
         sl.setResourceAccessor(new ClassLoaderResourceAccessor(getClass().getClassLoader()));
 

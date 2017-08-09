@@ -37,7 +37,7 @@ public class ServerBootstraper {
     @PostConstruct
     private void init() {
         logger.info("====================================");
-        logger.info("Lock database...");
+        logger.info("Locking database...");
 
         dbLockManager.checkForcedUnlock();
         dbLock.waitForLock();

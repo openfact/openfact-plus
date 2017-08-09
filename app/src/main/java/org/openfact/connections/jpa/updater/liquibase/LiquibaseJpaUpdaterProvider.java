@@ -62,7 +62,7 @@ public class LiquibaseJpaUpdaterProvider implements JpaUpdaterProvider {
 
         Writer exportWriter = null;
         try {
-            // Run update with keycloak master changelog first
+            // Run update with Openfact master changelog first
             Liquibase liquibase = getLiquibaseForOpenfactUpdate(connection, defaultSchema);
             if (file != null) {
                 exportWriter = new FileWriter(file);
