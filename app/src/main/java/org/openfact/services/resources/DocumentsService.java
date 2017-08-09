@@ -11,10 +11,7 @@ import org.openfact.services.managers.DocumentManager;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -23,8 +20,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-@Path("/documents")
 @Stateless
+@Path("/documents")
 public class DocumentsService {
 
     private static final Logger logger = Logger.getLogger(DocumentsService.class);
@@ -50,7 +47,7 @@ public class DocumentsService {
             try {
                 inputStream = inputPart.getBody(InputStream.class, null);
             } catch (IOException e) {
-                throw new ErrorResponseException("Could not buildEntity file " + fileName, Response.Status.BAD_REQUEST);
+                throw new ErrorResponseException("Could not read file " + fileName, Response.Status.BAD_REQUEST);
             }
 
             // Save document
@@ -67,7 +64,7 @@ public class DocumentsService {
             return Response.ok(documentModel).build();
         }
 
-        throw new ErrorResponseException("Could not find any file to buildEntity");
+        throw new ErrorResponseException("Could not find any file to process");
     }
 
     private String parseFileName(MultivaluedMap<String, String> headers) {

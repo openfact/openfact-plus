@@ -1,5 +1,7 @@
 package org.openfact.models;
 
+import org.openfact.broker.BrokerType;
+
 import java.util.List;
 import java.util.Set;
 
@@ -22,7 +24,7 @@ public interface UserModel {
 
     List<RequestAccessToSpaceModel> getSpaceRequests();
 
-    UserRepositoryModel addRepository(String name);
+    UserRepositoryModel addRepository(String email, BrokerType type);
     List<UserRepositoryModel> getRepositories();
     boolean removeAllRepositories();
 

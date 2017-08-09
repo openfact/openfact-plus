@@ -1,6 +1,6 @@
 package org.openfact.models;
 
-import org.openfact.models.broker.BrokerType;
+import org.openfact.broker.BrokerType;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -9,9 +9,9 @@ public interface UserRepositoryModel {
 
     String getId();
 
-    BrokerType getType();
-
     String getEmail();
+
+    BrokerType getType();
 
     LocalDateTime getLastTimeSynchronized();
 
@@ -20,4 +20,7 @@ public interface UserRepositoryModel {
     Map<String, String> getConfig();
 
     void setConfig(Map<String, String> config);
+
+    UserModel getUser();
+
 }

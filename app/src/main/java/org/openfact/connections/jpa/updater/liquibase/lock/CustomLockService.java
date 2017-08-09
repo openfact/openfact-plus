@@ -76,7 +76,7 @@ public class CustomLockService extends StandardLockService {
         }
 
 
-        // Keycloak doesn't support Derby, but keep it for sure...
+        // SSODeploymentProducer doesn't support Derby, but keep it for sure...
         if (executor.updatesDatabase() && database instanceof DerbyDatabase && ((DerbyDatabase) database).supportsBooleanDataType()) { //check if the changelog table is of an old smallint vs. boolean format
             String lockTable = database.escapeTableName(database.getLiquibaseCatalogName(), database.getLiquibaseSchemaName(), database.getDatabaseChangeLogLockTableName());
             Object obj = executor.queryForObject(new RawSqlStatement("select min(locked) as test from " + lockTable + " fetch first row only"), Object.class);

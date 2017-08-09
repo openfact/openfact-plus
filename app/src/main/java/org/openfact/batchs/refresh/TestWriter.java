@@ -1,6 +1,6 @@
 package org.openfact.batchs.refresh;
 
-import org.openfact.models.broker.BrokerType;
+import org.openfact.broker.BrokerType;
 import org.openfact.models.UserModel;
 
 import javax.batch.api.chunk.AbstractItemWriter;
@@ -26,8 +26,6 @@ public class TestWriter extends AbstractItemWriter {
         for (BrokerType idp : mappedUser.getIdps()) {
             switch (idp) {
                 case GOOGLE:
-                    break;
-                case MICROSOFT:
                     break;
                 default:
                     break;
