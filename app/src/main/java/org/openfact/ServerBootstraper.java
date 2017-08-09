@@ -36,29 +36,29 @@ public class ServerBootstraper {
 
     @PostConstruct
     private void init() {
-        logger.info("====================================");
-        logger.info("Locking database...");
-
-        dbLockManager.checkForcedUnlock();
-        dbLock.waitForLock();
-
-        logger.info("Database locked");
-        logger.info("====================================");
-
-
-        logger.info("====================================");
-        logger.info("Init migration (Liquibase)...");
-
-        migrationBootstraper.init();
-
-        logger.info("Migration Complete...");
-        logger.info("====================================");
-
-        try {
-            migrateAndBootstrap();
-        } finally {
-            dbLock.releaseLock();
-        }
+//        logger.info("====================================");
+//        logger.info("Locking database...");
+//
+//        dbLockManager.checkForcedUnlock();
+//        dbLock.waitForLock();
+//
+//        logger.info("Database locked");
+//        logger.info("====================================");
+//
+//
+//        logger.info("====================================");
+//        logger.info("Init migration (Liquibase)...");
+//
+//        migrationBootstraper.init();
+//
+//        logger.info("Migration Complete...");
+//        logger.info("====================================");
+//
+//        try {
+//            migrateAndBootstrap();
+//        } finally {
+//            dbLock.releaseLock();
+//        }
     }
 
     // Migrate model, bootstrap server. This is done with acquired dbLock

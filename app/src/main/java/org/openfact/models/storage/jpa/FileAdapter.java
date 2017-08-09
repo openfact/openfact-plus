@@ -2,7 +2,7 @@ package org.openfact.models.storage.jpa;
 
 import org.openfact.models.FileModel;
 import org.openfact.models.StorageException;
-import org.openfact.models.jpa.JpaModel;
+import org.openfact.models.db.jpa.JpaModel;
 import org.openfact.models.storage.jpa.entity.FileEntity;
 
 import javax.persistence.EntityManager;
