@@ -24,7 +24,7 @@ import static org.keycloak.test.TestsHelper.createClient;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 
 @RunWith(Arquillian.class)
-public abstract class AbstractSecureTest {
+public abstract class AbstractTest {
 
     @ClassRule
     public static SSORuleTest ssoProvider = new SSORuleTest();
