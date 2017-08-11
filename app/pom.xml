@@ -308,6 +308,10 @@
                 <directory>src/test/resources</directory>
                 <filtering>true</filtering>
             </testResource>
+            <testResource>
+                <directory>src/it/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
         </testResources>
         <plugins>
             <plugin>
@@ -331,6 +335,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>add-source</id>
@@ -360,7 +365,23 @@
                     </execution>
                 </executions>
             </plugin>
-            
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*IT.java</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
@@ -396,67 +417,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <version>${version.liquibase-maven-plugin}</version>
-                <configuration>
-                    <url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</url>
-                    <driver>org.h2.Driver</driver>
-                    <username>sa</username>
-                    <password>sa</password>
-                    <changeLogFile>${project.build.directory}/changelog-master.xml</changeLogFile>
-                    <diffChangeLogFile>${project.build.directory}/changelog-diff.xml</diffChangeLogFile>
-                    <outputChangeLogFile>${project.build.directory}/changelog-output.xml</outputChangeLogFile>
-                    <dropFirst>true</dropFirst>
-                    <referenceUrl>hibernate:spring:org.openfact?dialect=org.hibernate.dialect.H2Dialect</referenceUrl>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>diff</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.liquibase.ext</groupId>
-                        <artifactId>liquibase-hibernate5</artifactId>
-                        <version>3.6</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-beans</artifactId>
-                        <version>4.3.7.RELEASE</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.springframework.data</groupId>
-                        <artifactId>spring-data-jpa</artifactId>
-                        <version>1.11.1.RELEASE</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>javax.el</groupId>
-                        <artifactId>javax.el-api</artifactId>
-                        <version>3.0.0</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>com.h2database</groupId>
-                        <artifactId>h2</artifactId>
-                        <version>${version.h2}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-search-orm</artifactId>
-                        <version>${version.hibernate-search}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-validator</artifactId>
-                        <version>${version.hibernate-validator}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
         </plugins>
     </build>
 
@@ -521,6 +481,75 @@
             </build>
         </profile>
 
+        <profile>
+            <id>liquibase</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.liquibase</groupId>
+                        <artifactId>liquibase-maven-plugin</artifactId>
+                        <version>${version.liquibase-maven-plugin}</version>
+                        <configuration>
+                            <url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</url>
+                            <driver>org.h2.Driver</driver>
+                            <username>sa</username>
+                            <password>sa</password>
+                            <changeLogFile>${project.build.directory}/changelog-master.xml</changeLogFile>
+                            <diffChangeLogFile>${project.build.directory}/changelog-diff.xml</diffChangeLogFile>
+                            <outputChangeLogFile>${project.build.directory}/changelog-output.xml</outputChangeLogFile>
+                            <dropFirst>true</dropFirst>
+                            <referenceUrl>hibernate:spring:org.openfact?dialect=org.hibernate.dialect.H2Dialect
+                            </referenceUrl>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>diff</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.liquibase.ext</groupId>
+                                <artifactId>liquibase-hibernate5</artifactId>
+                                <version>3.6</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.springframework</groupId>
+                                <artifactId>spring-beans</artifactId>
+                                <version>4.3.7.RELEASE</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.springframework.data</groupId>
+                                <artifactId>spring-data-jpa</artifactId>
+                                <version>1.11.1.RELEASE</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>javax.el</groupId>
+                                <artifactId>javax.el-api</artifactId>
+                                <version>3.0.0</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.h2database</groupId>
+                                <artifactId>h2</artifactId>
+                                <version>${version.h2}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.hibernate</groupId>
+                                <artifactId>hibernate-search-orm</artifactId>
+                                <version>${version.hibernate-search}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.hibernate</groupId>
+                                <artifactId>hibernate-validator</artifactId>
+                                <version>${version.hibernate-validator}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>clean-jpa</id>
             <build>

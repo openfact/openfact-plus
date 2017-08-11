@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OfflineTestsHelpersTest {
+public class OfflineHelpers {
 
     public static String getContent(HttpEntity entity) throws IOException {
         if (entity == null) return null;

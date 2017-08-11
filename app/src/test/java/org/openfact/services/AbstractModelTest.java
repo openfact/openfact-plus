@@ -2,7 +2,6 @@ package org.openfact.services;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -13,8 +12,8 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.keycloak.test.builders.ClientBuilder;
-import org.openfact.services.rule.JAXRSRuleTest;
-import org.openfact.services.rule.SSORuleTest;
+import org.openfact.services.rule.JAXRSRule;
+import org.openfact.services.rule.KeycloakRule;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,13 +23,13 @@ import static org.keycloak.test.TestsHelper.createClient;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 
 @RunWith(Arquillian.class)
-public abstract class AbstractTest {
+public abstract class AbstractModelTest {
 
     @ClassRule
-    public static SSORuleTest ssoProvider = new SSORuleTest();
+    public static KeycloakRule ssoProvider = new KeycloakRule();
 
     @Rule
-    public JAXRSRuleTest client = JAXRSRuleTest.target("http://localhost:8080");
+    public JAXRSRule client = JAXRSRule.target("http://localhost:8080");
 
     @Deployment(testable = false)
     public static Archive<?> createTestArchive() throws IOException {

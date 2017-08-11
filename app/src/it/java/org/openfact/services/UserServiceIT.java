@@ -1,15 +1,14 @@
 package org.openfact.services;
 
 import org.junit.Test;
-import org.openfact.models.RequestStatusType;
-import org.openfact.representation.idm.UserRepresentation;
 
 import javax.ws.rs.core.Response;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.equalTo;
 
-public class UserServiceTest extends AbstractTest {
+public class UserServiceIT extends AbstractModelTest {
 
     public static final String PATH = "/api/user";
 

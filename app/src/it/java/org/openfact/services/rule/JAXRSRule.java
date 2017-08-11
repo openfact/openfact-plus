@@ -11,18 +11,18 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-public class JAXRSRuleTest implements TestRule {
+public class JAXRSRule implements TestRule {
 
     private final Client client;
     private final WebTarget target;
 
-    private JAXRSRuleTest(String uri) {
+    private JAXRSRule(String uri) {
         this.client = ResteasyClientBuilder.newClient();
         this.target = client.target(uri);
     }
 
-    public static JAXRSRuleTest target(String uri) {
-        return new JAXRSRuleTest(uri);
+    public static JAXRSRule target(String uri) {
+        return new JAXRSRule(uri);
     }
 
     public WebTarget target() {

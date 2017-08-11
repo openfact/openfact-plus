@@ -11,10 +11,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static org.keycloak.test.TestsHelper.*;
+import static org.keycloak.test.TestsHelper.deleteRealm;
+import static org.keycloak.test.TestsHelper.importTestRealm;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 
-public class SSORuleTest extends ExternalResource {
+public class KeycloakRule extends ExternalResource {
 
     @Override
     protected void before() {
