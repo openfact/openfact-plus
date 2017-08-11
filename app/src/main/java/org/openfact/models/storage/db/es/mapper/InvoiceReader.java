@@ -3,8 +3,8 @@ package org.openfact.models.storage.db.es.mapper;
 import com.helger.ubl21.UBL21Reader;
 import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
 import org.openfact.models.FileModel;
-import org.openfact.models.storage.db.es.entity.DocumentEntity;
 import org.openfact.models.storage.db.es.DocumentMapper;
+import org.openfact.models.storage.db.es.entity.DocumentEntity;
 import org.openfact.models.storage.db.es.entity.IndexedDocumentEntity;
 import org.w3c.dom.Document;
 

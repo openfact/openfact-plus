@@ -1,8 +1,5 @@
 package org.openfact.services;
 
-import org.openfact.services.ErrorResponse;
-import org.openfact.services.ErrorResponseException;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;

@@ -2,9 +2,7 @@ package org.openfact.transaction;
 
 import org.jboss.logging.Logger;
 import org.openfact.models.OpenfactSession;
-import org.openfact.transaction.jboss.JBossJtaTransactionManagerLookup;
 
-import javax.transaction.TransactionManager;
 import java.util.LinkedList;
 import java.util.List;
 

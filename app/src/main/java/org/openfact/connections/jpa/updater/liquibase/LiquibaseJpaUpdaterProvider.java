@@ -31,7 +31,6 @@ import java.io.Writer;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.util.List;
-import java.util.Set;
 
 @Stateless
 public class LiquibaseJpaUpdaterProvider implements JpaUpdaterProvider {

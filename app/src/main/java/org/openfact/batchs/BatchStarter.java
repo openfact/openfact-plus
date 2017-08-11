@@ -1,10 +1,7 @@
 package org.openfact.batchs;
 
-import javax.annotation.PostConstruct;
 import javax.batch.operations.JobOperator;
 import javax.batch.runtime.BatchRuntime;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
 import javax.ejb.Stateless;
 import java.util.Properties;
 

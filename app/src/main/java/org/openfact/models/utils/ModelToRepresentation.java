@@ -1,10 +1,12 @@
 package org.openfact.models.utils;
 
-import org.openfact.models.*;
+import org.openfact.models.RequestAccessToSpaceModel;
+import org.openfact.models.SharedSpaceModel;
+import org.openfact.models.SpaceModel;
+import org.openfact.models.UserModel;
 import org.openfact.representation.idm.*;
 
 import javax.ejb.Stateless;
-import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 

@@ -1,8 +1,8 @@
 package org.openfact.batchs.read;
 
-import java.util.List;
 import javax.batch.api.chunk.AbstractItemWriter;
 import javax.inject.Named;
+import java.util.List;
 
 @Named
 public class MyItemWriter extends AbstractItemWriter {

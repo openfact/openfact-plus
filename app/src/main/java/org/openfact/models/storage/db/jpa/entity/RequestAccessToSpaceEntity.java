@@ -5,11 +5,11 @@ import org.openfact.models.PermissionType;
 import org.openfact.models.RequestStatusType;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "REQUEST_ACCESS")

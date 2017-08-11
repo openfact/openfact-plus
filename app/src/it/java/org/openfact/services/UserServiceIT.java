@@ -8,7 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.equalTo;
 
-public class UserServiceIT extends AbstractModelTest {
+public class UserServiceIT extends AbstractIT {
 
     public static final String PATH = "/api/user";
 

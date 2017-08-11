@@ -2,7 +2,6 @@ package org.openfact.connections.jpa;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.enterprise.inject.Produces;
 import javax.sql.DataSource;
 import java.sql.Connection;
 

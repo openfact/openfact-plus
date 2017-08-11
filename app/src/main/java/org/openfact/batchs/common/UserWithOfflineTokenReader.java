@@ -4,10 +4,10 @@ import org.openfact.models.ScrollableResultsModel;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 
-import java.io.Serializable;
 import javax.batch.api.chunk.AbstractItemReader;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.Serializable;
 
 @Named
 public class UserWithOfflineTokenReader extends AbstractItemReader {

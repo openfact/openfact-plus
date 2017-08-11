@@ -1,17 +1,16 @@
 package org.openfact.repositories.user.gmail;
 
+import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
 import com.google.api.services.gmail.model.MessagePartBody;
 import org.openfact.models.UserRepositoryModel;
+import org.openfact.repositories.user.UserRepositoryElementModel;
+import org.openfact.repositories.user.UserRepositoryReadException;
 
 import java.io.IOException;
 import java.util.List;
-
-import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
-import org.openfact.repositories.user.UserRepositoryReadException;
-import org.openfact.repositories.user.UserRepositoryElementModel;
 
 public class UserRepositoryElementAdapter implements UserRepositoryElementModel {
 

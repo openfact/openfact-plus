@@ -1,7 +1,6 @@
 package org.openfact.services;
 
 import javax.ejb.ApplicationException;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 @ApplicationException(rollback = true)

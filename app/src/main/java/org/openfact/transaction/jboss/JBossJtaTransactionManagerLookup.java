@@ -1,7 +1,6 @@
 package org.openfact.transaction.jboss;
 
 import org.jboss.logging.Logger;
-import org.keycloak.Config;
 import org.openfact.transaction.JtaTransactionManagerLookup;
 
 import javax.annotation.PostConstruct;

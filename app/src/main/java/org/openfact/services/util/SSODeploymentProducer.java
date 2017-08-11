@@ -4,7 +4,7 @@ import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.KeycloakDeploymentBuilder;
 
 import javax.ejb.Singleton;
-import javax.ws.rs.Produces;
+import javax.enterprise.inject.Produces;
 import java.io.InputStream;
 
 @Singleton

@@ -3,7 +3,9 @@ package org.openfact.services.resources;
 import org.jboss.logging.Logger;
 import org.keycloak.jose.jws.JWSInputException;
 import org.keycloak.util.TokenUtil;
-import org.openfact.models.*;
+import org.openfact.models.Constants;
+import org.openfact.models.UserModel;
+import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.ContextInformationRepresentation;
 import org.openfact.representation.idm.ExtProfileRepresentation;
@@ -18,7 +20,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 @Stateless
 @Path("/user")

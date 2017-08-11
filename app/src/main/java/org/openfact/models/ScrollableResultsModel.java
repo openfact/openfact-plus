@@ -1,16 +1,5 @@
 package org.openfact.models;
 
-import org.hibernate.type.Type;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-
 public interface ScrollableResultsModel<T> {
 
     /**

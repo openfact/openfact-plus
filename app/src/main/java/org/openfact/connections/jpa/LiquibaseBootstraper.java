@@ -6,8 +6,9 @@ import org.openfact.connections.jpa.updater.JpaUpdaterProvider;
 import org.openfact.models.MigrationBootstraper;
 import org.openfact.models.dblock.DBLockProvider;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.*;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import java.io.File;
 import java.sql.Connection;
