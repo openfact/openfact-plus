@@ -24,5 +24,5 @@ public class UserProviderTest extends AbstractModelTest {
                 .matches(u -> u.getUsername().equals("carlos"))
                 .matches(u -> !u.isRegistrationCompleted());
     }
-    
+
 }
