@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.openshift</groupId>
@@ -23,8 +21,8 @@
 
         <version.wildfly.swarm>2017.8.1</version.wildfly.swarm>
 
-        <fabric8.version>2.3.2</fabric8.version>
-        <fabric8.maven.plugin.version>3.5.19</fabric8.maven.plugin.version>
+        <fabric8.version>2.3.3</fabric8.version>
+        <fabric8.maven.plugin.version>3.5.22</fabric8.maven.plugin.version>
 
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>2.19.1</maven-failsafe-plugin.version>
@@ -45,7 +43,7 @@
                         <resources>
                             <labels>
                                 <all>
-                                    <space>openfact-platform</space>
+                                    <space>test</space>
                                 </all>
                             </labels>
                         </resources>
