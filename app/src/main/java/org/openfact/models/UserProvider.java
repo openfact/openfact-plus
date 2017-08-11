@@ -1,11 +1,15 @@
 package org.openfact.models;
 
+import java.util.List;
+
 public interface UserProvider {
 
     UserModel addUser(String username);
 
     UserModel getByUsername(String username);
 
-    ScrollableResultsModel<UserModel> getUsers();
+    List<UserModel> getUsers();
+
+    ScrollableResultsModel<UserModel> getScrollableUsers();
 
 }

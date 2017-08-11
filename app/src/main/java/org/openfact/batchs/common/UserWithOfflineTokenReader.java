@@ -19,7 +19,7 @@ public class UserWithOfflineTokenReader extends AbstractItemReader {
 
     @Override
     public void open(Serializable checkpoint) throws Exception {
-        users = userProvider.getUsers();
+        users = userProvider.getScrollableUsers();
     }
 
     @Override

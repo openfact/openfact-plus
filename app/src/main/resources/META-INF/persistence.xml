@@ -9,14 +9,15 @@
         <!--<jta-data-source>java:jboss/datasources/SyncDS</jta-data-source>-->
         <properties>
             <!--Hibernate upgrade-->
-            <property name="jboss.as.jpa.providerModule" value="org.hibernate:5.2"/>
-            <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:5.8.0.Beta4"/>
+            <property name="jboss.as.jpa.providerModule" value="org.hibernate:${version.hibernate}"/>
+            <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>
+
+            <property name="hibernate.transaction.flush_before_completion" value="true"/>
 
             <!--Hibernate properties-->
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.transaction.flush_before_completion" value="true"/>
 
             <!--Hibernate search-->
             <!--<property name="hibernate.search.default.indexmanager" value="elasticsearch"/>-->

@@ -1,22 +1,16 @@
 package org.openfact.models.storage.db.jpa;
 
 import org.hibernate.ScrollableResults;
-import org.hibernate.Session;
-import org.hibernate.StatelessSession;
 import org.openfact.models.ScrollableResultsModel;
 
 import java.util.function.Function;
 
 public class ScrollableResultsAdapter<T, R> implements ScrollableResultsModel<R> {
 
-    private final Session session;
-    private final StatelessSession statelessSession;
     private final ScrollableResults scroll;
     private final Function<T, R> mapper;
 
-    public ScrollableResultsAdapter(Session session, StatelessSession statelessSession, ScrollableResults scroll, Function<T, R> mapper) {
-        this.session = session;
-        this.statelessSession = statelessSession;
+    public ScrollableResultsAdapter(ScrollableResults scroll, Function<T, R> mapper) {
         this.scroll = scroll;
         this.mapper = mapper;
     }
@@ -24,8 +18,6 @@ public class ScrollableResultsAdapter<T, R> implements ScrollableResultsModel<R>
     @Override
     public void close() {
         scroll.close();
-        statelessSession.close();
-        session.close();
     }
 
     @Override

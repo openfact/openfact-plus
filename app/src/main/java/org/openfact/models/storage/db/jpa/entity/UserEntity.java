@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "user")
 @NamedQueries({
         @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username"),
         @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username")
@@ -21,22 +21,22 @@ public class UserEntity implements Serializable {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
-    @Column(name = "ID", length = 36)
+    @Column(name = "id", length = 36)
     private String id;
 
     @NotNull
     @NotEmpty
     @NaturalId
-    @Column(name = "USERNAME")
+    @Column(name = "username")
     private String username;
 
     @Size(max = 255)
-    @Column(name = "FULL_NAME")
+    @Column(name = "full_name")
     private String fullName;
 
     @NotNull
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    @Column(name = "REGISTRATION_COMPLETED")
+    @Type(type = "org.hibernate.type.TrueFalseType")
+    @Column(name = "registration_complete")
     private boolean registrationCompleted;
 
     @Size(max = 2048)
@@ -56,7 +56,7 @@ public class UserEntity implements Serializable {
     private Set<UserRepositoryEntity> repositories = new HashSet<>();
 
     @Version
-    @Column(name = "VERSION")
+    @Column(name = "version")
     private int version;
 
     public String getId() {

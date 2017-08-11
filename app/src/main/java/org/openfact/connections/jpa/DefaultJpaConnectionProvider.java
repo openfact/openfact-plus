@@ -4,7 +4,6 @@ import javax.ejb.Stateless;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.lang.reflect.Proxy;
 
 @Stateless
 public class DefaultJpaConnectionProvider implements JpaConnectionProvider {
@@ -14,7 +13,7 @@ public class DefaultJpaConnectionProvider implements JpaConnectionProvider {
 
     @Produces
     public EntityManager getEntityManager() {
-        return (EntityManager) Proxy.newProxyInstance(EntityManager.class.getClassLoader(), new Class[]{EntityManager.class}, new PersistenceExceptionConverter(em));
+        return PersistenceExceptionConverter.create(em);
     }
 
 }

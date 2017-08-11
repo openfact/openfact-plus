@@ -1,0 +1,21 @@
+user:
+  - id: 1
+    username: carlos
+    registration_complete: F
+    version: 1
+  - id: 2
+    username: esteban
+    registration_complete: F
+    version: 1
+  - id: 3
+    username: pavel
+    registration_complete: F
+    version: 1
+  - id: 4
+    username: shano
+    registration_complete: F
+    version: 1
+  - id: 5
+    username: alex
+    registration_complete: F
+    version: 1
