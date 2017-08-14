@@ -1,0 +1,26 @@
+space:
+  - id: 1
+    assigned_id: 11111
+    alias: 11111
+    owner_id: 1 # carlos
+    version: 1
+  - id: 2
+    assigned_id: 22222
+    alias: 22222
+    owner_id: 2 # esteban
+    version: 1
+  - id: 3
+    assigned_id: 33333
+    alias: 33333
+    owner_id: 3 # pavel
+    version: 1
+  - id: 4
+    assigned_id: 44444
+    alias: 44444
+    owner_id: 4 # shano
+    version: 1
+  - id: 5
+    assigned_id: 55555
+    alias: 55555
+    owner_id: 5 # alex
+    version: 1

@@ -9,6 +9,12 @@ public interface FileProvider {
     FileModel addFile(byte[] file, String extension) throws StorageException;
 
     /**
+     * @param id
+     * @return file model
+     */
+    FileModel getFile(String id);
+
+    /**
      * @param file to be removed
      * @return result of operation
      */

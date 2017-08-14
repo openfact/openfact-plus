@@ -6,6 +6,7 @@ import org.arquillian.ape.rdbms.TestExecutionPhase;
 import org.arquillian.ape.rdbms.UsingDataSet;
 import org.junit.Test;
 
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
 
 import java.util.List;
@@ -17,24 +18,24 @@ public class UserProviderTest extends AbstractModelTest {
     @Inject
     public UserProvider userProvider;
 
-    @Test(expected = ModelDuplicateException.class)
+    @Test
     @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
     public void createUserTest() {
-        UserModel user = userProvider.addUser("feria");
+        UserModel user1 = userProvider.addUser("carlos");
 
-        assertThat(user).isNotNull()
+        assertThat(user1).isNotNull()
                 .matches(u -> u.getId() != null)
-                .matches(u -> u.getUsername().equals("feria"))
+                .matches(u -> u.getUsername().equals("carlos"))
                 .matches(u -> !u.isRegistrationCompleted());
 
-        user = userProvider.getByUsername("feria");
-        assertThat(user).isNotNull();
-
-        userProvider.addUser("feria");
+        // get user
+        UserModel user2 = userProvider.getByUsername("carlos");
+        assertThat(user1).isEqualTo(user2);
     }
 
     @Test
     @UsingDataSet("users.yml")
+    @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
     public void getByUsernameTest() {
         UserModel user = userProvider.getByUsername("carlos");
 
@@ -44,6 +45,7 @@ public class UserProviderTest extends AbstractModelTest {
 
     @Test
     @UsingDataSet("users.yml")
+    @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
     public void getUsersTest() {
         List<UserModel> users = userProvider.getUsers();
 
@@ -52,16 +54,16 @@ public class UserProviderTest extends AbstractModelTest {
 
     @Test
     @UsingDataSet("users.yml")
+    @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
     public void getScrollableUsersTest() {
         ScrollableResultsModel<UserModel> users = userProvider.getScrollableUsers();
 
-        int currentRowNumber = 0;
-        if (users.next()) {
-            currentRowNumber++;
+        assertThat(users).isNotNull();
+
+        while (users.next()) {
+            assertThat(users.get()).isNotNull();
         }
         users.close();
-
-        assertThat(currentRowNumber).isEqualTo(5);
     }
 
 }
