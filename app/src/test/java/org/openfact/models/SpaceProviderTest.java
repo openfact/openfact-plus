@@ -44,18 +44,18 @@ public class SpaceProviderTest extends AbstractModelTest {
         assertThat(space1).isEqualTo(space2);
     }
 
-//    @Test
-//    @UsingDataSet(value = {"users.yml", "spaces.yml"})
-//    public void removeSpaceTest() {
-//        SpaceModel space = spaceProvider.getByAssignedId("11111");
-//
-//        assertThat(space).isNotNull()
-//                .matches(u -> u.getAssignedId().equals("11111"));
-//
-//        // Remove
-//        boolean result = spaceProvider.removeSpace(space);
-//
-//        assertThat(result).isTrue();
-//    }
+    @Test
+    @UsingDataSet(value = {"users.yml", "spaces.yml"})
+    public void removeSpaceTest() {
+        SpaceModel space = spaceProvider.getByAssignedId("11111");
+
+        assertThat(space).isNotNull()
+                .matches(u -> u.getAssignedId().equals("11111"));
+
+        // Remove
+        boolean result = spaceProvider.removeSpace(space);
+
+        assertThat(result).isTrue();
+    }
 
 }
