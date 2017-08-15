@@ -1,7 +1,5 @@
 package org.openfact.models;
 
-import org.openfact.broker.BrokerType;
-
 import java.util.List;
 import java.util.Set;
 

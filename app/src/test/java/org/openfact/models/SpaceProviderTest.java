@@ -1,10 +1,7 @@
 package org.openfact.models;
 
 import org.apache.xmlbeans.xml.stream.Space;
-import org.arquillian.ape.rdbms.Cleanup;
-import org.arquillian.ape.rdbms.CleanupStrategy;
-import org.arquillian.ape.rdbms.TestExecutionPhase;
-import org.arquillian.ape.rdbms.UsingDataSet;
+import org.arquillian.ape.rdbms.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,14 +42,14 @@ public class SpaceProviderTest extends AbstractModelTest {
     }
 
     @Test
-    @UsingDataSet(value = {"users.yml", "spaces.yml"})
+    @UsingDataSet(value = {"users.yml"})
+    @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
     public void removeSpaceTest() {
-        SpaceModel space = spaceProvider.getByAssignedId("11111");
+        SpaceModel space = spaceProvider.addSpace("123456789", user);
 
         assertThat(space).isNotNull()
-                .matches(u -> u.getAssignedId().equals("11111"));
+                .matches(u -> u.getAssignedId().equals("123456789"));
 
-        // Remove
         boolean result = spaceProvider.removeSpace(space);
 
         assertThat(result).isTrue();

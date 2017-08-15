@@ -3,6 +3,7 @@ package org.openfact.models.db.jpa;
 import org.openfact.models.SpaceModel;
 import org.openfact.models.SpaceProvider;
 import org.openfact.models.UserModel;
+import org.openfact.models.db.HibernateProvider;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.db.jpa.entity.UserEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
@@ -14,43 +15,54 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class JpaSpaceProvider implements SpaceProvider {
+public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider {
+
+    private EntityManager em;
 
     @Inject
-    private EntityManager em;
+    public JpaSpaceProvider(EntityManager em) {
+        this.em = em;
+    }
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
 
     @Override
     public SpaceModel addSpace(String assignedId, UserModel owner) {
-        UserEntity userEntity = UserAdapter.toEntity(owner, em);
+        UserEntity userEntity = UserAdapter.toEntity(owner, getSession());
 
         SpaceEntity entity = new SpaceEntity();
         entity.setId(OpenfactModelUtils.generateId());
         entity.setAssignedId(assignedId);
         entity.setAlias(assignedId);
         entity.setOwner(userEntity);
-        em.persist(entity);
+        getSession().persist(entity);
+
+        getSession().flush();
 
         // Cache
         userEntity.getOwnedSpaces().add(entity);
 
-        return new SpaceAdapter(em, entity);
+        return new SpaceAdapter(getSession(), entity);
     }
 
     @Override
     public SpaceModel getByAssignedId(String assignedId) {
-        TypedQuery<SpaceEntity> query = em.createNamedQuery("getSpaceByAssignedId", SpaceEntity.class);
+        TypedQuery<SpaceEntity> query = getSession().createNamedQuery("getSpaceByAssignedId", SpaceEntity.class);
         query.setParameter("assignedId", assignedId);
         List<SpaceEntity> entities = query.getResultList();
         if (entities.size() == 0) return null;
-        return new SpaceAdapter(em, entities.get(0));
+        return new SpaceAdapter(getSession(), entities.get(0));
     }
 
     @Override
     public boolean removeSpace(SpaceModel space) {
-        SpaceEntity entity = em.find(SpaceEntity.class, space.getId());
+        SpaceEntity entity = getSession().find(SpaceEntity.class, space.getId());
         if (entity == null) return false;
-        em.remove(entity);
+        getSession().remove(entity);
+        getSession().flush();
         return true;
     }
-
 }

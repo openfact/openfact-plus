@@ -1,7 +1,5 @@
 package org.openfact.models;
 
-import org.openfact.broker.BrokerType;
-
 import java.time.LocalDateTime;
 import java.util.Map;
 

@@ -4,7 +4,7 @@ import org.jboss.logging.Logger;
 import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.ServerRequest;
 import org.keycloak.representations.AccessTokenResponse;
-import org.openfact.broker.BrokerType;
+import org.openfact.models.BrokerType;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserRepositoryModel;
 import org.openfact.repositories.user.UserRepositorySync;

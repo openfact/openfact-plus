@@ -1,4 +1,4 @@
-package org.openfact.broker;
+package org.openfact.models;
 
 public class BrokerTokenModel {
 

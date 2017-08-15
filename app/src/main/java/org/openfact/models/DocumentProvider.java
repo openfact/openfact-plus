@@ -1,13 +1,10 @@
 package org.openfact.models;
 
-import org.w3c.dom.Document;
-
 public interface DocumentProvider {
 
     /**
-     * @param document to be persisted
-     * @param file     attached to the document
+     * @param file that represents the xml document to be persisted
      */
-    DocumentModel addDocument(Document document, FileModel file);
+    DocumentModel addDocument(FileModel file);
 
 }

@@ -48,6 +48,7 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
         entity.setUsername(username);
         entity.setRegistrationCompleted(false);
         getSession().persist(entity);
+        getSession().flush();
         return new UserAdapter(getSession(), entity);
     }
 

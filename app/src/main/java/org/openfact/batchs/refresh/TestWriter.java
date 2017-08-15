@@ -1,6 +1,6 @@
 package org.openfact.batchs.refresh;
 
-import org.openfact.broker.BrokerType;
+import org.openfact.models.BrokerType;
 import org.openfact.models.UserModel;
 
 import javax.batch.api.chunk.AbstractItemWriter;

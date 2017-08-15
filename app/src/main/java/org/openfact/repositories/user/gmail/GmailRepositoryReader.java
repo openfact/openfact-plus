@@ -3,7 +3,7 @@ package org.openfact.repositories.user.gmail;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
-import org.openfact.broker.BrokerType;
+import org.openfact.models.BrokerType;
 import org.openfact.models.UserRepositoryModel;
 import org.openfact.repositories.user.*;
 import org.openfact.services.managers.BrokerManager;

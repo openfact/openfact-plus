@@ -6,6 +6,6 @@ import org.w3c.dom.Document;
 
 public interface DocumentMapper {
 
-    DocumentEntity buildEntity(Document document, FileModel fileModel);
+    DocumentEntity buildEntity(FileModel file);
 
 }

@@ -2,6 +2,7 @@ package org.openfact.services.managers;
 
 import org.jboss.logging.Logger;
 import org.openfact.models.*;
+import org.openfact.models.utils.OpenfactModelUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -41,7 +42,7 @@ public class DocumentManager {
     public DocumentModel importDocument(byte[] bytes) throws ParseExceptionModel, StorageException {
         Document document;
         try {
-            document = toDocument(bytes);
+            document = OpenfactModelUtils.toDocument(bytes);
         } catch (ParserConfigurationException | IOException | SAXException e) {
             throw new ParseExceptionModel("Could not parse bytes[] to Document", e);
         }
@@ -58,7 +59,7 @@ public class DocumentManager {
     public DocumentModel importDocument(InputStream inputStream) throws ParseExceptionModel, StorageException {
         Document document;
         try {
-            document = toDocument(inputStream);
+            document = OpenfactModelUtils.toDocument(inputStream);
         } catch (ParserConfigurationException | IOException | SAXException e) {
             throw new ParseExceptionModel("Could not parse inputStream to Document", e);
         }
@@ -76,7 +77,7 @@ public class DocumentManager {
         // Persist File
         FileModel fileModel;
         try {
-            byte[] file = toByteArray(document);
+            byte[] file = OpenfactModelUtils.toByteArray(document);
             fileModel = fileProvider.addFile(file, ".xml");
         } catch (TransformerException e) {
             throw new ParseExceptionModel("Could not parse Document to bytes[]", e);
@@ -84,34 +85,12 @@ public class DocumentManager {
 
         // Persist Document
         try {
-            return documentProvider.addDocument(document, fileModel);
+            return documentProvider.addDocument(fileModel);
         } catch (ModelException e) {
             boolean result = fileProvider.removeFile(fileModel);
             logger.infof("Rollback file result={}", result);
             throw new ModelException("Could not persist document model", e);
         }
-    }
-
-    public static Document toDocument(InputStream inputStream) throws ParserConfigurationException, IOException, SAXException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        return builder.parse(new InputSource(inputStream));
-    }
-
-    private Document toDocument(byte[] bytes) throws ParserConfigurationException, IOException, SAXException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        return builder.parse(new ByteArrayInputStream(bytes));
-    }
-
-    private byte[] toByteArray(Document document) throws TransformerException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        StreamResult result = new StreamResult(out);
-        TransformerFactory factory = TransformerFactory.newInstance();
-        Transformer transformer = factory.newTransformer();
-        transformer.transform(new DOMSource(document), result);
-        return out.toByteArray();
     }
 
 }

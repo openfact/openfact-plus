@@ -1,6 +1,6 @@
 package org.openfact.repositories.user;
 
-import org.openfact.broker.BrokerType;
+import org.openfact.models.BrokerType;
 
 import javax.enterprise.util.AnnotationLiteral;
 

@@ -1,8 +1,8 @@
 package org.openfact.services.managers;
 
 import org.keycloak.adapters.KeycloakDeployment;
-import org.openfact.broker.BrokerTokenModel;
-import org.openfact.broker.BrokerType;
+import org.openfact.models.BrokerTokenModel;
+import org.openfact.models.BrokerType;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
