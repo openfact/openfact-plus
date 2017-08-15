@@ -1,33 +1,57 @@
-<%@page import="org.keycloak.AuthorizationContext" %>
-<%@ page import="org.keycloak.KeycloakSecurityContext" %>
-<%@ page import="org.keycloak.common.util.KeycloakUriBuilder" %>
-<%@ page import="org.keycloak.constants.ServiceUrlConstants" %>
-<%@ page import="org.keycloak.representations.idm.authorization.Permission" %>
-
-<%
-    KeycloakSecurityContext keycloakSecurityContext = (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
-    AuthorizationContext authzContext = keycloakSecurityContext.getAuthorizationContext();
-    authzContext.
-%>
 <html>
-<body>
-<h2>Welcome !</h2>
-<h2><a href="<%= KeycloakUriBuilder.fromUri("/auth").path(ServiceUrlConstants.TOKEN_SERVICE_LOGOUT_PATH)
-            .queryParam("redirect_uri", "http://localhost:8080/hello-world-authz-service").build("hello-world-authz").toString()%>">Logout</a></h2>
+<head>
+    <title>Welcome to Sync</title>
 
-<h3>Your permissions are:</h3>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex, nofollow">
 
-<ul>
-    <%
-        for (Permission permission : authzContext.getPermissions()) {
-    %>
-    <li>
-        <p>Resource: <%= permission.getResourceSetName() %></p>
-        <p>ID: <%= permission.getResourceSetId() %></p>
-    </li>
-    <%
+    <link rel="shortcut icon" href="welcome-content/favicon.ico" type="image/x-icon">
+    <link rel="StyleSheet" href="welcome-content/keycloak.css" type="text/css">
+    <style>
+        label {
+            display: inline-block;
+            width: 200px;
+            text-align: right;
+            margin-right: 10px;
         }
-    %>
-</ul>
+
+        button {
+            margin-left: 215px;
+        }
+
+        form {
+            background-color: #eee;
+            border: 1px solid #666;
+            padding-bottom: 1em;
+        }
+
+        .error {
+            color: #a30000;
+        }
+    </style>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="content">
+        <div class="logo">
+            <img src="welcome-content/sync_logo.png" alt="Sync" border="0">
+        </div>
+        <h1>Welcome to Sync</h1>
+
+
+        <p><a href="http://www.sync.org/docs">Documentation</a> | <a href="admin/">Administration Console</a></p>
+
+        <p><a href="http://www.sync.org">Sync Project</a> |
+            <a href="https://lists.jboss.org/mailman/listinfo/sync-user">Mailing List</a> |
+            <a href="https://issues.jboss.org/browse/KEYCLOAK">Report an issue</a></p>
+        <p class="logos"><a href="http://www.jboss.org"><img src="welcome-content/jboss_community.png"
+                                                             alt="JBoss and JBoss Community" width="254" height="31"
+                                                             border="0"></a></p>
+    </div>
+</div>
+
+
 </body>
 </html>

@@ -34,11 +34,11 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
 
     @Override
     public UserModel getByUsername(String username) {
-        TypedQuery<UserEntity> query = getSession().createNamedQuery("getUserByUsername", UserEntity.class);
+        TypedQuery<UserEntity> query = em.createNamedQuery("getUserByUsername", UserEntity.class);
         query.setParameter("username", username);
         List<UserEntity> entities = query.getResultList();
         if (entities.size() == 0) return null;
-        return new UserAdapter(getSession(), entities.get(0));
+        return new UserAdapter(em, entities.get(0));
     }
 
     @Override
@@ -47,23 +47,23 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
         entity.setId(OpenfactModelUtils.generateId());
         entity.setUsername(username);
         entity.setRegistrationCompleted(false);
-        getSession().persist(entity);
-        getSession().flush();
-        return new UserAdapter(getSession(), entity);
+        em.persist(entity);
+        em.flush();
+        return new UserAdapter(em, entity);
     }
 
     @Override
     public List<UserModel> getUsers() {
-        TypedQuery<UserEntity> query = getSession().createNamedQuery("getAllUsers", UserEntity.class);
+        TypedQuery<UserEntity> query = em.createNamedQuery("getAllUsers", UserEntity.class);
         return query.getResultList().stream()
-                .map(f -> new UserAdapter(getSession(), f))
+                .map(f -> new UserAdapter(em, f))
                 .collect(Collectors.toList());
     }
 
     @Override
     public ScrollableResultsModel<UserModel> getScrollableUsers() {
         ScrollableResults scrollableResults = getSession().createNamedQuery("getAllUsers").scroll(ScrollMode.FORWARD_ONLY);
-        Function<UserEntity, UserModel> mapper = entity -> new UserAdapter(getSession(), entity);
+        Function<UserEntity, UserModel> mapper = entity -> new UserAdapter(em, entity);
         return new ScrollableResultsAdapter<>(scrollableResults, mapper);
     }
 
