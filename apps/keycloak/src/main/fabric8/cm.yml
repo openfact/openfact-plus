@@ -17,7 +17,7 @@ data:
     {
       "realm": "openfact",
       "enabled": true,
-      "loginTheme": "keycloak",
+      "loginTheme": "openfact",
       "privateKey": "${KEYCLOAK_PRIVATEKEY}",
       "publicKey": "${KEYCLOAK_PUBLICKEY}",
       "sslRequired": "external",
@@ -55,6 +55,25 @@ data:
           "bearerOnly": true
         }
       ],
+      "users": [{
+         "username": "service-account-openfact-online-platform",
+         "enabled": true,
+         "totp": false,
+         "emailVerified": false,
+         "email": "service-account-openfact-online-platform@placeholder.org",
+         "serviceAccountClientId": "openfact-online-platform",
+         "credentials": [],
+         "disableableCredentialTypes": [],
+         "requiredActions": [],
+         "realmRoles": ["offline_access", "uma_authorization"],
+         "clientRoles": {
+            "realm-management": ["view-users", "manage-authorization"],
+            "broker": ["read-token"],
+            "openfact-online-platform": ["uma_protection"],
+            "account": ["manage-account", "view-profile"]
+         },
+         "groups": []
+      }],
       "clientScopeMappings": {
         "realm-management": [
             {
@@ -95,6 +114,7 @@ data:
           "trustEmail": true,
           "addReadTokenRoleOnCreate" : true,
           "config": {
+            "hideOnLoginPage": "${HIDE_GOOGLE_BTN}",
             "clientSecret": "${GOOGLE_OAUTH_CLIENT_SECRET}",
             "clientId": "${GOOGLE_OAUTH_CLIENT_ID}",
             "defaultScope": "",
@@ -110,6 +130,7 @@ data:
           "trustEmail": true,
           "addReadTokenRoleOnCreate" : true,
           "config": {
+            "hideOnLoginPage": "${HIDE_MICROSOFT_BTN}",
             "clientSecret": "${MICROSOFT_OAUTH_CLIENT_SECRET}",
             "clientId": "${MICROSOFT_OAUTH_CLIENT_ID}",
             "defaultScope": "",

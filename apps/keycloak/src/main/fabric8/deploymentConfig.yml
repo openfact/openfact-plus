@@ -13,6 +13,20 @@ spec:
       annotations:
         pod.beta.kubernetes.io/init-containers: |-
           [{
+            "name": "git-cloner",
+            "image": "fabric8/builder-clients:0.11",
+            "imagePullPolicy": "IfNotPresent",
+            "command": [ "/bin/bash" ],
+            "args": [
+              "-c",
+              "git clone https://github.com/openfactio/openfact-keycloak-theme.git /keycloak-theme/login && cd /keycloak-theme/login && git checkout 5c10e317eb49c23c1314a39f589e804a7af30328"
+            ],
+            "volumeMounts": [{
+              "name": "keycloak-theme",
+              "mountPath": "/keycloak-theme"
+            }]
+          },
+          {
             "name": "openshift-ca-pemtokeystore",
             "image": "jimmidyson/pemtokeystore:v0.2.0",
             "imagePullPolicy": "IfNotPresent",
@@ -96,6 +110,14 @@ spec:
                           "key": "apiserver.url"
                       }
                   }
+            },
+            {
+              "name": "HIDE_GOOGLE_BTN",
+              "value": "false"
+            },
+            {
+              "name": "HIDE_MICROSOFT_BTN",
+              "value": "true"
             }],
             "volumeMounts": [
             {
@@ -120,8 +142,7 @@ spec:
         - -Dkeycloak.migration.action=import
         - -Dkeycloak.migration.provider=singleFile
         - -Dkeycloak.migration.file=/opt/jboss/keycloak/standalone/configuration/import/openfact-realm.json
-        - -Dkeycloak.migration.strategy=OVERWRITE_EXISTING
-
+        - -Dkeycloak.migration.strategy=IGNORE_EXISTING
         env:
         - name: POSTGRES_HOSTNAME
           value: keycloak-db
@@ -162,6 +183,10 @@ spec:
             secretKeyRef:
               name: keycloak
               key: kc.public.key
+        - name: HIDE_GOOGLE_BTN
+          value: "false"
+        - name: HIDE_MICROSOFT_BTN
+          value: "true"
         readinessProbe:
           httpGet:
             path: "/auth"
@@ -179,6 +204,8 @@ spec:
           mountPath: /opt/jboss/keycloak/standalone/configuration/tls
         - name: keycloak-subst-config
           mountPath: /opt/jboss/keycloak/standalone/configuration/import
+        - name: keycloak-theme
+          mountPath: /opt/jboss/keycloak/themes/openfact
       volumes:
       - name: keycloak-tls
         emptyDir: {}
@@ -190,3 +217,5 @@ spec:
           items:
           - key: openfact-realm.json
             path: config/openfact-realm.json
+      - name: keycloak-theme
+        emptyDir: {}
