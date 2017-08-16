@@ -22,7 +22,7 @@
         <version.keycloak>2.5.5.Final</version.keycloak>
         <version.hibernate>5.2.10.Final</version.hibernate>
         <version.hibernate-validator>5.2.4.Final</version.hibernate-validator>
-        <version.hibernate-search>5.8.0.Beta4</version.hibernate-search>
+        <version.hibernate-search>5.8.0.CR1</version.hibernate-search>
 
         <version.h2>1.4.187</version.h2>
         <version.postgresql>9.4.1207</version.postgresql>
