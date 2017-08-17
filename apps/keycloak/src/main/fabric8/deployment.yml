@@ -196,5 +196,4 @@ spec:
       - name: keycloak-theme
         gitRepo:
           repository: https://github.com/openfactio/openfact-keycloak-theme.git
-          revision: 5c10e317eb49c23c1314a39f589e804a7af30328
           directory: login

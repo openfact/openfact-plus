@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-oc login -u developer -p developer
-oc project openfact-dev
-
 mvn clean package -DskipTests=true
+
+oc login -u developer -p developer
+oc new-project openfact-dev
+oc project openfact-dev
 
 mvn fabric8:deploy -DSSO_REALM=openfact \
     -DSSO_AUTH_SERVER_URL=http://`oc get route keycloak --template={{.spec.host}}`/auth \

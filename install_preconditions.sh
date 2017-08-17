@@ -6,6 +6,7 @@ cd apps && mvn clean package && cd ..
 # Minishift
 oc login -u developer -p developer
 oc new-project openfact-dev
+oc project openfact-dev
 
 APISERVER=$(oc version | grep Server | sed -e 's/.*http:\/\///g' -e 's/.*https:\/\///g')
 NODE_IP=$(echo "${APISERVER}" | sed -e 's/:.*//g')

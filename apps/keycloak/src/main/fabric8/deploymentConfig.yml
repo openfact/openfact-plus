@@ -19,7 +19,7 @@ spec:
             "command": [ "/bin/bash" ],
             "args": [
               "-c",
-              "git clone https://github.com/openfactio/openfact-keycloak-theme.git /keycloak-theme/login && cd /keycloak-theme/login && git checkout 5c10e317eb49c23c1314a39f589e804a7af30328"
+              "git clone https://github.com/openfactio/openfact-keycloak-theme.git /keycloak-theme/login && cd /keycloak-theme/login"
             ],
             "volumeMounts": [{
               "name": "keycloak-theme",
