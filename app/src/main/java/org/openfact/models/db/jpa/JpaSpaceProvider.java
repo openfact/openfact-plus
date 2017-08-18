@@ -49,6 +49,13 @@ public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider
     }
 
     @Override
+    public SpaceModel getSpace(String id) {
+        SpaceEntity entity = em.find(SpaceEntity.class, id);
+        if (entity == null) return null;
+        return new SpaceAdapter(em, entity);
+    }
+
+    @Override
     public SpaceModel getByAssignedId(String assignedId) {
         TypedQuery<SpaceEntity> query = getSession().createNamedQuery("getSpaceByAssignedId", SpaceEntity.class);
         query.setParameter("assignedId", assignedId);

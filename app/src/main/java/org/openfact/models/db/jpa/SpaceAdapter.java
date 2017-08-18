@@ -1,8 +1,8 @@
 package org.openfact.models.db.jpa;
 
 import org.openfact.models.*;
-import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.db.jpa.entity.RequestAccessToSpaceEntity;
+import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.db.jpa.entity.UserEntity;
 
 import javax.persistence.EntityManager;

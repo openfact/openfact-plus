@@ -2,7 +2,6 @@ package org.openfact.models.db.jpa;
 
 import org.openfact.models.FileModel;
 import org.openfact.models.FileProvider;
-import org.openfact.models.ModelException;
 import org.openfact.models.StorageException;
 import org.openfact.models.db.HibernateProvider;
 import org.openfact.models.db.jpa.entity.FileEntity;

@@ -16,9 +16,9 @@ import liquibase.util.StreamUtil;
 import org.jboss.logging.Logger;
 import org.keycloak.common.util.reflections.Reflections;
 import org.openfact.models.db.connections.jpa.entityprovider.JpaEntityProvider;
+import org.openfact.models.db.connections.jpa.updater.JpaUpdaterProvider;
 import org.openfact.models.db.connections.jpa.updater.liquibase.conn.LiquibaseConnectionProvider;
 import org.openfact.models.db.connections.jpa.util.JpaUtils;
-import org.openfact.models.db.connections.jpa.updater.JpaUpdaterProvider;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Any;

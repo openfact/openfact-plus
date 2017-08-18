@@ -4,7 +4,6 @@ import com.helger.ubl21.UBL21Reader;
 import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
 import org.openfact.models.FileModel;
 import org.openfact.models.ModelException;
-import org.openfact.models.StorageException;
 import org.openfact.models.db.es.DocumentMapper;
 import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.entity.IndexedDocumentEntity;

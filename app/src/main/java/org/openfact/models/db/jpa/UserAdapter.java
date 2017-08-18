@@ -1,9 +1,8 @@
 package org.openfact.models.db.jpa;
 
-import org.openfact.models.BrokerType;
 import org.openfact.models.*;
-import org.openfact.models.db.jpa.entity.UserRepositoryEntity;
 import org.openfact.models.db.jpa.entity.UserEntity;
+import org.openfact.models.db.jpa.entity.UserRepositoryEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.persistence.EntityManager;

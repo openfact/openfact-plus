@@ -10,6 +10,14 @@ public interface SpaceProvider {
     SpaceModel addSpace(String assignedId, UserModel user);
 
     /**
+     * Find space by id
+     *
+     * @param id
+     * @return space
+     */
+    SpaceModel getSpace(String id);
+
+    /**
      * @param assignedId
      * @return space
      */

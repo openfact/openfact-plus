@@ -53,6 +53,13 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
     }
 
     @Override
+    public UserModel getUser(String userId) {
+        UserEntity entity = em.find(UserEntity.class, userId);
+        if (entity == null) return null;
+        return new UserAdapter(em, entity);
+    }
+
+    @Override
     public List<UserModel> getUsers() {
         TypedQuery<UserEntity> query = em.createNamedQuery("getAllUsers", UserEntity.class);
         return query.getResultList().stream()

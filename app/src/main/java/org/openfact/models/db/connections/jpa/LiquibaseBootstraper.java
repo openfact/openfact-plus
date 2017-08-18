@@ -3,8 +3,8 @@ package org.openfact.models.db.connections.jpa;
 import org.jboss.logging.Logger;
 import org.openfact.ServerStartupError;
 import org.openfact.models.MigrationBootstraper;
-import org.openfact.models.dblock.DBLockProvider;
 import org.openfact.models.db.connections.jpa.updater.JpaUpdaterProvider;
+import org.openfact.models.dblock.DBLockProvider;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;

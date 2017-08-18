@@ -6,6 +6,8 @@ public interface UserProvider {
 
     UserModel addUser(String username);
 
+    UserModel getUser(String userId);
+
     UserModel getByUsername(String username);
 
     List<UserModel> getUsers();

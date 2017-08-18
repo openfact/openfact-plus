@@ -1,14 +1,12 @@
 package org.openfact.models.utils;
 
-import org.openfact.models.RequestAccessToSpaceModel;
-import org.openfact.models.SharedSpaceModel;
-import org.openfact.models.SpaceModel;
-import org.openfact.models.UserModel;
+import org.openfact.models.*;
 import org.openfact.representation.idm.*;
 
 import javax.ejb.Stateless;
-import java.util.function.Function;
+import java.util.Arrays;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Stateless
 public class ModelToRepresentation {
@@ -22,45 +20,58 @@ public class ModelToRepresentation {
         attributes.setFullName(model.getFullName());
         attributes.setRegistrationCompleted(model.isRegistrationCompleted());
 
-        Function<SpaceModel, SpaceRepresentation> toSpaceRepresentation = space -> {
-            SpaceRepresentation rep = new SpaceRepresentation();
-            rep.setId(space.getId());
-            rep.setAssignedId(space.getAssignedId());
-            rep.setAlias(space.getAlias());
-            return rep;
-        };
-
-        Function<SharedSpaceModel, SharedSpaceRepresentation> toSharedSpaceRepresentation = space -> {
-            SharedSpaceRepresentation rep = new SharedSpaceRepresentation();
-            rep.setId(space.getSpace().getId());
-            rep.setAlias(space.getSpace().getAlias());
-            rep.setPermissions(space.getPermissions().stream().map(Enum::toString).collect(Collectors.toList()));
-            return rep;
-        };
-
-        Function<RequestAccessToSpaceModel, RequestAccessToSpaceRepresentation> toSpaceRequestRepresentation = request -> {
-            RequestAccessToSpaceRepresentation rep = new RequestAccessToSpaceRepresentation();
-            rep.setSpaceId(request.getSpace().getId());
-            rep.setSpaceAssignedId(request.getSpace().getAssignedId());
-            rep.setStatus(request.getStatus().toString().toLowerCase());
-            rep.setMessage(request.getMessage());
-            rep.setPermissions(request.getPermissions().stream().map(f -> f.toString().toLowerCase()).collect(Collectors.toList()));
-            return rep;
-        };
-
         // Spaces
-        attributes.setOwnedSpaces(model.getOwnedSpaces().stream()
-                .map(toSpaceRepresentation)
-                .collect(Collectors.toList()));
-        attributes.setSharedSpaces(model.getSharedSpaces().stream()
-                .map(toSharedSpaceRepresentation)
-                .collect(Collectors.toList()));
-        attributes.setSpaceRequests(model.getSpaceRequests().stream()
-                .map(toSpaceRequestRepresentation)
-                .collect(Collectors.toList()));
+        Stream<SpaceRepresentation> sharedSpaces = model.getSharedSpaces().stream()
+                .map(this::toRepresentation);
+        Stream<SpaceRepresentation> ownedSpaces = model.getOwnedSpaces().stream()
+                .map(f -> toRepresentation(f, true));
+
+        attributes.setSpaces(Stream.concat(ownedSpaces, sharedSpaces).collect(Collectors.toList()));
+        attributes.setSpaceRequests(model.getSpaceRequests().stream().map(this::toRepresentation).collect(Collectors.toList()));
 
         representation.setAttributes(attributes);
         return representation;
+    }
+
+    public SpaceRepresentation toRepresentation(SpaceModel model, boolean isOwner) {
+        SpaceRepresentation rep = new SpaceRepresentation();
+
+        rep.setId(model.getId());
+        rep.setAssignedId(model.getAssignedId());
+        rep.setAlias(model.getAlias());
+
+        if (isOwner) {
+            rep.setPermissions(Arrays.asList(PermissionType.OWNER.getAlias()));
+        }
+
+        return rep;
+    }
+
+    public SpaceRepresentation toRepresentation(SharedSpaceModel model) {
+        SpaceRepresentation rep = toRepresentation(model.getSpace(), false);
+        rep.setPermissions(model.getPermissions().stream().map(PermissionType::getAlias).collect(Collectors.toList()));
+        return rep;
+    }
+
+    public RequestAccessToSpaceRepresentation toRepresentation(RequestAccessToSpaceModel model) {
+        RequestAccessToSpaceRepresentation rep = new RequestAccessToSpaceRepresentation();
+
+        rep.setMessage(model.getMessage());
+        rep.setPermissions(model.getPermissions().stream().map(PermissionType::getAlias).collect(Collectors.toList()));
+        rep.setStatus(model.getStatus().getAlias());
+
+        return rep;
+    }
+
+    public RepositoryRepresentation toRepresentation(UserRepositoryModel model) {
+        RepositoryRepresentation rep = new RepositoryRepresentation();
+
+        rep.setId(model.getId());
+        rep.setType(model.getType().getAlias());
+        rep.setEmail(model.getEmail());
+        rep.setLasTimeSynchronized(model.getLastTimeSynchronized());
+
+        return rep;
     }
 
 }
