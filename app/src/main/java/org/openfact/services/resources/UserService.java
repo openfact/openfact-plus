@@ -4,11 +4,13 @@ import org.jboss.logging.Logger;
 import org.keycloak.jose.jws.JWSInputException;
 import org.keycloak.util.TokenUtil;
 import org.openfact.models.Constants;
+import org.openfact.models.ModelType;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.ContextInformationRepresentation;
 import org.openfact.representation.idm.ExtProfileRepresentation;
+import org.openfact.representation.idm.ResponseRepresentation;
 import org.openfact.services.ErrorResponse;
 import org.openfact.services.managers.SpaceManager;
 import org.openfact.services.util.SSOContext;
@@ -73,7 +75,11 @@ public class UserService {
             }
         }
 
-        return Response.ok(modelToRepresentation.toRepresentation(user)).build();
+        ResponseRepresentation result = ResponseRepresentation.builder()
+                .type(ModelType.USER)
+                .data(modelToRepresentation.toRepresentation(user))
+                .build();
+        return Response.ok(result).build();
     }
 
     @PUT
