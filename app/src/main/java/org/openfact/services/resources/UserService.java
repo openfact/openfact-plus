@@ -1,25 +1,23 @@
 package org.openfact.services.resources;
 
 import org.jboss.logging.Logger;
-import org.keycloak.jose.jws.JWSInputException;
-import org.keycloak.util.TokenUtil;
+import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
+import org.jboss.resteasy.annotations.providers.jaxb.WrappedMap;
 import org.openfact.models.Constants;
 import org.openfact.models.ModelType;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
-import org.openfact.representation.idm.ContextInformationRepresentation;
-import org.openfact.representation.idm.ExtProfileRepresentation;
 import org.openfact.representation.idm.ResponseFactory;
-import org.openfact.representation.idm.ResponseRepresentation;
-import org.openfact.services.ErrorResponse;
 import org.openfact.services.managers.SpaceManager;
 import org.openfact.services.util.SSOContext;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -44,6 +42,7 @@ public class UserService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @WrappedMap
     public Response getCurrentUser(@Context final HttpServletRequest httpServletRequest) {
         SSOContext ssoContext = new SSOContext(httpServletRequest);
         String username = ssoContext.getUsername();
@@ -76,43 +75,7 @@ public class UserService {
             }
         }
 
-        return Response.ok(ResponseFactory.response(ModelType.USER, modelToRepresentation.toRepresentation(user))).build();
-    }
-
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(@Context final HttpServletRequest httpServletRequest, final ExtProfileRepresentation extProfile) {
-        String username = new SSOContext(httpServletRequest).getUsername();
-
-        UserModel user = userProvider.getByUsername(username);
-        if (user == null) {
-            throw new NotFoundException();
-        }
-
-        // Offline token
-        ContextInformationRepresentation contextInformation = extProfile.getContextInformation();
-        if (contextInformation != null) {
-            String offlineToken = contextInformation.getOfflineToken();
-            if (offlineToken != null) {
-                try {
-                    if (TokenUtil.isOfflineToken(offlineToken)) {
-                        user.setOfflineRefreshToken(offlineToken);
-                    } else {
-                        return ErrorResponse.error("Invalid Token Type", Response.Status.BAD_REQUEST);
-                    }
-                } catch (JWSInputException e) {
-                    logger.error("Could not decode token", e);
-                }
-            }
-        }
-
-        // Is registration completed
-        Boolean registrationCompleted = extProfile.getRegistrationCompleted();
-        if (registrationCompleted != null) {
-            user.setRegistrationCompleted(registrationCompleted);
-        }
-
-        return Response.ok(modelToRepresentation.toRepresentation(user)).build();
+        return Response.ok(ResponseFactory.response(modelToRepresentation.toRepresentation(user))).build();
     }
 
 }

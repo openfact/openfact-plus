@@ -2,22 +2,35 @@ package org.openfact.representation.idm;
 
 public class ExtProfileRepresentation {
 
-    private Boolean registrationCompleted;
-    private ContextInformationRepresentation contextInformation;
+    private Data data;
 
-    public Boolean getRegistrationCompleted() {
-        return registrationCompleted;
+    public Data getData() {
+        return data;
     }
 
-    public void setRegistrationCompleted(Boolean registrationCompleted) {
-        this.registrationCompleted = registrationCompleted;
+    public void setData(Data data) {
+        this.data = data;
     }
 
-    public ContextInformationRepresentation getContextInformation() {
-        return contextInformation;
-    }
+    public static class Data {
 
-    public void setContextInformation(ContextInformationRepresentation contextInformation) {
-        this.contextInformation = contextInformation;
+        private String type;
+        private UserDataAttributesRepresentation attributes;
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public UserDataAttributesRepresentation getAttributes() {
+            return attributes;
+        }
+
+        public void setAttributes(UserDataAttributesRepresentation attributes) {
+            this.attributes = attributes;
+        }
     }
 }

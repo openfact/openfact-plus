@@ -47,6 +47,9 @@ public class UserDataAttributesRepresentation {
     private List<SpaceRepresentation> spaces;
     private List<RequestAccessToSpaceRepresentation> spaceRequests;
 
+    private String refreshToken;
+    private ContextInformationRepresentation contextInformation;
+
     public String getUserID() {
         return userID;
     }
@@ -165,5 +168,21 @@ public class UserDataAttributesRepresentation {
 
     public void setSpaceRequests(List<RequestAccessToSpaceRepresentation> spaceRequests) {
         this.spaceRequests = spaceRequests;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public ContextInformationRepresentation getContextInformation() {
+        return contextInformation;
+    }
+
+    public void setContextInformation(ContextInformationRepresentation contextInformation) {
+        this.contextInformation = contextInformation;
     }
 }
