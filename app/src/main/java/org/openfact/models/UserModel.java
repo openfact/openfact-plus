@@ -5,6 +5,8 @@ import java.util.Set;
 
 public interface UserModel {
 
+    String USERNAME = "username";
+
     String getId();
     String getUsername();
 

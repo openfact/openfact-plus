@@ -3,8 +3,7 @@ package org.openfact.services.resources;
 import org.jboss.logging.Logger;
 import org.openfact.models.*;
 import org.openfact.models.utils.ModelToRepresentation;
-import org.openfact.representation.idm.RepositoryRepresentation;
-import org.openfact.representation.idm.SpaceRepresentation;
+import org.openfact.representation.idm.*;
 import org.openfact.services.managers.UserManager;
 
 import javax.ejb.Stateless;
@@ -48,6 +47,20 @@ public class UsersService {
             throw new NotFoundException();
         }
         return user;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseRepresentation getUsers(@QueryParam("filter[username]") String usernameFilter) {
+        QueryModel.Builder builder = QueryModel.builder();
+
+        if (usernameFilter != null) {
+            builder.addFilter(UserModel.USERNAME, usernameFilter);
+        }
+
+        return ResponseFactory.response(ModelType.USER, userProvider.getUsers(builder.build()).stream()
+                .map(f -> modelToRepresentation.toRepresentation(f))
+                .collect(Collectors.toList()));
     }
 
     @GET

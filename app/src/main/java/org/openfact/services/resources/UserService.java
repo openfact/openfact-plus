@@ -10,6 +10,7 @@ import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.ContextInformationRepresentation;
 import org.openfact.representation.idm.ExtProfileRepresentation;
+import org.openfact.representation.idm.ResponseFactory;
 import org.openfact.representation.idm.ResponseRepresentation;
 import org.openfact.services.ErrorResponse;
 import org.openfact.services.managers.SpaceManager;
@@ -75,11 +76,7 @@ public class UserService {
             }
         }
 
-        ResponseRepresentation result = ResponseRepresentation.builder()
-                .type(ModelType.USER)
-                .data(modelToRepresentation.toRepresentation(user))
-                .build();
-        return Response.ok(result).build();
+        return Response.ok(ResponseFactory.response(ModelType.USER, modelToRepresentation.toRepresentation(user))).build();
     }
 
     @PUT

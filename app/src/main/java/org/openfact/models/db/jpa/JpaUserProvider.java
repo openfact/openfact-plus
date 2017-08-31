@@ -5,6 +5,7 @@ import org.hibernate.ScrollableResults;
 import org.openfact.models.ScrollableResultsModel;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
+import org.openfact.models.QueryModel;
 import org.openfact.models.db.HibernateProvider;
 import org.openfact.models.db.jpa.entity.UserEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
@@ -63,6 +64,14 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
     public List<UserModel> getUsers() {
         TypedQuery<UserEntity> query = em.createNamedQuery("getAllUsers", UserEntity.class);
         return query.getResultList().stream()
+                .map(f -> new UserAdapter(em, f))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserModel> getUsers(QueryModel query) {
+        TypedQuery<UserEntity> typedQuery = new JpaCriteria<>(em, UserEntity.class, UserEntity.class, query).buildTypedQuery();
+        return typedQuery.getResultList().stream()
                 .map(f -> new UserAdapter(em, f))
                 .collect(Collectors.toList());
     }

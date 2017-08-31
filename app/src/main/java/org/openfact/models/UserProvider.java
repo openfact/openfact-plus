@@ -12,6 +12,8 @@ public interface UserProvider {
 
     List<UserModel> getUsers();
 
+    List<UserModel> getUsers(QueryModel query);
+
     ScrollableResultsModel<UserModel> getScrollableUsers();
 
 }
