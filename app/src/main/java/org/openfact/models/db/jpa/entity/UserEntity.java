@@ -2,22 +2,25 @@ package org.openfact.models.db.jpa.entity;
 
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "user")
+@EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username"),
-        @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username")
+        @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username"),
+        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username")
 })
-public class UserEntity implements Serializable {
+public class UserEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
@@ -33,6 +36,37 @@ public class UserEntity implements Serializable {
     @Size(max = 255)
     @Column(name = "full_name")
     private String fullName;
+
+    @Size(max = 255)
+    @Column(name = "image_url")
+    private String imageURL;
+
+    @Size(max = 255)
+    @Column(name = "bio")
+    private String bio;
+
+    @Email
+    @Size(max = 255)
+    @Column(name = "email")
+    private String email;
+
+    @Size(max = 255)
+    @Column(name = "company")
+    private String company;
+
+    @Size(max = 255)
+    @Column(name = "url")
+    private String url;
+
+    @NotNull
+    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @NotNull
+    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @NotNull
     @Type(type = "org.hibernate.type.TrueFalseType")
@@ -81,6 +115,62 @@ public class UserEntity implements Serializable {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public boolean isRegistrationCompleted() {

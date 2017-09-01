@@ -4,6 +4,7 @@ import org.openfact.models.*;
 import org.openfact.representation.idm.*;
 
 import javax.ejb.Stateless;
+import javax.ws.rs.core.UriInfo;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,12 +14,23 @@ public class ModelToRepresentation {
 
     public UserRepresentation toRepresentation(UserModel model) {
         UserRepresentation representation = new UserRepresentation();
-        representation.setId(model.getId());
 
+        representation.setId(model.getId());
+        representation.setType(ModelType.USER.getAlias());
+        representation.setLinks(new GenericLinksRepresentation());
+
+        // Attributes
         UserDataAttributesRepresentation attributes = new UserDataAttributesRepresentation();
         attributes.setUsername(model.getUsername());
         attributes.setFullName(model.getFullName());
         attributes.setRegistrationCompleted(model.isRegistrationCompleted());
+        attributes.setBio(model.getBio());
+        attributes.setEmail(model.getEmail());
+        attributes.setCompany(model.getCompany());
+        attributes.setImageURL(model.getImageURL());
+        attributes.setUrl(model.getUrl());
+        attributes.setCreated_at(model.getCreatedAt());
+        attributes.setUpdated_at(model.getUpdatedAt());
 
         // Spaces
         Stream<SpaceRepresentation> sharedSpaces = model.getSharedSpaces().stream()

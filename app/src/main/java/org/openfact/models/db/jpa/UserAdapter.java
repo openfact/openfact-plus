@@ -6,6 +6,7 @@ import org.openfact.models.db.jpa.entity.UserRepositoryEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +52,66 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public void setOfflineRefreshToken(String refreshToken) {
         user.setOfflineToken(refreshToken);
+    }
+
+    @Override
+    public String getImageURL() {
+        return user.getImageURL();
+    }
+
+    @Override
+    public void setImageURL(String imageURL) {
+        user.setImageURL(imageURL);
+    }
+
+    @Override
+    public String getBio() {
+        return user.getBio();
+    }
+
+    @Override
+    public void setBio(String bio) {
+        user.setBio(bio);
+    }
+
+    @Override
+    public String getEmail() {
+        return user.getEmail();
+    }
+
+    @Override
+    public void setEmail(String email) {
+        user.setEmail(email);
+    }
+
+    @Override
+    public String getCompany() {
+        return user.getCompany();
+    }
+
+    @Override
+    public void setCompany(String company) {
+        user.setCompany(company);
+    }
+
+    @Override
+    public String getUrl() {
+        return user.getUrl();
+    }
+
+    @Override
+    public void setUrl(String url) {
+        user.setUrl(url);
+    }
+
+    @Override
+    public LocalDateTime getCreatedAt() {
+        return user.getCreatedAt();
+    }
+
+    @Override
+    public LocalDateTime getUpdatedAt() {
+        return user.getUpdatedAt();
     }
 
     @Override

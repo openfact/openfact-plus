@@ -1,5 +1,6 @@
 package org.openfact.representation.idm;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -12,10 +13,10 @@ public class UserDataAttributesRepresentation {
     private String identityID;
 
     // The date of creation of the user
-    private Date created_at;
+    private LocalDateTime created_at;
 
     // The date of update of the user
-    private Date updated_at;
+    private LocalDateTime updated_at;
 
     // The user's full name
     private String fullName;
@@ -66,19 +67,19 @@ public class UserDataAttributesRepresentation {
         this.identityID = identityID;
     }
 
-    public Date getCreated_at() {
+    public LocalDateTime getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Date created_at) {
+    public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
     }
 
-    public Date getUpdated_at() {
+    public LocalDateTime getUpdated_at() {
         return updated_at;
     }
 
-    public void setUpdated_at(Date updated_at) {
+    public void setUpdated_at(LocalDateTime updated_at) {
         this.updated_at = updated_at;
     }
 

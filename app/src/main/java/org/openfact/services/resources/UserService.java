@@ -3,6 +3,7 @@ package org.openfact.services.resources;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.jboss.resteasy.annotations.providers.jaxb.WrappedMap;
+import org.keycloak.representations.AccessToken;
 import org.openfact.models.Constants;
 import org.openfact.models.ModelType;
 import org.openfact.models.UserModel;
@@ -45,12 +46,15 @@ public class UserService {
     @WrappedMap
     public Response getCurrentUser(@Context final HttpServletRequest httpServletRequest) {
         SSOContext ssoContext = new SSOContext(httpServletRequest);
-        String username = ssoContext.getUsername();
+        AccessToken accessToken = ssoContext.getParsedAccessToken();
+        String username = accessToken.getPreferredUsername();
 
         // Get user
         UserModel user = this.userProvider.getByUsername(username);
         if (user == null) {
             user = this.userProvider.addUser(username);
+            user.setEmail(accessToken.getEmail());
+            user.setFullName(accessToken.getName() + ' ' + accessToken.getFamilyName());
 
             Map<String, Object> userAttributes = ssoContext.getOtherClaims();
             if (userAttributes.containsKey(Constants.KC_SPACE_ATTRIBUTE_NAME)) {

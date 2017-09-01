@@ -6,6 +6,7 @@ import org.keycloak.adapters.AdapterDeploymentContext;
 import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.keycloak.jose.jws.JWSInputException;
+import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.RefreshToken;
 import org.keycloak.util.TokenUtil;
 
@@ -18,6 +19,11 @@ public class SSOContext {
 
     public SSOContext(HttpServletRequest httpServletRequest) {
         this.httpServletRequest = httpServletRequest;
+    }
+
+    public AccessToken getParsedAccessToken() {
+        KeycloakPrincipal<KeycloakSecurityContext> kcPrincipal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
+        return kcPrincipal.getKeycloakSecurityContext().getToken();
     }
 
     public String getUsername() {

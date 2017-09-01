@@ -46,12 +46,23 @@ public class UsersService {
     @Inject
     private ModelToRepresentation modelToRepresentation;
 
-    private UserModel getUser(String userId) {
+    private UserModel getUserById(String userId) {
         UserModel user = userProvider.getUser(userId);
         if (user == null) {
             throw new NotFoundException();
         }
         return user;
+    }
+
+    private void setLinks(UserModel model, UserRepresentation representation) {
+        GenericLinksRepresentation links = representation.getLinks();
+
+        URI self = uriInfo.getBaseUriBuilder()
+                .path(UsersService.class)
+                .path(UsersService.class, "getUser")
+                .build(model.getId());
+
+        links.setSelf(self.toString());
     }
 
     @PUT
@@ -89,7 +100,10 @@ public class UsersService {
             user.setRegistrationCompleted(registrationCompleted);
         }
 
-        return Response.ok(ResponseFactory.response(modelToRepresentation.toRepresentation(user))).build();
+        // Build result
+        UserRepresentation representation = modelToRepresentation.toRepresentation(user);
+        setLinks(user, representation);
+        return Response.ok(ResponseFactory.response(representation)).build();
     }
 
     @GET
@@ -102,8 +116,24 @@ public class UsersService {
         }
 
         return ResponseFactory.response(userProvider.getUsers(builder.build()).stream()
-                .map(f -> modelToRepresentation.toRepresentation(f))
-                .collect(Collectors.toList()));
+                .map(f -> {
+                    UserRepresentation representation = modelToRepresentation.toRepresentation(f);
+                    setLinks(f, representation);
+                    return representation;
+                }).collect(Collectors.toList()));
+    }
+
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseRepresentation getUser(@PathParam("id") String userId) {
+        UserModel user = getUserById(userId);
+
+        // Build result
+        UserRepresentation representation = modelToRepresentation.toRepresentation(user);
+        setLinks(user, representation);
+
+        return ResponseFactory.response(representation);
     }
 
 //    @GET
