@@ -40,8 +40,23 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     }
 
     @Override
+    public String getIdentityID() {
+        return user.getIdentityID();
+    }
+
+    @Override
+    public String getProviderType() {
+        return user.getProviderType();
+    }
+
+    @Override
     public String getUsername() {
         return user.getUsername();
+    }
+
+    @Override
+    public void setUsername(String username) {
+        user.setUsername(username);
     }
 
     @Override

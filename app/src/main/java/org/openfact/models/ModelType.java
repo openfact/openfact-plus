@@ -1,7 +1,12 @@
 package org.openfact.models;
 
 public enum ModelType {
-    USER("user"), DOCUMENT("document");
+
+    IDENTITIES("identities"),
+
+    USER("user"),
+
+    DOCUMENT("document");
 
     private String alias;
 

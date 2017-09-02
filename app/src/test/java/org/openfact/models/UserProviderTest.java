@@ -21,15 +21,15 @@ public class UserProviderTest extends AbstractModelTest {
     @Test
     @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
     public void createUserTest() {
-        UserModel user1 = userProvider.addUser("carlos");
+        UserModel user1 = userProvider.addUser("carlos", "kc");
 
         assertThat(user1).isNotNull()
                 .matches(u -> u.getId() != null)
                 .matches(u -> u.getUsername().equals("carlos"))
                 .matches(u -> !u.isRegistrationCompleted());
 
-        // get user
-        UserModel user2 = userProvider.getByUsername("carlos");
+        // getInstance user
+        UserModel user2 = userProvider.getUserByIdentityID("carlos");
         assertThat(user1).isEqualTo(user2);
     }
 
@@ -37,7 +37,7 @@ public class UserProviderTest extends AbstractModelTest {
     @UsingDataSet("users.yml")
     @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
     public void getByUsernameTest() {
-        UserModel user = userProvider.getByUsername("carlos");
+        UserModel user = userProvider.getUserByIdentityID("carlos");
 
         assertThat(user).isNotNull()
                 .matches(u -> u.getUsername().equals("carlos"));

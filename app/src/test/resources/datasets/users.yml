@@ -1,21 +1,31 @@
 user:
   - id: 1
     username: carlos
+    identityID: carlos
+    providerType: kc
     registration_complete: F
     version: 1
   - id: 2
     username: esteban
+    identityID: esteban
+    providerType: kc
     registration_complete: F
     version: 1
   - id: 3
     username: pavel
+    identityID: pavel
+    providerType: kc
     registration_complete: F
     version: 1
   - id: 4
     username: shano
+    identityID: shano
+    providerType: kc
     registration_complete: F
     version: 1
   - id: 5
     username: alex
+    identityID: alex
+    providerType: kc
     registration_complete: F
     version: 1

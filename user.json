@@ -1,0 +1,24 @@
+{
+  "data": {
+    "attributes": {
+      "bio": "",
+      "company": "",
+      "created-at": "2017-09-02T13:48:47.407459Z",
+      "email": "carlosthe19916@gmail.com",
+      "fullName": "Carlos Feria",
+      "identityID": "968dcfbb-977e-4321-89e7-808af993f55e",
+      "imageURL": "https://www.gravatar.com/avatar/163cc1ad968597824afc0fea62779fc6.jpg",
+      "providerType": "kc",
+      "registrationCompleted": false,
+      "updated-at": "2017-09-02T13:48:47.408716Z",
+      "url": "",
+      "userID": "afde52ba-2b57-4e96-86e8-eeaaa2a3b96d",
+      "username": "developer"
+    },
+    "id": "968dcfbb-977e-4321-89e7-808af993f55e",
+    "links": {
+      "self": "http://wit-fabric8.192.168.42.165.nip.io/api/users/968dcfbb-977e-4321-89e7-808af993f55e"
+    },
+    "type": "identities"
+  }
+}

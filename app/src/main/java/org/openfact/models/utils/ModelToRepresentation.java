@@ -2,25 +2,41 @@ package org.openfact.models.utils;
 
 import org.openfact.models.*;
 import org.openfact.representation.idm.*;
+import org.openfact.services.resources.UsersService;
 
 import javax.ejb.Stateless;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Stateless
 public class ModelToRepresentation {
 
+    public GenericLinksRepresentation createUserLinks(UserModel model, UriInfo uriInfo) {
+        GenericLinksRepresentation rep = new GenericLinksRepresentation();
+
+        URI self = uriInfo.getBaseUriBuilder()
+                .path(UsersService.class)
+                .path(UsersService.class, "getUser")
+                .build(model.getIdentityID());
+
+        rep.setSelf(self.toString());
+
+        return rep;
+    }
+
     public UserRepresentation toRepresentation(UserModel model) {
         UserRepresentation representation = new UserRepresentation();
 
-        representation.setId(model.getId());
-        representation.setType(ModelType.USER.getAlias());
-        representation.setLinks(new GenericLinksRepresentation());
+        representation.setId(model.getIdentityID());
+        representation.setType(ModelType.IDENTITIES.getAlias());
 
         // Attributes
         UserDataAttributesRepresentation attributes = new UserDataAttributesRepresentation();
+        attributes.setUserID(model.getId());
+        attributes.setIdentityID(model.getIdentityID());
+        attributes.setProviderType(model.getProviderType());
         attributes.setUsername(model.getUsername());
         attributes.setFullName(model.getFullName());
         attributes.setRegistrationCompleted(model.isRegistrationCompleted());
@@ -29,17 +45,17 @@ public class ModelToRepresentation {
         attributes.setCompany(model.getCompany());
         attributes.setImageURL(model.getImageURL());
         attributes.setUrl(model.getUrl());
-        attributes.setCreated_at(model.getCreatedAt());
-        attributes.setUpdated_at(model.getUpdatedAt());
+        attributes.setCreatedAt(model.getCreatedAt());
+        attributes.setUpdatedAt(model.getUpdatedAt());
 
         // Spaces
-        Stream<SpaceRepresentation> sharedSpaces = model.getSharedSpaces().stream()
-                .map(this::toRepresentation);
-        Stream<SpaceRepresentation> ownedSpaces = model.getOwnedSpaces().stream()
-                .map(f -> toRepresentation(f, true));
-
-        attributes.setSpaces(Stream.concat(ownedSpaces, sharedSpaces).collect(Collectors.toList()));
-        attributes.setSpaceRequests(model.getSpaceRequests().stream().map(this::toRepresentation).collect(Collectors.toList()));
+//        Stream<SpaceRepresentation> sharedSpaces = model.getSharedSpaces().stream()
+//                .map(this::toRepresentation);
+//        Stream<SpaceRepresentation> ownedSpaces = model.getOwnedSpaces().stream()
+//                .map(f -> toRepresentation(f, true));
+//
+//        attributes.setSpaces(Stream.concat(ownedSpaces, sharedSpaces).collect(Collectors.toList()));
+//        attributes.setSpaceRequests(model.getSpaceRequests().stream().map(this::toRepresentation).collect(Collectors.toList()));
 
         representation.setAttributes(attributes);
         return representation;

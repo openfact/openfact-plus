@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface UserProvider {
 
-    UserModel addUser(String username);
+    UserModel addUser(String identityID, String providerType);
 
     UserModel getUser(String userId);
 
-    UserModel getByUsername(String username);
+    UserModel getUserByIdentityID(String identityID);
 
     List<UserModel> getUsers();
 

@@ -1,7 +1,8 @@
 package org.openfact.representation.idm;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 public class UserDataAttributesRepresentation {
@@ -13,10 +14,12 @@ public class UserDataAttributesRepresentation {
     private String identityID;
 
     // The date of creation of the user
-    private LocalDateTime created_at;
+    @JsonProperty("created-at")
+    private LocalDateTime createdAt;
 
     // The date of update of the user
-    private LocalDateTime updated_at;
+    @JsonProperty("updated-at")
+    private LocalDateTime updatedAt;
 
     // The user's full name
     private String fullName;
@@ -67,20 +70,20 @@ public class UserDataAttributesRepresentation {
         this.identityID = identityID;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated_at(LocalDateTime updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getFullName() {

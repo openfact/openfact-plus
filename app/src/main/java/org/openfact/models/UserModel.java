@@ -1,11 +1,5 @@
 package org.openfact.models;
 
-import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.Email;
-
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +9,11 @@ public interface UserModel {
     String USERNAME = "username";
 
     String getId();
+    String getIdentityID();
+    String getProviderType();
+
     String getUsername();
+    void setUsername(String username);
 
     String getFullName();
     void setFullName(String fullName);

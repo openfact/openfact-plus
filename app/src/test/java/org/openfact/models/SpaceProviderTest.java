@@ -22,7 +22,7 @@ public class SpaceProviderTest extends AbstractModelTest {
 
     @Before
     public void before() {
-        user = userProvider.getByUsername("carlos");
+        user = userProvider.getUserByIdentityID("carlos");
     }
 
     @Test
@@ -36,7 +36,7 @@ public class SpaceProviderTest extends AbstractModelTest {
                 .matches(u -> u.getAssignedId().equals("123456789"))
                 .matches(u -> u.getAlias().equals("123456789"), "First alias should be assignedId");
 
-        // get user
+        // getInstance user
         SpaceModel space2 = spaceProvider.getByAssignedId("123456789");
         assertThat(space1).isEqualTo(space2);
     }

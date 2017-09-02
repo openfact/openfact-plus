@@ -3,7 +3,10 @@ package org.openfact.services.resources;
 import org.jboss.logging.Logger;
 import org.keycloak.jose.jws.JWSInputException;
 import org.keycloak.util.TokenUtil;
-import org.openfact.models.*;
+import org.openfact.models.QueryModel;
+import org.openfact.models.SpaceProvider;
+import org.openfact.models.UserModel;
+import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.*;
 import org.openfact.services.ErrorResponse;
@@ -18,12 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Stateless
 @Path("/users")
@@ -46,40 +44,25 @@ public class UsersService {
     @Inject
     private ModelToRepresentation modelToRepresentation;
 
-    private UserModel getUserById(String userId) {
-        UserModel user = userProvider.getUser(userId);
+    private UserModel getUserByIdentityID(String identityID) {
+        UserModel user = userProvider.getUserByIdentityID(identityID);
         if (user == null) {
             throw new NotFoundException();
         }
         return user;
     }
 
-    private void setLinks(UserModel model, UserRepresentation representation) {
-        GenericLinksRepresentation links = representation.getLinks();
-
-        URI self = uriInfo.getBaseUriBuilder()
-                .path(UsersService.class)
-                .path(UsersService.class, "getUser")
-                .build(model.getId());
-
-        links.setSelf(self.toString());
-    }
-
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateExtProfile(@Context final HttpServletRequest httpServletRequest,
                                      final ExtProfileRepresentation extProfile) {
-        String username = new SSOContext(httpServletRequest).getUsername();
-
-        UserModel user = userProvider.getByUsername(username);
-        if (user == null) {
-            throw new NotFoundException();
-        }
+        String identityID = new SSOContext(httpServletRequest).getParsedAccessToken().getId();
+        UserModel user = getUserByIdentityID(identityID);
 
         // Offline token
         UserDataAttributesRepresentation attributes = extProfile.getData().getAttributes();
 
-        if (attributes.getRefreshToken() != null) {
+        if (attributes != null && attributes.getRefreshToken() != null) {
             String offlineToken = attributes.getRefreshToken();
             if (offlineToken != null) {
                 try {
@@ -101,9 +84,9 @@ public class UsersService {
         }
 
         // Build result
-        UserRepresentation representation = modelToRepresentation.toRepresentation(user);
-        setLinks(user, representation);
-        return Response.ok(ResponseFactory.response(representation)).build();
+        UserRepresentation rep = modelToRepresentation.toRepresentation(user);
+        rep.setLinks(modelToRepresentation.createUserLinks(user, uriInfo));
+        return Response.ok(ResponseFactory.response(rep)).build();
     }
 
     @GET
@@ -118,22 +101,21 @@ public class UsersService {
         return ResponseFactory.response(userProvider.getUsers(builder.build()).stream()
                 .map(f -> {
                     UserRepresentation representation = modelToRepresentation.toRepresentation(f);
-                    setLinks(f, representation);
+                    representation.setLinks(modelToRepresentation.createUserLinks(f, uriInfo));
                     return representation;
                 }).collect(Collectors.toList()));
     }
 
     @GET
-    @Path("{id}")
+    @Path("{identityID}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseRepresentation getUser(@PathParam("id") String userId) {
-        UserModel user = getUserById(userId);
+    public ResponseRepresentation getUser(@PathParam("identityID") String identityID) {
+        UserModel user = getUserByIdentityID(identityID);
 
-        // Build result
-        UserRepresentation representation = modelToRepresentation.toRepresentation(user);
-        setLinks(user, representation);
-
-        return ResponseFactory.response(representation);
+        // Result
+        UserRepresentation rep = modelToRepresentation.toRepresentation(user);
+        rep.setLinks(modelToRepresentation.createUserLinks(user, uriInfo));
+        return ResponseFactory.response(rep);
     }
 
 //    @GET
@@ -158,7 +140,7 @@ public class UsersService {
 //    }
 //
 //    /**
-//     * Search spaces from user and get back it to you.
+//     * Search spaces from user and getInstance back it to you.
 //     *
 //     * @return spaces from user
 //     */

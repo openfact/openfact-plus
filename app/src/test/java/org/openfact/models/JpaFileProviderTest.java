@@ -26,7 +26,7 @@ public class JpaFileProviderTest extends AbstractModelTest {
                 .matches(u -> u.getFilename().endsWith(".xml"))
                 .matches(u -> u.getExtension().equals(".xml"));
 
-        // get user
+        // getInstance user
         FileModel user2 = fileProvider.getFile(file1.getId());
         assertThat(file1).isEqualTo(user2);
     }

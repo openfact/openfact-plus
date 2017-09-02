@@ -1,6 +1,5 @@
 package org.openfact.models.db.jpa.entity;
 
-import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -18,7 +17,8 @@ import java.util.Set;
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username"),
-        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username")
+        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username"),
+        @NamedQuery(name = "getUserByIdentityID", query = "select u from UserEntity u where u.identityID = :identityID")
 })
 public class UserEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
@@ -29,7 +29,15 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     @NotNull
     @NotEmpty
-    @NaturalId
+    @Column(name = "identity_id")
+    private String identityID;
+
+    @NotNull
+    @NotEmpty
+    @Column(name = "provider_type")
+    private String providerType;
+
+    @NotEmpty
     @Column(name = "username")
     private String username;
 
@@ -101,6 +109,22 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.id = id;
     }
 
+    public String getIdentityID() {
+        return identityID;
+    }
+
+    public void setIdentityID(String identityID) {
+        this.identityID = identityID;
+    }
+
+    public String getProviderType() {
+        return providerType;
+    }
+
+    public void setProviderType(String providerType) {
+        this.providerType = providerType;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -161,6 +185,7 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         return createdAt;
     }
 
+    @Override
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
@@ -169,6 +194,7 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         return updatedAt;
     }
 
+    @Override
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
@@ -241,5 +267,4 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     public int hashCode() {
         return getId().hashCode();
     }
-
 }
