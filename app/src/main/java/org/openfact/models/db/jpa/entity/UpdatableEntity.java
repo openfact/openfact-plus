@@ -1,7 +1,7 @@
 package org.openfact.models.db.jpa.entity;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public interface UpdatableEntity {
-    void setUpdatedAt(final LocalDateTime dateTime);
+    void setUpdatedAt(final Date date);
 }

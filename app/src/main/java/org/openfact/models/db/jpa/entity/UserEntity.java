@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,6 +38,7 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "provider_type")
     private String providerType;
 
+    @NotNull
     @NotEmpty
     @Column(name = "username")
     private String username;
@@ -67,14 +69,14 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     private String url;
 
     @NotNull
-    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
     @NotNull
-    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
 
     @NotNull
     @Type(type = "org.hibernate.type.TrueFalseType")
@@ -181,21 +183,21 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.url = url;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
     @Override
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
     @Override
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 

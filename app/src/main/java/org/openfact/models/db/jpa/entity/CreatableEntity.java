@@ -1,9 +1,9 @@
 package org.openfact.models.db.jpa.entity;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public interface CreatableEntity {
 
-    void setCreatedAt(final LocalDateTime dateTime);
+    void setCreatedAt(final Date date);
 
 }

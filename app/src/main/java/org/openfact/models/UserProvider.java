@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface UserProvider {
 
-    UserModel addUser(String identityID, String providerType);
+    UserModel addUser(String identityID, String providerType, String username);
 
     UserModel getUser(String userId);
 

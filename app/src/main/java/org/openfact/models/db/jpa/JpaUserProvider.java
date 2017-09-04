@@ -34,11 +34,12 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
     }
 
     @Override
-    public UserModel addUser(String identityID, String providerType) {
+    public UserModel addUser(String identityID, String providerType, String username) {
         UserEntity entity = new UserEntity();
         entity.setId(OpenfactModelUtils.generateId());
         entity.setIdentityID(identityID);
         entity.setProviderType(providerType);
+        entity.setUsername(username);
         entity.setRegistrationCompleted(false);
         em.persist(entity);
         em.flush();

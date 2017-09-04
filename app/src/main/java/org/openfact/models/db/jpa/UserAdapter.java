@@ -6,7 +6,7 @@ import org.openfact.models.db.jpa.entity.UserRepositoryEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,11 +52,6 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public String getUsername() {
         return user.getUsername();
-    }
-
-    @Override
-    public void setUsername(String username) {
-        user.setUsername(username);
     }
 
     @Override
@@ -120,12 +115,12 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     }
 
     @Override
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return user.getCreatedAt();
     }
 
     @Override
-    public LocalDateTime getUpdatedAt() {
+    public Date getUpdatedAt() {
         return user.getUpdatedAt();
     }
 

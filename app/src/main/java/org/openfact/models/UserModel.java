@@ -1,6 +1,6 @@
 package org.openfact.models;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -11,9 +11,7 @@ public interface UserModel {
     String getId();
     String getIdentityID();
     String getProviderType();
-
     String getUsername();
-    void setUsername(String username);
 
     String getFullName();
     void setFullName(String fullName);
@@ -39,8 +37,8 @@ public interface UserModel {
     String getUrl();
     void setUrl(String url);
 
-    LocalDateTime getCreatedAt();
-    LocalDateTime getUpdatedAt();
+    Date getCreatedAt();
+    Date getUpdatedAt();
 
     Set<SpaceModel> getOwnedSpaces();
     Set<SharedSpaceModel> getSharedSpaces();

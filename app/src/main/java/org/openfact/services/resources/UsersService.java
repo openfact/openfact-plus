@@ -2,6 +2,7 @@ package org.openfact.services.resources;
 
 import org.jboss.logging.Logger;
 import org.keycloak.jose.jws.JWSInputException;
+import org.keycloak.representations.AccessToken;
 import org.keycloak.util.TokenUtil;
 import org.openfact.models.QueryModel;
 import org.openfact.models.SpaceProvider;
@@ -56,8 +57,11 @@ public class UsersService {
     @Produces(MediaType.APPLICATION_JSON)
     public DataRepresentation updateExtProfile(@Context final HttpServletRequest httpServletRequest,
                                                final ExtProfileRepresentation extProfile) {
-        String identityID = new SSOContext(httpServletRequest).getParsedAccessToken().getId();
-        UserModel user = getUserByIdentityID(identityID);
+        SSOContext ssoContext = new SSOContext(httpServletRequest);
+        AccessToken accessToken = ssoContext.getParsedAccessToken();
+
+        String kcUserID = (String) accessToken.getOtherClaims().get("userID");
+        UserModel user = getUserByIdentityID(kcUserID);
 
         // Offline token
         UserDataAttributesRepresentation attributes = extProfile.getData().getAttributes();
@@ -90,13 +94,13 @@ public class UsersService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public DataRepresentation getUsers(@QueryParam("filter[username]") String usernameFilter) {
-        QueryModel.Builder builder = QueryModel.builder();
+        QueryModel.Builder queryBuilder = QueryModel.builder();
 
         if (usernameFilter != null) {
-            builder.addFilter(UserModel.USERNAME, usernameFilter);
+            queryBuilder.addFilter(UserModel.USERNAME, usernameFilter);
         }
 
-        return new DataRepresentation(userProvider.getUsers(builder.build()).stream()
+        return new DataRepresentation(userProvider.getUsers(queryBuilder.build()).stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
                 .collect(Collectors.toList()));
     }

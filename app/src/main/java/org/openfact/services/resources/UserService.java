@@ -2,12 +2,10 @@ package org.openfact.services.resources;
 
 import org.jboss.logging.Logger;
 import org.keycloak.representations.AccessToken;
-import org.openfact.models.ModelFetchException;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.DataRepresentation;
-import org.openfact.representation.idm.UserRepresentation;
 import org.openfact.services.managers.KeycloakManager;
 import org.openfact.services.util.SSOContext;
 
@@ -15,7 +13,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -50,58 +47,54 @@ public class UserService {
     public DataRepresentation getCurrentUser(@Context final HttpServletRequest httpServletRequest) {
         SSOContext ssoContext = new SSOContext(httpServletRequest);
         AccessToken accessToken = ssoContext.getParsedAccessToken();
-        String kcUserID = accessToken.getId();
 
-        // Fetch Keycloak user
-        org.keycloak.representations.idm.UserRepresentation kcUser;
-        try {
-            kcUser = keycloakManager.getUser(kcUserID, ssoContext.getAccessToken());
-        } catch (ModelFetchException e) {
-            throw new NotFoundException("Could not fetch user from Keycloak");
-        }
-
-        // Null means that user no longer exists on Keycloak
-        if (kcUser == null) {
-            logger.error("User " + kcUserID + "not exists on Keycloak");
-            throw new NotFoundException("User not exists on Keycloak");
-        }
+        String kcUserID = (String) accessToken.getOtherClaims().get("userID");
+        String kcUsername = accessToken.getPreferredUsername();
 
         // Get user from DB
-        UserModel user = this.userProvider.getUser(kcUserID);
+        UserModel user = this.userProvider.getUserByIdentityID(kcUserID);
         if (user == null) {
-            user = this.userProvider.addUser(kcUserID, "kc");
-            mergeKeycloakUser(user, kcUser);
+            user = this.userProvider.addUser(kcUserID, "kc", kcUsername);
         }
+        mergeKeycloakUser(user, accessToken);
 
         // Result
         return new DataRepresentation(modelToRepresentation.toRepresentation(user, uriInfo));
     }
 
-    private void mergeKeycloakUser(UserModel user, org.keycloak.representations.idm.UserRepresentation kcUser) {
-        user.setUsername(kcUser.getUsername());
-        user.setEmail(kcUser.getEmail());
-        user.setFullName(kcUser.getFirstName() + " " + kcUser.getLastName());
+    private void mergeKeycloakUser(UserModel user, AccessToken accessToken) {
+        if (accessToken.getEmail() != null && !accessToken.getEmail().equals(user.getEmail())) {
+            user.setEmail(accessToken.getEmail());
+        }
 
-        Map<String, List<String>> attributes = kcUser.getAttributes();
+        if (accessToken.getName() != null && !accessToken.getName().equals(user.getFullName())) {
+            user.setFullName(accessToken.getName());
+        }
+
+        Map<String, Object> attributes = accessToken.getOtherClaims();
         if (attributes != null) {
-            List<String> bio = attributes.get("bio");
-            if (bio != null && !bio.isEmpty()) {
-                user.setBio(bio.get(0));
+            Object bio = attributes.get("bio");
+            if (bio != null) {
+                String bioAttribute = (String) bio;
+                if (!bioAttribute.equals(user.getBio())) user.setBio(bioAttribute);
             }
 
-            List<String> company = attributes.get("company");
-            if (company != null && !company.isEmpty()) {
-                user.setCompany(company.get(0));
+            Object company = attributes.get("company");
+            if (company != null) {
+                String companyAttribute = (String) company;
+                if (!companyAttribute.equals(user.getCompany())) user.setCompany(companyAttribute);
             }
 
-            List<String> imageURL = attributes.get("imageURL");
-            if (imageURL != null && !imageURL.isEmpty()) {
-                user.setImageURL(imageURL.get(0));
+            Object imageURL = attributes.get("imageURL");
+            if (imageURL != null) {
+                String imageURLAttribute = (String) imageURL;
+                if (!imageURLAttribute.equals(user.getImageURL())) user.setImageURL(imageURLAttribute);
             }
 
-            List<String> url = attributes.get("url");
-            if (url != null && !url.isEmpty()) {
-                user.setUrl(url.get(0));
+            Object url = attributes.get("url");
+            if (url != null) {
+                String urlAttribute = (String) url;
+                if (!urlAttribute.equals(user.getUrl())) user.setUrl(urlAttribute);
             }
         }
     }

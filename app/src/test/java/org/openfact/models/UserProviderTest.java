@@ -21,7 +21,7 @@ public class UserProviderTest extends AbstractModelTest {
     @Test
     @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
     public void createUserTest() {
-        UserModel user1 = userProvider.addUser("carlos", "kc");
+        UserModel user1 = userProvider.addUser("carlos", "kc", "carlos");
 
         assertThat(user1).isNotNull()
                 .matches(u -> u.getId() != null)
