@@ -1,14 +1,13 @@
 package org.openfact.representation.idm;
 
-public class DataRepresentation {
+public class GenericDataRepresentation {
 
     private Object data;
 
-    public DataRepresentation() {
-
+    public GenericDataRepresentation() {
     }
 
-    public DataRepresentation(Object data) {
+    public GenericDataRepresentation(Object data) {
         this.data = data;
     }
 

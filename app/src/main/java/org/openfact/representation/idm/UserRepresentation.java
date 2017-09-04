@@ -1,42 +1,65 @@
 package org.openfact.representation.idm;
 
 public class UserRepresentation {
-    
-    private String id;
-    private String type;
-    private UserDataAttributesRepresentation attributes;
-    private GenericLinksRepresentation links;
 
-    public String getId() {
-        return id;
+    private Data data;
+
+    public UserRepresentation() {
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public UserRepresentation(Data data) {
+        this.data = data;
     }
 
-    public String getType() {
-        return type;
+    public Data getData() {
+        return data;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setData(Data data) {
+        this.data = data;
     }
 
-    public UserDataAttributesRepresentation getAttributes() {
-        return attributes;
-    }
+    public static class Data {
+        private String id;
+        private String type;
+        private UserAttributesRepresentation attributes;
+        private GenericLinksRepresentation links;
 
-    public void setAttributes(UserDataAttributesRepresentation attributes) {
-        this.attributes = attributes;
-    }
+        public UserRepresentation toUserRepresentation() {
+            return new UserRepresentation(this);
+        }
 
-    public GenericLinksRepresentation getLinks() {
-        return links;
-    }
+        public String getId() {
+            return id;
+        }
 
-    public void setLinks(GenericLinksRepresentation links) {
-        this.links = links;
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public UserAttributesRepresentation getAttributes() {
+            return attributes;
+        }
+
+        public void setAttributes(UserAttributesRepresentation attributes) {
+            this.attributes = attributes;
+        }
+
+        public GenericLinksRepresentation getLinks() {
+            return links;
+        }
+
+        public void setLinks(GenericLinksRepresentation links) {
+            this.links = links;
+        }
     }
 
 }

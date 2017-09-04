@@ -6,6 +6,7 @@ import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.db.jpa.entity.UserEntity;
 
 import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,13 +43,23 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
     }
 
     @Override
-    public String getAlias() {
-        return space.getAlias();
+    public String getName() {
+        return space.getName();
     }
 
     @Override
-    public void setAlias(String alias) {
-        space.setAlias(alias);
+    public void setName(String name) {
+        space.setName(name);
+    }
+
+    @Override
+    public String getDescription() {
+        return null;
+    }
+
+    @Override
+    public void setDescription(String description) {
+
     }
 
     @Override
@@ -61,6 +72,16 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
     public void setOwner(UserModel user) {
         UserEntity userEntity = UserAdapter.toEntity(user, em);
         space.setOwner(userEntity);
+    }
+
+    @Override
+    public Date getCreatedAt() {
+        return space.getCreatedAt();
+    }
+
+    @Override
+    public Date getUpdatedAt() {
+        return space.getUpdatedAt();
     }
 
     @Override

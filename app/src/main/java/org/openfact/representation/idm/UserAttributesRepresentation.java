@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import java.util.List;
 
-public class UserDataAttributesRepresentation {
+public class UserAttributesRepresentation {
 
     // The id of the corresponding User
     private String userID;

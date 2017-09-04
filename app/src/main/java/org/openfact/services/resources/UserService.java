@@ -5,24 +5,26 @@ import org.keycloak.representations.AccessToken;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
-import org.openfact.representation.idm.DataRepresentation;
+import org.openfact.representation.idm.GenericDataRepresentation;
+import org.openfact.representation.idm.UserRepresentation;
 import org.openfact.services.managers.KeycloakManager;
 import org.openfact.services.util.SSOContext;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
 import java.util.Map;
 
 @Stateless
 @Path("/user")
+@Consumes(MediaType.APPLICATION_JSON)
 public class UserService {
 
     private static final Logger logger = Logger.getLogger(UserService.class);
@@ -44,7 +46,7 @@ public class UserService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public DataRepresentation getCurrentUser(@Context final HttpServletRequest httpServletRequest) {
+    public UserRepresentation getCurrentUser(@Context final HttpServletRequest httpServletRequest) {
         SSOContext ssoContext = new SSOContext(httpServletRequest);
         AccessToken accessToken = ssoContext.getParsedAccessToken();
 
@@ -59,7 +61,7 @@ public class UserService {
         mergeKeycloakUser(user, accessToken);
 
         // Result
-        return new DataRepresentation(modelToRepresentation.toRepresentation(user, uriInfo));
+        return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
     }
 
     private void mergeKeycloakUser(UserModel user, AccessToken accessToken) {

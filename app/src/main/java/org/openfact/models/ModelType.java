@@ -4,6 +4,8 @@ public enum ModelType {
 
     IDENTITIES("identities"),
 
+    SPACES("spaces"),
+
     USER("user"),
 
     DOCUMENT("document");

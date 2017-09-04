@@ -18,6 +18,26 @@
 
     <security-constraint>
         <web-resource-collection>
+            <web-resource-name>Users resources</web-resource-name>
+            <url-pattern>/api/users/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Spaces resources</web-resource-name>
+            <url-pattern>/api/spaces/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
             <web-resource-name>Admin resources</web-resource-name>
             <url-pattern>/api/admin/*</url-pattern>
         </web-resource-collection>

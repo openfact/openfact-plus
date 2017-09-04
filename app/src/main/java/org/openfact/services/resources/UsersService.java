@@ -10,7 +10,6 @@ import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.*;
-import org.openfact.services.ErrorResponse;
 import org.openfact.services.managers.UserManager;
 import org.openfact.services.util.SSOContext;
 
@@ -20,12 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.stream.Collectors;
 
 @Stateless
 @Path("/users")
+@Consumes(MediaType.APPLICATION_JSON)
 public class UsersService {
 
     private static final Logger logger = Logger.getLogger(UsersService.class);
@@ -55,7 +54,7 @@ public class UsersService {
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    public DataRepresentation updateExtProfile(@Context final HttpServletRequest httpServletRequest,
+    public UserRepresentation updateExtProfile(@Context final HttpServletRequest httpServletRequest,
                                                final ExtProfileRepresentation extProfile) {
         SSOContext ssoContext = new SSOContext(httpServletRequest);
         AccessToken accessToken = ssoContext.getParsedAccessToken();
@@ -64,7 +63,7 @@ public class UsersService {
         UserModel user = getUserByIdentityID(kcUserID);
 
         // Offline token
-        UserDataAttributesRepresentation attributes = extProfile.getData().getAttributes();
+        UserAttributesRepresentation attributes = extProfile.getData().getAttributes();
 
         if (attributes != null && attributes.getRefreshToken() != null) {
             String offlineToken = attributes.getRefreshToken();
@@ -82,25 +81,27 @@ public class UsersService {
         }
 
         // Is registration completed
-        Boolean registrationCompleted = attributes.getRegistrationCompleted();
-        if (registrationCompleted != null) {
-            user.setRegistrationCompleted(registrationCompleted);
+        if (attributes != null) {
+            Boolean registrationCompleted = attributes.getRegistrationCompleted();
+            if (registrationCompleted != null) {
+                user.setRegistrationCompleted(registrationCompleted);
+            }
         }
 
         // Build result
-        return new DataRepresentation(modelToRepresentation.toRepresentation(user, uriInfo));
+        return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public DataRepresentation getUsers(@QueryParam("filter[username]") String usernameFilter) {
+    public GenericDataRepresentation getUsers(@QueryParam("filter[username]") String usernameFilter) {
         QueryModel.Builder queryBuilder = QueryModel.builder();
 
         if (usernameFilter != null) {
             queryBuilder.addFilter(UserModel.USERNAME, usernameFilter);
         }
 
-        return new DataRepresentation(userProvider.getUsers(queryBuilder.build()).stream()
+        return new GenericDataRepresentation(userProvider.getUsers(queryBuilder.build()).stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
                 .collect(Collectors.toList()));
     }
@@ -108,9 +109,9 @@ public class UsersService {
     @GET
     @Path("{identityID}")
     @Produces(MediaType.APPLICATION_JSON)
-    public DataRepresentation getUser(@PathParam("identityID") String identityID) {
+    public UserRepresentation getUser(@PathParam("identityID") String identityID) {
         UserModel user = getUserByIdentityID(identityID);
-        return new DataRepresentation(modelToRepresentation.toRepresentation(user, uriInfo));
+        return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
     }
 
 //    @GET

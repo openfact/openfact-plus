@@ -36,7 +36,7 @@ public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider
         SpaceEntity entity = new SpaceEntity();
         entity.setId(OpenfactModelUtils.generateId());
         entity.setAssignedId(assignedId);
-        entity.setAlias(assignedId);
+        entity.setName(assignedId);
         entity.setOwner(userEntity);
         getSession().persist(entity);
 

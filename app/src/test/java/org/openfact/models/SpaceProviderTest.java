@@ -1,12 +1,10 @@
 package org.openfact.models;
 
-import org.apache.xmlbeans.xml.stream.Space;
 import org.arquillian.ape.rdbms.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,7 +32,7 @@ public class SpaceProviderTest extends AbstractModelTest {
         assertThat(space1).isNotNull()
                 .matches(u -> u.getId() != null)
                 .matches(u -> u.getAssignedId().equals("123456789"))
-                .matches(u -> u.getAlias().equals("123456789"), "First alias should be assignedId");
+                .matches(u -> u.getName().equals("123456789"), "First alias should be assignedId");
 
         // getInstance user
         SpaceModel space2 = spaceProvider.getByAssignedId("123456789");
