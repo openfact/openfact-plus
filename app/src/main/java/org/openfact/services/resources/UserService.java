@@ -6,7 +6,7 @@ import org.openfact.models.ModelFetchException;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
-import org.openfact.representation.idm.ResponseFactory;
+import org.openfact.representation.idm.DataRepresentation;
 import org.openfact.representation.idm.UserRepresentation;
 import org.openfact.services.managers.KeycloakManager;
 import org.openfact.services.util.SSOContext;
@@ -20,7 +20,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,7 @@ public class UserService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCurrentUser(@Context final HttpServletRequest httpServletRequest) {
+    public DataRepresentation getCurrentUser(@Context final HttpServletRequest httpServletRequest) {
         SSOContext ssoContext = new SSOContext(httpServletRequest);
         AccessToken accessToken = ssoContext.getParsedAccessToken();
         String kcUserID = accessToken.getId();
@@ -56,7 +55,6 @@ public class UserService {
         // Fetch Keycloak user
         org.keycloak.representations.idm.UserRepresentation kcUser;
         try {
-            //KeycloakDeployment kcDeployment = (KeycloakDeployment) request.getServletContext().getAttribute(KeycloakDeployment.class.getName());
             kcUser = keycloakManager.getUser(kcUserID, ssoContext.getAccessToken());
         } catch (ModelFetchException e) {
             throw new NotFoundException("Could not fetch user from Keycloak");
@@ -76,9 +74,7 @@ public class UserService {
         }
 
         // Result
-        UserRepresentation rep = modelToRepresentation.toRepresentation(user);
-        rep.setLinks(modelToRepresentation.createUserLinks(user, uriInfo));
-        return Response.ok(ResponseFactory.response(modelToRepresentation.toRepresentation(user))).build();
+        return new DataRepresentation(modelToRepresentation.toRepresentation(user, uriInfo));
     }
 
     private void mergeKeycloakUser(UserModel user, org.keycloak.representations.idm.UserRepresentation kcUser) {

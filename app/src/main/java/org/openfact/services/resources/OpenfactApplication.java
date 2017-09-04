@@ -1,5 +1,6 @@
 package org.openfact.services.resources;
 
+import org.jboss.logging.Logger;
 import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.KeycloakDeploymentBuilder;
 
@@ -12,10 +13,19 @@ import java.io.InputStream;
 @ApplicationPath("/api")
 public class OpenfactApplication extends Application {
 
+    private static final Logger logger = Logger.getLogger(OpenfactApplication.class);
+
     public OpenfactApplication(@Context ServletContext context) {
+        logger.info("Getting keycloak.json");
         InputStream config = context.getResourceAsStream("/WEB-INF/keycloak.json");
+
+        logger.info("Parsing keycloak.json");
         KeycloakDeployment deployment = KeycloakDeploymentBuilder.build(config);
-        KeycloakDeploymentConfig.getInstance().setKeycloakDeployment(deployment);
+        logger.info("keycloak.json parsed");
+
+        KeycloakDeploymentConfig instance = KeycloakDeploymentConfig.getInstance();
+        instance.setKeycloakDeployment(deployment);
+        logger.info("keycloak.json saved on " + KeycloakDeploymentConfig.class.getName());
     }
 
 }

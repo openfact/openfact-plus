@@ -54,8 +54,8 @@ public class UsersService {
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateExtProfile(@Context final HttpServletRequest httpServletRequest,
-                                     final ExtProfileRepresentation extProfile) {
+    public DataRepresentation updateExtProfile(@Context final HttpServletRequest httpServletRequest,
+                                               final ExtProfileRepresentation extProfile) {
         String identityID = new SSOContext(httpServletRequest).getParsedAccessToken().getId();
         UserModel user = getUserByIdentityID(identityID);
 
@@ -69,7 +69,7 @@ public class UsersService {
                     if (TokenUtil.isOfflineToken(offlineToken)) {
                         user.setOfflineRefreshToken(offlineToken);
                     } else {
-                        return ErrorResponse.error("Invalid Token Type", Response.Status.BAD_REQUEST);
+                        throw new BadRequestException("Invalid Token Type");
                     }
                 } catch (JWSInputException e) {
                     logger.error("Could not decode token", e);
@@ -84,38 +84,29 @@ public class UsersService {
         }
 
         // Build result
-        UserRepresentation rep = modelToRepresentation.toRepresentation(user);
-        rep.setLinks(modelToRepresentation.createUserLinks(user, uriInfo));
-        return Response.ok(ResponseFactory.response(rep)).build();
+        return new DataRepresentation(modelToRepresentation.toRepresentation(user, uriInfo));
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseRepresentation getUsers(@QueryParam("filter[username]") String usernameFilter) {
+    public DataRepresentation getUsers(@QueryParam("filter[username]") String usernameFilter) {
         QueryModel.Builder builder = QueryModel.builder();
 
         if (usernameFilter != null) {
             builder.addFilter(UserModel.USERNAME, usernameFilter);
         }
 
-        return ResponseFactory.response(userProvider.getUsers(builder.build()).stream()
-                .map(f -> {
-                    UserRepresentation representation = modelToRepresentation.toRepresentation(f);
-                    representation.setLinks(modelToRepresentation.createUserLinks(f, uriInfo));
-                    return representation;
-                }).collect(Collectors.toList()));
+        return new DataRepresentation(userProvider.getUsers(builder.build()).stream()
+                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
+                .collect(Collectors.toList()));
     }
 
     @GET
     @Path("{identityID}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseRepresentation getUser(@PathParam("identityID") String identityID) {
+    public DataRepresentation getUser(@PathParam("identityID") String identityID) {
         UserModel user = getUserByIdentityID(identityID);
-
-        // Result
-        UserRepresentation rep = modelToRepresentation.toRepresentation(user);
-        rep.setLinks(modelToRepresentation.createUserLinks(user, uriInfo));
-        return ResponseFactory.response(rep);
+        return new DataRepresentation(modelToRepresentation.toRepresentation(user, uriInfo));
     }
 
 //    @GET

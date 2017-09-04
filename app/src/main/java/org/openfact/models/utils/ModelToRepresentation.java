@@ -13,24 +13,22 @@ import java.util.stream.Collectors;
 @Stateless
 public class ModelToRepresentation {
 
-    public GenericLinksRepresentation createUserLinks(UserModel model, UriInfo uriInfo) {
-        GenericLinksRepresentation rep = new GenericLinksRepresentation();
+    public UserRepresentation toRepresentation(UserModel model, UriInfo uriInfo) {
+        UserRepresentation rep = new UserRepresentation();
 
+        // General
+        rep.setId(model.getIdentityID());
+        rep.setType(ModelType.IDENTITIES.getAlias());
+
+        // Links
+        GenericLinksRepresentation links = new GenericLinksRepresentation();
         URI self = uriInfo.getBaseUriBuilder()
                 .path(UsersService.class)
                 .path(UsersService.class, "getUser")
                 .build(model.getIdentityID());
+        links.setSelf(self.toString());
 
-        rep.setSelf(self.toString());
-
-        return rep;
-    }
-
-    public UserRepresentation toRepresentation(UserModel model) {
-        UserRepresentation representation = new UserRepresentation();
-
-        representation.setId(model.getIdentityID());
-        representation.setType(ModelType.IDENTITIES.getAlias());
+        rep.setLinks(links);
 
         // Attributes
         UserDataAttributesRepresentation attributes = new UserDataAttributesRepresentation();
@@ -57,8 +55,8 @@ public class ModelToRepresentation {
 //        attributes.setSpaces(Stream.concat(ownedSpaces, sharedSpaces).collect(Collectors.toList()));
 //        attributes.setSpaceRequests(model.getSpaceRequests().stream().map(this::toRepresentation).collect(Collectors.toList()));
 
-        representation.setAttributes(attributes);
-        return representation;
+        rep.setAttributes(attributes);
+        return rep;
     }
 
     public SpaceRepresentation toRepresentation(SpaceModel model, boolean isOwner) {

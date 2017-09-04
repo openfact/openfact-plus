@@ -1,7 +1,7 @@
 package org.openfact.representation.idm;
 
 public class UserRepresentation {
-
+    
     private String id;
     private String type;
     private UserDataAttributesRepresentation attributes;
@@ -38,5 +38,5 @@ public class UserRepresentation {
     public void setLinks(GenericLinksRepresentation links) {
         this.links = links;
     }
-    
+
 }
