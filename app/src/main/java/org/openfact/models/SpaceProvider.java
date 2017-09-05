@@ -1,5 +1,7 @@
 package org.openfact.models;
 
+import java.util.List;
+
 public interface SpaceProvider {
 
     /**
@@ -7,7 +9,7 @@ public interface SpaceProvider {
      * @param user       owner of space
      * @return created space
      */
-    SpaceModel addSpace(String assignedId, UserModel user);
+    SpaceModel addSpace(String assignedId, String name, UserModel user);
 
     /**
      * Find space by id
@@ -24,4 +26,9 @@ public interface SpaceProvider {
     SpaceModel getByAssignedId(String assignedId);
 
     boolean removeSpace(SpaceModel space);
+
+    List<SpaceModel> getSpaces(UserModel user);
+
+    List<SpaceModel> getSpaces(UserModel user, int offset, int limit);
+
 }

@@ -15,7 +15,8 @@ import java.util.Set;
 @Table(name = "space")
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getSpaceByAssignedId", query = "select s from SpaceEntity s where s.assignedId = :assignedId")
+        @NamedQuery(name = "getSpaceByAssignedId", query = "select s from SpaceEntity s where s.assignedId = :assignedId"),
+        @NamedQuery(name = "getSpacesByUserId", query = "select s from SpaceEntity s inner join s.owner o where o.id = :userId")
 })
 public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializable {
 

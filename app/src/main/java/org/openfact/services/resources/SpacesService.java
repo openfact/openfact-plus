@@ -56,13 +56,11 @@ public class SpacesService {
             throw new ErrorResponseException("Space already exists", Response.Status.CONFLICT);
         }
 
-        SpaceModel space = spaceProvider.addSpace(attributes.getAssignedId(), user);
-        space.setName(attributes.getName());
+        SpaceModel space = spaceProvider.addSpace(attributes.getAssignedId(), attributes.getName(), user);
         space.setDescription(attributes.getDescription());
 
         SpaceRepresentation.Data createdSpaceRep = modelToRepresentation.toRepresentation(space, uriInfo);
-        SpaceRepresentation result = createdSpaceRep.toSpaceRepresentation();
-        return Response.status(Response.Status.CREATED).entity(result).build();
+        return Response.status(Response.Status.CREATED).entity(createdSpaceRep.toSpaceRepresentation()).build();
     }
 
     @GET

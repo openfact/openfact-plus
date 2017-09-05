@@ -11,6 +11,7 @@ import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.*;
 import org.openfact.services.managers.UserManager;
+import org.openfact.services.resources.utils.PATCH;
 import org.openfact.services.util.SSOContext;
 
 import javax.ejb.Stateless;
@@ -55,7 +56,7 @@ public class UsersService {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     public UserRepresentation updateExtProfile(@Context final HttpServletRequest httpServletRequest,
-                                               final ExtProfileRepresentation extProfile) {
+                                               final UserRepresentation userRepresentation) {
         SSOContext ssoContext = new SSOContext(httpServletRequest);
         AccessToken accessToken = ssoContext.getParsedAccessToken();
 
@@ -63,7 +64,7 @@ public class UsersService {
         UserModel user = getUserByIdentityID(kcUserID);
 
         // Offline token
-        UserAttributesRepresentation attributes = extProfile.getData().getAttributes();
+        UserAttributesRepresentation attributes = userRepresentation.getData().getAttributes();
 
         if (attributes != null && attributes.getRefreshToken() != null) {
             String offlineToken = attributes.getRefreshToken();
@@ -87,6 +88,21 @@ public class UsersService {
                 user.setRegistrationCompleted(registrationCompleted);
             }
         }
+
+        // Build result
+        return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
+    }
+
+    @PATCH
+    @Produces(MediaType.APPLICATION_JSON)
+    public UserRepresentation saveRecentContexts(@Context final HttpServletRequest httpServletRequest,
+                                   final UserRepresentation userRepresentation) {
+
+        SSOContext ssoContext = new SSOContext(httpServletRequest);
+        AccessToken accessToken = ssoContext.getParsedAccessToken();
+
+        String kcUserID = (String) accessToken.getOtherClaims().get("userID");
+        UserModel user = getUserByIdentityID(kcUserID);
 
         // Build result
         return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();

@@ -27,7 +27,7 @@ public class SpaceProviderTest extends AbstractModelTest {
     @UsingDataSet("users.yml")
     @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
     public void createSpaceTest() {
-        SpaceModel space1 = spaceProvider.addSpace("123456789", user);
+        SpaceModel space1 = spaceProvider.addSpace("123456789", "Sistcoop", user);
 
         assertThat(space1).isNotNull()
                 .matches(u -> u.getId() != null)
@@ -43,7 +43,7 @@ public class SpaceProviderTest extends AbstractModelTest {
     @UsingDataSet(value = {"users.yml"})
     @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
     public void removeSpaceTest() {
-        SpaceModel space = spaceProvider.addSpace("123456789", user);
+        SpaceModel space = spaceProvider.addSpace("123456789", "Sistcoop", user);
 
         assertThat(space).isNotNull()
                 .matches(u -> u.getAssignedId().equals("123456789"));

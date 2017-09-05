@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Stateless
 public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider {
@@ -30,13 +31,13 @@ public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider
     }
 
     @Override
-    public SpaceModel addSpace(String assignedId, UserModel owner) {
+    public SpaceModel addSpace(String assignedId, String name, UserModel owner) {
         UserEntity userEntity = UserAdapter.toEntity(owner, getSession());
 
         SpaceEntity entity = new SpaceEntity();
         entity.setId(OpenfactModelUtils.generateId());
         entity.setAssignedId(assignedId);
-        entity.setName(assignedId);
+        entity.setName(name);
         entity.setOwner(userEntity);
         getSession().persist(entity);
 
@@ -71,5 +72,27 @@ public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider
         getSession().remove(entity);
         getSession().flush();
         return true;
+    }
+
+    @Override
+    public List<SpaceModel> getSpaces(UserModel user) {
+        TypedQuery<SpaceEntity> query = getSession().createNamedQuery("getSpacesByUserId", SpaceEntity.class);
+        query.setParameter("userId", user.getId());
+        return query.getResultList().stream()
+                .map(f -> new SpaceAdapter(em, f))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SpaceModel> getSpaces(UserModel user, int offset, int limit) {
+        TypedQuery<SpaceEntity> query = getSession().createNamedQuery("getSpacesByUserId", SpaceEntity.class);
+        query.setParameter("userId", user.getId());
+
+        if (offset != -1) query.setFirstResult(offset);
+        if (limit != -1) query.setMaxResults(limit);
+
+        return query.getResultList().stream()
+                .map(f -> new SpaceAdapter(em, f))
+                .collect(Collectors.toList());
     }
 }
