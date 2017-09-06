@@ -68,10 +68,10 @@ public class NamedSpacesService {
             URI next = uriInfo.getBaseUriBuilder()
                     .path(NamedSpacesService.class)
                     .path(NamedSpacesService.class, "getSpaces")
-                    .queryParam("page[offset]", offset + limit)
-                    .queryParam("page[limit]", limit)
                     .build(identityID);
-            links.put("next", next.toString());
+            links.put("next", next.toString()
+                    + "?page[offset]=" + (offset + limit)
+                    + "&page[limit]" + limit);
 
             // Remove last item
             spaces.remove(links.size() - 1);
