@@ -13,7 +13,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,16 +61,35 @@ public class NamedSpacesService {
 
         List<SpaceModel> spaces = spaceProvider.getSpaces(user, offset, limit + 1);
 
+        // Meta
+        int totalCount = user.getOwnedSpaces().size();
+
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("totalCount", totalCount);
+
         // Links
         Map<String, String> links = new HashMap<>();
+        links.put("first", uriInfo.getBaseUriBuilder()
+                .path(NamedSpacesService.class)
+                .path(NamedSpacesService.class, "getSpaces")
+                .build(identityID).toString() +
+                "?page[offset]=0" +
+                "&page[limit]=" + limit);
+
+        links.put("last", uriInfo.getBaseUriBuilder()
+                .path(NamedSpacesService.class)
+                .path(NamedSpacesService.class, "getSpaces")
+                .build(identityID).toString() +
+                "?page[offset]=" + (totalCount > 0 ? (((totalCount - 1) % limit) * limit) : 0) +
+                "&page[limit]=" + limit);
+
         if (spaces.size() > limit) {
-            URI next = uriInfo.getBaseUriBuilder()
+            links.put("next", uriInfo.getBaseUriBuilder()
                     .path(NamedSpacesService.class)
                     .path(NamedSpacesService.class, "getSpaces")
-                    .build(identityID);
-            links.put("next", next.toString()
-                    + "?page[offset]=" + (offset + limit)
-                    + "&page[limit]" + limit);
+                    .build(identityID).toString() +
+                    "?page[offset]=" + (offset + limit) +
+                    "&page[limit]=" + limit);
 
             // Remove last item
             spaces.remove(links.size() - 1);
@@ -79,6 +97,6 @@ public class NamedSpacesService {
 
         return new GenericDataRepresentation(spaces.stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
-                .collect(Collectors.toList()), links);
+                .collect(Collectors.toList()), links, meta);
     }
 }

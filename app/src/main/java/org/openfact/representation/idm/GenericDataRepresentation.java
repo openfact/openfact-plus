@@ -6,6 +6,7 @@ public class GenericDataRepresentation {
 
     private Object data;
     private Map<String, String> links;
+    private Map<String, Object> meta;
 
     public GenericDataRepresentation() {
     }
@@ -17,6 +18,12 @@ public class GenericDataRepresentation {
     public GenericDataRepresentation(Object data, Map<String, String> links) {
         this.data = data;
         this.links = links;
+    }
+
+    public GenericDataRepresentation(Object data, Map<String, String> links, Map<String, Object> meta) {
+        this.data = data;
+        this.links = links;
+        this.meta = meta;
     }
 
     public Object getData() {
@@ -33,5 +40,13 @@ public class GenericDataRepresentation {
 
     public void setLinks(Map<String, String> links) {
         this.links = links;
+    }
+
+    public Map<String, Object> getMeta() {
+        return meta;
+    }
+
+    public void setMeta(Map<String, Object> meta) {
+        this.meta = meta;
     }
 }
