@@ -60,7 +60,7 @@ public class NamedSpacesService {
             limit = 100;
         }
 
-        List<SpaceModel> spaces = spaceProvider.getSpaces(user, offset, limit);
+        List<SpaceModel> spaces = spaceProvider.getSpaces(user, offset, limit + 1);
 
         // Links
         Map<String, String> links = new HashMap<>();

@@ -19,10 +19,10 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 
-        <version.wildfly.swarm>2017.8.1</version.wildfly.swarm>
+        <version.wildfly.swarm>2017.9.4</version.wildfly.swarm>
 
-        <fabric8.version>2.3.3</fabric8.version>
-        <fabric8.maven.plugin.version>3.5.22</fabric8.maven.plugin.version>
+        <fabric8.version>2.3.4</fabric8.version>
+        <fabric8.maven.plugin.version>3.5.26</fabric8.maven.plugin.version>
 
         <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>2.20</maven-failsafe-plugin.version>
