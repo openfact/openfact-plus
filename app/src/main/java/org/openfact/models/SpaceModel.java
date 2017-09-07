@@ -15,12 +15,11 @@ public interface SpaceModel {
     void setDescription(String description);
 
     UserModel getOwner();
-    void setOwner(UserModel user);
 
     Date getCreatedAt();
     Date getUpdatedAt();
 
-    Set<SharedSpaceModel> getSharedUsers();
-
-    RequestAccessToSpaceModel requestAccess(UserModel user, Set<PermissionType> permissions);
+//    Set<SharedSpaceModel> getSharedUsers();
+//
+//    RequestAccessToSpaceModel requestAccess(UserModel user, Set<PermissionType> permissions);
 }

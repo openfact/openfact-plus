@@ -1,8 +1,5 @@
 package org.openfact.models.db.jpa.entity;
 
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -16,7 +13,6 @@ public class FileEntity {
     private String id;
 
     @NotNull
-    @NaturalId
     @Column(name = "filename")
     private String filename;
 
@@ -25,7 +21,6 @@ public class FileEntity {
     @Column(name = "file")
     private byte[] file;
 
-    @NotEmpty
     @NotNull
     @Column(name = "extension")
     private String fileExtension;

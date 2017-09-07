@@ -41,12 +41,15 @@ public interface UserModel {
     Date getUpdatedAt();
 
     Set<SpaceModel> getOwnedSpaces();
-    Set<SharedSpaceModel> getSharedSpaces();
+//    Set<SharedSpaceModel> getSharedSpaces();
 
-    List<RequestAccessToSpaceModel> getSpaceRequests();
+    Set<String> getRecentSpaces();
+    void setRecentSpaces(Set<String> recentSpaces);
 
-    UserRepositoryModel addRepository(String email, BrokerType type);
-    List<UserRepositoryModel> getRepositories();
-    boolean removeAllRepositories();
+//    List<RequestAccessToSpaceModel> getSpaceRequests();
+//
+//    UserRepositoryModel addRepository(String email, BrokerType type);
+//    List<UserRepositoryModel> getRepositories();
+//    boolean removeAllRepositories();
 
 }

@@ -1,8 +1,6 @@
 package org.openfact.models.db.jpa.entity;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.openfact.models.BrokerType;
 
 import javax.persistence.*;
@@ -20,7 +18,6 @@ public class UserRepositoryEntity {
     private String id;
 
     @NotNull
-    @NotEmpty
     @Column(name = "ALIAS")
     private String alias;
 
@@ -30,8 +27,6 @@ public class UserRepositoryEntity {
     private BrokerType type;
 
     @NotNull
-    @NotEmpty
-    @Email
     @Column(name = "EMAIL")
     private String email;
 

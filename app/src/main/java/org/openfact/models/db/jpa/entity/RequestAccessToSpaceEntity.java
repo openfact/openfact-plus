@@ -1,6 +1,5 @@
 package org.openfact.models.db.jpa.entity;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.openfact.models.PermissionType;
 import org.openfact.models.RequestStatusType;
 
@@ -31,7 +30,6 @@ public class RequestAccessToSpaceEntity implements Serializable {
     private String message;
 
     @NotNull
-    @NotEmpty
     @ElementCollection(targetClass = PermissionType.class)
     @Enumerated(EnumType.STRING)
     @Column(name = "VALUE")

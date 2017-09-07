@@ -1,7 +1,5 @@
 package org.openfact.models.db.jpa;
 
-import org.hibernate.ScrollMode;
-import org.hibernate.ScrollableResults;
 import org.openfact.models.ScrollableResultsModel;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
@@ -80,9 +78,10 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
 
     @Override
     public ScrollableResultsModel<UserModel> getScrollableUsers() {
-        ScrollableResults scrollableResults = getSession().createNamedQuery("getAllUsers").scroll(ScrollMode.FORWARD_ONLY);
-        Function<UserEntity, UserModel> mapper = entity -> new UserAdapter(em, entity);
-        return new ScrollableResultsAdapter<>(scrollableResults, mapper);
+//        ScrollableResults scrollableResults = getSession().createNamedQuery("getAllUsers").scroll(ScrollMode.FORWARD_ONLY);
+//        Function<UserEntity, UserModel> mapper = entity -> new UserAdapter(em, entity);
+//        return new ScrollableResultsAdapter<>(scrollableResults, mapper);
+        return null;
     }
 
 }

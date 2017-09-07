@@ -66,31 +66,31 @@ public class UserManager {
      *
      * @param user
      */
-    public void refreshUserAvailableRepositories(UserModel user) {
-        if (hasValidOfflineRefreshToken(user)) {
-            List<BrokerType> currentBrokers = user.getRepositories().stream()
-                    .map(UserRepositoryModel::getType)
-                    .collect(Collectors.toList());
-
-            brokerManager.getAvailableBrokers(user.getOfflineRefreshToken()).stream()
-                    .filter(p -> !currentBrokers.contains(p.getType()))
-                    .forEach(c -> {
-                        user.addRepository(c.getEmail(), c.getType());
-                    });
-        } else {
-            user.removeAllRepositories();
-        }
-    }
+//    public void refreshUserAvailableRepositories(UserModel user) {
+//        if (hasValidOfflineRefreshToken(user)) {
+//            List<BrokerType> currentBrokers = user.getRepositories().stream()
+//                    .map(UserRepositoryModel::getType)
+//                    .collect(Collectors.toList());
+//
+//            brokerManager.getAvailableBrokers(user.getOfflineRefreshToken()).stream()
+//                    .filter(p -> !currentBrokers.contains(p.getType()))
+//                    .forEach(c -> {
+//                        user.addRepository(c.getEmail(), c.getType());
+//                    });
+//        } else {
+//            user.removeAllRepositories();
+//        }
+//    }
 
     /**
      * Synchronize repositories
      *
      * @param user
      */
-    public void syncUserRepositories(UserModel user) {
-        for (UserRepositoryModel repo : user.getRepositories()) {
-            repositorySynchronizer.synchronize(repo);
-        }
-    }
+//    public void syncUserRepositories(UserModel user) {
+//        for (UserRepositoryModel repo : user.getRepositories()) {
+//            repositorySynchronizer.synchronize(repo);
+//        }
+//    }
 
 }

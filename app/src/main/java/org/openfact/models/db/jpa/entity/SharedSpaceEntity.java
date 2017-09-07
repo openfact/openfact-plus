@@ -1,6 +1,5 @@
 package org.openfact.models.db.jpa.entity;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.openfact.models.PermissionType;
 
 import javax.persistence.*;
@@ -25,7 +24,6 @@ public class SharedSpaceEntity implements Serializable {
     private SpaceEntity space;
 
     @NotNull
-    @NotEmpty
     @ElementCollection(targetClass = PermissionType.class)
     @Enumerated(EnumType.STRING)
     @Column(name = "VALUE")

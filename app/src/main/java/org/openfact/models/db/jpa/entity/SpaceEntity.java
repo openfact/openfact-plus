@@ -1,15 +1,10 @@
 package org.openfact.models.db.jpa.entity;
 
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "space")
@@ -26,13 +21,10 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
     private String id;
 
     @NotNull
-    @NotEmpty
-    @NaturalId
     @Column(name = "assigned_id")
     private String assignedId;
 
     @NotNull
-    @NotEmpty
     @Size(max = 255)
     @Column(name = "name")
     private String name;
@@ -45,11 +37,11 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
     @JoinColumn(name = "owner_id", foreignKey = @ForeignKey)
     private UserEntity owner;
 
-    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
-    private Set<SharedSpaceEntity> sharedUsers = new HashSet<>();
-
-    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
-    private Set<RequestAccessToSpaceEntity> accessRequests = new HashSet<>();
+//    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
+//    private Set<SharedSpaceEntity> sharedUsers = new HashSet<>();
+//
+//    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
+//    private Set<RequestAccessToSpaceEntity> accessRequests = new HashSet<>();
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -105,21 +97,21 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
         this.owner = owner;
     }
 
-    public Set<SharedSpaceEntity> getSharedUsers() {
-        return sharedUsers;
-    }
-
-    public void setSharedUsers(Set<SharedSpaceEntity> sharedUsers) {
-        this.sharedUsers = sharedUsers;
-    }
-
-    public Set<RequestAccessToSpaceEntity> getAccessRequests() {
-        return accessRequests;
-    }
-
-    public void setAccessRequests(Set<RequestAccessToSpaceEntity> accessRequests) {
-        this.accessRequests = accessRequests;
-    }
+//    public Set<SharedSpaceEntity> getSharedUsers() {
+//        return sharedUsers;
+//    }
+//
+//    public void setSharedUsers(Set<SharedSpaceEntity> sharedUsers) {
+//        this.sharedUsers = sharedUsers;
+//    }
+//
+//    public Set<RequestAccessToSpaceEntity> getAccessRequests() {
+//        return accessRequests;
+//    }
+//
+//    public void setAccessRequests(Set<RequestAccessToSpaceEntity> accessRequests) {
+//        this.accessRequests = accessRequests;
+//    }
 
     public Date getCreatedAt() {
         return createdAt;

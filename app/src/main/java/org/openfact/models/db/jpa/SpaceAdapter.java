@@ -54,24 +54,18 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
 
     @Override
     public String getDescription() {
-        return null;
+        return space.getDescription();
     }
 
     @Override
     public void setDescription(String description) {
-
+        space.setDescription(description);
     }
 
     @Override
     public UserModel getOwner() {
         UserEntity owner = space.getOwner();
         return owner != null ? new UserAdapter(em, owner) : null;
-    }
-
-    @Override
-    public void setOwner(UserModel user) {
-        UserEntity userEntity = UserAdapter.toEntity(user, em);
-        space.setOwner(userEntity);
     }
 
     @Override
@@ -84,29 +78,29 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
         return space.getUpdatedAt();
     }
 
-    @Override
-    public Set<SharedSpaceModel> getSharedUsers() {
-        return space.getSharedUsers().stream()
-                .map(f -> new SharedSpaceAdapter(em, f))
-                .collect(Collectors.toSet());
-    }
+//    @Override
+//    public Set<SharedSpaceModel> getSharedUsers() {
+//        return space.getSharedUsers().stream()
+//                .map(f -> new SharedSpaceAdapter(em, f))
+//                .collect(Collectors.toSet());
+//    }
 
-    @Override
-    public RequestAccessToSpaceModel requestAccess(UserModel user, Set<PermissionType> permissions) {
-        UserEntity userEntity = UserAdapter.toEntity(user, em);
-
-        RequestAccessToSpaceEntity entity = new RequestAccessToSpaceEntity(userEntity, space);
-        entity.setSpace(space);
-        entity.setUser(userEntity);
-        entity.setPermissions(permissions);
-        entity.setStatus(RequestStatusType.REQUESTED);
-
-        // Cache
-        space.getAccessRequests().add(entity);
-        userEntity.getSpaceRequests().add(entity);
-
-        return new RequestAccessToSpaceAdapter(em, entity);
-    }
+//    @Override
+//    public RequestAccessToSpaceModel requestAccess(UserModel user, Set<PermissionType> permissions) {
+//        UserEntity userEntity = UserAdapter.toEntity(user, em);
+//
+//        RequestAccessToSpaceEntity entity = new RequestAccessToSpaceEntity(userEntity, space);
+//        entity.setSpace(space);
+//        entity.setUser(userEntity);
+//        entity.setPermissions(permissions);
+//        entity.setStatus(RequestStatusType.REQUESTED);
+//
+//        // Cache
+//        space.getAccessRequests().add(entity);
+//        userEntity.getSpaceRequests().add(entity);
+//
+//        return new RequestAccessToSpaceAdapter(em, entity);
+//    }
 
     @Override
     public boolean equals(Object obj) {

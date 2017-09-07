@@ -1,7 +1,6 @@
 package org.openfact.models.db.es.entity;
 
 import org.hibernate.search.annotations.Indexed;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -27,7 +26,6 @@ public class IndexedDocumentEntity implements DocumentEntity {
     private String assignedId;
 
     @NotNull
-    @NotEmpty
     @Column(name = "FILE_ID")
     private String fileId;
 

@@ -21,6 +21,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -53,56 +54,51 @@ public class UsersService {
         return user;
     }
 
-    @PUT
+    @PATCH
     @Produces(MediaType.APPLICATION_JSON)
-    public UserRepresentation updateExtProfile(@Context final HttpServletRequest httpServletRequest,
-                                               final UserRepresentation userRepresentation) {
+    public UserRepresentation currentUser(@Context final HttpServletRequest httpServletRequest,
+                                        final UserRepresentation userRepresentation) {
+
         SSOContext ssoContext = new SSOContext(httpServletRequest);
         AccessToken accessToken = ssoContext.getParsedAccessToken();
 
         String kcUserID = (String) accessToken.getOtherClaims().get("userID");
         UserModel user = getUserByIdentityID(kcUserID);
 
-        // Offline token
         UserAttributesRepresentation attributes = userRepresentation.getData().getAttributes();
 
-        if (attributes != null && attributes.getRefreshToken() != null) {
-            String offlineToken = attributes.getRefreshToken();
-            if (offlineToken != null) {
-                try {
-                    if (TokenUtil.isOfflineToken(offlineToken)) {
-                        user.setOfflineRefreshToken(offlineToken);
-                    } else {
-                        throw new BadRequestException("Invalid Token Type");
+        if (attributes != null) {
+            // Refresh Token
+            String refreshToken = attributes.getRefreshToken();
+            if (refreshToken != null) {
+                if (refreshToken != null) {
+                    try {
+                        if (TokenUtil.isOfflineToken(refreshToken)) {
+                            user.setOfflineRefreshToken(refreshToken);
+                        } else {
+                            throw new BadRequestException("Invalid Token Type");
+                        }
+                    } catch (JWSInputException e) {
+                        logger.error("Could not decode token", e);
                     }
-                } catch (JWSInputException e) {
-                    logger.error("Could not decode token", e);
                 }
             }
-        }
 
-        // Is registration completed
-        if (attributes != null) {
+            // Is registration completed
             Boolean registrationCompleted = attributes.getRegistrationCompleted();
             if (registrationCompleted != null) {
                 user.setRegistrationCompleted(registrationCompleted);
             }
+
+            // Context Information
+            ContextInformationRepresentation contextInformation = attributes.getContextInformation();
+            if (contextInformation != null) {
+                Set<String> recentSpaces = contextInformation.getRecentSpaces();
+                if (recentSpaces != null) {
+                    user.setRecentSpaces(recentSpaces);
+                }
+            }
         }
-
-        // Build result
-        return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
-    }
-
-    @PATCH
-    @Produces(MediaType.APPLICATION_JSON)
-    public UserRepresentation saveRecentContexts(@Context final HttpServletRequest httpServletRequest,
-                                   final UserRepresentation userRepresentation) {
-
-        SSOContext ssoContext = new SSOContext(httpServletRequest);
-        AccessToken accessToken = ssoContext.getParsedAccessToken();
-
-        String kcUserID = (String) accessToken.getOtherClaims().get("userID");
-        UserModel user = getUserByIdentityID(kcUserID);
 
         // Build result
         return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();

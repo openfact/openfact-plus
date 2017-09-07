@@ -1,16 +1,17 @@
 package org.openfact.representation.idm;
 
 import java.util.List;
+import java.util.Set;
 
 public class ContextInformationRepresentation {
 
-    private List<String> recentSpaces;
+    private Set<String> recentSpaces;
 
-    public List<String> getRecentSpaces() {
+    public Set<String> getRecentSpaces() {
         return recentSpaces;
     }
 
-    public void setRecentSpaces(List<String> recentSpaces) {
+    public void setRecentSpaces(Set<String> recentSpaces) {
         this.recentSpaces = recentSpaces;
     }
 

@@ -11,8 +11,7 @@
         <properties>
             <!--Hibernate upgrade-->
             <property name="jboss.as.jpa.providerModule" value="org.hibernate:${version.hibernate}"/>
-            <property name="wildfly.jpa.hibernate.search.module"
-                      value="org.hibernate.search.orm:${version.hibernate-search}"/>
+            <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>
 
             <!--Hibernate properties-->
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>

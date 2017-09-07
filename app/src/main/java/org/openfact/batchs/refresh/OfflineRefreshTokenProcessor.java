@@ -21,37 +21,38 @@ public class OfflineRefreshTokenProcessor implements ItemProcessor {
 
     @Override
     public MappedUser processItem(Object item) throws Exception {
-        UserModel user;
-        if (item instanceof UserModel) {
-            user = (UserModel) item;
-        } else {
-            return null;
-        }
-
-        // Get offline refresh token
-        String offlineRefreshToken = user.getOfflineRefreshToken();
-
-        // Check offline token is still valid
-        String accessToken = null;
-        try {
-            accessToken = retrieveAccessToken(offlineRefreshToken);
-        } catch (ServerRequest.HttpFailure e) {
-            // Invalid refresh token
-            user.setOfflineRefreshToken(null);
-            user.removeAllRepositories();
-        }
-        if (accessToken == null) {
-            return null;
-        }
-
-        // Check if user has already had supported repositories
-        List<BrokerType> supportedIDPS = Arrays.asList(BrokerType.values());
-        boolean result = user.getRepositories().stream().map(UserRepositoryModel::getType).allMatch(supportedIDPS::contains);
-        if (result) {
-            return null;
-        }
-        supportedIDPS.removeAll(user.getRepositories().stream().map(UserRepositoryModel::getType).collect(Collectors.toList()));
-        return new MappedUser(user, supportedIDPS);
+//        UserModel user;
+//        if (item instanceof UserModel) {
+//            user = (UserModel) item;
+//        } else {
+//            return null;
+//        }
+//
+//        // Get offline refresh token
+//        String offlineRefreshToken = user.getOfflineRefreshToken();
+//
+//        // Check offline token is still valid
+//        String accessToken = null;
+//        try {
+//            accessToken = retrieveAccessToken(offlineRefreshToken);
+//        } catch (ServerRequest.HttpFailure e) {
+//            // Invalid refresh token
+//            user.setOfflineRefreshToken(null);
+//            user.removeAllRepositories();
+//        }
+//        if (accessToken == null) {
+//            return null;
+//        }
+//
+//        // Check if user has already had supported repositories
+//        List<BrokerType> supportedIDPS = Arrays.asList(BrokerType.values());
+//        boolean result = user.getRepositories().stream().map(UserRepositoryModel::getType).allMatch(supportedIDPS::contains);
+//        if (result) {
+//            return null;
+//        }
+//        supportedIDPS.removeAll(user.getRepositories().stream().map(UserRepositoryModel::getType).collect(Collectors.toList()));
+//        return new MappedUser(user, supportedIDPS);
+        return null;
     }
 
     private String retrieveAccessToken(String refreshToken) throws IOException, ServerRequest.HttpFailure {

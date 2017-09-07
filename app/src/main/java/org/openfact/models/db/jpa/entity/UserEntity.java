@@ -1,14 +1,11 @@
 package org.openfact.models.db.jpa.entity;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,17 +26,14 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     private String id;
 
     @NotNull
-    @NotEmpty
     @Column(name = "identity_id")
     private String identityID;
 
     @NotNull
-    @NotEmpty
     @Column(name = "provider_type")
     private String providerType;
 
     @NotNull
-    @NotEmpty
     @Column(name = "username")
     private String username;
 
@@ -55,7 +49,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "bio")
     private String bio;
 
-    @Email
     @Size(max = 255)
     @Column(name = "email")
     private String email;
@@ -90,18 +83,36 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Set<SpaceEntity> ownedSpaces = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<SharedSpaceEntity> sharedSpaces = new HashSet<>();
+    @ElementCollection
+    @Column(name="value")
+    @CollectionTable(name="recent_spaces", joinColumns={ @JoinColumn(name="user_id") })
+    private Set<String> recentSpaces = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<RequestAccessToSpaceEntity> spaceRequests = new HashSet<>();
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<UserRepositoryEntity> repositories = new HashSet<>();
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    private Set<SharedSpaceEntity> sharedSpaces = new HashSet<>();
+//
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    private Set<RequestAccessToSpaceEntity> spaceRequests = new HashSet<>();
+//
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    private Set<UserRepositoryEntity> repositories = new HashSet<>();
 
     @Version
     @Column(name = "version")
     private int version;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity that = (UserEntity) o;
+        return getId().equals(that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
 
     public String getId() {
         return id;
@@ -225,29 +236,37 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.ownedSpaces = ownedSpaces;
     }
 
-    public Set<SharedSpaceEntity> getSharedSpaces() {
-        return sharedSpaces;
+    public Set<String> getRecentSpaces() {
+        return recentSpaces;
     }
 
-    public void setSharedSpaces(Set<SharedSpaceEntity> sharedSpaces) {
-        this.sharedSpaces = sharedSpaces;
+    public void setRecentSpaces(Set<String> recentSpaces) {
+        this.recentSpaces = recentSpaces;
     }
 
-    public Set<RequestAccessToSpaceEntity> getSpaceRequests() {
-        return spaceRequests;
-    }
-
-    public void setSpaceRequests(Set<RequestAccessToSpaceEntity> spaceRequests) {
-        this.spaceRequests = spaceRequests;
-    }
-
-    public Set<UserRepositoryEntity> getRepositories() {
-        return repositories;
-    }
-
-    public void setRepositories(Set<UserRepositoryEntity> repositories) {
-        this.repositories = repositories;
-    }
+//    public Set<SharedSpaceEntity> getSharedSpaces() {
+//        return sharedSpaces;
+//    }
+//
+//    public void setSharedSpaces(Set<SharedSpaceEntity> sharedSpaces) {
+//        this.sharedSpaces = sharedSpaces;
+//    }
+//
+//    public Set<RequestAccessToSpaceEntity> getSpaceRequests() {
+//        return spaceRequests;
+//    }
+//
+//    public void setSpaceRequests(Set<RequestAccessToSpaceEntity> spaceRequests) {
+//        this.spaceRequests = spaceRequests;
+//    }
+//
+//    public Set<UserRepositoryEntity> getRepositories() {
+//        return repositories;
+//    }
+//
+//    public void setRepositories(Set<UserRepositoryEntity> repositories) {
+//        this.repositories = repositories;
+//    }
 
     public int getVersion() {
         return version;
@@ -255,18 +274,5 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     public void setVersion(int version) {
         this.version = version;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserEntity that = (UserEntity) o;
-        return getId().equals(that.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getId().hashCode();
     }
 }

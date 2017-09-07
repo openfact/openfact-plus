@@ -6,10 +6,7 @@ import org.openfact.models.db.jpa.entity.UserRepositoryEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserAdapter implements UserModel, JpaModel<UserEntity> {
@@ -151,48 +148,63 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
                 .collect(Collectors.toSet());
     }
 
+//    @Override
+//    public Set<SharedSpaceModel> getSharedSpaces() {
+//        return user.getSharedSpaces().stream()
+//                .map(f -> new SharedSpaceAdapter(em, f))
+//                .collect(Collectors.toSet());
+//    }
+
     @Override
-    public Set<SharedSpaceModel> getSharedSpaces() {
-        return user.getSharedSpaces().stream()
-                .map(f -> new SharedSpaceAdapter(em, f))
-                .collect(Collectors.toSet());
+    public Set<String> getRecentSpaces() {
+        Set<String> recentSpaces = user.getRecentSpaces();
+        if (recentSpaces.isEmpty()) return Collections.EMPTY_SET;
+        Set<String> copy = new HashSet<>();
+        copy.addAll(recentSpaces);
+        return Collections.unmodifiableSet(copy);
     }
 
     @Override
-    public List<RequestAccessToSpaceModel> getSpaceRequests() {
-        return user.getSpaceRequests().stream()
-                .map(f -> new RequestAccessToSpaceAdapter(em, f))
-                .collect(Collectors.toList());
+    public void setRecentSpaces(Set<String> recentSpaces) {
+        user.setRecentSpaces(recentSpaces);
+        em.flush();
     }
 
-    @Override
-    public UserRepositoryModel addRepository(String email, BrokerType type) {
-        UserRepositoryEntity entity = new UserRepositoryEntity();
-        entity.setId(OpenfactModelUtils.generateId());
-        entity.setAlias(email);
-        entity.setEmail(email);
-        entity.setType(type);
-        entity.setUser(user);
-        em.persist(entity);
-
-        // Cache
-        user.getRepositories().add(entity);
-
-        return new UserRepositoryAdapter(em, entity);
-    }
-
-    @Override
-    public List<UserRepositoryModel> getRepositories() {
-        return user.getRepositories().stream()
-                .map(f -> new UserRepositoryAdapter(em, f))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean removeAllRepositories() {
-        user.setRepositories(new HashSet<>());
-        return true;
-    }
+//    @Override
+//    public List<RequestAccessToSpaceModel> getSpaceRequests() {
+//        return user.getSpaceRequests().stream()
+//                .map(f -> new RequestAccessToSpaceAdapter(em, f))
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public UserRepositoryModel addRepository(String email, BrokerType type) {
+//        UserRepositoryEntity entity = new UserRepositoryEntity();
+//        entity.setId(OpenfactModelUtils.generateId());
+//        entity.setAlias(email);
+//        entity.setEmail(email);
+//        entity.setType(type);
+//        entity.setUser(user);
+//        em.persist(entity);
+//
+//        // Cache
+//        user.getRepositories().add(entity);
+//
+//        return new UserRepositoryAdapter(em, entity);
+//    }
+//
+//    @Override
+//    public List<UserRepositoryModel> getRepositories() {
+//        return user.getRepositories().stream()
+//                .map(f -> new UserRepositoryAdapter(em, f))
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public boolean removeAllRepositories() {
+//        user.setRepositories(new HashSet<>());
+//        return true;
+//    }
 
     @Override
     public boolean equals(Object obj) {

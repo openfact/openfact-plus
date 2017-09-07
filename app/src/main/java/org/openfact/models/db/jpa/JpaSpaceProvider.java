@@ -1,5 +1,6 @@
 package org.openfact.models.db.jpa;
 
+import org.openfact.models.ModelException;
 import org.openfact.models.SpaceModel;
 import org.openfact.models.SpaceProvider;
 import org.openfact.models.UserModel;
@@ -79,7 +80,7 @@ public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider
         TypedQuery<SpaceEntity> query = getSession().createNamedQuery("getSpacesByUserId", SpaceEntity.class);
         query.setParameter("userId", user.getId());
         return query.getResultList().stream()
-                .map(f -> new SpaceAdapter(em, f))
+                .map(f -> new SpaceAdapter(getSession(), f))
                 .collect(Collectors.toList());
     }
 
@@ -92,7 +93,7 @@ public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider
         if (limit != -1) query.setMaxResults(limit);
 
         return query.getResultList().stream()
-                .map(f -> new SpaceAdapter(em, f))
+                .map(f -> new SpaceAdapter(getSession(), f))
                 .collect(Collectors.toList());
     }
 }
