@@ -31,4 +31,6 @@ public interface SpaceProvider {
 
     List<SpaceModel> getSpaces(UserModel user, int offset, int limit);
 
+    List<SpaceModel> getSpaces(QueryModel query);
+
 }

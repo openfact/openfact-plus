@@ -1,5 +1,6 @@
 package org.openfact.models.db.jpa.entity;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -83,10 +84,14 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Set<SpaceEntity> ownedSpaces = new HashSet<>();
 
-    @ElementCollection
-    @Column(name="value")
-    @CollectionTable(name="recent_spaces", joinColumns={ @JoinColumn(name="user_id") })
-    private Set<String> recentSpaces = new HashSet<>();
+//    @ElementCollection
+//    @Column(name="value")
+//    @CollectionTable(name="recent_spaces", joinColumns={ @JoinColumn(name="user_id") })
+//    private Set<String> recentSpaces = new HashSet<>();
+
+    @Type(type = "org.openfact.models.db.type.json.JsonNodeType")
+    @Column(name = "context_information", length = 4096)
+    private JsonNode contextInformation;
 
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 //    private Set<SharedSpaceEntity> sharedSpaces = new HashSet<>();
@@ -236,12 +241,20 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.ownedSpaces = ownedSpaces;
     }
 
-    public Set<String> getRecentSpaces() {
-        return recentSpaces;
+//    public Set<String> getRecentSpaces() {
+//        return recentSpaces;
+//    }
+//
+//    public void setRecentSpaces(Set<String> recentSpaces) {
+//        this.recentSpaces = recentSpaces;
+//    }
+
+    public void setContextInformation(JsonNode contextInformation) {
+        this.contextInformation = contextInformation;
     }
 
-    public void setRecentSpaces(Set<String> recentSpaces) {
-        this.recentSpaces = recentSpaces;
+    public JsonNode getContextInformation() {
+        return contextInformation;
     }
 
 //    public Set<SharedSpaceEntity> getSharedSpaces() {
@@ -275,4 +288,5 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     public void setVersion(int version) {
         this.version = version;
     }
+
 }

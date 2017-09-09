@@ -71,4 +71,12 @@ public class SpacesService {
         return modelToRepresentation.toRepresentation(space, uriInfo).toSpaceRepresentation();
     }
 
+    @DELETE
+    @Path("{spaceId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void deleteSpace(@PathParam("spaceId") String spaceId) {
+        SpaceModel space = getSpaceById(spaceId);
+        spaceProvider.removeSpace(space);
+    }
+
 }

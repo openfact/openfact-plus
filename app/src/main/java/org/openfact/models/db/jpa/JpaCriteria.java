@@ -20,18 +20,22 @@ public class JpaCriteria<T, R> {
     private final Class<T> tClass;
     private final Class<R> rClass;
 
+    private final String[] searchFields;
+
     protected final CriteriaBuilder cb;
     protected final CriteriaQuery cq;
     protected final Root<T> root;
 
     protected final Set<Predicate> predicates;
 
-    public JpaCriteria(EntityManager em, Class<T> tClass, Class<R> rClass, QueryModel query) {
+    public JpaCriteria(EntityManager em, Class<T> tClass, Class<R> rClass, QueryModel query, String[] searchFields) {
         this.em = em;
         this.query = query;
 
         this.tClass = tClass;
         this.rClass = rClass;
+
+        this.searchFields = searchFields;
 
         this.cb = em.getCriteriaBuilder();
         this.cq = cb.createQuery(tClass);
@@ -43,6 +47,14 @@ public class JpaCriteria<T, R> {
     }
 
     protected void init() {
+        if (query.getFilterText() != null && !query.getFilterText().trim().isEmpty()) {
+            Set<Predicate> orPredicates = new HashSet<>();
+            for (String field : searchFields) {
+                orPredicates.add(cb.like(cb.upper(root.get(field)), "%" + query.getFilterText().toUpperCase() + "%"));
+            }
+            predicates.add(cb.or(orPredicates.toArray(new Predicate[orPredicates.size()])));
+        }
+
         if (query.getFilters() != null && !query.getFilters().isEmpty()) {
             Set<Predicate> orPredicates = new HashSet<>();
             for (Map.Entry<String, String> entry : query.getFilters().entrySet()) {

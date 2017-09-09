@@ -5,6 +5,9 @@ import java.util.Set;
 
 public interface SpaceModel {
 
+    String NAME ="name";
+    String ASSIGNED_ID ="assignedId";
+
     String getId();
     String getAssignedId();
 

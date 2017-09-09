@@ -44,9 +44,9 @@ public class ModelToRepresentation {
         attributes.setCreatedAt(model.getCreatedAt());
         attributes.setUpdatedAt(model.getUpdatedAt());
 
-        ContextInformationRepresentation contextInformation = new ContextInformationRepresentation();
-        attributes.setContextInformation(contextInformation);
-        contextInformation.setRecentSpaces(model.getRecentSpaces());
+//        ContextInformationRepresentation contextInformation = new ContextInformationRepresentation();
+        attributes.setContextInformation(model.getContextInformation());
+//        contextInformation.setRecentSpaces(model.getRecentSpaces());
 
         rep.setAttributes(attributes);
         return rep;

@@ -1,0 +1,48 @@
+package org.openfact.services.resources;
+
+import org.openfact.models.QueryModel;
+import org.openfact.models.SpaceProvider;
+import org.openfact.models.UserModel;
+import org.openfact.models.utils.ModelToRepresentation;
+import org.openfact.representation.idm.GenericDataRepresentation;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
+import java.util.stream.Collectors;
+
+@Stateless
+@Path("search")
+@Consumes(MediaType.APPLICATION_JSON)
+public class SearchService {
+
+    @Context
+    private UriInfo uriInfo;
+
+    @Inject
+    private SpaceProvider spaceProvider;
+
+    @Inject
+    private ModelToRepresentation modelToRepresentation;
+
+    @GET
+    @Path("spaces")
+    public GenericDataRepresentation searchSpaces(@QueryParam("q") String filterText) {
+        QueryModel.Builder queryBuilder = QueryModel.builder();
+
+        if (filterText != null) {
+            queryBuilder.filterText(filterText);
+        }
+
+        return new GenericDataRepresentation(spaceProvider.getSpaces(queryBuilder.build()).stream()
+                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
+                .collect(Collectors.toList()));
+    }
+
+}

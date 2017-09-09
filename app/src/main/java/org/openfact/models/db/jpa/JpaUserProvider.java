@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 @Stateless
 public class JpaUserProvider extends HibernateProvider implements UserProvider {
 
+    private final static String[] SEARCH_FIELDS = {"username"};
+
     private EntityManager em;
 
     @Inject
@@ -70,7 +72,7 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
 
     @Override
     public List<UserModel> getUsers(QueryModel query) {
-        TypedQuery<UserEntity> typedQuery = new JpaCriteria<>(em, UserEntity.class, UserEntity.class, query).buildTypedQuery();
+        TypedQuery<UserEntity> typedQuery = new JpaCriteria<>(em, UserEntity.class, UserEntity.class, query, SEARCH_FIELDS).buildTypedQuery();
         return typedQuery.getResultList().stream()
                 .map(f -> new UserAdapter(em, f))
                 .collect(Collectors.toList());

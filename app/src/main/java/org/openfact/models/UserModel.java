@@ -1,5 +1,7 @@
 package org.openfact.models;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -43,8 +45,10 @@ public interface UserModel {
     Set<SpaceModel> getOwnedSpaces();
 //    Set<SharedSpaceModel> getSharedSpaces();
 
-    Set<String> getRecentSpaces();
-    void setRecentSpaces(Set<String> recentSpaces);
+//    Set<String> getRecentSpaces();
+//    void setRecentSpaces(Set<String> recentSpaces);
+    JsonNode getContextInformation();
+    void setContextInformation(JsonNode contextInformation);
 
 //    List<RequestAccessToSpaceModel> getSpaceRequests();
 //

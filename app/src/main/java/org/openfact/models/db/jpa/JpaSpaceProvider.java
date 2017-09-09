@@ -1,9 +1,6 @@
 package org.openfact.models.db.jpa;
 
-import org.openfact.models.ModelException;
-import org.openfact.models.SpaceModel;
-import org.openfact.models.SpaceProvider;
-import org.openfact.models.UserModel;
+import org.openfact.models.*;
 import org.openfact.models.db.HibernateProvider;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.db.jpa.entity.UserEntity;
@@ -18,6 +15,8 @@ import java.util.stream.Collectors;
 
 @Stateless
 public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider {
+
+    private final static String[] SEARCH_FIELDS = {"assignedId", "name"};
 
     private EntityManager em;
 
@@ -52,9 +51,9 @@ public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider
 
     @Override
     public SpaceModel getSpace(String id) {
-        SpaceEntity entity = em.find(SpaceEntity.class, id);
+        SpaceEntity entity = getSession().find(SpaceEntity.class, id);
         if (entity == null) return null;
-        return new SpaceAdapter(em, entity);
+        return new SpaceAdapter(getSession(), entity);
     }
 
     @Override
@@ -93,6 +92,14 @@ public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider
         if (limit != -1) query.setMaxResults(limit);
 
         return query.getResultList().stream()
+                .map(f -> new SpaceAdapter(getSession(), f))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SpaceModel> getSpaces(QueryModel query) {
+        TypedQuery<SpaceEntity> typedQuery = new JpaCriteria<>(getSession(), SpaceEntity.class, SpaceEntity.class, query, SEARCH_FIELDS).buildTypedQuery();
+        return typedQuery.getResultList().stream()
                 .map(f -> new SpaceAdapter(getSession(), f))
                 .collect(Collectors.toList());
     }

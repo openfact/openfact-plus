@@ -1,5 +1,6 @@
 package org.openfact.services.resources;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.jboss.logging.Logger;
 import org.keycloak.jose.jws.JWSInputException;
 import org.keycloak.representations.AccessToken;
@@ -8,6 +9,7 @@ import org.openfact.models.QueryModel;
 import org.openfact.models.SpaceProvider;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
+import org.openfact.models.utils.JacksonUtil;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.*;
 import org.openfact.services.managers.UserManager;
@@ -57,7 +59,7 @@ public class UsersService {
     @PATCH
     @Produces(MediaType.APPLICATION_JSON)
     public UserRepresentation currentUser(@Context final HttpServletRequest httpServletRequest,
-                                        final UserRepresentation userRepresentation) {
+                                          final UserRepresentation userRepresentation) {
 
         SSOContext ssoContext = new SSOContext(httpServletRequest);
         AccessToken accessToken = ssoContext.getParsedAccessToken();
@@ -91,12 +93,9 @@ public class UsersService {
             }
 
             // Context Information
-            ContextInformationRepresentation contextInformation = attributes.getContextInformation();
+            JsonNode contextInformation = attributes.getContextInformation();
             if (contextInformation != null) {
-                Set<String> recentSpaces = contextInformation.getRecentSpaces();
-                if (recentSpaces != null) {
-                    user.setRecentSpaces(recentSpaces);
-                }
+                user.setContextInformation(JacksonUtil.clone(JacksonUtil.merge(user.getContextInformation(), contextInformation)));
             }
         }
 

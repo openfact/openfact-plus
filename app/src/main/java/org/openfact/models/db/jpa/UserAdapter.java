@@ -1,5 +1,6 @@
 package org.openfact.models.db.jpa;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.openfact.models.*;
 import org.openfact.models.db.jpa.entity.UserEntity;
 import org.openfact.models.db.jpa.entity.UserRepositoryEntity;
@@ -148,6 +149,16 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
                 .collect(Collectors.toSet());
     }
 
+    @Override
+    public JsonNode getContextInformation() {
+        return user.getContextInformation();
+    }
+
+    @Override
+    public void setContextInformation(JsonNode contextInformation) {
+        user.setContextInformation(contextInformation);
+    }
+
 //    @Override
 //    public Set<SharedSpaceModel> getSharedSpaces() {
 //        return user.getSharedSpaces().stream()
@@ -155,20 +166,20 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
 //                .collect(Collectors.toSet());
 //    }
 
-    @Override
-    public Set<String> getRecentSpaces() {
-        Set<String> recentSpaces = user.getRecentSpaces();
-        if (recentSpaces.isEmpty()) return Collections.EMPTY_SET;
-        Set<String> copy = new HashSet<>();
-        copy.addAll(recentSpaces);
-        return Collections.unmodifiableSet(copy);
-    }
-
-    @Override
-    public void setRecentSpaces(Set<String> recentSpaces) {
-        user.setRecentSpaces(recentSpaces);
-        em.flush();
-    }
+//    @Override
+//    public Set<String> getRecentSpaces() {
+//        Set<String> recentSpaces = user.getRecentSpaces();
+//        if (recentSpaces.isEmpty()) return Collections.EMPTY_SET;
+//        Set<String> copy = new HashSet<>();
+//        copy.addAll(recentSpaces);
+//        return Collections.unmodifiableSet(copy);
+//    }
+//
+//    @Override
+//    public void setRecentSpaces(Set<String> recentSpaces) {
+//        user.setRecentSpaces(recentSpaces);
+//        em.flush();
+//    }
 
 //    @Override
 //    public List<RequestAccessToSpaceModel> getSpaceRequests() {

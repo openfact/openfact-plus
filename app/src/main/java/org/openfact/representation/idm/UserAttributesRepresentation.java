@@ -1,6 +1,7 @@
 package org.openfact.representation.idm;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Date;
 import java.util.List;
@@ -52,7 +53,7 @@ public class UserAttributesRepresentation {
     private List<RequestAccessToSpaceRepresentation> spaceRequests;
 
     private String refreshToken;
-    private ContextInformationRepresentation contextInformation;
+    private JsonNode contextInformation;
 
     public String getUserID() {
         return userID;
@@ -182,11 +183,11 @@ public class UserAttributesRepresentation {
         this.refreshToken = refreshToken;
     }
 
-    public ContextInformationRepresentation getContextInformation() {
+    public JsonNode getContextInformation() {
         return contextInformation;
     }
 
-    public void setContextInformation(ContextInformationRepresentation contextInformation) {
+    public void setContextInformation(JsonNode contextInformation) {
         this.contextInformation = contextInformation;
     }
 }
