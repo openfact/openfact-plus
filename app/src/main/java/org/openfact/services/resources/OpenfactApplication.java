@@ -1,13 +1,18 @@
 package org.openfact.services.resources;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.jboss.logging.Logger;
 import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.KeycloakDeploymentBuilder;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import java.io.InputStream;
 
 @ApplicationPath("/api")
@@ -24,8 +29,18 @@ public class OpenfactApplication extends Application {
         logger.info("keycloak.json parsed");
 
         KeycloakDeploymentConfig instance = KeycloakDeploymentConfig.getInstance();
-        instance.setKeycloakDeployment(deployment);
+        instance.setDeployment(deployment);
         logger.info("keycloak.json saved on " + KeycloakDeploymentConfig.class.getName());
+
+//        String authServer = deployment.getAuthServerBaseUrl();
+//        String realmName = deployment.getRealm();
+//
+//        Client client = ClientBuilder.newBuilder().build();
+//        WebTarget target = client.target(authServer + "/realms/" + realmName + "/.well-known/openid-configuration");
+//        Response response = target.request().get();
+//        JsonNode jsonNode = response.readEntity(JsonNode.class);
+//
+//        instance.setEndpoints(jsonNode);
     }
 
 }

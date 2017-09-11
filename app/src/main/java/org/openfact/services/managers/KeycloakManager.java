@@ -30,7 +30,7 @@ public class KeycloakManager {
     }
 
     public WebTarget getKeycloakTarget(String accessToken, String... path) {
-        KeycloakDeployment keycloakDeployment = KeycloakDeploymentConfig.getInstance().getKeycloakDeployment();
+        KeycloakDeployment keycloakDeployment = KeycloakDeploymentConfig.getInstance().getDeployment();
 
         String authServer = keycloakDeployment.getAuthServerBaseUrl();
         String realmName = keycloakDeployment.getRealm();
