@@ -3,6 +3,7 @@ package org.openfact.services.resources;
 import org.openfact.models.QueryModel;
 import org.openfact.models.SpaceProvider;
 import org.openfact.models.UserModel;
+import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.GenericDataRepresentation;
 
@@ -29,6 +30,9 @@ public class SearchService {
     private SpaceProvider spaceProvider;
 
     @Inject
+    private UserProvider userProvider;
+
+    @Inject
     private ModelToRepresentation modelToRepresentation;
 
     @GET
@@ -41,6 +45,20 @@ public class SearchService {
         }
 
         return new GenericDataRepresentation(spaceProvider.getSpaces(queryBuilder.build()).stream()
+                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
+                .collect(Collectors.toList()));
+    }
+
+    @GET
+    @Path("users")
+    public GenericDataRepresentation searchUsers(@QueryParam("q") String filterText) {
+        QueryModel.Builder queryBuilder = QueryModel.builder();
+
+        if (filterText != null) {
+            queryBuilder.filterText(filterText);
+        }
+
+        return new GenericDataRepresentation(userProvider.getUsers(queryBuilder.build()).stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
                 .collect(Collectors.toList()));
     }

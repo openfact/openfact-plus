@@ -5,6 +5,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "space")
@@ -37,8 +39,8 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
     @JoinColumn(name = "owner_id", foreignKey = @ForeignKey)
     private UserEntity owner;
 
-//    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
-//    private Set<SharedSpaceEntity> sharedUsers = new HashSet<>();
+    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
+    private Set<CollaboratorEntity> collaborators = new HashSet<>();
 //
 //    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
 //    private Set<RequestAccessToSpaceEntity> accessRequests = new HashSet<>();
@@ -97,14 +99,14 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
         this.owner = owner;
     }
 
-//    public Set<SharedSpaceEntity> getSharedUsers() {
-//        return sharedUsers;
-//    }
-//
-//    public void setSharedUsers(Set<SharedSpaceEntity> sharedUsers) {
-//        this.sharedUsers = sharedUsers;
-//    }
-//
+    public Set<CollaboratorEntity> getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(Set<CollaboratorEntity> collaborators) {
+        this.collaborators = collaborators;
+    }
+
 //    public Set<RequestAccessToSpaceEntity> getAccessRequests() {
 //        return accessRequests;
 //    }
@@ -153,4 +155,5 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
     public int hashCode() {
         return getId().hashCode();
     }
+
 }

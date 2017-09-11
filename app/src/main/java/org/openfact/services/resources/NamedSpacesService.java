@@ -1,11 +1,13 @@
 package org.openfact.services.resources;
 
+import org.jboss.as.controller.UnauthorizedException;
 import org.openfact.models.SpaceModel;
 import org.openfact.models.SpaceProvider;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.GenericDataRepresentation;
+import org.openfact.representation.idm.SpaceRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -43,10 +45,18 @@ public class NamedSpacesService {
         return user;
     }
 
+    private SpaceModel getSpaceByAssignedID(String assignedID) {
+        SpaceModel space = spaceProvider.getByAssignedId(assignedID);
+        if (space == null) {
+            throw new NotFoundException();
+        }
+        return space;
+    }
+
     @GET
     @Path("{identityID}")
     @Produces(MediaType.APPLICATION_JSON)
-    public GenericDataRepresentation getSpaces(
+    public GenericDataRepresentation getSpacesByUser(
             @PathParam("identityID") String identityID,
             @QueryParam("page[offset]") Integer offset,
             @QueryParam("page[limit]") Integer limit) {
@@ -71,14 +81,14 @@ public class NamedSpacesService {
         Map<String, String> links = new HashMap<>();
         links.put("first", uriInfo.getBaseUriBuilder()
                 .path(NamedSpacesService.class)
-                .path(NamedSpacesService.class, "getSpaces")
+                .path(NamedSpacesService.class, "getSpacesByUser")
                 .build(identityID).toString() +
                 "?page[offset]=0" +
                 "&page[limit]=" + limit);
 
         links.put("last", uriInfo.getBaseUriBuilder()
                 .path(NamedSpacesService.class)
-                .path(NamedSpacesService.class, "getSpaces")
+                .path(NamedSpacesService.class, "getSpacesByUser")
                 .build(identityID).toString() +
                 "?page[offset]=" + (totalCount > 0 ? (((totalCount - 1) % limit) * limit) : 0) +
                 "&page[limit]=" + limit);
@@ -86,7 +96,7 @@ public class NamedSpacesService {
         if (spaces.size() > limit) {
             links.put("next", uriInfo.getBaseUriBuilder()
                     .path(NamedSpacesService.class)
-                    .path(NamedSpacesService.class, "getSpaces")
+                    .path(NamedSpacesService.class, "getSpacesByUser")
                     .build(identityID).toString() +
                     "?page[offset]=" + (offset + limit) +
                     "&page[limit]=" + limit);
@@ -99,4 +109,22 @@ public class NamedSpacesService {
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
                 .collect(Collectors.toList()), links, meta);
     }
+
+    @GET
+    @Path("{identityID}/{assignedID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public SpaceRepresentation getSpaceByUser(
+            @PathParam("identityID") String identityID,
+            @PathParam("assignedID") String assignedID) {
+        UserModel user = getUserByIdentityID(identityID);
+        SpaceModel space = getSpaceByAssignedID(assignedID);
+
+        // TODO check if user has access to space
+        if (space.getOwner().equals(user)) {
+            return modelToRepresentation.toRepresentation(space, uriInfo).toSpaceRepresentation();
+        } else {
+            throw new BadRequestException();
+        }
+    }
+
 }

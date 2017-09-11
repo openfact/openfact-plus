@@ -5,7 +5,10 @@ import org.openfact.models.SpaceProvider;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 import org.openfact.models.utils.ModelToRepresentation;
+import org.openfact.representation.idm.GenericDataRepresentation;
 import org.openfact.representation.idm.SpaceRepresentation;
+import org.openfact.representation.idm.TypedGenericDataRepresentation;
+import org.openfact.representation.idm.UserRepresentation;
 import org.openfact.services.ErrorResponseException;
 
 import javax.ejb.Stateless;
@@ -15,6 +18,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Stateless
 @Path("spaces")
@@ -77,6 +84,92 @@ public class SpacesService {
     public void deleteSpace(@PathParam("spaceId") String spaceId) {
         SpaceModel space = getSpaceById(spaceId);
         spaceProvider.removeSpace(space);
+    }
+
+    @GET
+    @Path("{spaceId}/collaborators")
+    @Produces(MediaType.APPLICATION_JSON)
+    public GenericDataRepresentation getSpaceCollaborators(
+            @PathParam("spaceId") String spaceId,
+            @QueryParam("page[offset]") Integer offset,
+            @QueryParam("page[limit]") Integer limit) {
+
+        if (offset == null) {
+            offset = 0;
+        }
+        if (limit == null) {
+            limit = 100;
+        }
+
+        SpaceModel space = getSpaceById(spaceId);
+
+        List<UserModel> collaborators = space.getCollaborators(offset, limit + 1);
+
+        // Meta
+        int totalCount = space.getCollaborators().size();
+
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("totalCount", totalCount);
+
+        // Links
+        Map<String, String> links = new HashMap<>();
+        links.put("first", uriInfo.getBaseUriBuilder()
+                .path(SpacesService.class)
+                .path(SpacesService.class, "getSpaceCollaborators")
+                .build(spaceId).toString() +
+                "?page[offset]=0" +
+                "&page[limit]=" + limit);
+
+        links.put("last", uriInfo.getBaseUriBuilder()
+                .path(SpacesService.class)
+                .path(SpacesService.class, "getSpaceCollaborators")
+                .build(spaceId).toString() +
+                "?page[offset]=" + (totalCount > 0 ? (((totalCount - 1) % limit) * limit) : 0) +
+                "&page[limit]=" + limit);
+
+        if (collaborators.size() > limit) {
+            links.put("next", uriInfo.getBaseUriBuilder()
+                    .path(SpacesService.class)
+                    .path(SpacesService.class, "getSpaceCollaborators")
+                    .build(spaceId).toString() +
+                    "?page[offset]=" + (offset + limit) +
+                    "&page[limit]=" + limit);
+
+            // Remove last item
+            collaborators.remove(links.size() - 1);
+        }
+
+        return new GenericDataRepresentation(collaborators.stream()
+                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
+                .collect(Collectors.toList()), links, meta);
+    }
+
+    @POST
+    @Path("{spaceId}/collaborators")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void addSpaceCollaborators(
+            @PathParam("spaceId") String spaceId,
+            final TypedGenericDataRepresentation<List<UserRepresentation.Data>> representation) {
+        SpaceModel space = getSpaceById(spaceId);
+
+        for (UserRepresentation.Data data : representation.getData()) {
+            UserModel user = userProvider.getUserByIdentityID(data.getId());
+            space.addCollaborators(user);
+        }
+    }
+
+    @DELETE
+    @Path("{spaceId}/collaborators/{identityID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void removeSpaceCollaborators(
+            @PathParam("spaceId") String spaceId,
+            @PathParam("identityID") String identityID) {
+        SpaceModel space = getSpaceById(spaceId);
+        UserModel user = userProvider.getUserByIdentityID(identityID);
+        boolean result = space.removeCollaborators(user);
+        if (!result) {
+            throw new InternalServerErrorException();
+        }
     }
 
 }

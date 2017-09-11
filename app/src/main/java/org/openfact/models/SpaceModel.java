@@ -1,6 +1,7 @@
 package org.openfact.models;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 public interface SpaceModel {
@@ -22,7 +23,8 @@ public interface SpaceModel {
     Date getCreatedAt();
     Date getUpdatedAt();
 
-//    Set<SharedSpaceModel> getSharedUsers();
-//
-//    RequestAccessToSpaceModel requestAccess(UserModel user, Set<PermissionType> permissions);
+    List<UserModel> getCollaborators();
+    List<UserModel> getCollaborators(int offset, int limit);
+    void addCollaborators(UserModel user);
+    boolean removeCollaborators(UserModel user);
 }

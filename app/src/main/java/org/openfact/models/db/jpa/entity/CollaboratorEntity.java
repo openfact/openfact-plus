@@ -1,17 +1,15 @@
 package org.openfact.models.db.jpa.entity;
 
-import org.openfact.models.PermissionType;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Table(name = "SHARED_SPACE")
-@IdClass(SharedSpaceEntity.Key.class)
-public class SharedSpaceEntity implements Serializable {
+@Table(name = "COLLABORATOR")
+@IdClass(CollaboratorEntity.Key.class)
+@NamedQueries({
+        @NamedQuery(name = "getCollaboratorsBySpaceId", query = "select c from CollaboratorEntity c inner join c.space s where s.id = :spaceId")
+})
+public class CollaboratorEntity implements Serializable {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,17 +21,17 @@ public class SharedSpaceEntity implements Serializable {
     @JoinColumn(name = "SPACE_ID")
     private SpaceEntity space;
 
-    @NotNull
-    @ElementCollection(targetClass = PermissionType.class)
-    @Enumerated(EnumType.STRING)
-    @Column(name = "VALUE")
-    @CollectionTable(name = "PERMISSIONS", joinColumns = {@JoinColumn(name = "USER_ID"), @JoinColumn(name = "SPACE_ID")})
-    private Set<PermissionType> permissions = new HashSet<>();
+//    @NotNull
+//    @ElementCollection(targetClass = PermissionType.class)
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "VALUE")
+//    @CollectionTable(name = "PERMISSIONS", joinColumns = {@JoinColumn(name = "USER_ID"), @JoinColumn(name = "SPACE_ID")})
+//    private Set<PermissionType> permissions = new HashSet<>();
 
-    public SharedSpaceEntity() {
+    public CollaboratorEntity() {
     }
 
-    public SharedSpaceEntity(UserEntity user, SpaceEntity space) {
+    public CollaboratorEntity(UserEntity user, SpaceEntity space) {
         this.user = user;
         this.space = space;
     }
@@ -54,13 +52,13 @@ public class SharedSpaceEntity implements Serializable {
         this.space = space;
     }
 
-    public Set<PermissionType> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(Set<PermissionType> permissions) {
-        this.permissions = permissions;
-    }
+//    public Set<PermissionType> getPermissions() {
+//        return permissions;
+//    }
+//
+//    public void setPermissions(Set<PermissionType> permissions) {
+//        this.permissions = permissions;
+//    }
 
     public static class Key implements Serializable {
 
@@ -104,7 +102,7 @@ public class SharedSpaceEntity implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SharedSpaceEntity that = (SharedSpaceEntity) o;
+        CollaboratorEntity that = (CollaboratorEntity) o;
         if (!getUser().equals(that.getUser())) return false;
         return getSpace().equals(that.getSpace());
     }

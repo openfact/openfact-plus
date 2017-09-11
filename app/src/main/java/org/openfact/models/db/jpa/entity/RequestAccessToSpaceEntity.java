@@ -126,7 +126,7 @@ public class RequestAccessToSpaceEntity implements Serializable {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            SharedSpaceEntity.Key key = (SharedSpaceEntity.Key) o;
+            RequestAccessToSpaceEntity.Key key = (RequestAccessToSpaceEntity.Key) o;
             if (!getUser().equals(key.getUser())) return false;
             return getSpace().equals(key.getSpace());
         }

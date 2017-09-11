@@ -1,12 +1,15 @@
 package org.openfact.models.db.jpa;
 
 import org.openfact.models.*;
+import org.openfact.models.db.jpa.entity.CollaboratorEntity;
 import org.openfact.models.db.jpa.entity.RequestAccessToSpaceEntity;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.db.jpa.entity.UserEntity;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -78,29 +81,48 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
         return space.getUpdatedAt();
     }
 
-//    @Override
-//    public Set<SharedSpaceModel> getSharedUsers() {
-//        return space.getSharedUsers().stream()
-//                .map(f -> new SharedSpaceAdapter(em, f))
-//                .collect(Collectors.toSet());
-//    }
+    @Override
+    public List<UserModel> getCollaborators() {
+        return space.getCollaborators().stream()
+                .map(CollaboratorEntity::getUser)
+                .map(f -> new UserAdapter(em, f))
+                .collect(Collectors.toList());
+    }
 
-//    @Override
-//    public RequestAccessToSpaceModel requestAccess(UserModel user, Set<PermissionType> permissions) {
-//        UserEntity userEntity = UserAdapter.toEntity(user, em);
-//
-//        RequestAccessToSpaceEntity entity = new RequestAccessToSpaceEntity(userEntity, space);
-//        entity.setSpace(space);
-//        entity.setUser(userEntity);
-//        entity.setPermissions(permissions);
-//        entity.setStatus(RequestStatusType.REQUESTED);
-//
-//        // Cache
-//        space.getAccessRequests().add(entity);
-//        userEntity.getSpaceRequests().add(entity);
-//
-//        return new RequestAccessToSpaceAdapter(em, entity);
-//    }
+    @Override
+    public List<UserModel> getCollaborators(int offset, int limit) {
+        TypedQuery<CollaboratorEntity> query = em.createNamedQuery("getCollaboratorsBySpaceId", CollaboratorEntity.class);
+        query.setParameter("spaceId", space.getId());
+
+        if (offset != -1) query.setFirstResult(offset);
+        if (limit != -1) query.setMaxResults(limit);
+
+        return query.getResultList().stream()
+                .map(CollaboratorEntity::getUser)
+                .map(f -> new UserAdapter(em, f))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addCollaborators(UserModel user) {
+        UserEntity userEntity = UserAdapter.toEntity(user, em);
+
+        CollaboratorEntity entity = new CollaboratorEntity(userEntity, space);
+        em.persist(entity);
+
+        // Cache
+        space.getCollaborators().add(entity);
+    }
+
+    @Override
+    public boolean removeCollaborators(UserModel user) {
+        UserEntity userEntity = UserAdapter.toEntity(user, em);
+
+        CollaboratorEntity entity = em.find(CollaboratorEntity.class, new CollaboratorEntity.Key(userEntity, space));
+        if (entity == null) return false;
+        em.remove(entity);
+        return true;
+    }
 
     @Override
     public boolean equals(Object obj) {

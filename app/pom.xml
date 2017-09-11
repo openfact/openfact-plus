@@ -264,6 +264,11 @@
             <artifactId>google-oauth-client</artifactId>
             <version>1.22.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.oauth-client</groupId>
+            <artifactId>google-oauth-client-servlet</artifactId>
+            <version>1.22.0</version>
+        </dependency>
 
         <!--Test-->
         <dependency>
