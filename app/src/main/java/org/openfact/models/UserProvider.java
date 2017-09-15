@@ -8,6 +8,8 @@ public interface UserProvider {
 
     UserModel getUser(String userId);
 
+    UserModel getUserByUsername(String username);
+
     UserModel getUserByIdentityID(String identityID);
 
     List<UserModel> getUsers();
@@ -16,4 +18,7 @@ public interface UserProvider {
 
     ScrollableResultsModel<UserModel> getScrollableUsers();
 
+    /**
+     * */
+    void updateUser(String identityID, String offlineToken, boolean registrationComplete);
 }

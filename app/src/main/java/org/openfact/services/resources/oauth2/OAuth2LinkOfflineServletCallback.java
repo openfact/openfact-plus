@@ -1,12 +1,16 @@
 package org.openfact.services.resources.oauth2;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeCallbackServlet;
-import org.openfact.representation.idm.TokenRepresentation;
+import org.keycloak.jose.jws.JWSInputException;
+import org.keycloak.util.TokenUtil;
+import org.openfact.models.UserProvider;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,14 +19,30 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
-@WebServlet("/api/login/authorize_callback")
-public class OAuth2ServletCallback extends AbstractAuthorizationCodeCallbackServlet {
+@WebServlet("/api/login/authorize_offline_callback")
+public class OAuth2LinkOfflineServletCallback extends AbstractAuthorizationCodeCallbackServlet {
+
+    @Inject
+    private UserProvider userProvider;
 
     @Override
     protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential) throws ServletException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        TokenRepresentation token = OAuth2Utils.toRepresentation(credential);
-        resp.sendRedirect(req.getParameter("redirect") + "?token_json=" + mapper.writeValueAsString(token));
+        boolean isOfflineToken = false;
+        try {
+            isOfflineToken = TokenUtil.isOfflineToken(credential.getRefreshToken());
+        } catch (JWSInputException e) {
+            resp.sendRedirect(req.getParameter("redirect") + "?error=Could not decode token");
+        }
+
+        if (isOfflineToken) {
+            DecodedJWT decodedJWT = JWT.decode(credential.getAccessToken());
+            String identityID = decodedJWT.getClaim("userID").asString();
+            userProvider.updateUser(identityID, credential.getRefreshToken(), true);
+
+            resp.sendRedirect(req.getParameter("redirect"));
+        } else {
+            resp.sendRedirect(req.getParameter("redirect") + "?error=Obtained token is not offline");
+        }
     }
 
     @Override
@@ -32,7 +52,7 @@ public class OAuth2ServletCallback extends AbstractAuthorizationCodeCallbackServ
 
     @Override
     protected String getRedirectUri(HttpServletRequest req) throws ServletException, IOException {
-        return OAuth2Utils.buildRedirectURL(req, "/api/login/authorize_callback");
+        return OAuth2Utils.buildRedirectURL(req, "/api/login/authorize_offline_callback");
     }
 
     @Override

@@ -12,7 +12,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "identity_id")
+})
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username"),

@@ -1,9 +1,6 @@
 package org.openfact.models.db.jpa;
 
-import org.openfact.models.ScrollableResultsModel;
-import org.openfact.models.UserModel;
-import org.openfact.models.UserProvider;
-import org.openfact.models.QueryModel;
+import org.openfact.models.*;
 import org.openfact.models.db.HibernateProvider;
 import org.openfact.models.db.jpa.entity.UserEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
@@ -54,6 +51,15 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
     }
 
     @Override
+    public UserModel getUserByUsername(String username) {
+        TypedQuery<UserEntity> query = em.createNamedQuery("getUserByUsername", UserEntity.class);
+        query.setParameter("username", username);
+        List<UserEntity> entities = query.getResultList();
+        if (entities.size() == 0) return null;
+        return new UserAdapter(em, entities.get(0));
+    }
+
+    @Override
     public UserModel getUserByIdentityID(String identityID) {
         TypedQuery<UserEntity> query = em.createNamedQuery("getUserByIdentityID", UserEntity.class);
         query.setParameter("identityID", identityID);
@@ -84,6 +90,18 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
 //        Function<UserEntity, UserModel> mapper = entity -> new UserAdapter(em, entity);
 //        return new ScrollableResultsAdapter<>(scrollableResults, mapper);
         return null;
+    }
+
+    @Override
+    public void updateUser(String identityID, String offlineToken, boolean registrationComplete) {
+        TypedQuery<UserEntity> query = em.createNamedQuery("getUserByIdentityID", UserEntity.class);
+        query.setParameter("identityID", identityID);
+        List<UserEntity> entities = query.getResultList();
+        if (entities.size() == 0) throw new ModelException("User not found");
+
+        UserEntity entity = entities.get(0);
+        entity.setOfflineToken(offlineToken);
+        entity.setRegistrationCompleted(registrationComplete);
     }
 
 }

@@ -10,17 +10,17 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
-@WebServlet("/api/login/authorize")
-public class OAuth2Servlet extends AbstractAuthorizationCodeServlet {
+@WebServlet("/api/login/linkoffline")
+public class OAuth2LinkOfflineServlet extends AbstractAuthorizationCodeServlet {
 
     @Override
     protected String getRedirectUri(HttpServletRequest req) throws ServletException, IOException {
-        return OAuth2Utils.buildRedirectURL(req, "/api/login/authorize_callback");
+        return OAuth2Utils.buildRedirectURL(req, "/api/login/authorize_offline_callback");
     }
 
     @Override
     protected AuthorizationCodeFlow initializeFlow() throws IOException {
-        return OAuth2Utils.buildAuthCodeFlow(Arrays.asList("openid"));
+        return OAuth2Utils.buildAuthCodeFlow(Arrays.asList("openid", "offline_access"));
     }
 
     @Override

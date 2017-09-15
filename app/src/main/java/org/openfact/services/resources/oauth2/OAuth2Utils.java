@@ -1,11 +1,8 @@
 package org.openfact.services.resources.oauth2;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.http.BasicAuthentication;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -39,10 +36,10 @@ public class OAuth2Utils {
                 .build();
     }
 
-    public static String buildRedirectURL(HttpServletRequest req) {
+    public static String buildRedirectURL(HttpServletRequest req, String callback) {
         String redirect = "?redirect=" + req.getParameter("redirect");
         GenericUrl url = new GenericUrl(req.getRequestURL().toString());
-        url.setRawPath("/api/login/authorize_callback");
+        url.setRawPath(callback);
 
         String redirect_url = url.build() + redirect;
         logger.debug("redirect_url:" + redirect_url);
@@ -67,20 +64,15 @@ public class OAuth2Utils {
         } catch (JWSInputException e) {
             throw new ModelException("Could not parse refresh token", e);
         }
-        DecodedJWT decodedRefreshToken = decodeToken(credential.getRefreshToken());
 
         TokenRepresentation token = new TokenRepresentation();
-        token.setToken_type(decodedRefreshToken.getType());
+        token.setToken_type("Bearer");
         token.setAccess_token(credential.getAccessToken());
         token.setExpires_in(credential.getExpirationTimeMilliseconds());
         token.setRefresh_token(credential.getRefreshToken());
         token.setRefresh_expires_in((long) refreshToken.getExpiration());
 
         return token;
-    }
-
-    public static DecodedJWT decodeToken(String token) {
-        return JWT.decode(token);
     }
 
 }
