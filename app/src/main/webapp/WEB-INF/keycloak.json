@@ -3,6 +3,8 @@
   "auth-server-url": "${sso.auth.server.url:http://localhost:8180/auth}",
   "resource": "${sso.clientId:openfact-online-platform}",
   "ssl-required": "external",
-  "bearer-only": true,
+  "credentials": {
+    "secret": "${sso.credentials.secret}"
+  },
   "enable-cors": true
 }

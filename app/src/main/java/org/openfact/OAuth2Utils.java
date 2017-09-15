@@ -6,15 +6,15 @@ import com.google.api.client.http.BasicAuthentication;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import org.jboss.logging.Logger;
 import org.openfact.services.resources.KeycloakDeploymentConfig;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 public class OAuth2Utils {
+
+    private static final Logger logger = Logger.getLogger(OAuth2Utils.class);
 
     public static AuthorizationCodeFlow buildAuthCodeFlow(List<String> scopes) {
         KeycloakDeploymentConfig kcConfig = KeycloakDeploymentConfig.getInstance();
@@ -22,10 +22,10 @@ public class OAuth2Utils {
         return new AuthorizationCodeFlow.Builder(BearerToken.authorizationHeaderAccessMethod(),
                 new NetHttpTransport(),
                 new JacksonFactory(),
-                new GenericUrl("http://keycloak-openfact-dev.192.168.42.56.nip.io/auth/realms/openfact/protocol/openid-connect/token"),
-                new BasicAuthentication("openfact", "51d552f9-16e3-4544-9754-aa02f2cff3de"),
-                "openfact",
-                "http://keycloak-openfact-dev.192.168.42.56.nip.io/auth/realms/openfact/protocol/openid-connect/auth")
+                new GenericUrl(kcConfig.getTokenUrl()),
+                new BasicAuthentication(kcConfig.getClientID(), kcConfig.getClientSecret()),
+                kcConfig.getClientID(),
+                kcConfig.getAuthorizationUrl())
                 .setScopes(scopes)
                 .build();
     }
@@ -34,6 +34,9 @@ public class OAuth2Utils {
         String redirect = "?redirect=" + req.getParameter("redirect");
         GenericUrl url = new GenericUrl(req.getRequestURL().toString());
         url.setRawPath("/api/login/authorize_callback");
-        return url.build() + redirect;
+
+        String redirect_url = url.build() + redirect;
+        logger.info("redirect_url:" + redirect_url);
+        return redirect_url;
     }
 }
