@@ -1,12 +1,11 @@
-package org.openfact;
+package org.openfact.services.resources.oauth2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.api.client.auth.oauth2.*;
+import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
+import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeCallbackServlet;
-import org.keycloak.jose.jws.JWSInputException;
-import org.keycloak.representations.RefreshToken;
-import org.keycloak.util.TokenUtil;
+import org.openfact.representation.idm.TokenRepresentation;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,24 +20,9 @@ public class OAuth2ServletCallback extends AbstractAuthorizationCodeCallbackServ
 
     @Override
     protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential) throws ServletException, IOException {
-        RefreshToken refreshToken = null;
-        try {
-            refreshToken = TokenUtil.getRefreshToken(credential.getRefreshToken());
-        } catch (JWSInputException e) {
-            e.printStackTrace();
-        }
-
         ObjectMapper mapper = new ObjectMapper();
-        ObjectNode token = mapper.createObjectNode()
-                .put("token_type", "Bearer")
-                .put("access_token", credential.getAccessToken())
-                .put("expires_in", credential.getExpirationTimeMilliseconds())
-                .put("refresh_token", credential.getRefreshToken())
-                .put("refresh_expires_in", refreshToken.getExpiration());
-        String tokenString = mapper.writeValueAsString(token);
-
-        String redirect = req.getParameter("redirect");
-        resp.sendRedirect(redirect + "?token_json=" + tokenString);
+        TokenRepresentation token = OAuth2Utils.toRepresentation(credential);
+        resp.sendRedirect(req.getParameter("redirect") + "?token_json=" + mapper.writeValueAsString(token));
     }
 
     @Override

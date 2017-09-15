@@ -6,5 +6,6 @@
   "credentials": {
     "secret": "${sso.credentials.secret}"
   },
+  "bearer-only": true,
   "enable-cors": true
 }

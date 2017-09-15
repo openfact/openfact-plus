@@ -1,4 +1,4 @@
-package org.openfact;
+package org.openfact.services.resources.oauth2;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeServlet;
@@ -28,10 +28,4 @@ public class OAuth2Servlet extends AbstractAuthorizationCodeServlet {
         return UUID.randomUUID().toString();
     }
 
-//    @Override
-//    protected void onAuthorization(HttpServletRequest req, HttpServletResponse resp,
-//                                   AuthorizationCodeRequestUrl authorizationUrl) throws ServletException, IOException {
-//        authorizationUrl.setState(UUID.randomUUID().toString());
-//        super.onAuthorization(req, resp, authorizationUrl);
-//    }
 }
