@@ -1,7 +1,6 @@
 package org.openfact.batchs;
 
 import org.jboss.logging.Logger;
-import org.openfact.services.resources.DocumentsService;
 
 import javax.batch.api.listener.JobListener;
 import javax.batch.runtime.context.StepContext;
@@ -13,7 +12,7 @@ import javax.inject.Named;
 @Dependent
 public class LoggerListener implements JobListener {
 
-    private static final Logger logger = Logger.getLogger(DocumentsService.class);
+    private static final Logger logger = Logger.getLogger(LoggerListener.class);
 
     @Inject
     private StepContext stepContext;
