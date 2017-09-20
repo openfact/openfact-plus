@@ -22,7 +22,7 @@ public class DocumentManager {
     private FileProvider fileProvider;
 
     @Inject
-    private DocumentProvider documentProvider;
+    private UBLDocumentProvider documentProvider;
 
     /**
      * @param bytes
@@ -30,7 +30,7 @@ public class DocumentManager {
      * @throws StorageException    in case could not be persist file on storage
      * @throws ModelException      in case unexpected error happens
      */
-    public DocumentModel importDocument(byte[] bytes) throws ParseExceptionModel, StorageException {
+    public UBLDocumentModel importDocument(byte[] bytes) throws ParseExceptionModel, StorageException {
         Document document;
         try {
             document = OpenfactModelUtils.toDocument(bytes);
@@ -47,7 +47,7 @@ public class DocumentManager {
      * @throws StorageException    in case could not be persist file on storage
      * @throws ModelException      in case unexpected error happens
      */
-    public DocumentModel importDocument(InputStream inputStream) throws ParseExceptionModel, StorageException {
+    public UBLDocumentModel importDocument(InputStream inputStream) throws ParseExceptionModel, StorageException {
         Document document;
         try {
             document = OpenfactModelUtils.toDocument(inputStream);
@@ -64,7 +64,7 @@ public class DocumentManager {
      * @throws StorageException    in case could not be persist file on storage
      * @throws ModelException      in case unexpected error happens
      */
-    public DocumentModel importDocument(Document document) throws ParseExceptionModel, StorageException {
+    public UBLDocumentModel importDocument(Document document) throws ParseExceptionModel, StorageException {
         // Persist File
         FileModel fileModel;
         try {

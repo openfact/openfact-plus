@@ -9,8 +9,8 @@ import java.util.Map;
 
 @Entity
 @Indexed
-@Table(name = "INDEXED_DOCUMENT")
-public class IndexedDocumentEntity implements DocumentEntity {
+@Table(name = "UBL_DOCUMENT")
+public class UBLDocumentEntity {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
@@ -29,10 +29,12 @@ public class IndexedDocumentEntity implements DocumentEntity {
     @Column(name = "FILE_ID")
     private String fileId;
 
-    @Transient
-    private Map<String, Object> attributes = new HashMap<>();
+    @ElementCollection
+    @MapKeyColumn(name="NAME")
+    @Column(name="VALUE")
+    @CollectionTable(name="UBL_DOCUMENT_TAGS", joinColumns={ @JoinColumn(name="UBL_DOCUMENT_ID") })
+    private Map<String, String> tags = new HashMap<>();
 
-    @Override
     public String getId() {
         return id;
     }
@@ -41,7 +43,6 @@ public class IndexedDocumentEntity implements DocumentEntity {
         this.id = id;
     }
 
-    @Override
     public String getType() {
         return type;
     }
@@ -50,7 +51,6 @@ public class IndexedDocumentEntity implements DocumentEntity {
         this.type = type;
     }
 
-    @Override
     public String getAssignedId() {
         return assignedId;
     }
@@ -59,7 +59,6 @@ public class IndexedDocumentEntity implements DocumentEntity {
         this.assignedId = assignedId;
     }
 
-    @Override
     public String getFileId() {
         return fileId;
     }
@@ -68,12 +67,11 @@ public class IndexedDocumentEntity implements DocumentEntity {
         this.fileId = fileId;
     }
 
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
+    public Map<String, String> getTags() {
+        return tags;
     }
 
-    public void setAttributes(Map<String, Object> attributes) {
-        this.attributes = attributes;
+    public void setTags(Map<String, String> tags) {
+        this.tags = tags;
     }
 }

@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DocumentProviderTest extends AbstractModelTest {
 
     @Inject
-    public DocumentProvider documentProvider;
+    public UBLDocumentProvider documentProvider;
 
     @Inject
     public FileProvider fileProvider;
@@ -33,7 +33,7 @@ public class DocumentProviderTest extends AbstractModelTest {
         byte[] bytes = OpenfactModelUtils.toByteArray(xml);
 
         FileModel file = fileProvider.addFile(bytes, ".xml");
-        DocumentModel document1 = documentProvider.addDocument(file);
+        UBLDocumentModel document1 = documentProvider.addDocument(file);
 
         assertThat(document1).isNotNull()
                 .matches(u -> u.getId() != null)

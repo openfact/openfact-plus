@@ -1,11 +1,11 @@
 package org.openfact.models.db.es;
 
 import org.jboss.logging.Logger;
-import org.openfact.models.DocumentModel;
-import org.openfact.models.DocumentProvider;
+import org.openfact.models.UBLDocumentModel;
+import org.openfact.models.UBLDocumentProvider;
 import org.openfact.models.FileModel;
 import org.openfact.models.ModelException;
-import org.openfact.models.db.es.entity.DocumentEntity;
+import org.openfact.models.db.es.entity.UBLDocumentEntity;
 import org.openfact.models.db.es.mapper.MapperTypeLiteral;
 import org.openfact.models.utils.OpenfactModelUtils;
 
@@ -17,19 +17,19 @@ import javax.persistence.EntityManager;
 import java.lang.annotation.Annotation;
 
 @Stateless
-public class ESDocumentProvider implements DocumentProvider {
+public class ESUBLDocumentProvider implements UBLDocumentProvider {
 
-    private static final Logger logger = Logger.getLogger(ESDocumentProvider.class);
+    private static final Logger logger = Logger.getLogger(ESUBLDocumentProvider.class);
 
     @Inject
     private EntityManager em;
 
     @Inject
     @Any
-    private Instance<DocumentMapper> mappers;
+    private Instance<UBLDocumentMapper> mappers;
 
     @Override
-    public DocumentModel addDocument(FileModel file) {
+    public UBLDocumentModel addDocument(FileModel file) {
         String documentType;
         try {
             documentType = OpenfactModelUtils.getDocumentType(file.getFile());
@@ -38,16 +38,17 @@ public class ESDocumentProvider implements DocumentProvider {
         }
 
         Annotation annotation = new MapperTypeLiteral(documentType);
-        Instance<DocumentMapper> instance = mappers.select(annotation);
+        Instance<UBLDocumentMapper> instance = mappers.select(annotation);
         if (instance.isAmbiguous() || instance.isUnsatisfied()) {
             logger.error("Could not find a reader for:" + documentType);
             throw new ModelException("Document[" + documentType + "] not supported");
         }
 
-        DocumentMapper reader = instance.get();
-        DocumentEntity entity = reader.buildEntity(file);
+        UBLDocumentEntity entity = instance.get().map(file);
+        entity.setId(OpenfactModelUtils.generateId());
         em.persist(entity);
-        return new DocumentAdapter(em, entity);
+        
+        return new UBLDocumentAdapter(em, entity);
     }
 
 }

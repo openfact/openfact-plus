@@ -36,7 +36,7 @@ public class FileAdapter implements FileModel {
         try {
             return Files.readAllBytes(path);
         } catch (IOException e) {
-            throw new StorageException("Could not buildEntity file: " + path.toAbsolutePath().toString(), e);
+            throw new StorageException("Could not map file: " + path.toAbsolutePath().toString(), e);
         }
     }
 }

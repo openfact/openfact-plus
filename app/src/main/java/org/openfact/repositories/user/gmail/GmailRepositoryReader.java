@@ -32,7 +32,7 @@ public class GmailRepositoryReader implements UserRepositoryReader {
                     .map(f -> new UserRepositoryElementAdapter(userRepository, client, f))
                     .collect(Collectors.toList());
         } catch (IOException e) {
-            throw new UserRepositoryReadException("Could not buildEntity gmail messages", e);
+            throw new UserRepositoryReadException("Could not map gmail messages", e);
         }
         return result;
     }

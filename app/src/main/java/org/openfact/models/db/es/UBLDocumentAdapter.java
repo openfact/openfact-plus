@@ -1,17 +1,16 @@
 package org.openfact.models.db.es;
 
-import org.openfact.models.DocumentModel;
-import org.openfact.models.db.es.entity.DocumentEntity;
+import org.openfact.models.UBLDocumentModel;
+import org.openfact.models.db.es.entity.UBLDocumentEntity;
 
 import javax.persistence.EntityManager;
-import java.util.Map;
 
-public class DocumentAdapter implements DocumentModel {
+public class UBLDocumentAdapter implements UBLDocumentModel {
 
     private final EntityManager em;
-    private final DocumentEntity persistedDocument;
+    private final UBLDocumentEntity persistedDocument;
 
-    public DocumentAdapter(EntityManager em, DocumentEntity persistedDocument) {
+    public UBLDocumentAdapter(EntityManager em, UBLDocumentEntity persistedDocument) {
         this.em = em;
         this.persistedDocument = persistedDocument;
     }
@@ -29,11 +28,6 @@ public class DocumentAdapter implements DocumentModel {
     @Override
     public String getAssignedId() {
         return persistedDocument.getAssignedId();
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return persistedDocument.getAttributes();
     }
 
     @Override

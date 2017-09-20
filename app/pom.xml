@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -123,6 +122,14 @@
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>camel-jaxb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>camel-stream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>camel-ftp</artifactId>
         </dependency>
 
         <dependency>
@@ -572,8 +579,7 @@
                             <diffChangeLogFile>${project.build.directory}/changelog-diff.xml</diffChangeLogFile>
                             <outputChangeLogFile>${project.build.directory}/changelog-output.xml</outputChangeLogFile>
                             <dropFirst>true</dropFirst>
-                            <referenceUrl>hibernate:spring:org.openfact?dialect=org.hibernate.dialect.H2Dialect
-                            </referenceUrl>
+                            <referenceUrl>hibernate:spring:org.openfact?dialect=org.hibernate.dialect.H2Dialect</referenceUrl>
                         </configuration>
                         <executions>
                             <execution>

@@ -2,7 +2,7 @@ package org.openfact.models;
 
 import java.util.Map;
 
-public interface DocumentModel {
+public interface UBLDocumentModel {
 
     String getId();
 
@@ -11,7 +11,5 @@ public interface DocumentModel {
     String getAssignedId();
 
     String getFileId();
-
-    Map<String, Object> getAttributes();
 
 }
