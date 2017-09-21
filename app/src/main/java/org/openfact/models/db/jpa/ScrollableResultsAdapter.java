@@ -7,11 +7,11 @@ import java.util.function.Function;
 public class ScrollableResultsAdapter<T, R> /*implements ScrollableResultsModel<R>*/ {
 
 //    private final ScrollableResults scroll;
-//    private final Function<T, R> mapper;
+//    private final Function<T, R> reader;
 //
-//    public ScrollableResultsAdapter(ScrollableResults scroll, Function<T, R> mapper) {
+//    public ScrollableResultsAdapter(ScrollableResults scroll, Function<T, R> reader) {
 //        this.scroll = scroll;
-//        this.mapper = mapper;
+//        this.reader = reader;
 //    }
 //
 //    @Override
@@ -76,7 +76,7 @@ public class ScrollableResultsAdapter<T, R> /*implements ScrollableResultsModel<
 //
 //    @Override
 //    public R get() {
-//        return mapper.apply((T) scroll.get(0));
+//        return reader.apply((T) scroll.get(0));
 //    }
 
 }

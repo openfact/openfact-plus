@@ -46,11 +46,11 @@ public class OfflineRefreshTokenProcessor implements ItemProcessor {
 //
 //        // Check if user has already had supported repositories
 //        List<BrokerType> supportedIDPS = Arrays.asList(BrokerType.values());
-//        boolean result = user.getRepositories().stream().map(UserRepositoryModel::getType).allMatch(supportedIDPS::contains);
+//        boolean result = user.getRepositories().stream().read(UserRepositoryModel::getType).allMatch(supportedIDPS::contains);
 //        if (result) {
 //            return null;
 //        }
-//        supportedIDPS.removeAll(user.getRepositories().stream().map(UserRepositoryModel::getType).collect(Collectors.toList()));
+//        supportedIDPS.removeAll(user.getRepositories().stream().read(UserRepositoryModel::getType).collect(Collectors.toList()));
 //        return new MappedUser(user, supportedIDPS);
         return null;
     }

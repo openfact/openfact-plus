@@ -38,7 +38,7 @@ public class KeycloakRule extends ExternalResource {
         usernameProtocolMapper.setName("username");
         usernameProtocolMapper.setConsentText("${username}");
         usernameProtocolMapper.setProtocol("openid-connect");
-        usernameProtocolMapper.setProtocolMapper("oidc-usermodel-property-mapper");
+        usernameProtocolMapper.setProtocolMapper("oidc-usermodel-property-reader");
         usernameProtocolMapper.setConsentRequired(true);
         usernameProtocolMapper.setConfig(new HashMap<String, String>() {{
             put("user.attribute", "username");
@@ -52,7 +52,7 @@ public class KeycloakRule extends ExternalResource {
         ProtocolMapperRepresentation spaceProtocolMapper = new ProtocolMapperRepresentation();
         spaceProtocolMapper.setName(Constants.KC_SPACE_ATTRIBUTE_NAME);
         spaceProtocolMapper.setProtocol("openid-connect");
-        spaceProtocolMapper.setProtocolMapper("oidc-usermodel-attribute-mapper");
+        spaceProtocolMapper.setProtocolMapper("oidc-usermodel-attribute-reader");
         spaceProtocolMapper.setConsentRequired(false);
         spaceProtocolMapper.setConfig(new HashMap<String, String>() {{
             put("user.attribute", Constants.KC_SPACE_ATTRIBUTE_NAME);

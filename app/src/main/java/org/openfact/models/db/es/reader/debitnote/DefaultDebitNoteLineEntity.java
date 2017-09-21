@@ -1,6 +1,7 @@
-package org.openfact.models.db.es.mapper.debitnote;
+package org.openfact.models.db.es.reader.debitnote;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
@@ -12,6 +13,7 @@ public class DefaultDebitNoteLineEntity {
     @Column(name = "id", length = 36)
     private String id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey, name = "debit_note_id")
     private DefaultDebitNoteEntity debitNote;

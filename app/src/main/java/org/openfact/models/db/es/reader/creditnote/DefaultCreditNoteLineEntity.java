@@ -1,6 +1,7 @@
-package org.openfact.models.db.es.mapper.creditnote;
+package org.openfact.models.db.es.reader.creditnote;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
@@ -12,6 +13,7 @@ public class DefaultCreditNoteLineEntity {
     @Column(name = "id", length = 36)
     private String id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey, name = "credit_note_id")
     private DefaultCreditNoteEntity creditNote;

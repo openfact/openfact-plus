@@ -2,12 +2,14 @@ package org.openfact.models.utils;
 
 import org.openfact.models.*;
 import org.openfact.representation.idm.*;
+import org.openfact.services.resources.DocumentsService;
 import org.openfact.services.resources.SpacesService;
 import org.openfact.services.resources.UsersService;
 
 import javax.ejb.Stateless;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.HashMap;
 
 @Stateless
 public class ModelToRepresentation {
@@ -99,9 +101,57 @@ public class ModelToRepresentation {
         return rep;
     }
 
+    public DocumentRepresentation.Data toRepresentation(DocumentModel model, UriInfo uriInfo) {
+        DocumentRepresentation.Data rep = new DocumentRepresentation.Data();
+
+        rep.setId(model.getId());
+        rep.setType(ModelType.UBL_DOCUMENT.getAlias());
+
+        // Links
+        GenericLinksRepresentation links = new GenericLinksRepresentation();
+        URI self = uriInfo.getBaseUriBuilder()
+                .path(DocumentsService.class)
+                .path(DocumentsService.class, "getDocument")
+                .build(model.getId());
+        links.setSelf(self.toString());
+
+        rep.setLinks(links);
+
+        // Relationships
+        DocumentRepresentation.Relationships relationships = new DocumentRepresentation.Relationships();
+        DocumentRepresentation.OwnedBy ownedBy = new DocumentRepresentation.OwnedBy();
+        relationships.setOwnedBy(ownedBy);
+        rep.setRelationships(relationships);
+
+        SpaceRepresentation.Data spaceData = new SpaceRepresentation.Data();
+        spaceData.setId(model.getOwner().getId());
+        spaceData.setType(ModelType.SPACES.getAlias());
+        ownedBy.setData(spaceData); // save
+
+        GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
+        ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
+                .path(UsersService.class)
+                .path(UsersService.class, "getUser")
+                .build(model.getOwner().getIdentityID()).toString());
+        ownedBy.setLinks(ownedLinks); // save
+
+        // Attributes
+        DocumentRepresentation.Attributes attributes = new DocumentRepresentation.Attributes();
+        rep.setAttributes(attributes);
+
+        attributes.setId(model.getId());
+        attributes.setAssignedId(model.getAssignedId());
+        attributes.setDocumentType(model.getType());
+        attributes.setTags(new HashMap<>(model.getTags()));
+        attributes.setCreatedAt(model.getCreatedAt());
+        attributes.setUpdatedAt(model.getUpdatedAt());
+
+        return rep;
+    }
+
 //    public SpaceRepresentation toRepresentation(SharedSpaceModel model) {
 //        SpaceRepresentation rep = toRepresentation(model.getSpace(), false);
-//        rep.setPermissions(model.getPermissions().stream().map(PermissionType::getName).collect(Collectors.toList()));
+//        rep.setPermissions(model.getPermissions().stream().read(PermissionType::getName).collect(Collectors.toList()));
 //        return rep;
 //    }
 //
@@ -109,7 +159,7 @@ public class ModelToRepresentation {
 //        RequestAccessToSpaceRepresentation rep = new RequestAccessToSpaceRepresentation();
 //
 //        rep.setMessage(model.getMessage());
-//        rep.setPermissions(model.getPermissions().stream().map(PermissionType::getName).collect(Collectors.toList()));
+//        rep.setPermissions(model.getPermissions().stream().read(PermissionType::getName).collect(Collectors.toList()));
 //        rep.setStatus(model.getStatus().getName());
 //
 //        return rep;

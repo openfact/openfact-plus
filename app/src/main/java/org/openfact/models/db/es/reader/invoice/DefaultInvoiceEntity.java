@@ -1,8 +1,10 @@
-package org.openfact.models.db.es.mapper.creditnote;
+package org.openfact.models.db.es.reader.invoice;
 
 import org.hibernate.search.annotations.Indexed;
+import org.openfact.models.db.es.entity.DocumentEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,13 +12,21 @@ import java.util.List;
 
 @Entity
 @Indexed
-@Table(name = "credit_note")
-public class DefaultCreditNoteEntity {
+@Table(name = "invoice")
+@NamedQueries({
+        @NamedQuery(name = "getInvoiceByDocumentId", query = "select d from DefaultInvoiceEntity d inner join d.document u where u.id = :documentId")
+})
+public class DefaultInvoiceEntity {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
     @Column(name = "id", length = 36)
     private String id;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ubl_document_id", foreignKey = @ForeignKey)
+    private DocumentEntity document;
 
     @Column(name = "assigned_id")
     private String assignedId;
@@ -62,8 +72,8 @@ public class DefaultCreditNoteEntity {
     /*
      * Lines
      * */
-    @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true, mappedBy = "creditNote", fetch = FetchType.LAZY)
-    private List<DefaultCreditNoteLineEntity> lines = new ArrayList<>();
+    @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true, mappedBy = "invoice", fetch = FetchType.LAZY)
+    private List<DefaultInvoiceLineEntity> lines = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -153,11 +163,19 @@ public class DefaultCreditNoteEntity {
         this.payableAmount = payableAmount;
     }
 
-    public List<DefaultCreditNoteLineEntity> getLines() {
+    public List<DefaultInvoiceLineEntity> getLines() {
         return lines;
     }
 
-    public void setLines(List<DefaultCreditNoteLineEntity> lines) {
+    public void setLines(List<DefaultInvoiceLineEntity> lines) {
         this.lines = lines;
+    }
+
+    public DocumentEntity getDocument() {
+        return document;
+    }
+
+    public void setDocument(DocumentEntity document) {
+        this.document = document;
     }
 }

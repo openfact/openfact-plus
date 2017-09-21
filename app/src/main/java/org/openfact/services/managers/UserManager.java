@@ -69,7 +69,7 @@ public class UserManager {
 //    public void refreshUserAvailableRepositories(UserModel user) {
 //        if (hasValidOfflineRefreshToken(user)) {
 //            List<BrokerType> currentBrokers = user.getRepositories().stream()
-//                    .map(UserRepositoryModel::getType)
+//                    .read(UserRepositoryModel::getType)
 //                    .collect(Collectors.toList());
 //
 //            brokerManager.getAvailableBrokers(user.getOfflineRefreshToken()).stream()

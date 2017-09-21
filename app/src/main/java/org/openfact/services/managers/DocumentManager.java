@@ -22,7 +22,7 @@ public class DocumentManager {
     private FileProvider fileProvider;
 
     @Inject
-    private UBLDocumentProvider documentProvider;
+    private DocumentProvider documentProvider;
 
     /**
      * @param bytes
@@ -30,7 +30,7 @@ public class DocumentManager {
      * @throws StorageException    in case could not be persist file on storage
      * @throws ModelException      in case unexpected error happens
      */
-    public UBLDocumentModel importDocument(byte[] bytes) throws ParseExceptionModel, StorageException {
+    public DocumentModel importDocument(byte[] bytes) throws ParseExceptionModel, StorageException {
         Document document;
         try {
             document = OpenfactModelUtils.toDocument(bytes);
@@ -47,7 +47,7 @@ public class DocumentManager {
      * @throws StorageException    in case could not be persist file on storage
      * @throws ModelException      in case unexpected error happens
      */
-    public UBLDocumentModel importDocument(InputStream inputStream) throws ParseExceptionModel, StorageException {
+    public DocumentModel importDocument(InputStream inputStream) throws ParseExceptionModel, StorageException {
         Document document;
         try {
             document = OpenfactModelUtils.toDocument(inputStream);
@@ -64,7 +64,7 @@ public class DocumentManager {
      * @throws StorageException    in case could not be persist file on storage
      * @throws ModelException      in case unexpected error happens
      */
-    public UBLDocumentModel importDocument(Document document) throws ParseExceptionModel, StorageException {
+    public DocumentModel importDocument(Document document) throws ParseExceptionModel, StorageException {
         // Persist File
         FileModel fileModel;
         try {
@@ -82,6 +82,30 @@ public class DocumentManager {
             logger.infof("Rollback file result={}", result);
             throw new ModelException("Could not persist document model", e);
         }
+    }
+
+    public boolean removeDocument(DocumentModel ublDocument) {
+        FileModel file = fileProvider.getFile(ublDocument.getFileId());
+
+        // Delete document
+        boolean result = documentProvider.removeDocument(ublDocument);
+        if (!result) {
+            return false;
+        }
+
+        // Delete file
+        try {
+            fileProvider.removeFile(file);
+        } catch (StorageException e) {
+            try {
+                fileProvider.removeFile(file);
+            } catch (StorageException e1) {
+                logger.error("Could not remove file:" + file.getId());
+                logger.warn("Transaction was not rolled back");
+            }
+        }
+
+        return true;
     }
 
 }

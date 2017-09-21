@@ -1,6 +1,8 @@
 package org.openfact.models.db.es.entity;
 
 import org.hibernate.search.annotations.Indexed;
+import org.openfact.models.db.jpa.entity.SpaceEntity;
+import org.openfact.models.db.jpa.entity.UserEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,7 +12,7 @@ import java.util.Map;
 @Entity
 @Indexed
 @Table(name = "UBL_DOCUMENT")
-public class UBLDocumentEntity {
+public class DocumentEntity {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
@@ -34,6 +36,11 @@ public class UBLDocumentEntity {
     @Column(name="VALUE")
     @CollectionTable(name="UBL_DOCUMENT_TAGS", joinColumns={ @JoinColumn(name="UBL_DOCUMENT_ID") })
     private Map<String, String> tags = new HashMap<>();
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "space_id", foreignKey = @ForeignKey)
+    private SpaceEntity space;
 
     public String getId() {
         return id;
@@ -73,5 +80,13 @@ public class UBLDocumentEntity {
 
     public void setTags(Map<String, String> tags) {
         this.tags = tags;
+    }
+
+    public SpaceEntity getSpace() {
+        return space;
+    }
+
+    public void setSpace(SpaceEntity space) {
+        this.space = space;
     }
 }

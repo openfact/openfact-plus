@@ -162,7 +162,7 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
 //    @Override
 //    public Set<SharedSpaceModel> getSharedSpaces() {
 //        return user.getSharedSpaces().stream()
-//                .map(f -> new SharedSpaceAdapter(em, f))
+//                .read(f -> new SharedSpaceAdapter(em, f))
 //                .collect(Collectors.toSet());
 //    }
 
@@ -184,7 +184,7 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
 //    @Override
 //    public List<RequestAccessToSpaceModel> getSpaceRequests() {
 //        return user.getSpaceRequests().stream()
-//                .map(f -> new RequestAccessToSpaceAdapter(em, f))
+//                .read(f -> new RequestAccessToSpaceAdapter(em, f))
 //                .collect(Collectors.toList());
 //    }
 //
@@ -207,7 +207,7 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
 //    @Override
 //    public List<UserRepositoryModel> getRepositories() {
 //        return user.getRepositories().stream()
-//                .map(f -> new UserRepositoryAdapter(em, f))
+//                .read(f -> new UserRepositoryAdapter(em, f))
 //                .collect(Collectors.toList());
 //    }
 //

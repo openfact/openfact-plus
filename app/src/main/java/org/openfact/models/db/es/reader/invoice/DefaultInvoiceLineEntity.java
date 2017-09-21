@@ -1,4 +1,4 @@
-package org.openfact.models.db.es.mapper.invoice;
+package org.openfact.models.db.es.reader.invoice;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,6 +13,7 @@ public class DefaultInvoiceLineEntity {
     @Column(name = "id", length = 36)
     private String id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey, name = "invoice_id")
     private DefaultInvoiceEntity invoice;

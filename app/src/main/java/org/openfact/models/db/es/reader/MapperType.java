@@ -1,4 +1,4 @@
-package org.openfact.models.db.es.mapper;
+package org.openfact.models.db.es.reader;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.*;

@@ -3,21 +3,16 @@ package org.openfact.services.resources;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.openfact.models.UBLDocumentModel;
-import org.openfact.models.ParseExceptionModel;
-import org.openfact.models.StorageException;
+import org.openfact.models.*;
+import org.openfact.models.utils.ModelToRepresentation;
+import org.openfact.representation.idm.SpaceRepresentation;
 import org.openfact.services.ErrorResponseException;
 import org.openfact.services.managers.DocumentManager;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -29,8 +24,25 @@ public class DocumentsService {
 
     private static final Logger logger = Logger.getLogger(DocumentsService.class);
 
+    @Context
+    private UriInfo uriInfo;
+
+    @Inject
+    private DocumentProvider documentProvider;
+
     @Inject
     private DocumentManager documentManager;
+
+    @Inject
+    private ModelToRepresentation modelToRepresentation;
+
+    private DocumentModel getDocumentById(String documentId) {
+        DocumentModel ublDocument = documentProvider.getDocument(documentId);
+        if (ublDocument == null) {
+            throw new NotFoundException();
+        }
+        return ublDocument;
+    }
 
     /**
      * @return javax.ws.rs.core.Response including document persisted information
@@ -54,7 +66,7 @@ public class DocumentsService {
             }
 
             // Save document
-            UBLDocumentModel documentModel = null;
+            DocumentModel documentModel = null;
             try {
                 documentModel = documentManager.importDocument(inputStream);
             } catch (ParseExceptionModel e) {
@@ -80,6 +92,22 @@ public class DocumentsService {
             }
         }
         return null;
+    }
+
+    @GET
+    @Path("{documentId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public SpaceRepresentation getSpace(@PathParam("documentId") String documentId) {
+        DocumentModel ublDocument = getDocumentById(documentId);
+        return modelToRepresentation.toRepresentation(ublDocument, uriInfo).toSpaceRepresentation();
+    }
+
+    @DELETE
+    @Path("{documentId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void deleteSpace(@PathParam("documentId") String documentId) {
+        DocumentModel ublDocument = getDocumentById(documentId);
+        documentManager.removeDocument(ublDocument);
     }
 
 }

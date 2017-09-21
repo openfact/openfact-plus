@@ -132,7 +132,7 @@ public class UsersService {
 //        UserModel user = getUser(userId);
 //
 //        return user.getRepositories().stream()
-//                .map(f -> modelToRepresentation.toRepresentation(f))
+//                .read(f -> modelToRepresentation.toRepresentation(f))
 //                .collect(Collectors.toList());
 //    }
 //
@@ -158,9 +158,9 @@ public class UsersService {
 //        UserModel user = getUser(userId);
 //
 //        Stream<SpaceRepresentation> sharedSpaces = user.getSharedSpaces().stream()
-//                .map(f -> modelToRepresentation.toRepresentation(f));
+//                .read(f -> modelToRepresentation.toRepresentation(f));
 //        Stream<SpaceRepresentation> ownedSpaces = user.getOwnedSpaces().stream()
-//                .map(f -> modelToRepresentation.toRepresentation(f, true));
+//                .read(f -> modelToRepresentation.toRepresentation(f, true));
 //
 //        return Stream.concat(ownedSpaces, sharedSpaces).collect(Collectors.toList());
 //    }

@@ -87,8 +87,8 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
     @Override
     public ScrollableResultsModel<UserModel> getScrollableUsers() {
 //        ScrollableResults scrollableResults = getSession().createNamedQuery("getAllUsers").scroll(ScrollMode.FORWARD_ONLY);
-//        Function<UserEntity, UserModel> mapper = entity -> new UserAdapter(em, entity);
-//        return new ScrollableResultsAdapter<>(scrollableResults, mapper);
+//        Function<UserEntity, UserModel> reader = entity -> new UserAdapter(em, entity);
+//        return new ScrollableResultsAdapter<>(scrollableResults, reader);
         return null;
     }
 
