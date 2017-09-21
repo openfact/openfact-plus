@@ -1,4 +1,4 @@
-package org.openfact.models.db.jpa;
+package org.openfact.models.db;
 
 
 public interface JpaModel<T> {

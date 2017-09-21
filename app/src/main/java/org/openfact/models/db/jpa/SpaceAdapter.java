@@ -1,8 +1,8 @@
 package org.openfact.models.db.jpa;
 
 import org.openfact.models.*;
-import org.openfact.models.db.jpa.entity.CollaboratorEntity;
-import org.openfact.models.db.jpa.entity.RequestAccessToSpaceEntity;
+import org.openfact.models.db.CollaboratorEntity;
+import org.openfact.models.db.JpaModel;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.db.jpa.entity.UserEntity;
 
@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {

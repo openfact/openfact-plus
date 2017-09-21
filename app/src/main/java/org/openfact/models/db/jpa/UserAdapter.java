@@ -2,9 +2,8 @@ package org.openfact.models.db.jpa;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.openfact.models.*;
+import org.openfact.models.db.JpaModel;
 import org.openfact.models.db.jpa.entity.UserEntity;
-import org.openfact.models.db.jpa.entity.UserRepositoryEntity;
-import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.persistence.EntityManager;
 import java.util.*;

@@ -1,7 +1,8 @@
 package org.openfact.models.db.jpa.entity;
 
+import org.openfact.models.db.CreatableEntity;
+
 import javax.persistence.PrePersist;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 
 public class CreatedAtListener {

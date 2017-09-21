@@ -11,12 +11,15 @@ import org.openfact.models.db.es.DocumentReader;
 import org.openfact.models.db.es.GenericDocument;
 import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.reader.MapperType;
+import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 import org.w3c.dom.Document;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Stateless
 @MapperType(value = "Invoice")
@@ -27,25 +30,32 @@ public class DefaultInvoiceReader implements DocumentReader {
 
     @Override
     public GenericDocument read(FileModel file) {
-        byte[] bytes;
-        Document document;
+        InvoiceType invoiceType;
         try {
-            bytes = file.getFile();
-            document = OpenfactModelUtils.toDocument(bytes);
+            byte[] bytes = file.getFile();
+            Document document = OpenfactModelUtils.toDocument(bytes);
+            invoiceType = UBL21Reader.invoice().read(document);
         } catch (Exception e) {
             throw new ModelException("Could not read bytes from file");
         }
+        if (invoiceType == null) {
+            return null;
+        }
 
-        InvoiceType invoiceType = UBL21Reader.invoice().read(document);
+        SpaceEntity spaceEntity = getSpace(invoiceType);
+        if (spaceEntity == null) {
+            return null;
+        }
 
-        DocumentEntity entity = new DocumentEntity();
-        entity.setFileId(file.getId());
-        entity.setAssignedId(invoiceType != null ? invoiceType.getIDValue() : null);
+        DocumentEntity documentEntity = new DocumentEntity();
+        documentEntity.setFileId(file.getId());
+        documentEntity.setAssignedId(invoiceType.getIDValue());
+        documentEntity.setSpace(spaceEntity);
 
         return new GenericDocument() {
             @Override
             public DocumentEntity getEntity() {
-                return entity;
+                return documentEntity;
             }
 
             @Override
@@ -53,6 +63,18 @@ public class DefaultInvoiceReader implements DocumentReader {
                 return invoiceType;
             }
         };
+    }
+
+    private SpaceEntity getSpace(InvoiceType invoiceType) {
+        SupplierPartyType accountingSupplierParty = invoiceType.getAccountingSupplierParty();
+        if (accountingSupplierParty == null) return null;
+
+        String assignedAccountIDValue = accountingSupplierParty.getCustomerAssignedAccountIDValue();
+        TypedQuery<SpaceEntity> typedQuery = em.createNamedQuery("getSpaceByAssignedId", SpaceEntity.class);
+        typedQuery.setParameter("assignedId", assignedAccountIDValue);
+        List<SpaceEntity> resultList = typedQuery.getResultList();
+        if (resultList.isEmpty()) return null;
+        return resultList.get(0);
     }
 
 }

@@ -1,8 +1,7 @@
-package org.openfact.models.db.jpa.entity;
+package org.openfact.models.db;
 
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 
 public class UpdatedAtListener {

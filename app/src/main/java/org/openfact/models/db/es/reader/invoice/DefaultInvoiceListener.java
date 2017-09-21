@@ -6,6 +6,8 @@ import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
 import org.openfact.models.DocumentModel;
 import org.openfact.models.DocumentModel.DocumentCreationEvent;
 import org.openfact.models.DocumentModel.DocumentRemovedEvent;
+import org.openfact.models.db.es.DocumentAdapter;
+import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.reader.MapperType;
 import org.openfact.models.utils.OpenfactModelUtils;
 
@@ -23,11 +25,13 @@ public class DefaultInvoiceListener {
     private EntityManager em;
 
     public void creationListener(@Observes() @MapperType(value = "Invoice") DocumentCreationEvent createdDocument) {
+        DocumentEntity documentEntity = DocumentAdapter.toEntity(createdDocument.getCreatedDocument(), em);
         InvoiceType invoiceType = (InvoiceType) createdDocument.getDocumentType();
 
         DefaultInvoiceEntity invoiceEntity = new DefaultInvoiceEntity();
         invoiceEntity.setId(OpenfactModelUtils.generateId());
         invoiceEntity.setAssignedId(invoiceType.getIDValue());
+        invoiceEntity.setDocument(documentEntity);
         if (invoiceType.getIssueDateValue() != null) {
             invoiceEntity.setIssueDate(invoiceType.getIssueDateValue().toGregorianCalendar().getTime());
         }

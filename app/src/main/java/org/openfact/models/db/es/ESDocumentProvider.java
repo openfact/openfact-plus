@@ -67,6 +67,9 @@ public class ESDocumentProvider implements DocumentProvider {
         String documentType = getDocumentType(file);
         DocumentReader documentReader = getDocumentReader(documentType);
         GenericDocument genericDocument = documentReader.read(file);
+        if (genericDocument == null) {
+            throw new ModelException("Could not read all required fields on Invoice");
+        }
 
         DocumentEntity documentEntity = genericDocument.getEntity();
         documentEntity.setId(OpenfactModelUtils.generateId());

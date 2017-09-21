@@ -3,9 +3,12 @@ package org.openfact.services.resources;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.openfact.models.*;
+import org.openfact.models.DocumentModel;
+import org.openfact.models.DocumentProvider;
+import org.openfact.models.ParseExceptionModel;
+import org.openfact.models.StorageException;
 import org.openfact.models.utils.ModelToRepresentation;
-import org.openfact.representation.idm.SpaceRepresentation;
+import org.openfact.representation.idm.DocumentRepresentation;
 import org.openfact.services.ErrorResponseException;
 import org.openfact.services.managers.DocumentManager;
 
@@ -50,7 +53,7 @@ public class DocumentsService {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response importDocument(final MultipartFormDataInput multipartFormDataInput) throws ErrorResponseException {
+    public DocumentRepresentation importDocument(final MultipartFormDataInput multipartFormDataInput) throws ErrorResponseException {
         Map<String, List<InputPart>> formParts = multipartFormDataInput.getFormDataMap();
         List<InputPart> inputParts = formParts.get("file");
 
@@ -76,7 +79,7 @@ public class DocumentsService {
             }
 
             // Return result
-            return Response.ok(documentModel).build();
+            return modelToRepresentation.toRepresentation(documentModel, uriInfo).toSpaceRepresentation();
         }
 
         throw new ErrorResponseException("Could not find any file to process");
@@ -97,15 +100,15 @@ public class DocumentsService {
     @GET
     @Path("{documentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public SpaceRepresentation getSpace(@PathParam("documentId") String documentId) {
-        DocumentModel ublDocument = getDocumentById(documentId);
-        return modelToRepresentation.toRepresentation(ublDocument, uriInfo).toSpaceRepresentation();
+    public DocumentRepresentation getDocument(@PathParam("documentId") String documentId) {
+        DocumentModel document = getDocumentById(documentId);
+        return modelToRepresentation.toRepresentation(document, uriInfo).toSpaceRepresentation();
     }
 
     @DELETE
     @Path("{documentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void deleteSpace(@PathParam("documentId") String documentId) {
+    public void deleteDocument(@PathParam("documentId") String documentId) {
         DocumentModel ublDocument = getDocumentById(documentId);
         documentManager.removeDocument(ublDocument);
     }

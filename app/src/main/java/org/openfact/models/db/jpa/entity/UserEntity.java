@@ -2,6 +2,9 @@ package org.openfact.models.db.jpa.entity;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.hibernate.annotations.Type;
+import org.openfact.models.db.CreatableEntity;
+import org.openfact.models.db.UpdatableEntity;
+import org.openfact.models.db.UpdatedAtListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

@@ -29,7 +29,7 @@ public class DocumentRepresentation {
         private String type;
         private Attributes attributes;
         private Relationships relationships;
-        private GenericLinksRepresentation links;
+        private DocumentLink links;
 
         public DocumentRepresentation toSpaceRepresentation() {
             return new DocumentRepresentation(this);
@@ -67,11 +67,11 @@ public class DocumentRepresentation {
             this.relationships = relationships;
         }
 
-        public GenericLinksRepresentation getLinks() {
+        public DocumentLink getLinks() {
             return links;
         }
 
-        public void setLinks(GenericLinksRepresentation links) {
+        public void setLinks(DocumentLink links) {
             this.links = links;
         }
     }
@@ -168,6 +168,27 @@ public class DocumentRepresentation {
 
         public void setLinks(GenericLinksRepresentation links) {
             this.links = links;
+        }
+    }
+
+    public static class DocumentLink {
+        private String self;
+        private String filelink;
+
+        public String getSelf() {
+            return self;
+        }
+
+        public void setSelf(String self) {
+            this.self = self;
+        }
+
+        public String getFilelink() {
+            return filelink;
+        }
+
+        public void setFilelink(String filelink) {
+            this.filelink = filelink;
         }
     }
 

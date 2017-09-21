@@ -1,41 +1,57 @@
 package org.openfact.models.db.es.entity;
 
 import org.hibernate.search.annotations.Indexed;
+import org.openfact.models.db.CreatableEntity;
+import org.openfact.models.db.UpdatableEntity;
+import org.openfact.models.db.UpdatedAtListener;
+import org.openfact.models.db.jpa.entity.CreatedAtListener;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
-import org.openfact.models.db.jpa.entity.UserEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
 @Indexed
-@Table(name = "UBL_DOCUMENT")
-public class DocumentEntity {
+@Table(name = "document")
+@EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
+public class DocumentEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
-    @Column(name = "ID", length = 36)
+    @Column(name = "id", length = 36)
     private String id;
 
     @NotNull
-    @Column(name = "TYPE")
+    @Column(name = "type")
     private String type;
 
     @NotNull
-    @Column(name = "ASSIGNED_ID")
+    @Column(name = "assigned_id")
     private String assignedId;
 
     @NotNull
-    @Column(name = "FILE_ID")
+    @Column(name = "file_id")
     private String fileId;
 
     @ElementCollection
-    @MapKeyColumn(name="NAME")
-    @Column(name="VALUE")
-    @CollectionTable(name="UBL_DOCUMENT_TAGS", joinColumns={ @JoinColumn(name="UBL_DOCUMENT_ID") })
+    @MapKeyColumn(name = "NAME")
+    @Column(name = "VALUE")
+    @CollectionTable(name = "UBL_DOCUMENT_TAGS", joinColumns = {@JoinColumn(name = "document_id")})
     private Map<String, String> tags = new HashMap<>();
+
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -80,6 +96,24 @@ public class DocumentEntity {
 
     public void setTags(Map<String, String> tags) {
         this.tags = tags;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    @Override
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    @Override
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public SpaceEntity getSpace() {

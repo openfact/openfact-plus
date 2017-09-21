@@ -3,6 +3,7 @@ package org.openfact.models.utils;
 import org.openfact.models.*;
 import org.openfact.representation.idm.*;
 import org.openfact.services.resources.DocumentsService;
+import org.openfact.services.resources.FilesService;
 import org.openfact.services.resources.SpacesService;
 import org.openfact.services.resources.UsersService;
 
@@ -108,12 +109,18 @@ public class ModelToRepresentation {
         rep.setType(ModelType.UBL_DOCUMENT.getAlias());
 
         // Links
-        GenericLinksRepresentation links = new GenericLinksRepresentation();
+        DocumentRepresentation.DocumentLink links = new DocumentRepresentation.DocumentLink();
         URI self = uriInfo.getBaseUriBuilder()
                 .path(DocumentsService.class)
                 .path(DocumentsService.class, "getDocument")
                 .build(model.getId());
+        URI fileLink = uriInfo.getBaseUriBuilder()
+                .path(FilesService.class)
+                .path(FilesService.class, "getFile")
+                .build(model.getFileId());
+
         links.setSelf(self.toString());
+        links.setFilelink(fileLink.toString());
 
         rep.setLinks(links);
 
@@ -130,9 +137,9 @@ public class ModelToRepresentation {
 
         GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
         ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
-                .path(UsersService.class)
-                .path(UsersService.class, "getUser")
-                .build(model.getOwner().getIdentityID()).toString());
+                .path(SpacesService.class)
+                .path(SpacesService.class, "getSpace")
+                .build(model.getOwner().getId()).toString());
         ownedBy.setLinks(ownedLinks); // save
 
         // Attributes
