@@ -20,7 +20,7 @@ public interface DocumentModel {
     Date getCreatedAt();
     Date getUpdatedAt();
 
-    SpaceModel getOwner();
+    SpaceModel getSpace();
 
     interface DocumentCreationEvent extends ProviderEvent {
         String getType();

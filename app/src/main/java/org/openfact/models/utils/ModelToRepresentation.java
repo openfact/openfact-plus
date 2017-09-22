@@ -77,17 +77,19 @@ public class ModelToRepresentation {
         relationships.setOwnedBy(ownedBy);
         rep.setRelationships(relationships);
 
-        UserRepresentation.Data userData = new UserRepresentation.Data();
-        userData.setId(model.getOwner().getIdentityID());
-        userData.setType(ModelType.IDENTITIES.getAlias());
-        ownedBy.setData(userData); // save
+        if (model.getOwner() != null) {
+            UserRepresentation.Data userData = new UserRepresentation.Data();
+            userData.setId(model.getOwner().getIdentityID());
+            userData.setType(ModelType.IDENTITIES.getAlias());
+            ownedBy.setData(userData); // save
 
-        GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
-        ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
-                .path(UsersService.class)
-                .path(UsersService.class, "getUser")
-                .build(model.getOwner().getIdentityID()).toString());
-        ownedBy.setLinks(ownedLinks); // save
+            GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
+            ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
+                    .path(UsersService.class)
+                    .path(UsersService.class, "getUser")
+                    .build(model.getOwner().getIdentityID()).toString());
+            ownedBy.setLinks(ownedLinks); // save
+        }
 
         // Attributes
         SpaceRepresentation.Attributes attributes = new SpaceRepresentation.Attributes();
@@ -131,7 +133,7 @@ public class ModelToRepresentation {
         rep.setRelationships(relationships);
 
         SpaceRepresentation.Data spaceData = new SpaceRepresentation.Data();
-        spaceData.setId(model.getOwner().getId());
+        spaceData.setId(model.getSpace().getId());
         spaceData.setType(ModelType.SPACES.getAlias());
         ownedBy.setData(spaceData); // save
 
@@ -139,7 +141,7 @@ public class ModelToRepresentation {
         ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
                 .path(SpacesService.class)
                 .path(SpacesService.class, "getSpace")
-                .build(model.getOwner().getId()).toString());
+                .build(model.getSpace().getId()).toString());
         ownedBy.setLinks(ownedLinks); // save
 
         // Attributes

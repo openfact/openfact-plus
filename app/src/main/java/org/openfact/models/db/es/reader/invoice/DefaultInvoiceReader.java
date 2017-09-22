@@ -11,7 +11,10 @@ import org.openfact.models.db.es.DocumentReader;
 import org.openfact.models.db.es.GenericDocument;
 import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.reader.MapperType;
+import org.openfact.models.db.jpa.SpaceAdapter;
+import org.openfact.models.db.jpa.UserAdapter;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
+import org.openfact.models.db.jpa.entity.UserEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 import org.w3c.dom.Document;
 
@@ -44,7 +47,11 @@ public class DefaultInvoiceReader implements DocumentReader {
 
         SpaceEntity spaceEntity = getSpace(invoiceType);
         if (spaceEntity == null) {
-            return null;
+            spaceEntity = new SpaceEntity();
+            spaceEntity.setId(OpenfactModelUtils.generateId());
+            spaceEntity.setAssignedId(invoiceType.getAccountingSupplierParty().getCustomerAssignedAccountIDValue());
+            spaceEntity.setName(invoiceType.getAccountingSupplierParty().getCustomerAssignedAccountIDValue());
+            em.persist(spaceEntity);
         }
 
         DocumentEntity documentEntity = new DocumentEntity();

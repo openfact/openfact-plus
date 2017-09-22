@@ -38,8 +38,7 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
 
     @Column(name = "description")
     private String description;
-
-    @NotNull
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", foreignKey = @ForeignKey)
     private UserEntity owner;

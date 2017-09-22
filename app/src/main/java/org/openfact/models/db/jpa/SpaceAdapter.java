@@ -71,6 +71,12 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
     }
 
     @Override
+    public void setOwner(UserModel user) {
+        UserEntity userEntity = UserAdapter.toEntity(user, em);
+        space.setOwner(userEntity);
+    }
+
+    @Override
     public Date getCreatedAt() {
         return space.getCreatedAt();
     }

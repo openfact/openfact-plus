@@ -59,11 +59,16 @@ public class SpacesService {
         UserModel user = userProvider.getUserByIdentityID(ownedBy.getData().getId());
 
         // Create space
-        if (spaceProvider.getByAssignedId(attributes.getAssignedId()) != null) {
-            throw new ErrorResponseException("Space already exists", Response.Status.CONFLICT);
+        SpaceModel space = spaceProvider.getByAssignedId(attributes.getAssignedId());
+        if (space != null) {
+            if (space.getOwner() == null) {
+                space.setOwner(user);
+            } else {
+                throw new ErrorResponseException("Space already exists", Response.Status.CONFLICT);
+            }
+        } else {
+            space = spaceProvider.addSpace(attributes.getAssignedId(), attributes.getName(), user);
         }
-
-        SpaceModel space = spaceProvider.addSpace(attributes.getAssignedId(), attributes.getName(), user);
         space.setDescription(attributes.getDescription());
 
         SpaceRepresentation.Data createdSpaceRep = modelToRepresentation.toRepresentation(space, uriInfo);

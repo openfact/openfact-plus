@@ -73,7 +73,7 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public SpaceModel getOwner() {
+    public SpaceModel getSpace() {
         return new SpaceAdapter(em, document.getSpace());
     }
 

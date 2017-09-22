@@ -19,6 +19,7 @@ public interface SpaceModel {
     void setDescription(String description);
 
     UserModel getOwner();
+    void setOwner(UserModel user);
 
     Date getCreatedAt();
     Date getUpdatedAt();
