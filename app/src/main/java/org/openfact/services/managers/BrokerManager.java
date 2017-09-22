@@ -59,15 +59,16 @@ public class BrokerManager {
         HttpTransport transport = new NetHttpTransport();
         HttpRequestFactory requestFactory = transport.createRequestFactory(credential);
 
-        GenericUrl ulr = new GenericUrl(authServer + "/realms/" + realmName + "/broker/" + broker + "/token");
-        HttpResponse execute = requestFactory.buildGetRequest(ulr).execute();
-        execute.disconnect();
-
+        GenericUrl url = new GenericUrl(authServer + "/realms/" + realmName + "/broker/" + broker + "/token");
+        HttpResponse execute = requestFactory.buildGetRequest(url).execute();
         if (execute.isSuccessStatusCode()) {
             String response = execute.parseAsString();
             ObjectMapper mapper = new ObjectMapper();
+            execute.disconnect();
             return mapper.readValue(response, TokenRepresentation.class);
         }
+
+        execute.disconnect();
         return null;
     }
 
