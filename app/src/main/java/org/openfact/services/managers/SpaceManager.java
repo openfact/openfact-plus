@@ -13,9 +13,9 @@ import java.util.Set;
 @Stateless
 public class SpaceManager {
 
-    @Inject
-    private SpaceProvider spaceProvider;
-
+//    @Inject
+//    private SpaceProvider spaceProvider;
+//
 //    public void claimAccountId(String claimedAccountId, UserModel user) {
 //        SpaceModel space = spaceProvider.getByAssignedId(claimedAccountId);
 //        if (space == null) {

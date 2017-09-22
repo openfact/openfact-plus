@@ -189,7 +189,7 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
 //
 //    @Override
 //    public UserRepositoryModel addRepository(String email, BrokerType type) {
-//        UserRepositoryEntity entity = new UserRepositoryEntity();
+//        UserLinkedBrokerEntity entity = new UserLinkedBrokerEntity();
 //        entity.setId(OpenfactModelUtils.generateId());
 //        entity.setAlias(email);
 //        entity.setEmail(email);

@@ -22,9 +22,6 @@ public class UserManager {
     private static final Logger logger = Logger.getLogger(UsersService.class);
 
     @Inject
-    private KeycloakDeployment keycloakDeployment;
-
-    @Inject
     private BrokerManager brokerManager;
 
     @Inject
@@ -36,28 +33,28 @@ public class UserManager {
      * @param user
      * @return user has valid offline refresh token
      */
-    public boolean hasValidOfflineRefreshToken(UserModel user) {
-        String offlineRefreshToken = user.getOfflineRefreshToken();
-
-        if (offlineRefreshToken == null) {
-            return false;
-        }
-
-        // Check offline token is still valid
-        String accessToken = null;
-        try {
-            accessToken = retrieveAccessToken(offlineRefreshToken);
-        } catch (IOException | ServerRequest.HttpFailure e) {
-            logger.warn("Invalid token detected, try to delete it in order to reduce server process");
-        }
-
-        return accessToken != null;
-    }
-
-    private String retrieveAccessToken(String refreshToken) throws IOException, ServerRequest.HttpFailure {
-        AccessTokenResponse response = ServerRequest.invokeRefresh(keycloakDeployment, refreshToken);
-        return response.getToken();
-    }
+//    public boolean hasValidOfflineRefreshToken(UserModel user) {
+//        String offlineRefreshToken = user.getOfflineRefreshToken();
+//
+//        if (offlineRefreshToken == null) {
+//            return false;
+//        }
+//
+//        // Check offline token is still valid
+//        String accessToken = null;
+//        try {
+//            accessToken = retrieveAccessToken(offlineRefreshToken);
+//        } catch (IOException | ServerRequest.HttpFailure e) {
+//            logger.warn("Invalid token detected, try to delete it in order to reduce server process");
+//        }
+//
+//        return accessToken != null;
+//    }
+//
+//    private String retrieveAccessToken(String refreshToken) throws IOException, ServerRequest.HttpFailure {
+//        AccessTokenResponse response = ServerRequest.invokeRefresh(keycloakDeployment, refreshToken);
+//        return response.getToken();
+//    }
 
     /**
      * Refresh repositories based on offline token.

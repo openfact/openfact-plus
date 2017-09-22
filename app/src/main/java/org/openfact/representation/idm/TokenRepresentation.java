@@ -10,6 +10,8 @@ public class TokenRepresentation {
     private String refresh_token;
     private String token_type;
 
+    private String id_token;
+
     @JsonProperty("not-before-policy")
     private String notBeforePolicy;
 
@@ -59,5 +61,13 @@ public class TokenRepresentation {
 
     public void setNotBeforePolicy(String notBeforePolicy) {
         this.notBeforePolicy = notBeforePolicy;
+    }
+
+    public String getId_token() {
+        return id_token;
+    }
+
+    public void setId_token(String id_token) {
+        this.id_token = id_token;
     }
 }

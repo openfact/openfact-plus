@@ -1,4 +1,4 @@
-package org.openfact.batchs;
+package org.openfact.batchs.common;
 
 public class BatchContants {
 

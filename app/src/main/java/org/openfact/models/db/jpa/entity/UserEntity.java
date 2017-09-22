@@ -18,12 +18,16 @@ import java.util.Set;
 @Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "identity_id")
+}, indexes = {
+        @Index(columnList = "username", unique = true),
+        @Index(columnList = "identity_id", unique = true)
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username"),
         @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username"),
-        @NamedQuery(name = "getUserByIdentityID", query = "select u from UserEntity u where u.identityID = :identityID")
+        @NamedQuery(name = "getUserByIdentityID", query = "select u from UserEntity u where u.identityID = :identityID"),
+        @NamedQuery(name = "getUserWithOfflineToken", query = "select u from UserEntity u where u.offlineToken is not null order by u.username")
 })
 public class UserEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
@@ -99,14 +103,14 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "context_information", length = 4096)
     private JsonNode contextInformation;
 
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 //    private Set<SharedSpaceEntity> sharedSpaces = new HashSet<>();
 //
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 //    private Set<RequestAccessToSpaceEntity> spaceRequests = new HashSet<>();
 //
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    private Set<UserRepositoryEntity> repositories = new HashSet<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private Set<UserLinkedBrokerEntity> linkedBrokers = new HashSet<>();
 
     @Version
     @Column(name = "version")
@@ -279,11 +283,11 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 //        this.spaceRequests = spaceRequests;
 //    }
 //
-//    public Set<UserRepositoryEntity> getRepositories() {
+//    public Set<UserLinkedBrokerEntity> getRepositories() {
 //        return repositories;
 //    }
 //
-//    public void setRepositories(Set<UserRepositoryEntity> repositories) {
+//    public void setRepositories(Set<UserLinkedBrokerEntity> repositories) {
 //        this.repositories = repositories;
 //    }
 
@@ -295,4 +299,11 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.version = version;
     }
 
+    public Set<UserLinkedBrokerEntity> getLinkedBrokers() {
+        return linkedBrokers;
+    }
+
+    public void setLinkedBrokers(Set<UserLinkedBrokerEntity> linkedBrokers) {
+        this.linkedBrokers = linkedBrokers;
+    }
 }

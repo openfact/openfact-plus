@@ -1,4 +1,6 @@
-package org.openfact.batchs.read;
+package org.openfact.batchs.common;
+
+import org.jboss.logging.Logger;
 
 import javax.batch.api.AbstractBatchlet;
 import javax.batch.runtime.BatchStatus;
@@ -7,11 +9,13 @@ import javax.inject.Named;
 
 @Named
 @Dependent
-public class MyBatchlet1 extends AbstractBatchlet {
+public class EndBatchlet extends AbstractBatchlet {
+
+    private static final Logger logger = Logger.getLogger(EndBatchlet.class);
 
     @Override
     public String process() {
-        System.out.println("Running inside a batchlet 1");
+        logger.info("Ending batchlet...");
         return BatchStatus.COMPLETED.toString();
     }
 

@@ -69,7 +69,7 @@ public class GmailRepositoryReader implements UserRepositoryReader {
     }
 
     private Gmail buildClient(UserRepositoryModel userRepository) {
-        String accessToken = brokerManager.getBrokerToken(userRepository.getType().getAlias().toLowerCase(), userRepository.getUser().getOfflineRefreshToken());
+        //String accessToken = brokerManager.getBrokerToken(userRepository.getType().getAlias().toLowerCase(), userRepository.getUser().getOfflineRefreshToken());
         return null;
     }
 

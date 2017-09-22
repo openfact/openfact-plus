@@ -14,7 +14,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "space")
+@Table(name = "space", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "assigned_id"),
+        @UniqueConstraint(columnNames = "name")
+}, indexes = {
+        @Index(columnList = "assigned_id", unique = true),
+        @Index(columnList = "name", unique = true)
+})
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getSpaceByAssignedId", query = "select s from SpaceEntity s where s.assignedId = :assignedId"),
@@ -38,7 +44,7 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
 
     @Column(name = "description")
     private String description;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", foreignKey = @ForeignKey)
     private UserEntity owner;
