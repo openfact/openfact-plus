@@ -64,8 +64,9 @@ public class BrokerManager {
         if (execute.isSuccessStatusCode()) {
             String response = execute.parseAsString();
             ObjectMapper mapper = new ObjectMapper();
+            TokenRepresentation result = mapper.readValue(response, TokenRepresentation.class);
             execute.disconnect();
-            return mapper.readValue(response, TokenRepresentation.class);
+            return result;
         }
 
         execute.disconnect();
