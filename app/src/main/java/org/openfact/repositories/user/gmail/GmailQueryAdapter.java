@@ -1,12 +1,12 @@
 package org.openfact.repositories.user.gmail;
 
-import org.openfact.repositories.user.UserRepositoryQuery;
+import org.openfact.repositories.user.MailQuery;
 
-public class QueryAdapter {
+public class GmailQueryAdapter {
 
-    private UserRepositoryQuery query;
+    private MailQuery query;
 
-    public QueryAdapter(UserRepositoryQuery query) {
+    public GmailQueryAdapter(MailQuery query) {
         this.query = query;
     }
 

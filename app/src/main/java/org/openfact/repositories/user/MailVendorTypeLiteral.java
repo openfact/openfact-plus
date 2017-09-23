@@ -4,11 +4,11 @@ import org.openfact.models.BrokerType;
 
 import javax.enterprise.util.AnnotationLiteral;
 
-public class UserRepositoryTypeLiteral extends AnnotationLiteral<UserRepositoryType> implements UserRepositoryType {
+public class MailVendorTypeLiteral extends AnnotationLiteral<MailVendorType> implements MailVendorType {
 
     private final BrokerType value;
 
-    public UserRepositoryTypeLiteral(BrokerType value) {
+    public MailVendorTypeLiteral(BrokerType value) {
         this.value = value;
     }
 

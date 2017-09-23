@@ -2,12 +2,12 @@ package org.openfact.repositories.user;
 
 import java.time.LocalDateTime;
 
-public class UserRepositoryQuery {
+public class MailQuery {
 
     private LocalDateTime from;
     private LocalDateTime to;
 
-    private UserRepositoryQuery(Builder builder) {
+    private MailQuery(Builder builder) {
         this.from = builder.from;
         this.to = builder.to;
     }
@@ -50,8 +50,8 @@ public class UserRepositoryQuery {
             return this;
         }
 
-        public UserRepositoryQuery build() {
-            return new UserRepositoryQuery(this);
+        public MailQuery build() {
+            return new MailQuery(this);
         }
     }
 }

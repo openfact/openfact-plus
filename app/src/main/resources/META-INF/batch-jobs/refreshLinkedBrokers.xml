@@ -7,7 +7,7 @@
         <listener ref="batchLoggerListener"></listener>
     </listeners>
     <flow id="start" next="end">
-        <step id="refreshLinkedBrokers">
+        <step id="refreshLinkedBrokers" next="pullMailMessages">
             <chunk>
                 <reader ref="jpaItemReader">
                     <properties>
@@ -16,6 +16,22 @@
                     </properties>
                 </reader>
                 <processor ref="refreshLinkedBrokersProcessor"/>
+                <writer ref="jpaAdvancedWriter">
+                    <properties>
+                        <property name="operation" value="merge"></property>
+                    </properties>
+                </writer>
+            </chunk>
+        </step>
+        <step id="pullMailMessages">
+            <chunk>
+                <reader ref="jpaItemReader">
+                    <properties>
+                        <property name="namedQuery" value="getAllLinkedBrokers"></property>
+                        <property name="beanType" value="org.openfact.models.db.jpa.entity.UserLinkedBrokerEntity"></property>
+                    </properties>
+                </reader>
+                <processor ref="pullMailMessagesProcessor"></processor>
                 <writer ref="jpaAdvancedWriter">
                     <properties>
                         <property name="operation" value="merge"></property>

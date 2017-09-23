@@ -1,7 +1,7 @@
-package org.openfact.repositories.user;
+package org.openfact.repositories.managers;
 
 import org.openfact.models.UserRepositoryModel;
 
-public interface UserRepositorySync {
+public interface MailSynchronizer {
     void synchronize(UserRepositoryModel repository);
 }

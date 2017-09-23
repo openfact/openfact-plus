@@ -5,40 +5,40 @@ import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
 import com.google.api.services.gmail.model.MessagePartBody;
-import org.openfact.models.UserRepositoryModel;
-import org.openfact.repositories.user.UserRepositoryElementModel;
-import org.openfact.repositories.user.UserRepositoryReadException;
+import org.openfact.repositories.user.MailReadException;
+import org.openfact.repositories.user.MailRepository;
+import org.openfact.repositories.user.MailUBLMessage;
 
 import java.io.IOException;
 import java.util.List;
 
-public class UserRepositoryElementAdapter implements UserRepositoryElementModel {
+public class GmailUBLMessage implements MailUBLMessage {
 
-    private final UserRepositoryModel userRepository;
+    private final MailRepository mailRepository;
     private final Gmail client;
     private final Message message;
 
-    public UserRepositoryElementAdapter(UserRepositoryModel userRepository, Gmail client, Message message) {
-        this.userRepository = userRepository;
-        this.client = client;
+    public GmailUBLMessage(Gmail gmail, MailRepository mailRepository, Message message) {
+        this.mailRepository = mailRepository;
+        this.client = gmail;
         this.message = message;
     }
 
     @Override
-    public byte[] getXml() throws UserRepositoryReadException {
+    public byte[] getXml() throws MailReadException {
         try {
             return getFileByExtension(".xml", ".XML");
         } catch (IOException e) {
-            throw new UserRepositoryReadException("Could not retrieve xml document from gmail broker", e);
+            throw new MailReadException("Could not retrieve xml document from gmail broker", e);
         }
     }
 
     @Override
-    public byte[] getInvoice() throws UserRepositoryReadException {
+    public byte[] getInvoice() throws MailReadException {
         try {
             return getFileByExtension(".pdf", ".PDF");
         } catch (IOException e) {
-            throw new UserRepositoryReadException("Could not retrieve pdf invoice from gmail broker", e);
+            throw new MailReadException("Could not retrieve pdf invoice from gmail broker", e);
         }
     }
 
@@ -64,7 +64,7 @@ public class UserRepositoryElementAdapter implements UserRepositoryElementModel 
                     MessagePartBody messagePartBody = client.users()
                             .messages()
                             .attachments()
-                            .get(userRepository.getEmail(), message.getId(), attachmentId)
+                            .get(mailRepository.getEmail(), message.getId(), attachmentId)
                             .execute();
 
                     Base64 base64url = new Base64(true);
@@ -72,6 +72,7 @@ public class UserRepositoryElementAdapter implements UserRepositoryElementModel 
                 }
             }
         }
+
         return null;
     }
 }
