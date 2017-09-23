@@ -1,20 +1,10 @@
 package org.openfact.services.managers;
 
 import org.jboss.logging.Logger;
-import org.keycloak.adapters.KeycloakDeployment;
-import org.keycloak.adapters.ServerRequest;
-import org.keycloak.representations.AccessTokenResponse;
-import org.openfact.models.BrokerType;
-import org.openfact.models.UserModel;
-import org.openfact.models.UserRepositoryModel;
-import org.openfact.repositories.user.UserRepositorySync;
 import org.openfact.services.resources.UsersService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Stateless
 public class UserManager {
@@ -23,9 +13,6 @@ public class UserManager {
 
     @Inject
     private BrokerManager brokerManager;
-
-    @Inject
-    private UserRepositorySync repositorySynchronizer;
 
     /**
      * Validate user offline token
