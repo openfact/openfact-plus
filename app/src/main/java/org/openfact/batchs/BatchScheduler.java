@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class BatchScheduler {
 
     public static final long INITIAL_DELAY = 0;
-    public final long PERIOD = 60;
+    public final long PERIOD = 30;
 
     @Resource
     private ManagedScheduledExecutorService scheduler;

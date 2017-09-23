@@ -38,13 +38,13 @@ public class RefreshLinkedBrokersProcessor implements ItemProcessor {
         Set<UserLinkedBrokerEntity> toRemove = linkedBrokers.stream()
                 .filter(linkedBrokerEntity -> availableLinkedBrokers.containsKey(linkedBrokerEntity.getEmail()))
                 .collect(Collectors.toSet());
-
         Set<String> linkedBrokerKeys = linkedBrokers.stream()
                 .map(UserLinkedBrokerEntity::getEmail)
                 .collect(Collectors.toSet());
+
         Set<UserLinkedBrokerEntity> toCreate = availableLinkedBrokers.keySet()
                 .stream()
-                .filter(linkedBrokerKeys::contains)
+                .filter(email -> !linkedBrokerKeys.contains(email))
                 .map(email -> {
                     UserLinkedBrokerEntity entity = new UserLinkedBrokerEntity();
                     entity.setId(OpenfactModelUtils.generateId());

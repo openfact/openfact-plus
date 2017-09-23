@@ -13,6 +13,9 @@ import java.util.Map;
         @UniqueConstraint(columnNames = {"email"}),
         @UniqueConstraint(columnNames = {"user_id", "type"})
 })
+@NamedQueries({
+        @NamedQuery(name = "getAllLinkedBrokers", query = "select b from UserLinkedBrokerEntity b join fetch b.user u order by b.email")
+})
 public class UserLinkedBrokerEntity {
 
     @Id

@@ -61,16 +61,15 @@ public class BrokerManager {
 
         GenericUrl url = new GenericUrl(authServer + "/realms/" + realmName + "/broker/" + broker + "/token");
         HttpResponse execute = requestFactory.buildGetRequest(url).execute();
+
+        TokenRepresentation result = null;
         if (execute.isSuccessStatusCode()) {
             String response = execute.parseAsString();
             ObjectMapper mapper = new ObjectMapper();
-            TokenRepresentation result = mapper.readValue(response, TokenRepresentation.class);
-            execute.disconnect();
-            return result;
+            result = mapper.readValue(response, TokenRepresentation.class);
         }
-
         execute.disconnect();
-        return null;
+        return result;
     }
 
 }
