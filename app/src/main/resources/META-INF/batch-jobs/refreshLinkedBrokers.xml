@@ -25,7 +25,7 @@
         </step>
         <step id="pullMailMessages">
             <chunk>
-                <reader ref="jpaItemReader">
+                <reader ref="pullMailMessagesReader">
                     <properties>
                         <property name="namedQuery" value="getAllLinkedBrokers"></property>
                         <property name="beanType" value="org.openfact.models.db.jpa.entity.UserLinkedBrokerEntity"></property>

@@ -18,7 +18,7 @@ public class OpenfactConfig {
     private OpenfactConfig() {
         config = new Properties();
         try {
-            InputStream input = new FileInputStream("openfact.properties");
+            InputStream input = getClass().getClassLoader().getResourceAsStream("openfact.properties");
             config.load(input);
         } catch (IOException e) {
             throw new IllegalStateException("Could not load openfact.properties");
