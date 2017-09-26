@@ -2,12 +2,16 @@ package org.openfact.repositories.user.gmail;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.HttpExecuteInterceptor;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.FixedValue;
+import net.sf.cglib.proxy.MethodInterceptor;
 import org.openfact.OpenfactConfig;
 import org.openfact.models.BrokerType;
 import org.openfact.repositories.user.*;
@@ -16,6 +20,7 @@ import org.openfact.services.resources.oauth2.OAuth2Utils;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import java.io.IOException;
+import java.lang.reflect.Proxy;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +36,8 @@ public class GmailReader implements MailReader {
 
     @PostConstruct
     private void init() {
-        APPLICATION_NAME = OpenfactConfig.getInstance().getProperty("gmail.application.name");
+//        APPLICATION_NAME = OpenfactConfig.getInstance().getProperty("gmail.application.name");
+        APPLICATION_NAME = "Openfact Sync";
         try {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -57,7 +63,12 @@ public class GmailReader implements MailReader {
 
     private Gmail buildClient(MailRepository mailRepository) {
         Credential credential = OAuth2Utils.buildCredential().setRefreshToken(mailRepository.getRefreshToken());
-        return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(Credential.class);
+        enhancer.setCallback(new CredentialHandler(credential));
+        Credential proxy = (Credential) enhancer.create(new Class[]{Credential.AccessMethod.class}, new Credential.AccessMethod[]{credential.getMethod()});
+        return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, proxy)
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }

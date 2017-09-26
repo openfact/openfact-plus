@@ -325,6 +325,13 @@
             <version>${version.jberet-support}</version>
         </dependency>
 
+        <!-- Proxy utils -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.2.5</version>
+        </dependency>
+
         <!--Test-->
         <dependency>
             <groupId>org.assertj</groupId>

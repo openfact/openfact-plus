@@ -37,7 +37,7 @@ public class PullMailMessagesReader extends JpaItemReader {
             if (reader != null) {
                 MailRepository mailRepository = MailRepository.builder()
                         .email(linkedBrokerEntity.getEmail())
-                        .refreshToken(null)
+                        .refreshToken(linkedBrokerEntity.getUser().getOfflineToken())
                         .build();
 
                 MailQuery.Builder mailQueryBuilder = MailQuery.builder();
