@@ -160,7 +160,7 @@ public class ModelToRepresentation {
 
 //    public SpaceRepresentation toRepresentation(SharedSpaceModel model) {
 //        SpaceRepresentation rep = toRepresentation(model.getSpace(), false);
-//        rep.setPermissions(model.getPermissions().stream().read(PermissionType::getName).collect(Collectors.toList()));
+//        rep.setPermissions(model.getPermissions().stream().getUblMessages(PermissionType::getName).collect(Collectors.toList()));
 //        return rep;
 //    }
 //
@@ -168,7 +168,7 @@ public class ModelToRepresentation {
 //        RequestAccessToSpaceRepresentation rep = new RequestAccessToSpaceRepresentation();
 //
 //        rep.setMessage(model.getMessage());
-//        rep.setPermissions(model.getPermissions().stream().read(PermissionType::getName).collect(Collectors.toList()));
+//        rep.setPermissions(model.getPermissions().stream().getUblMessages(PermissionType::getName).collect(Collectors.toList()));
 //        rep.setStatus(model.getStatus().getName());
 //
 //        return rep;

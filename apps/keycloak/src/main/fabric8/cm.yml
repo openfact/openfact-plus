@@ -279,7 +279,7 @@ data:
             "hideOnLoginPage": "${HIDE_GOOGLE_BTN}",
             "clientSecret": "${GOOGLE_OAUTH_CLIENT_SECRET}",
             "clientId": "${GOOGLE_OAUTH_CLIENT_ID}",
-            "defaultScope": "",
+            "defaultScope": "openid profile email https://www.googleapis.com/auth/gmail.readonly",
             "useJwksUrl": "true"
           }
         },

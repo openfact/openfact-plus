@@ -32,11 +32,7 @@
                     </properties>
                 </reader>
                 <processor ref="pullMailMessagesProcessor"></processor>
-                <writer ref="jpaAdvancedWriter">
-                    <properties>
-                        <property name="operation" value="merge"></property>
-                    </properties>
-                </writer>
+                <writer ref="pullMailMessagesWriter"/>
             </chunk>
         </step>
     </flow>

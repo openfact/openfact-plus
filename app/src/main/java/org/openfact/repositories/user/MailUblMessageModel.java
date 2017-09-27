@@ -1,6 +1,6 @@
 package org.openfact.repositories.user;
 
-public interface MailUBLMessage {
+public interface MailUblMessageModel {
 
     byte[] getXml() throws MailReadException;
 

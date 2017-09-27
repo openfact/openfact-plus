@@ -16,13 +16,13 @@ public class MailUtils {
 
     @Inject
     @Any
-    private Instance<MailReader> mailReaders;
+    private Instance<MailProvider> providers;
 
-    public MailReader getMailReader(BrokerType brokerType){
+    public MailProvider getMailReader(BrokerType brokerType){
         Annotation annotation = new MailVendorTypeLiteral(brokerType);
-        Instance<MailReader> instance = mailReaders.select(annotation);
+        Instance<MailProvider> instance = providers.select(annotation);
         if (instance.isAmbiguous() || instance.isUnsatisfied()) {
-            logger.warn("Could not find a reader for:" + brokerType);
+            logger.warn("Could not find a provider for:" + brokerType);
             return null;
         }
         return instance.get();

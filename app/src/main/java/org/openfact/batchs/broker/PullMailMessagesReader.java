@@ -26,33 +26,25 @@ public class PullMailMessagesReader extends JpaItemReader {
     public void open(final Serializable checkpoint) throws Exception {
         super.open(checkpoint);
         for (Object o : super.resultList) {
-            UserLinkedBrokerEntity linkedBrokerEntity;
-            if (o instanceof UserLinkedBrokerEntity) {
-                linkedBrokerEntity = (UserLinkedBrokerEntity) o;
-            } else {
-                throw new IllegalStateException("Could not cast to " + UserLinkedBrokerEntity.class.getName() + " class");
-            }
-
-            MailReader reader = mailUtils.getMailReader(linkedBrokerEntity.getType());
-            if (reader != null) {
-                MailRepository mailRepository = MailRepository.builder()
-                        .email(linkedBrokerEntity.getEmail())
-                        .refreshToken(linkedBrokerEntity.getUser().getOfflineToken())
+            UserLinkedBrokerEntity linkedBroker = (UserLinkedBrokerEntity) o;
+            MailProvider mailProvider = mailUtils.getMailReader(linkedBroker.getType());
+            if (mailProvider != null) {
+                MailRepositoryModel repository = MailRepositoryModel.builder()
+                        .email(linkedBroker.getEmail())
+                        .refreshToken(linkedBroker.getUser().getOfflineToken())
                         .build();
 
-                MailQuery.Builder mailQueryBuilder = MailQuery.builder();
-                LocalDateTime currentTime = LocalDateTime.now();
-                LocalDateTime lastTimeSynchronized = linkedBrokerEntity.getLastTimeSynchronized();
-                mailQueryBuilder.to(currentTime);
+                MailQuery.Builder queryBuilder = MailQuery.builder().fileType("xml");
+                LocalDateTime lastTimeSynchronized = linkedBroker.getLastTimeSynchronized();
                 if (lastTimeSynchronized != null) {
-                    mailQueryBuilder.from(lastTimeSynchronized);
+                    queryBuilder.after(lastTimeSynchronized);
                 }
 
-                for (MailUBLMessage message : reader.read(mailRepository, mailQueryBuilder.build())) {
+                for (MailUblMessageModel message : mailProvider.getUblMessages(repository, queryBuilder.build())) {
                     this.messageList.add(new PullMailMessageWrapper(message));
                 }
             } else {
-                logger.warn("Skipping broker read");
+                logger.warn("Skipping broker getUblMessages");
             }
         }
     }

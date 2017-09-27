@@ -1,16 +1,16 @@
 package org.openfact.batchs.broker;
 
-import org.openfact.repositories.user.MailUBLMessage;
+import org.openfact.repositories.user.MailUblMessageModel;
 
 public class PullMailMessageWrapper {
 
-    private final MailUBLMessage message;
+    private final MailUblMessageModel message;
 
-    public PullMailMessageWrapper(MailUBLMessage message) {
+    public PullMailMessageWrapper(MailUblMessageModel message) {
         this.message = message;
     }
 
-    public MailUBLMessage getMessage() {
+    public MailUblMessageModel getMessage() {
         return message;
     }
 }

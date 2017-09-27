@@ -1,11 +1,11 @@
 package org.openfact.repositories.user;
 
-public class MailRepository {
+public class MailRepositoryModel {
 
     private final String email;
     private final String refreshToken;
 
-    private MailRepository(Builder builder) {
+    private MailRepositoryModel(Builder builder) {
         this.email = builder.email;
         this.refreshToken = builder.refreshToken;
     }
@@ -36,8 +36,8 @@ public class MailRepository {
             return this;
         }
 
-        public MailRepository build() {
-            return new MailRepository(this);
+        public MailRepositoryModel build() {
+            return new MailRepositoryModel(this);
         }
     }
 }

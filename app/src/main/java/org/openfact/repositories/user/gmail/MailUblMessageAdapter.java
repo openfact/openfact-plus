@@ -6,19 +6,19 @@ import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
 import com.google.api.services.gmail.model.MessagePartBody;
 import org.openfact.repositories.user.MailReadException;
-import org.openfact.repositories.user.MailRepository;
-import org.openfact.repositories.user.MailUBLMessage;
+import org.openfact.repositories.user.MailRepositoryModel;
+import org.openfact.repositories.user.MailUblMessageModel;
 
 import java.io.IOException;
 import java.util.List;
 
-public class GmailUBLMessage implements MailUBLMessage {
+public class MailUblMessageAdapter implements MailUblMessageModel {
 
-    private final MailRepository mailRepository;
+    private final MailRepositoryModel mailRepository;
     private final Gmail client;
     private final Message message;
 
-    public GmailUBLMessage(Gmail gmail, MailRepository mailRepository, Message message) {
+    public MailUblMessageAdapter(Gmail gmail, MailRepositoryModel mailRepository, Message message) {
         this.mailRepository = mailRepository;
         this.client = gmail;
         this.message = message;
