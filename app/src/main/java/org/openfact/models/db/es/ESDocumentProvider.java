@@ -10,6 +10,7 @@ import org.openfact.models.ModelException;
 import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.reader.MapperTypeLiteral;
 import org.openfact.models.utils.OpenfactModelUtils;
+import org.w3c.dom.Document;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
@@ -51,8 +52,8 @@ public class ESDocumentProvider implements DocumentProvider {
         Annotation annotation = new MapperTypeLiteral(documentType);
         Instance<DocumentReader> instance = documentReaders.select(annotation);
         if (instance.isAmbiguous() || instance.isUnsatisfied()) {
-            logger.error("Could not find a reader for:" + documentType);
-            throw new ModelException("Document[" + documentType + "] not supported");
+            logger.warn("Could not find a reader for:" + documentType);
+            return null;
         }
         return instance.get();
     }
@@ -117,6 +118,29 @@ public class ESDocumentProvider implements DocumentProvider {
             }
         });
         return true;
+    }
+
+    @Override
+    public boolean isSupported(String documentType) {
+        return getDocumentReader(documentType) != null;
+    }
+
+    @Override
+    public boolean isSupported(byte[] bytes) {
+        try {
+            return isSupported(OpenfactModelUtils.getDocumentType(bytes));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isSupported(Document document) {
+        try {
+            return isSupported(OpenfactModelUtils.getDocumentType(document));
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

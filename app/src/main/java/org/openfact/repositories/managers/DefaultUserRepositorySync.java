@@ -20,12 +20,12 @@ public class DefaultUserRepositorySync implements MailSynchronizer {
 
     private static final Logger logger = Logger.getLogger(DefaultUserRepositorySync.class);
 
-    @Inject
-    @Any
-    private Instance<MailReader> readers;
-
-    @Inject
-    private DocumentManager documentManager;
+//    @Inject
+//    @Any
+//    private Instance<MailReader> readers;
+//
+//    @Inject
+//    private DocumentManager documentManager;
 
     public void synchronize(UserRepositoryModel repository) {
 //        try {
@@ -65,13 +65,13 @@ public class DefaultUserRepositorySync implements MailSynchronizer {
 //        }
     }
 
-    private MailReader getReader(UserRepositoryModel repository) {
-        Annotation annotation = new MailVendorTypeLiteral(repository.getType());
-        Instance<MailReader> instance = readers.select(annotation);
-        if (!instance.isAmbiguous() && !instance.isUnsatisfied()) {
-            return instance.get();
-        }
-        return null;
-    }
+//    private MailReader getReader(UserRepositoryModel repository) {
+//        Annotation annotation = new MailVendorTypeLiteral(repository.getType());
+//        Instance<MailReader> instance = readers.select(annotation);
+//        if (!instance.isAmbiguous() && !instance.isUnsatisfied()) {
+//            return instance.get();
+//        }
+//        return null;
+//    }
 
 }

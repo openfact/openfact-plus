@@ -1,5 +1,7 @@
 package org.openfact.models;
 
+import org.w3c.dom.Document;
+
 public interface DocumentProvider {
 
     /**
@@ -10,4 +12,10 @@ public interface DocumentProvider {
     DocumentModel getDocument(String documentId);
 
     boolean removeDocument(DocumentModel ublDocument);
+
+    boolean isSupported(String documentType);
+
+    boolean isSupported(byte[] bytes);
+
+    boolean isSupported(Document document);
 }

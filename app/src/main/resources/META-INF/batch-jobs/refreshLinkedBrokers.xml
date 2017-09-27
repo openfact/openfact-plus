@@ -31,7 +31,6 @@
                         <property name="beanType" value="org.openfact.models.db.jpa.entity.UserLinkedBrokerEntity"></property>
                     </properties>
                 </reader>
-                <processor ref="pullMailMessagesProcessor"></processor>
                 <writer ref="pullMailMessagesWriter"/>
             </chunk>
         </step>

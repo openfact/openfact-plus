@@ -30,7 +30,10 @@ public class OpenfactModelUtils {
     }
 
     public static String getDocumentType(byte[] bytes) throws Exception {
-        Document document = OpenfactModelUtils.toDocument(bytes);
+        return getDocumentType(OpenfactModelUtils.toDocument(bytes));
+    }
+
+    public static String getDocumentType(Document document) throws Exception {
         Element documentElement = document.getDocumentElement();
         return documentElement.getTagName();
     }
