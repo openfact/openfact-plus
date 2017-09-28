@@ -1,4 +1,4 @@
-package org.openfact.models.db.es.reader.debitnote;
+package org.openfact.models.db.es.reader.basic.debitnote;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

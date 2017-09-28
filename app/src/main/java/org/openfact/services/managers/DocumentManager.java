@@ -26,9 +26,9 @@ public class DocumentManager {
 
     /**
      * @param bytes
-     * @throws ModelParseException in case InputStream passed could not be processed
-     * @throws ModelStorageException    in case could not be persist file on storage
-     * @throws ModelException      in case unexpected error happens
+     * @throws ModelParseException   in case InputStream passed could not be processed
+     * @throws ModelStorageException in case could not be persist file on storage
+     * @throws ModelException        in case unexpected error happens
      */
     public DocumentModel importDocument(byte[] bytes) throws ModelParseException, ModelStorageException, ModelUnsupportedTypeException {
         Document document;
@@ -43,9 +43,9 @@ public class DocumentManager {
 
     /**
      * @param inputStream java.io.InputStream
-     * @throws ModelParseException in case InputStream passed could not be processed
-     * @throws ModelStorageException    in case could not be persist file on storage
-     * @throws ModelException      in case unexpected error happens
+     * @throws ModelParseException   in case InputStream passed could not be processed
+     * @throws ModelStorageException in case could not be persist file on storage
+     * @throws ModelException        in case unexpected error happens
      */
     public DocumentModel importDocument(InputStream inputStream) throws ModelParseException, ModelStorageException, ModelUnsupportedTypeException {
         Document document;
@@ -60,9 +60,9 @@ public class DocumentManager {
 
     /**
      * @param document
-     * @throws ModelParseException in case InputStream passed could not be processed
-     * @throws ModelStorageException    in case could not be persist file on storage
-     * @throws ModelException      in case unexpected error happens
+     * @throws ModelParseException   in case InputStream passed could not be processed
+     * @throws ModelStorageException in case could not be persist file on storage
+     * @throws ModelException        in case unexpected error happens
      */
     public DocumentModel importDocument(Document document) throws ModelParseException, ModelStorageException, ModelUnsupportedTypeException {
         // Persist File
@@ -79,10 +79,10 @@ public class DocumentManager {
             BasicXmlFileModel xmlFile = new BasicXmlFileModel(fileModel);
             BasicXmlUblFileModel ublFile = new BasicXmlUblFileModel(xmlFile);
             return documentProvider.addDocument(ublFile);
-        } catch (ModelException e) {
+        } catch (ModelUnsupportedTypeException | ModelFetchException | ModelParseException | ModelException e) {
             boolean result = fileProvider.removeFile(fileModel);
             logger.infof("Rollback file result={}", result);
-            throw new ModelException("Could not persist document model", e);
+            throw e;
         }
     }
 

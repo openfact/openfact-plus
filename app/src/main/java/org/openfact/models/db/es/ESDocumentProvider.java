@@ -6,8 +6,8 @@ import org.openfact.models.DocumentModel.DocumentCreationEvent;
 import org.openfact.models.DocumentModel.DocumentRemovedEvent;
 import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.reader.MapperTypeLiteral;
+import org.openfact.models.db.es.reader.ReaderUtil;
 import org.openfact.models.utils.OpenfactModelUtils;
-import org.w3c.dom.Document;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
@@ -26,14 +26,7 @@ public class ESDocumentProvider implements DocumentProvider {
     private EntityManager em;
 
     @Inject
-    @Any
-    private Instance<DocumentReader> documentReaders;
-
-    @Inject
-    private Event<DocumentCreationEvent> creationEvents;
-
-    @Inject
-    private Event<DocumentRemovedEvent> removedEvents;
+    private ReaderUtil readerUtil;
 
     private String getDocumentType(FileModel file) {
         String documentType;
@@ -45,25 +38,10 @@ public class ESDocumentProvider implements DocumentProvider {
         return documentType;
     }
 
-    private DocumentReader getDocumentReader(String documentType) {
-        Annotation annotation = new MapperTypeLiteral(documentType);
-        Instance<DocumentReader> instance = documentReaders.select(annotation);
-        if (instance.isAmbiguous() || instance.isUnsatisfied()) {
-            logger.warn("Could not find a reader for:" + documentType);
-            return null;
-        }
-        return instance.get();
-    }
-
-    private <T> Event<T> getProviderEvent(String documentType, Event<T> events) {
-        Annotation annotation = new MapperTypeLiteral(documentType);
-        return events.select(annotation);
-    }
-
     @Override
-    public DocumentModel addDocument(XmlUblFileModel file) throws ModelUnsupportedTypeException {
+    public DocumentModel addDocument(XmlUblFileModel file) throws ModelUnsupportedTypeException, ModelFetchException, ModelParseException {
         String documentType = getDocumentType(file);
-        DocumentReader reader = getDocumentReader(documentType);
+        DocumentReader reader = readerUtil.getReader(documentType);
         if (reader == null) {
             throw new ModelUnsupportedTypeException("Unsupported type=" + documentType);
         }
@@ -79,7 +57,9 @@ public class ESDocumentProvider implements DocumentProvider {
         em.persist(documentEntity);
 
         DocumentAdapter document = new DocumentAdapter(em, documentEntity);
-        getProviderEvent(documentType, creationEvents).fire(new DocumentCreationEvent() {
+
+        Event<DocumentCreationEvent> event = readerUtil.getCreationEvents(document.getType());
+        event.fire(new DocumentCreationEvent() {
             @Override
             public String getType() {
                 return documentType;
@@ -112,12 +92,8 @@ public class ESDocumentProvider implements DocumentProvider {
         if (entity == null) return false;
         em.remove(entity);
 
-        getProviderEvent(document.getType(), removedEvents).fire(new DocumentRemovedEvent() {
-            @Override
-            public DocumentModel getDocument() {
-                return document;
-            }
-        });
+        Event<DocumentRemovedEvent> event = readerUtil.getRemovedEvents(document.getType());
+        event.fire(() -> document);
         return true;
     }
 

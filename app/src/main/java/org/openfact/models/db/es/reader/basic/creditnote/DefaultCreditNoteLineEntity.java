@@ -1,4 +1,4 @@
-package org.openfact.models.db.es.reader.creditnote;
+package org.openfact.models.db.es.reader.basic.creditnote;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package org.openfact.models.db.es.reader.invoice;
+package org.openfact.models.db.es.reader.basic.invoice;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.MonetaryTotalType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.SupplierPartyType;
@@ -8,6 +8,7 @@ import org.openfact.models.DocumentModel.DocumentCreationEvent;
 import org.openfact.models.DocumentModel.DocumentRemovedEvent;
 import org.openfact.models.db.es.DocumentAdapter;
 import org.openfact.models.db.es.entity.DocumentEntity;
+import org.openfact.models.db.es.reader.LocationType;
 import org.openfact.models.db.es.reader.MapperType;
 import org.openfact.models.utils.OpenfactModelUtils;
 
@@ -16,7 +17,6 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.List;
 
 @Stateless
 public class DefaultInvoiceListener {
@@ -24,7 +24,7 @@ public class DefaultInvoiceListener {
     @Inject
     private EntityManager em;
 
-    public void creationListener(@Observes() @MapperType(value = "Invoice") DocumentCreationEvent createdDocument) {
+    public void creationListener(@Observes() @MapperType(value = "Invoice") @LocationType(value = "default") DocumentCreationEvent createdDocument) {
         DocumentEntity documentEntity = DocumentAdapter.toEntity(createdDocument.getCreatedDocument(), em);
         InvoiceType invoiceType = (InvoiceType) createdDocument.getDocumentType();
 
@@ -65,7 +65,7 @@ public class DefaultInvoiceListener {
         });
     }
 
-    public void removeListener(@Observes() @MapperType(value = "Invoice") DocumentRemovedEvent removedDocument) {
+    public void removeListener(@Observes() @MapperType(value = "Invoice") @LocationType(value = "default") DocumentRemovedEvent removedDocument) {
         DocumentModel document = removedDocument.getDocument();
 
         TypedQuery<DefaultInvoiceEntity> typedQuery = em.createNamedQuery("getInvoiceByDocumentId", DefaultInvoiceEntity.class);

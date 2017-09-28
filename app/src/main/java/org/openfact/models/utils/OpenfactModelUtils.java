@@ -9,6 +9,9 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -58,6 +61,12 @@ public class OpenfactModelUtils {
         Transformer transformer = factory.newTransformer();
         transformer.transform(new DOMSource(document), result);
         return out.toByteArray();
+    }
+
+    public static <T> T unmarshall(Class<T> tClass, Document document) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(tClass);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        return (T) unmarshaller.unmarshal(document);
     }
 
     /**

@@ -1,8 +1,10 @@
-package org.openfact.models.db.es.reader.debitnote;
+package org.openfact.models.db.es.reader.pe.invoice;
 
 import org.hibernate.search.annotations.Indexed;
+import org.openfact.models.db.es.entity.DocumentEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,13 +12,21 @@ import java.util.List;
 
 @Entity
 @Indexed
-@Table(name = "debit_note")
-public class DefaultDebitNoteEntity {
+@Table(name = "pe_invoice")
+@NamedQueries({
+        @NamedQuery(name = "getPEInvoiceByDocumentId", query = "select d from PEInvoiceEntity d inner join d.document u where u.id = :documentId")
+})
+public class PEInvoiceEntity {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
     @Column(name = "id", length = 36)
     private String id;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ubl_document_id", foreignKey = @ForeignKey)
+    private DocumentEntity document;
 
     @Column(name = "assigned_id")
     private String assignedId;
@@ -62,8 +72,8 @@ public class DefaultDebitNoteEntity {
     /*
      * Lines
      * */
-    @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true, mappedBy = "debitNote", fetch = FetchType.LAZY)
-    private List<DefaultDebitNoteLineEntity> lines = new ArrayList<>();
+    @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true, mappedBy = "invoice", fetch = FetchType.LAZY)
+    private List<PEInvoiceLineEntity> lines = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -153,11 +163,19 @@ public class DefaultDebitNoteEntity {
         this.payableAmount = payableAmount;
     }
 
-    public List<DefaultDebitNoteLineEntity> getLines() {
+    public List<PEInvoiceLineEntity> getLines() {
         return lines;
     }
 
-    public void setLines(List<DefaultDebitNoteLineEntity> lines) {
+    public void setLines(List<PEInvoiceLineEntity> lines) {
         this.lines = lines;
+    }
+
+    public DocumentEntity getDocument() {
+        return document;
+    }
+
+    public void setDocument(DocumentEntity document) {
+        this.document = document;
     }
 }

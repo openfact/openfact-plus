@@ -1,4 +1,4 @@
-package org.openfact.models.db.es.reader.invoice;
+package org.openfact.models.db.es.reader.basic.invoice;
 
 import org.hibernate.search.annotations.Indexed;
 import org.openfact.models.db.es.entity.DocumentEntity;
@@ -14,7 +14,7 @@ import java.util.List;
 @Indexed
 @Table(name = "invoice")
 @NamedQueries({
-        @NamedQuery(name = "getInvoiceByDocumentId", query = "select d from DefaultInvoiceEntity d inner join d.document u where u.id = :documentId")
+        @NamedQuery(name = "getInvoiceByDocumentId", query = "select d from PEInvoiceEntity d inner join d.document u where u.id = :documentId")
 })
 public class DefaultInvoiceEntity {
 
