@@ -8,8 +8,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import sunat.names.specification.ubl.peru.schema.xsd.voideddocuments_1.VoidedDocumentsType;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
@@ -63,10 +65,11 @@ public class OpenfactModelUtils {
         return out.toByteArray();
     }
 
-    public static <T> T unmarshall(Class<T> tClass, Document document) throws JAXBException {
+    public static <T> T unmarshall(Document document, Class<T> tClass) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(tClass);
         Unmarshaller unmarshaller = context.createUnmarshaller();
-        return (T) unmarshaller.unmarshal(document);
+        JAXBElement<T> jaxbElement = unmarshaller.unmarshal(document, tClass);
+        return jaxbElement.getValue();
     }
 
     /**
