@@ -33,7 +33,7 @@ public class PullMailMessagesWriter implements ItemWriter {
             try {
                 documentManager.importDocument(wrapper.getMessage().getXml());
             } catch (ModelUnsupportedTypeException e) {
-                logger.warn("Unsupported document type", e);
+                logger.debug("Unsupported document type");
             }
         }
     }
