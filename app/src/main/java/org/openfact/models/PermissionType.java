@@ -3,6 +3,7 @@ package org.openfact.models;
 public enum PermissionType {
 
     OWNER("owner"),
+
     READ("read");
 
     private String alias;

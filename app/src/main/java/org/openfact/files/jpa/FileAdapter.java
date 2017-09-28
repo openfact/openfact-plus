@@ -1,13 +1,11 @@
-package org.openfact.models.db.jpa;
+package org.openfact.files.jpa;
 
 import org.openfact.models.FileModel;
-import org.openfact.models.StorageException;
-import org.openfact.models.db.JpaModel;
-import org.openfact.models.db.jpa.entity.FileEntity;
+import org.openfact.models.ModelFetchException;
 
 import javax.persistence.EntityManager;
 
-public class FileAdapter implements FileModel, JpaModel<FileEntity> {
+public class FileAdapter implements FileModel {
 
     private final FileEntity file;
     private final EntityManager em;
@@ -15,18 +13,6 @@ public class FileAdapter implements FileModel, JpaModel<FileEntity> {
     public FileAdapter(EntityManager em, FileEntity entity) {
         this.file = entity;
         this.em = em;
-    }
-
-    public static FileEntity toEntity(FileModel model, EntityManager em) {
-        if (model instanceof FileAdapter) {
-            return ((FileAdapter) model).getEntity();
-        }
-        return em.getReference(FileEntity.class, model.getId());
-    }
-
-    @Override
-    public FileEntity getEntity() {
-        return file;
     }
 
     @Override
@@ -45,7 +31,7 @@ public class FileAdapter implements FileModel, JpaModel<FileEntity> {
     }
 
     @Override
-    public byte[] getFile() throws StorageException {
+    public byte[] getFile() throws ModelFetchException {
         return file.getFile();
     }
 

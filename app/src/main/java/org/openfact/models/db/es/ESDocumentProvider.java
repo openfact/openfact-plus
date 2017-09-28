@@ -1,12 +1,9 @@
 package org.openfact.models.db.es;
 
 import org.jboss.logging.Logger;
-import org.openfact.models.DocumentModel;
+import org.openfact.models.*;
 import org.openfact.models.DocumentModel.DocumentCreationEvent;
 import org.openfact.models.DocumentModel.DocumentRemovedEvent;
-import org.openfact.models.DocumentProvider;
-import org.openfact.models.FileModel;
-import org.openfact.models.ModelException;
 import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.reader.MapperTypeLiteral;
 import org.openfact.models.utils.OpenfactModelUtils;
@@ -64,10 +61,14 @@ public class ESDocumentProvider implements DocumentProvider {
     }
 
     @Override
-    public DocumentModel addDocument(FileModel file) {
+    public DocumentModel addDocument(XmlUblFileModel file) throws ModelUnsupportedTypeException {
         String documentType = getDocumentType(file);
-        DocumentReader documentReader = getDocumentReader(documentType);
-        GenericDocument genericDocument = documentReader.read(file);
+        DocumentReader reader = getDocumentReader(documentType);
+        if (reader == null) {
+            throw new ModelUnsupportedTypeException("Unsupported type=" + documentType);
+        }
+
+        GenericDocument genericDocument = reader.read(file);
         if (genericDocument == null) {
             throw new ModelException("Could not read all required fields on Invoice");
         }
@@ -118,29 +119,6 @@ public class ESDocumentProvider implements DocumentProvider {
             }
         });
         return true;
-    }
-
-    @Override
-    public boolean isSupported(String documentType) {
-        return getDocumentReader(documentType) != null;
-    }
-
-    @Override
-    public boolean isSupported(byte[] bytes) {
-        try {
-            return isSupported(OpenfactModelUtils.getDocumentType(bytes));
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean isSupported(Document document) {
-        try {
-            return isSupported(OpenfactModelUtils.getDocumentType(document));
-        } catch (Exception e) {
-            return false;
-        }
     }
 
 }

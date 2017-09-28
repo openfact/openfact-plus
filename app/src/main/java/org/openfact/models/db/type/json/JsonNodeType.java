@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Objects;
 
-public class JsonNodeType extends ImmutableType<JsonNode>{
+public class JsonNodeType extends ImmutableType<JsonNode> {
 
     public JsonNodeType() {
         super(JsonNode.class);

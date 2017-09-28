@@ -1,7 +1,7 @@
 package org.openfact.models.db.jpa.entity;
 
-import org.openfact.models.db.CollaboratorEntity;
 import org.openfact.models.db.CreatableEntity;
+import org.openfact.models.db.CreatedAtListener;
 import org.openfact.models.db.UpdatableEntity;
 import org.openfact.models.db.UpdatedAtListener;
 

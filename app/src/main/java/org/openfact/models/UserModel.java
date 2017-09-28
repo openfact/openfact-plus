@@ -22,7 +22,7 @@ public interface UserModel {
     void setRegistrationCompleted(boolean registrationCompleted);
 
     String getOfflineRefreshToken();
-    void setOfflineRefreshToken(String refreshToken);
+    void setOfflineRefreshToken(String offlineRefreshToken);
 
     String getImageURL();
     void setImageURL(String imageURL);
@@ -43,17 +43,8 @@ public interface UserModel {
     Date getUpdatedAt();
 
     Set<SpaceModel> getOwnedSpaces();
-//    Set<SharedSpaceModel> getSharedSpaces();
 
-//    Set<String> getRecentSpaces();
-//    void setRecentSpaces(Set<String> recentSpaces);
     JsonNode getContextInformation();
     void setContextInformation(JsonNode contextInformation);
-
-//    List<RequestAccessToSpaceModel> getSpaceRequests();
-//
-//    UserRepositoryModel addRepository(String email, BrokerType type);
-//    List<UserRepositoryModel> getRepositories();
-//    boolean removeAllRepositories();
 
 }

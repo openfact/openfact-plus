@@ -26,16 +26,16 @@ public class DocumentManager {
 
     /**
      * @param bytes
-     * @throws ParseExceptionModel in case InputStream passed could not be processed
-     * @throws StorageException    in case could not be persist file on storage
+     * @throws ModelParseException in case InputStream passed could not be processed
+     * @throws ModelStorageException    in case could not be persist file on storage
      * @throws ModelException      in case unexpected error happens
      */
-    public DocumentModel importDocument(byte[] bytes) throws ParseExceptionModel, StorageException {
+    public DocumentModel importDocument(byte[] bytes) throws ModelParseException, ModelStorageException, ModelUnsupportedTypeException {
         Document document;
         try {
             document = OpenfactModelUtils.toDocument(bytes);
         } catch (ParserConfigurationException | IOException | SAXException e) {
-            throw new ParseExceptionModel("Could not parse bytes[] to Document", e);
+            throw new ModelParseException("Could not parse bytes[] to Document", e);
         }
 
         return importDocument(document);
@@ -43,16 +43,16 @@ public class DocumentManager {
 
     /**
      * @param inputStream java.io.InputStream
-     * @throws ParseExceptionModel in case InputStream passed could not be processed
-     * @throws StorageException    in case could not be persist file on storage
+     * @throws ModelParseException in case InputStream passed could not be processed
+     * @throws ModelStorageException    in case could not be persist file on storage
      * @throws ModelException      in case unexpected error happens
      */
-    public DocumentModel importDocument(InputStream inputStream) throws ParseExceptionModel, StorageException {
+    public DocumentModel importDocument(InputStream inputStream) throws ModelParseException, ModelStorageException, ModelUnsupportedTypeException {
         Document document;
         try {
             document = OpenfactModelUtils.toDocument(inputStream);
         } catch (ParserConfigurationException | IOException | SAXException e) {
-            throw new ParseExceptionModel("Could not parse inputStream to Document", e);
+            throw new ModelParseException("Could not parse inputStream to Document", e);
         }
 
         return importDocument(document);
@@ -60,23 +60,25 @@ public class DocumentManager {
 
     /**
      * @param document
-     * @throws ParseExceptionModel in case InputStream passed could not be processed
-     * @throws StorageException    in case could not be persist file on storage
+     * @throws ModelParseException in case InputStream passed could not be processed
+     * @throws ModelStorageException    in case could not be persist file on storage
      * @throws ModelException      in case unexpected error happens
      */
-    public DocumentModel importDocument(Document document) throws ParseExceptionModel, StorageException {
+    public DocumentModel importDocument(Document document) throws ModelParseException, ModelStorageException, ModelUnsupportedTypeException {
         // Persist File
         FileModel fileModel;
         try {
             byte[] file = OpenfactModelUtils.toByteArray(document);
             fileModel = fileProvider.addFile(file, ".xml");
         } catch (TransformerException e) {
-            throw new ParseExceptionModel("Could not parse Document to bytes[]", e);
+            throw new ModelParseException("Could not parse Document to bytes[]", e);
         }
 
         // Persist Document
         try {
-            return documentProvider.addDocument(fileModel);
+            BasicXmlFileModel xmlFile = new BasicXmlFileModel(fileModel);
+            BasicXmlUblFileModel ublFile = new BasicXmlUblFileModel(xmlFile);
+            return documentProvider.addDocument(ublFile);
         } catch (ModelException e) {
             boolean result = fileProvider.removeFile(fileModel);
             logger.infof("Rollback file result={}", result);
@@ -96,10 +98,10 @@ public class DocumentManager {
         // Delete file
         try {
             fileProvider.removeFile(file);
-        } catch (StorageException e) {
+        } catch (ModelStorageException e) {
             try {
                 fileProvider.removeFile(file);
-            } catch (StorageException e1) {
+            } catch (ModelStorageException e1) {
                 logger.error("Could not remove file:" + file.getId());
                 logger.warn("Transaction was not rolled back");
             }

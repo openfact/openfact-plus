@@ -19,6 +19,7 @@ public abstract class ImmutableType<T> implements UserType {
     }
 
     protected abstract T get(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner) throws SQLException;
+
     protected abstract void set(PreparedStatement st, T value, int index, SharedSessionContractImplementor session) throws SQLException;
 
     @Override

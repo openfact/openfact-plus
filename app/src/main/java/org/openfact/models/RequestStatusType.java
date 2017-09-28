@@ -1,7 +1,12 @@
 package org.openfact.models;
 
 public enum RequestStatusType {
-    REQUESTED("requested"), ACCEPTED("accepted"), REJECTED("rejected");
+
+    REQUESTED("requested"),
+
+    ACCEPTED("accepted"),
+
+    REJECTED("rejected");
 
     private String alias;
 

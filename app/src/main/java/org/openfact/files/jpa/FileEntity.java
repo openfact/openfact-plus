@@ -1,4 +1,4 @@
-package org.openfact.models.db.jpa.entity;
+package org.openfact.files.jpa;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

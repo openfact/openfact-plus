@@ -3,10 +3,7 @@ package org.openfact.services.resources;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.openfact.models.DocumentModel;
-import org.openfact.models.DocumentProvider;
-import org.openfact.models.ParseExceptionModel;
-import org.openfact.models.StorageException;
+import org.openfact.models.*;
 import org.openfact.models.utils.ModelToRepresentation;
 import org.openfact.representation.idm.DocumentRepresentation;
 import org.openfact.services.ErrorResponseException;
@@ -72,10 +69,12 @@ public class DocumentsService {
             DocumentModel documentModel = null;
             try {
                 documentModel = documentManager.importDocument(inputStream);
-            } catch (ParseExceptionModel e) {
+            } catch (ModelParseException e) {
                 throw new ErrorResponseException("Could not process file", Response.Status.BAD_REQUEST);
-            } catch (StorageException e) {
+            } catch (ModelStorageException e) {
                 throw new ErrorResponseException("Could not write files to storage", Response.Status.INTERNAL_SERVER_ERROR);
+            } catch (ModelUnsupportedTypeException e) {
+                throw new ErrorResponseException("Unsupported type", Response.Status.BAD_REQUEST);
             }
 
             // Return result

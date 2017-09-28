@@ -1,7 +1,4 @@
-package org.openfact.models.db;
-
-import org.openfact.models.db.jpa.entity.SpaceEntity;
-import org.openfact.models.db.jpa.entity.UserEntity;
+package org.openfact.models.db.jpa.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;

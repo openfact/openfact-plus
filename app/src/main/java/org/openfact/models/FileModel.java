@@ -17,5 +17,5 @@ public interface FileModel {
     /**
      * @return file value on bytes
      */
-    byte[] getFile() throws StorageException;
+    byte[] getFile() throws ModelFetchException;
 }

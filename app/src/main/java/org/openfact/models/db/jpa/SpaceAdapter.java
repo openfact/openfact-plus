@@ -1,7 +1,7 @@
 package org.openfact.models.db.jpa;
 
 import org.openfact.models.*;
-import org.openfact.models.db.CollaboratorEntity;
+import org.openfact.models.db.jpa.entity.CollaboratorEntity;
 import org.openfact.models.db.JpaModel;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.db.jpa.entity.UserEntity;

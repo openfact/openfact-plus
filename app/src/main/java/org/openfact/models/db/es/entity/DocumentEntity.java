@@ -4,7 +4,7 @@ import org.hibernate.search.annotations.Indexed;
 import org.openfact.models.db.CreatableEntity;
 import org.openfact.models.db.UpdatableEntity;
 import org.openfact.models.db.UpdatedAtListener;
-import org.openfact.models.db.jpa.entity.CreatedAtListener;
+import org.openfact.models.db.CreatedAtListener;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 
 import javax.persistence.*;

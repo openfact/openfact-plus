@@ -8,6 +8,7 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeCallbackServlet;
 import org.keycloak.jose.jws.JWSInputException;
 import org.keycloak.util.TokenUtil;
+import org.openfact.models.UserBean;
 import org.openfact.models.UserProvider;
 
 import javax.inject.Inject;
@@ -37,7 +38,12 @@ public class OAuth2LinkOfflineServletCallback extends AbstractAuthorizationCodeC
         if (isOfflineToken) {
             DecodedJWT decodedJWT = JWT.decode(credential.getAccessToken());
             String identityID = decodedJWT.getClaim("userID").asString();
-            userProvider.updateUser(identityID, credential.getRefreshToken(), true);
+
+            UserBean bean = new UserBean();
+            bean.setIdentityID(identityID);
+            bean.setOfflineToken(credential.getRefreshToken());
+            bean.setRegistrationComplete(true);
+            userProvider.updateUser(bean);
 
             resp.sendRedirect(req.getParameter("redirect"));
         } else {

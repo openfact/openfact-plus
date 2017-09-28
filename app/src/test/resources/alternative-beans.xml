@@ -5,6 +5,6 @@
        bean-discovery-mode="all">
 
     <alternatives>
-        <class>org.openfact.models.db.filesystem.FSFileProvider</class>
+        <class>org.openfact.files.filesystem.FSFileProvider</class>
     </alternatives>
 </beans>

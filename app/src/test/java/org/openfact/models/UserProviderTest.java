@@ -52,18 +52,18 @@ public class UserProviderTest extends AbstractModelTest {
         assertThat(users.size()).isEqualTo(5);
     }
 
-    @Test
-    @UsingDataSet("users.yml")
-    @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
-    public void getScrollableUsersTest() {
-        ScrollableResultsModel<UserModel> users = userProvider.getScrollableUsers();
-
-        assertThat(users).isNotNull();
-
-        while (users.next()) {
-            assertThat(users.get()).isNotNull();
-        }
-        users.close();
-    }
+//    @Test
+//    @UsingDataSet("users.yml")
+//    @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
+//    public void getScrollableUsersTest() {
+//        ScrollableResultsModel<UserModel> users = userProvider.getScrollableUsers();
+//
+//        assertThat(users).isNotNull();
+//
+//        while (users.next()) {
+//            assertThat(users.get()).isNotNull();
+//        }
+//        users.close();
+//    }
 
 }

@@ -2,7 +2,6 @@ package org.openfact.batchs.broker;
 
 import org.jberet.support.io.JpaItemReader;
 import org.jboss.logging.Logger;
-import org.openfact.models.DocumentProvider;
 import org.openfact.models.db.jpa.entity.UserLinkedBrokerEntity;
 import org.openfact.repositories.user.*;
 
@@ -20,9 +19,6 @@ public class PullMailMessagesReader extends JpaItemReader {
 
     @Inject
     private MailUtils mailUtils;
-
-    @Inject
-    private DocumentProvider documentProvider;
 
     protected List<PullMailMessageWrapper> messageList = new ArrayList<>();
 
@@ -45,12 +41,8 @@ public class PullMailMessagesReader extends JpaItemReader {
                 }
 
                 for (MailUblMessageModel message : mailProvider.getUblMessages(repository, queryBuilder.build())) {
-                    if (documentProvider.isSupported(message.getXml())) {
-                        this.messageList.add(new PullMailMessageWrapper(message));
-                    }
+                    this.messageList.add(new PullMailMessageWrapper(message));
                 }
-            } else {
-                logger.warn("Skipping broker getUblMessages");
             }
         }
     }

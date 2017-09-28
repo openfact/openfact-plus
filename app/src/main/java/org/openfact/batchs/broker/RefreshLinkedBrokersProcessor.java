@@ -25,12 +25,7 @@ public class RefreshLinkedBrokersProcessor implements ItemProcessor {
 
     @Override
     public UserEntity processItem(Object item) throws Exception {
-        UserEntity userEntity;
-        if (item instanceof UserEntity) {
-            userEntity = (UserEntity) item;
-        } else {
-            throw new IllegalStateException("Could not cast to UserEntity class");
-        }
+        UserEntity userEntity = (UserEntity) item;
 
         Set<UserLinkedBrokerEntity> linkedBrokers = userEntity.getLinkedBrokers();
         Map<String, BrokerType> availableLinkedBrokers = brokerManager.getLinkedBrokers(userEntity.getOfflineToken());

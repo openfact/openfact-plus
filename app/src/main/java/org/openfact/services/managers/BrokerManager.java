@@ -10,24 +10,14 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.keycloak.adapters.KeycloakDeployment;
-import org.openfact.models.BrokerTokenModel;
 import org.openfact.models.BrokerType;
 import org.openfact.representation.idm.TokenRepresentation;
 import org.openfact.services.resources.KeycloakDeploymentConfig;
 import org.openfact.services.resources.oauth2.OAuth2Utils;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Stateless

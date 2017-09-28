@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -85,23 +84,31 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
     }
 
     @Override
-    public ScrollableResultsModel<UserModel> getScrollableUsers() {
-//        ScrollableResults scrollableResults = getSession().createNamedQuery("getAllUsers").scroll(ScrollMode.FORWARD_ONLY);
-//        Function<UserEntity, UserModel> reader = entity -> new UserAdapter(em, entity);
-//        return new ScrollableResultsAdapter<>(scrollableResults, reader);
-        return null;
-    }
+    public void updateUser(UserBean user) {
+        UserEntity userEntity = null;
+        if (user.getId() != null) {
+            userEntity = em.find(UserEntity.class, user.getId());
+        } else if (user.getIdentityID() != null) {
+            TypedQuery<UserEntity> query = em.createNamedQuery("getUserByIdentityID", UserEntity.class);
+            query.setParameter("identityID", user.getIdentityID());
+            List<UserEntity> entities = query.getResultList();
+            if (entities.size() == 1) {
+                userEntity = entities.get(0);
+            } else if (entities.size() > 1) {
+                throw new ModelException("Inconsistent data, found more than one user with identityID=" + user.getIdentityID());
+            }
+        } else {
+            throw new ModelException("Could not identity user identity, please add id or identityID information");
+        }
 
-    @Override
-    public void updateUser(String identityID, String offlineToken, boolean registrationComplete) {
-        TypedQuery<UserEntity> query = em.createNamedQuery("getUserByIdentityID", UserEntity.class);
-        query.setParameter("identityID", identityID);
-        List<UserEntity> entities = query.getResultList();
-        if (entities.size() == 0) throw new ModelException("User not found");
+        if (userEntity == null) {
+            throw new ModelException("User not found");
+        }
 
-        UserEntity entity = entities.get(0);
-        entity.setOfflineToken(offlineToken);
-        entity.setRegistrationCompleted(registrationComplete);
+        userEntity.setOfflineToken(user.getOfflineToken());
+        userEntity.setRegistrationCompleted(user.getRegistrationComplete());
+
+        em.merge(userEntity);
     }
 
 }

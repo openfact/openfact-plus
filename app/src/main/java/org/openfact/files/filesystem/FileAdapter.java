@@ -1,8 +1,9 @@
-package org.openfact.models.db.filesystem;
+package org.openfact.files.filesystem;
 
 import org.apache.commons.io.FilenameUtils;
 import org.openfact.models.FileModel;
-import org.openfact.models.StorageException;
+import org.openfact.models.ModelFetchException;
+import org.openfact.models.ModelStorageException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,11 +33,11 @@ public class FileAdapter implements FileModel {
     }
 
     @Override
-    public byte[] getFile() throws StorageException {
+    public byte[] getFile() throws ModelFetchException {
         try {
             return Files.readAllBytes(path);
         } catch (IOException e) {
-            throw new StorageException("Could not read file: " + path.toAbsolutePath().toString(), e);
+            throw new ModelFetchException("Could not fetch file: " + path.toAbsolutePath().toString(), e);
         }
     }
 }

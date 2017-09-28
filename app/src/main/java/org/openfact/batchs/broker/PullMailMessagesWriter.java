@@ -1,6 +1,7 @@
 package org.openfact.batchs.broker;
 
 import org.jboss.logging.Logger;
+import org.openfact.models.ModelUnsupportedTypeException;
 import org.openfact.services.managers.DocumentManager;
 
 import javax.batch.api.chunk.ItemWriter;
@@ -29,7 +30,11 @@ public class PullMailMessagesWriter implements ItemWriter {
     public void writeItems(List<Object> items) throws Exception {
         for (Object o : items) {
             PullMailMessageWrapper wrapper = (PullMailMessageWrapper) o;
-            documentManager.importDocument(wrapper.getMessage().getXml());
+            try {
+                documentManager.importDocument(wrapper.getMessage().getXml());
+            } catch (ModelUnsupportedTypeException e) {
+                logger.warn("Unsupported document type", e);
+            }
         }
     }
 

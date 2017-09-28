@@ -8,15 +8,11 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
-
-import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,7 +35,7 @@ public class FileSystemFileProviderTest {
 
     @Test
     @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
-    public void createFilesTest() throws StorageException {
+    public void createFilesTest() throws ModelStorageException {
         FileModel file1 = fileProvider.addFile(new byte[]{0, 1, 2, 3, 4, 5}, ".xml");
 
         assertThat(file1).isNotNull()
@@ -54,7 +50,7 @@ public class FileSystemFileProviderTest {
 
     @Test
     @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
-    public void removeFile() throws StorageException {
+    public void removeFile() throws ModelStorageException {
         FileModel file = fileProvider.addFile(new byte[]{0, 1, 2, 3, 4, 5}, ".xml");
 
         boolean result = fileProvider.removeFile(file);
