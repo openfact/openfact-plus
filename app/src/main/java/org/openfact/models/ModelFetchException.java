@@ -1,8 +1,6 @@
 package org.openfact.models;
 
-import java.io.IOException;
-
-public class ModelFetchException extends ModelStorageException {
+public class ModelFetchException extends Exception {
 
     public ModelFetchException(String message) {
         super(message);
@@ -11,4 +9,5 @@ public class ModelFetchException extends ModelStorageException {
     public ModelFetchException(String message, Throwable t) {
         super(message, t);
     }
+
 }

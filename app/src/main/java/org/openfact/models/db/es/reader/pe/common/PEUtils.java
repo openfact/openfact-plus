@@ -3,7 +3,6 @@ package org.openfact.models.db.es.reader.pe.common;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CustomerPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.SupplierPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyType;
-import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 

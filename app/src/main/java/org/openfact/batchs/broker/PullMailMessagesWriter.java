@@ -36,7 +36,7 @@ public class PullMailMessagesWriter implements ItemWriter {
             } catch (ModelUnsupportedTypeException e) {
                 logger.debug("Unsupported document type");
             } catch (ModelParseException e) {
-                logger.error("Could not parse document");
+                logger.debug("Unparsed document type");
             }
         }
     }

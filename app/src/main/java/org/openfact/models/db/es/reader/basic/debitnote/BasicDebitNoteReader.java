@@ -3,17 +3,18 @@ package org.openfact.models.db.es.reader.basic.debitnote;
 import com.helger.ubl21.UBL21Reader;
 import oasis.names.specification.ubl.schema.xsd.debitnote_21.DebitNoteType;
 import org.jboss.logging.Logger;
-import org.openfact.models.*;
+import org.openfact.models.InteractType;
+import org.openfact.models.ModelFetchException;
+import org.openfact.models.ModelParseException;
+import org.openfact.models.XmlUBLFileModel;
 import org.openfact.models.db.es.DocumentReader;
 import org.openfact.models.db.es.GenericDocument;
 import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.entity.DocumentSpaceEntity;
-import org.openfact.models.db.es.reader.LocationType;
 import org.openfact.models.db.es.reader.MapperType;
 import org.openfact.models.db.es.reader.basic.common.BasicUtils;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
-import org.w3c.dom.Document;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -22,7 +23,6 @@ import java.util.HashSet;
 
 @Stateless
 @MapperType(value = "DebitNote")
-@LocationType(value = "default")
 public class BasicDebitNoteReader implements DocumentReader {
 
     private static final Logger logger = Logger.getLogger(BasicDebitNoteReader.class);
@@ -31,20 +31,15 @@ public class BasicDebitNoteReader implements DocumentReader {
     private BasicUtils basicUtils;
 
     @Override
-    public GenericDocument read(XmlUblFileModel file) throws ModelFetchException, ModelParseException {
-        byte[] bytes = file.getFile();
+    public int getPriority() {
+        return 0;
+    }
 
-        Document document;
-        try {
-            document = OpenfactModelUtils.toDocument(bytes);
-        } catch (Exception e) {
-            logger.error("Could not parse document even when is " + XmlUblFileModel.class.getName());
-            throw new ModelException("Could not read document");
-        }
-
-        DebitNoteType debitNoteType = UBL21Reader.debitNote().read(document);
+    @Override
+    public GenericDocument read(XmlUBLFileModel file) {
+        DebitNoteType debitNoteType = UBL21Reader.debitNote().read(file.getDocument());
         if (debitNoteType == null) {
-            throw new ModelParseException("Could not parse document, it could be caused by invalid xml content");
+            return null;
         }
 
         SpaceEntity senderSpaceEntity = basicUtils.getSenderSpace(debitNoteType.getAccountingSupplierParty());
@@ -75,7 +70,7 @@ public class BasicDebitNoteReader implements DocumentReader {
             }
 
             @Override
-            public Object getType() {
+            public Object getJaxb() {
                 return debitNoteType;
             }
         };

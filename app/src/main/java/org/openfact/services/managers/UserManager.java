@@ -53,13 +53,13 @@ public class UserManager {
 //    public void refreshUserAvailableRepositories(UserModel user) {
 //        if (hasValidOfflineRefreshToken(user)) {
 //            List<BrokerType> currentBrokers = user.getRepositories().stream()
-//                    .read(UserRepositoryModel::getType)
+//                    .read(UserRepositoryModel::getDocumentType)
 //                    .collect(Collectors.toList());
 //
 //            brokerManager.getAvailableBrokers(user.getOfflineRefreshToken()).stream()
-//                    .filter(p -> !currentBrokers.contains(p.getType()))
+//                    .filter(p -> !currentBrokers.contains(p.getDocumentType()))
 //                    .forEach(c -> {
-//                        user.addRepository(c.getEmail(), c.getType());
+//                        user.addRepository(c.getEmail(), c.getDocumentType());
 //                    });
 //        } else {
 //            user.removeAllRepositories();

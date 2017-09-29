@@ -5,17 +5,14 @@ import org.openfact.models.*;
 import org.openfact.models.DocumentModel.DocumentCreationEvent;
 import org.openfact.models.DocumentModel.DocumentRemovedEvent;
 import org.openfact.models.db.es.entity.DocumentEntity;
-import org.openfact.models.db.es.reader.MapperTypeLiteral;
 import org.openfact.models.db.es.reader.ReaderUtil;
 import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import java.lang.annotation.Annotation;
+import java.util.SortedSet;
 
 @Stateless
 public class ESDocumentProvider implements DocumentProvider {
@@ -28,32 +25,28 @@ public class ESDocumentProvider implements DocumentProvider {
     @Inject
     private ReaderUtil readerUtil;
 
-    private String getDocumentType(FileModel file) {
-        String documentType;
-        try {
-            documentType = OpenfactModelUtils.getDocumentType(file.getFile());
-        } catch (Exception e) {
-            throw new ModelException("Could not read file bytes");
-        }
-        return documentType;
-    }
-
     @Override
-    public DocumentModel addDocument(XmlUblFileModel file) throws ModelUnsupportedTypeException, ModelFetchException, ModelParseException {
-        String documentType = getDocumentType(file);
-        DocumentReader reader = readerUtil.getReader(documentType);
-        if (reader == null) {
-            throw new ModelUnsupportedTypeException("Unsupported type=" + documentType);
+    public DocumentModel addDocument(XmlUBLFileModel file) throws ModelUnsupportedTypeException, ModelParseException {
+        SortedSet<DocumentReader> readers = readerUtil.getReader(file.getDocumentType());
+        if (readers.isEmpty()) {
+            throw new ModelUnsupportedTypeException("Unsupported type=" + file.getDocumentType());
         }
 
-        GenericDocument genericDocument = reader.read(file);
-        if (genericDocument == null) {
-            throw new ModelException("Could not read all required fields on Invoice");
+        GenericDocument genericDocument = null;
+        for (DocumentReader reader : readers) {
+            genericDocument = reader.read(file);
+            if (genericDocument != null) {
+                break;
+            }
         }
+        if (genericDocument == null) {
+            throw new ModelParseException(file.getDocumentType() + " Is supported but could not parsed");
+        }
+        Object jaxb = genericDocument.getJaxb();
 
         DocumentEntity documentEntity = genericDocument.getEntity();
         documentEntity.setId(OpenfactModelUtils.generateId());
-        documentEntity.setType(documentType);
+        documentEntity.setType(file.getDocumentType());
         em.persist(documentEntity);
 
         DocumentAdapter document = new DocumentAdapter(em, documentEntity);
@@ -61,13 +54,13 @@ public class ESDocumentProvider implements DocumentProvider {
         Event<DocumentCreationEvent> event = readerUtil.getCreationEvents(document.getType());
         event.fire(new DocumentCreationEvent() {
             @Override
-            public String getType() {
-                return documentType;
+            public String getDocumentType() {
+                return file.getDocumentType();
             }
 
             @Override
-            public Object getDocumentType() {
-                return genericDocument.getType();
+            public Object getJaxb() {
+                return jaxb;
             }
 
             @Override

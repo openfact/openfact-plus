@@ -2,7 +2,6 @@ package org.openfact.models.db.es.reader.pe.invoice;
 
 import org.openfact.models.DocumentModel.DocumentCreationEvent;
 import org.openfact.models.DocumentModel.DocumentRemovedEvent;
-import org.openfact.models.db.es.reader.LocationType;
 import org.openfact.models.db.es.reader.MapperType;
 
 import javax.ejb.Stateless;
@@ -16,11 +15,11 @@ public class PEInvoiceListener {
     @Inject
     private EntityManager em;
 
-    public void creationListener(@Observes() @MapperType(value = "Invoice") @LocationType(value = "peru") DocumentCreationEvent createdDocument) {
+    public void creationListener(@Observes() @MapperType(value = "Invoice") DocumentCreationEvent createdDocument) {
 
     }
 
-    public void removeListener(@Observes() @MapperType(value = "Invoice") @LocationType(value = "peru") DocumentRemovedEvent removedDocument) {
+    public void removeListener(@Observes() @MapperType(value = "Invoice") DocumentRemovedEvent removedDocument) {
 
     }
 

@@ -38,7 +38,7 @@ public class DocumentProviderTest extends AbstractModelTest {
 //        assertThat(document1).isNotNull()
 //                .matches(u -> u.getId() != null)
 //                .matches(u -> u.getFileId().equals(file.getId()))
-//                .matches(u -> u.getType().equals("Invoice"))
+//                .matches(u -> u.getJaxb().equals("Invoice"))
 //                .matches(u -> u.getAssignedId().equals("BB11-1"));
 //    }
 

@@ -6,6 +6,6 @@ public interface GenericDocument {
 
     DocumentEntity getEntity();
 
-    Object getType();
+    Object getJaxb();
 
 }

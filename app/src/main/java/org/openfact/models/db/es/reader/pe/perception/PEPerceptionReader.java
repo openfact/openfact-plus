@@ -6,7 +6,6 @@ import org.openfact.models.db.es.DocumentReader;
 import org.openfact.models.db.es.GenericDocument;
 import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.entity.DocumentSpaceEntity;
-import org.openfact.models.db.es.reader.LocationType;
 import org.openfact.models.db.es.reader.MapperType;
 import org.openfact.models.db.es.reader.pe.common.PEUtils;
 import org.openfact.models.db.es.reader.pe.common.jaxb.perception.PerceptionType;
@@ -25,7 +24,6 @@ import java.util.HashSet;
 
 @Stateless
 @MapperType(value = "Perception")
-@LocationType(value = "peru")
 public class PEPerceptionReader implements DocumentReader {
 
     private static final Logger logger = Logger.getLogger(PEPerceptionReader.class);
@@ -34,22 +32,17 @@ public class PEPerceptionReader implements DocumentReader {
     private PEUtils peUtils;
 
     @Override
-    public GenericDocument read(XmlUblFileModel file) throws ModelFetchException, ModelParseException {
-        byte[] bytes = file.getFile();
+    public int getPriority() {
+        return 0;
+    }
 
-        Document document;
-        try {
-            document = OpenfactModelUtils.toDocument(bytes);
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            logger.error("Could not parse document event when is " + XmlUblFileModel.class.getName());
-            throw new ModelException("Could not read document");
-        }
-
+    @Override
+    public GenericDocument read(XmlUBLFileModel file) {
         PerceptionType perceptionType;
         try {
-            perceptionType = OpenfactModelUtils.unmarshall(document, PerceptionType.class);
+            perceptionType = OpenfactModelUtils.unmarshall(file.getDocument(), PerceptionType.class);
         } catch (JAXBException e) {
-            throw new ModelParseException("Could not parse document, it could be caused by invalid xml content");
+            return null;
         }
 
         SpaceEntity senderSpaceEntity = peUtils.getSpace(perceptionType.getAgentParty());
@@ -81,7 +74,7 @@ public class PEPerceptionReader implements DocumentReader {
             }
 
             @Override
-            public Object getType() {
+            public Object getJaxb() {
                 return perceptionType;
             }
         };

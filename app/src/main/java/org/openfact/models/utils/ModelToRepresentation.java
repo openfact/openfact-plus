@@ -184,7 +184,7 @@ public class ModelToRepresentation {
 //        RepositoryRepresentation rep = new RepositoryRepresentation();
 //
 //        rep.setId(model.getId());
-//        rep.setType(model.getType().getName());
+//        rep.setType(model.getJaxb().getName());
 //        rep.setEmail(model.getEmail());
 //        rep.setLasTimeSynchronized(model.getLastTimeSynchronized());
 //

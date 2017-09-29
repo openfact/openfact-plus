@@ -25,8 +25,8 @@ public interface DocumentModel {
     Set<SpaceModel> getSpaces();
 
     interface DocumentCreationEvent extends ProviderEvent {
-        String getType();
-        Object getDocumentType();
+        String getDocumentType();
+        Object getJaxb();
         DocumentModel getCreatedDocument();
     }
 

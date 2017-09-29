@@ -3,6 +3,7 @@ package org.openfact.services.resources;
 import org.jboss.logging.Logger;
 import org.openfact.models.FileModel;
 import org.openfact.models.FileProvider;
+import org.openfact.models.ModelFetchException;
 import org.openfact.models.ModelStorageException;
 import org.openfact.services.ErrorResponse;
 
@@ -38,8 +39,8 @@ public class FilesService {
         Response.ResponseBuilder response;
         try {
             response = Response.ok(file.getFile());
-        } catch (ModelStorageException e) {
-            logger.error("Could not retrieve file from storage");
+        } catch (ModelFetchException e) {
+            logger.error("Could not fetch file from storage");
             return ErrorResponse.error("Could not read file", Response.Status.SERVICE_UNAVAILABLE);
         }
 

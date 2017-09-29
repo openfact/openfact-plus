@@ -1,5 +1,6 @@
 package org.openfact.services.managers;
 
+import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 import org.openfact.models.*;
 import org.openfact.models.utils.OpenfactModelUtils;
@@ -30,15 +31,20 @@ public class DocumentManager {
      * @throws ModelStorageException in case could not be persist file on storage
      * @throws ModelException        in case unexpected error happens
      */
-    public DocumentModel importDocument(byte[] bytes) throws ModelParseException, ModelStorageException, ModelUnsupportedTypeException {
-        Document document;
-        try {
-            document = OpenfactModelUtils.toDocument(bytes);
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            throw new ModelParseException("Could not parse bytes[] to Document", e);
-        }
+    public DocumentModel importDocument(byte[] bytes) throws ModelStorageException, ModelUnsupportedTypeException, ModelFetchException, ModelParseException {
+        FileModel fileModel = fileProvider.addFile(bytes, ".xml");
 
-        return importDocument(document);
+        try {
+            FlyWeightXmlUBLFileModel flyWeightFile = new FlyWeightXmlUBLFileModel(
+                    new FlyWeightXmlFileModel(
+                            new FlyWeightFileModel(fileModel))
+            );
+            return documentProvider.addDocument(flyWeightFile);
+        } catch (ModelUnsupportedTypeException | ModelParseException e) {
+            boolean result = fileProvider.removeFile(fileModel);
+            logger.debug("Rollback file result=" + result);
+            throw e;
+        }
     }
 
     /**
@@ -47,43 +53,8 @@ public class DocumentManager {
      * @throws ModelStorageException in case could not be persist file on storage
      * @throws ModelException        in case unexpected error happens
      */
-    public DocumentModel importDocument(InputStream inputStream) throws ModelParseException, ModelStorageException, ModelUnsupportedTypeException {
-        Document document;
-        try {
-            document = OpenfactModelUtils.toDocument(inputStream);
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            throw new ModelParseException("Could not parse inputStream to Document", e);
-        }
-
-        return importDocument(document);
-    }
-
-    /**
-     * @param document
-     * @throws ModelParseException   in case InputStream passed could not be processed
-     * @throws ModelStorageException in case could not be persist file on storage
-     * @throws ModelException        in case unexpected error happens
-     */
-    public DocumentModel importDocument(Document document) throws ModelParseException, ModelStorageException, ModelUnsupportedTypeException {
-        // Persist File
-        FileModel fileModel;
-        try {
-            byte[] file = OpenfactModelUtils.toByteArray(document);
-            fileModel = fileProvider.addFile(file, ".xml");
-        } catch (TransformerException e) {
-            throw new ModelParseException("Could not parse Document to bytes[]", e);
-        }
-
-        // Persist Document
-        try {
-            BasicXmlFileModel xmlFile = new BasicXmlFileModel(fileModel);
-            BasicXmlUblFileModel ublFile = new BasicXmlUblFileModel(xmlFile);
-            return documentProvider.addDocument(ublFile);
-        } catch (ModelUnsupportedTypeException | ModelFetchException | ModelParseException | ModelException e) {
-            boolean result = fileProvider.removeFile(fileModel);
-            logger.infof("Rollback file result={}", result);
-            throw e;
-        }
+    public DocumentModel importDocument(InputStream inputStream) throws IOException, ModelStorageException, ModelUnsupportedTypeException, ModelFetchException, ModelParseException {
+        return importDocument(IOUtils.toByteArray(inputStream));
     }
 
     public boolean removeDocument(DocumentModel ublDocument) {

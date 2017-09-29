@@ -1,11 +1,11 @@
 package org.openfact.models.db.es;
 
-import org.openfact.models.ModelFetchException;
-import org.openfact.models.ModelParseException;
-import org.openfact.models.XmlUblFileModel;
+import org.openfact.models.XmlUBLFileModel;
 
 public interface DocumentReader {
 
-    GenericDocument read(XmlUblFileModel file) throws ModelFetchException, ModelParseException;
+    int getPriority();
+
+    GenericDocument read(XmlUBLFileModel file);
 
 }

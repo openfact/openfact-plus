@@ -8,7 +8,6 @@ import org.openfact.models.db.es.DocumentReader;
 import org.openfact.models.db.es.GenericDocument;
 import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.entity.DocumentSpaceEntity;
-import org.openfact.models.db.es.reader.LocationType;
 import org.openfact.models.db.es.reader.MapperType;
 import org.openfact.models.db.es.reader.basic.common.BasicUtils;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
@@ -22,7 +21,6 @@ import java.util.HashSet;
 
 @Stateless
 @MapperType(value = "Invoice")
-@LocationType(value = "default")
 public class BasicInvoiceReader implements DocumentReader {
 
     private static final Logger logger = Logger.getLogger(BasicInvoiceReader.class);
@@ -31,20 +29,15 @@ public class BasicInvoiceReader implements DocumentReader {
     private BasicUtils basicUtils;
 
     @Override
-    public GenericDocument read(XmlUblFileModel file) throws ModelFetchException, ModelParseException {
-        byte[] bytes = file.getFile();
+    public int getPriority() {
+        return 0;
+    }
 
-        Document document;
-        try {
-            document = OpenfactModelUtils.toDocument(bytes);
-        } catch (Exception e) {
-            logger.error("Could not parse document even when is " + XmlUblFileModel.class.getName());
-            throw new ModelException("Could not read document");
-        }
-
-        InvoiceType invoiceType = UBL21Reader.invoice().read(document);
+    @Override
+    public GenericDocument read(XmlUBLFileModel file) {
+        InvoiceType invoiceType = UBL21Reader.invoice().read(file.getDocument());
         if (invoiceType == null) {
-            throw new ModelParseException("Could not parse document, it could be caused by invalid xml content");
+            return null;
         }
 
         SpaceEntity senderSpaceEntity = basicUtils.getSenderSpace(invoiceType.getAccountingSupplierParty());
@@ -76,7 +69,7 @@ public class BasicInvoiceReader implements DocumentReader {
             }
 
             @Override
-            public Object getType() {
+            public Object getJaxb() {
                 return invoiceType;
             }
         };

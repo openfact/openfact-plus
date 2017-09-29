@@ -69,12 +69,14 @@ public class DocumentsService {
             DocumentModel documentModel = null;
             try {
                 documentModel = documentManager.importDocument(inputStream);
-            } catch (ModelParseException e) {
-                throw new ErrorResponseException("Could not process file", Response.Status.BAD_REQUEST);
-            } catch (ModelStorageException e) {
-                throw new ErrorResponseException("Could not write files to storage", Response.Status.INTERNAL_SERVER_ERROR);
-            } catch (ModelUnsupportedTypeException e) {
+            } catch (ModelUnsupportedTypeException | ModelParseException e) {
                 throw new ErrorResponseException("Unsupported type", Response.Status.BAD_REQUEST);
+            } catch (ModelStorageException e) {
+                throw new ErrorResponseException("Could not save file", Response.Status.INTERNAL_SERVER_ERROR);
+            } catch (ModelFetchException e) {
+                throw new ErrorResponseException("Could not fetch file", Response.Status.INTERNAL_SERVER_ERROR);
+            } catch (IOException e) {
+                throw new ErrorResponseException("Could not read file", Response.Status.INTERNAL_SERVER_ERROR);
             }
 
             // Return result
