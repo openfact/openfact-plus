@@ -31,7 +31,8 @@ public class ReaderUtil {
     }
 
     public DocumentReader getReader(String documentType) {
-        String location = OpenfactConfig.getInstance().getProperty("invoice.reader", "default");
+        String location = OpenfactConfig.getInstance()
+                .getProperty(documentType.toLowerCase(), "default");
         return getReader(documentType, location);
     }
 
@@ -47,7 +48,8 @@ public class ReaderUtil {
     }
 
     public Event<DocumentCreationEvent> getCreationEvents(String documentType) {
-        String location = OpenfactConfig.getInstance().getProperty("invoice.reader", "default");
+        String location = OpenfactConfig.getInstance()
+                .getProperty(documentType.toLowerCase(), "default");
         return getCreationEvents(documentType, location);
     }
 
@@ -58,7 +60,8 @@ public class ReaderUtil {
     }
 
     public Event<DocumentRemovedEvent> getRemovedEvents(String documentType) {
-        String location = OpenfactConfig.getInstance().getProperty("invoice.reader", "default");
+        String location = OpenfactConfig.getInstance()
+                .getProperty(documentType.toLowerCase(), "default");
         return getRemovedEvents(documentType, location);
     }
 

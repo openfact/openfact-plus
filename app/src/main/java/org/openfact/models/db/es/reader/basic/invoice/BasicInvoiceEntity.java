@@ -16,7 +16,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "getInvoiceByDocumentId", query = "select d from PEInvoiceEntity d inner join d.document u where u.id = :documentId")
 })
-public class DefaultInvoiceEntity {
+public class BasicInvoiceEntity {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
@@ -73,7 +73,7 @@ public class DefaultInvoiceEntity {
      * Lines
      * */
     @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true, mappedBy = "invoice", fetch = FetchType.LAZY)
-    private List<DefaultInvoiceLineEntity> lines = new ArrayList<>();
+    private List<BasicInvoiceLineEntity> lines = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -163,11 +163,11 @@ public class DefaultInvoiceEntity {
         this.payableAmount = payableAmount;
     }
 
-    public List<DefaultInvoiceLineEntity> getLines() {
+    public List<BasicInvoiceLineEntity> getLines() {
         return lines;
     }
 
-    public void setLines(List<DefaultInvoiceLineEntity> lines) {
+    public void setLines(List<BasicInvoiceLineEntity> lines) {
         this.lines = lines;
     }
 

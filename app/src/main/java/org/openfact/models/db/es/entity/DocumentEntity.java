@@ -1,18 +1,18 @@
 package org.openfact.models.db.es.entity;
 
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.openfact.models.db.CreatableEntity;
 import org.openfact.models.db.UpdatableEntity;
 import org.openfact.models.db.UpdatedAtListener;
 import org.openfact.models.db.CreatedAtListener;
+import org.openfact.models.db.jpa.entity.CollaboratorEntity;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 @Indexed
@@ -53,10 +53,9 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "space_id", foreignKey = @ForeignKey)
-    private SpaceEntity space;
+    @IndexedEmbedded
+    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private Set<DocumentSpaceEntity> spaces = new HashSet<>();
 
     public String getId() {
         return id;
@@ -116,11 +115,11 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.updatedAt = updatedAt;
     }
 
-    public SpaceEntity getSpace() {
-        return space;
+    public Set<DocumentSpaceEntity> getSpaces() {
+        return spaces;
     }
 
-    public void setSpace(SpaceEntity space) {
-        this.space = space;
+    public void setSpaces(Set<DocumentSpaceEntity> spaces) {
+        this.spaces = spaces;
     }
 }

@@ -1,4 +1,4 @@
-package org.openfact.models.db.es.reader.basic.creditnote;
+package org.openfact.models.db.es.reader.basic.debitnote;
 
 import org.hibernate.search.annotations.Indexed;
 
@@ -10,8 +10,8 @@ import java.util.List;
 
 @Entity
 @Indexed
-@Table(name = "credit_note")
-public class DefaultCreditNoteEntity {
+@Table(name = "debit_note")
+public class BasicDebitNoteEntity {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
@@ -62,8 +62,8 @@ public class DefaultCreditNoteEntity {
     /*
      * Lines
      * */
-    @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true, mappedBy = "creditNote", fetch = FetchType.LAZY)
-    private List<DefaultCreditNoteLineEntity> lines = new ArrayList<>();
+    @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true, mappedBy = "debitNote", fetch = FetchType.LAZY)
+    private List<BasicDebitNoteLineEntity> lines = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -153,11 +153,11 @@ public class DefaultCreditNoteEntity {
         this.payableAmount = payableAmount;
     }
 
-    public List<DefaultCreditNoteLineEntity> getLines() {
+    public List<BasicDebitNoteLineEntity> getLines() {
         return lines;
     }
 
-    public void setLines(List<DefaultCreditNoteLineEntity> lines) {
+    public void setLines(List<BasicDebitNoteLineEntity> lines) {
         this.lines = lines;
     }
 }

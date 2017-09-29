@@ -10,7 +10,10 @@ import org.openfact.services.resources.UsersService;
 import javax.ejb.Stateless;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Stateless
 public class ModelToRepresentation {
@@ -132,17 +135,20 @@ public class ModelToRepresentation {
         relationships.setOwnedBy(ownedBy);
         rep.setRelationships(relationships);
 
-        SpaceRepresentation.Data spaceData = new SpaceRepresentation.Data();
-        spaceData.setId(model.getSpace().getId());
-        spaceData.setType(ModelType.SPACES.getAlias());
-        ownedBy.setData(spaceData); // save
+        List<SpaceRepresentation.Data> owners = model.getSpaces().stream().map(space -> {
+            SpaceRepresentation.Data spaceData = new SpaceRepresentation.Data();
+            spaceData.setId(space.getId());
+            spaceData.setType(ModelType.SPACES.getAlias());
+            return spaceData;
+        }).collect(Collectors.toList());
+        ownedBy.setData(owners); // save
 
-        GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
-        ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
-                .path(SpacesService.class)
-                .path(SpacesService.class, "getSpace")
-                .build(model.getSpace().getId()).toString());
-        ownedBy.setLinks(ownedLinks); // save
+//        GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
+//        ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
+//                .path(SpacesService.class)
+//                .path(SpacesService.class, "getSpace")
+//                .build(model.getSpace().getId()).toString());
+//        ownedBy.setLinks(ownedLinks); // save
 
         // Attributes
         DocumentRepresentation.Attributes attributes = new DocumentRepresentation.Attributes();

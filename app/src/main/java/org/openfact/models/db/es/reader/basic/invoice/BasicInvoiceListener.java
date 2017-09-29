@@ -19,7 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 @Stateless
-public class DefaultInvoiceListener {
+public class BasicInvoiceListener {
 
     @Inject
     private EntityManager em;
@@ -28,7 +28,7 @@ public class DefaultInvoiceListener {
         DocumentEntity documentEntity = DocumentAdapter.toEntity(createdDocument.getCreatedDocument(), em);
         InvoiceType invoiceType = (InvoiceType) createdDocument.getDocumentType();
 
-        DefaultInvoiceEntity invoiceEntity = new DefaultInvoiceEntity();
+        BasicInvoiceEntity invoiceEntity = new BasicInvoiceEntity();
         invoiceEntity.setId(OpenfactModelUtils.generateId());
         invoiceEntity.setAssignedId(invoiceType.getIDValue());
         invoiceEntity.setDocument(documentEntity);
@@ -54,7 +54,7 @@ public class DefaultInvoiceListener {
         em.persist(invoiceEntity);
 
         invoiceType.getInvoiceLine().forEach(lineType -> {
-            DefaultInvoiceLineEntity lineEntity = new DefaultInvoiceLineEntity();
+            BasicInvoiceLineEntity lineEntity = new BasicInvoiceLineEntity();
             lineEntity.setId(OpenfactModelUtils.generateId());
             lineEntity.setInvoice(invoiceEntity);
             lineEntity.setQuantity(lineEntity.getQuantity());
@@ -68,7 +68,7 @@ public class DefaultInvoiceListener {
     public void removeListener(@Observes() @MapperType(value = "Invoice") @LocationType(value = "default") DocumentRemovedEvent removedDocument) {
         DocumentModel document = removedDocument.getDocument();
 
-        TypedQuery<DefaultInvoiceEntity> typedQuery = em.createNamedQuery("getInvoiceByDocumentId", DefaultInvoiceEntity.class);
+        TypedQuery<BasicInvoiceEntity> typedQuery = em.createNamedQuery("getInvoiceByDocumentId", BasicInvoiceEntity.class);
         typedQuery.setParameter("documentId", document.getId());
         typedQuery.getResultList().forEach(entity -> {
             em.remove(entity);

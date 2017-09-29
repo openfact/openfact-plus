@@ -1,5 +1,7 @@
-package org.openfact.models.db.es.reader.pe.voideddocuments;
+package org.openfact.models.db.es.reader.basic.debitnote;
 
+import com.helger.ubl21.UBL21Reader;
+import oasis.names.specification.ubl.schema.xsd.debitnote_21.DebitNoteType;
 import org.jboss.logging.Logger;
 import org.openfact.models.*;
 import org.openfact.models.db.es.DocumentReader;
@@ -8,31 +10,25 @@ import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.entity.DocumentSpaceEntity;
 import org.openfact.models.db.es.reader.LocationType;
 import org.openfact.models.db.es.reader.MapperType;
-import org.openfact.models.db.es.reader.pe.common.PEUtils;
-import org.openfact.models.db.es.reader.pe.common.jaxb.perception.PerceptionType;
+import org.openfact.models.db.es.reader.basic.common.BasicUtils;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-import sunat.names.specification.ubl.peru.schema.xsd.voideddocuments_1.VoidedDocumentsType;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 
 @Stateless
-@MapperType(value = "VoidedDocuments")
-@LocationType(value = "peru")
-public class PEVoidedDocumentsReader implements DocumentReader {
+@MapperType(value = "DebitNote")
+@LocationType(value = "default")
+public class BasicDebitNoteReader implements DocumentReader {
 
-    private static final Logger logger = Logger.getLogger(PEVoidedDocumentsReader.class);
+    private static final Logger logger = Logger.getLogger(BasicDebitNoteReader.class);
 
     @Inject
-    private PEUtils peUtils;
+    private BasicUtils basicUtils;
 
     @Override
     public GenericDocument read(XmlUblFileModel file) throws ModelFetchException, ModelParseException {
@@ -41,20 +37,18 @@ public class PEVoidedDocumentsReader implements DocumentReader {
         Document document;
         try {
             document = OpenfactModelUtils.toDocument(bytes);
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            logger.error("Could not parse document event when is " + XmlUblFileModel.class.getName());
+        } catch (Exception e) {
+            logger.error("Could not parse document even when is " + XmlUblFileModel.class.getName());
             throw new ModelException("Could not read document");
         }
 
-        VoidedDocumentsType voidedDocumentsType;
-        try {
-            voidedDocumentsType = OpenfactModelUtils.unmarshall(document, VoidedDocumentsType.class);
-        } catch (JAXBException e) {
+        DebitNoteType debitNoteType = UBL21Reader.debitNote().read(document);
+        if (debitNoteType == null) {
             throw new ModelParseException("Could not parse document, it could be caused by invalid xml content");
         }
 
-        SpaceEntity senderSpaceEntity = peUtils.getSpace(voidedDocumentsType.getAccountingSupplierParty());
-
+        SpaceEntity senderSpaceEntity = basicUtils.getSenderSpace(debitNoteType.getAccountingSupplierParty());
+        SpaceEntity receiverSpaceEntity = basicUtils.getReceiverSpace(debitNoteType.getAccountingCustomerParty());
 
         DocumentEntity documentEntity = new DocumentEntity();
 
@@ -64,9 +58,15 @@ public class PEVoidedDocumentsReader implements DocumentReader {
         documentSpaceSenderEntity.setSpace(senderSpaceEntity);
         documentSpaceSenderEntity.setDocument(documentEntity);
 
+        DocumentSpaceEntity documentSpaceReceiverEntity = new DocumentSpaceEntity();
+        documentSpaceReceiverEntity.setId(OpenfactModelUtils.generateId());
+        documentSpaceReceiverEntity.setType(InteractType.RECEIVER);
+        documentSpaceReceiverEntity.setSpace(receiverSpaceEntity);
+        documentSpaceReceiverEntity.setDocument(documentEntity);
+
         documentEntity.setFileId(file.getId());
-        documentEntity.setAssignedId(voidedDocumentsType.getID().getValue());
-        documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity)));
+        documentEntity.setAssignedId(debitNoteType.getIDValue());
+        documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity, documentSpaceReceiverEntity)));
 
         return new GenericDocument() {
             @Override
@@ -76,7 +76,7 @@ public class PEVoidedDocumentsReader implements DocumentReader {
 
             @Override
             public Object getType() {
-                return voidedDocumentsType;
+                return debitNoteType;
             }
         };
     }

@@ -3,6 +3,7 @@ package org.openfact.representation.idm;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public class DocumentRepresentation {
@@ -151,24 +152,24 @@ public class DocumentRepresentation {
     }
 
     public static class OwnedBy {
-        private SpaceRepresentation.Data data;
-        private GenericLinksRepresentation links;
+        private List<SpaceRepresentation.Data> data;
+//        private GenericLinksRepresentation links;
 
-        public SpaceRepresentation.Data getData() {
+        public List<SpaceRepresentation.Data> getData() {
             return data;
         }
 
-        public void setData(SpaceRepresentation.Data data) {
+        public void setData(List<SpaceRepresentation.Data> data) {
             this.data = data;
         }
 
-        public GenericLinksRepresentation getLinks() {
-            return links;
-        }
-
-        public void setLinks(GenericLinksRepresentation links) {
-            this.links = links;
-        }
+//        public GenericLinksRepresentation getLinks() {
+//            return links;
+//        }
+//
+//        public void setLinks(GenericLinksRepresentation links) {
+//            this.links = links;
+//        }
     }
 
     public static class DocumentLink {

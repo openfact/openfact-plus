@@ -1,5 +1,7 @@
-package org.openfact.models.db.es.reader.pe.voideddocuments;
+package org.openfact.models.db.es.reader.pe.creditnote;
 
+import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
+import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import org.jboss.logging.Logger;
 import org.openfact.models.*;
 import org.openfact.models.db.es.DocumentReader;
@@ -9,12 +11,10 @@ import org.openfact.models.db.es.entity.DocumentSpaceEntity;
 import org.openfact.models.db.es.reader.LocationType;
 import org.openfact.models.db.es.reader.MapperType;
 import org.openfact.models.db.es.reader.pe.common.PEUtils;
-import org.openfact.models.db.es.reader.pe.common.jaxb.perception.PerceptionType;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import sunat.names.specification.ubl.peru.schema.xsd.voideddocuments_1.VoidedDocumentsType;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -25,11 +25,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 @Stateless
-@MapperType(value = "VoidedDocuments")
+@MapperType(value = "CreditNote")
 @LocationType(value = "peru")
-public class PEVoidedDocumentsReader implements DocumentReader {
+public class PECreditNoteReader implements DocumentReader {
 
-    private static final Logger logger = Logger.getLogger(PEVoidedDocumentsReader.class);
+    private static final Logger logger = Logger.getLogger(PECreditNoteReader.class);
 
     @Inject
     private PEUtils peUtils;
@@ -46,15 +46,15 @@ public class PEVoidedDocumentsReader implements DocumentReader {
             throw new ModelException("Could not read document");
         }
 
-        VoidedDocumentsType voidedDocumentsType;
+        CreditNoteType creditNoteType;
         try {
-            voidedDocumentsType = OpenfactModelUtils.unmarshall(document, VoidedDocumentsType.class);
+            creditNoteType = OpenfactModelUtils.unmarshall(document, CreditNoteType.class);
         } catch (JAXBException e) {
             throw new ModelParseException("Could not parse document, it could be caused by invalid xml content");
         }
 
-        SpaceEntity senderSpaceEntity = peUtils.getSpace(voidedDocumentsType.getAccountingSupplierParty());
-
+        SpaceEntity senderSpaceEntity = peUtils.getSpace(creditNoteType.getAccountingSupplierParty());
+        SpaceEntity receiverSpaceEntity = peUtils.getSpace(creditNoteType.getAccountingCustomerParty());
 
         DocumentEntity documentEntity = new DocumentEntity();
 
@@ -64,9 +64,15 @@ public class PEVoidedDocumentsReader implements DocumentReader {
         documentSpaceSenderEntity.setSpace(senderSpaceEntity);
         documentSpaceSenderEntity.setDocument(documentEntity);
 
+        DocumentSpaceEntity documentSpaceReceiverEntity = new DocumentSpaceEntity();
+        documentSpaceReceiverEntity.setId(OpenfactModelUtils.generateId());
+        documentSpaceReceiverEntity.setType(InteractType.RECEIVER);
+        documentSpaceReceiverEntity.setSpace(receiverSpaceEntity);
+        documentSpaceReceiverEntity.setDocument(documentEntity);
+
         documentEntity.setFileId(file.getId());
-        documentEntity.setAssignedId(voidedDocumentsType.getID().getValue());
-        documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity)));
+        documentEntity.setAssignedId(creditNoteType.getID().getValue());
+        documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity, documentSpaceReceiverEntity)));
 
         return new GenericDocument() {
             @Override
@@ -76,7 +82,7 @@ public class PEVoidedDocumentsReader implements DocumentReader {
 
             @Override
             public Object getType() {
-                return voidedDocumentsType;
+                return creditNoteType;
             }
         };
     }

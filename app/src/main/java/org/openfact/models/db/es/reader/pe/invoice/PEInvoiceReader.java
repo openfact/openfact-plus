@@ -1,6 +1,7 @@
 package org.openfact.models.db.es.reader.pe.invoice;
 
 import com.helger.xml.namespace.MapBasedNamespaceContext;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CustomerPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.SupplierPartyType;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import org.jboss.logging.Logger;
@@ -9,8 +10,10 @@ import org.openfact.models.db.es.DocumentReader;
 import org.openfact.models.db.es.ESDocumentProvider;
 import org.openfact.models.db.es.GenericDocument;
 import org.openfact.models.db.es.entity.DocumentEntity;
+import org.openfact.models.db.es.entity.DocumentSpaceEntity;
 import org.openfact.models.db.es.reader.LocationType;
 import org.openfact.models.db.es.reader.MapperType;
+import org.openfact.models.db.es.reader.pe.common.PEUtils;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 import org.w3c.dom.Document;
@@ -23,6 +26,8 @@ import javax.persistence.TypedQuery;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @Stateless
@@ -33,7 +38,7 @@ public class PEInvoiceReader implements DocumentReader {
     private static final Logger logger = Logger.getLogger(PEInvoiceReader.class);
 
     @Inject
-    private EntityManager em;
+    private PEUtils peUtils;
 
     @Override
     public GenericDocument read(XmlUblFileModel file) throws ModelFetchException, ModelParseException {
@@ -54,19 +59,26 @@ public class PEInvoiceReader implements DocumentReader {
             throw new ModelParseException("Could not parse document, it could be caused by invalid xml content");
         }
 
-        SpaceEntity spaceEntity = getSpace(invoiceType);
-        if (spaceEntity == null) {
-            spaceEntity = new SpaceEntity();
-            spaceEntity.setId(OpenfactModelUtils.generateId());
-            spaceEntity.setAssignedId(invoiceType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
-            spaceEntity.setName(invoiceType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
-            em.persist(spaceEntity);
-        }
+        SpaceEntity senderSpaceEntity = peUtils.getSpace(invoiceType.getAccountingSupplierParty());
+        SpaceEntity receiverSpaceEntity = peUtils.getSpace(invoiceType.getAccountingCustomerParty());
 
         DocumentEntity documentEntity = new DocumentEntity();
+
+        DocumentSpaceEntity documentSpaceSenderEntity = new DocumentSpaceEntity();
+        documentSpaceSenderEntity.setId(OpenfactModelUtils.generateId());
+        documentSpaceSenderEntity.setType(InteractType.SENDER);
+        documentSpaceSenderEntity.setSpace(senderSpaceEntity);
+        documentSpaceSenderEntity.setDocument(documentEntity);
+
+        DocumentSpaceEntity documentSpaceReceiverEntity = new DocumentSpaceEntity();
+        documentSpaceReceiverEntity.setId(OpenfactModelUtils.generateId());
+        documentSpaceReceiverEntity.setType(InteractType.RECEIVER);
+        documentSpaceReceiverEntity.setSpace(receiverSpaceEntity);
+        documentSpaceReceiverEntity.setDocument(documentEntity);
+
         documentEntity.setFileId(file.getId());
         documentEntity.setAssignedId(invoiceType.getID().getValue());
-        documentEntity.setSpace(spaceEntity);
+        documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity, documentSpaceReceiverEntity)));
 
         return new GenericDocument() {
             @Override
@@ -79,18 +91,6 @@ public class PEInvoiceReader implements DocumentReader {
                 return invoiceType;
             }
         };
-    }
-
-    private SpaceEntity getSpace(InvoiceType invoiceType) {
-        SupplierPartyType accountingSupplierParty = invoiceType.getAccountingSupplierParty();
-        if (accountingSupplierParty == null) return null;
-
-        String assignedAccountIDValue = accountingSupplierParty.getCustomerAssignedAccountID().getValue();
-        TypedQuery<SpaceEntity> typedQuery = em.createNamedQuery("getSpaceByAssignedId", SpaceEntity.class);
-        typedQuery.setParameter("assignedId", assignedAccountIDValue);
-        List<SpaceEntity> resultList = typedQuery.getResultList();
-        if (resultList.isEmpty()) return null;
-        return resultList.get(0);
     }
 
 }

@@ -8,10 +8,8 @@ import org.openfact.models.db.jpa.SpaceAdapter;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 
 import javax.persistence.EntityManager;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> {
 
@@ -73,8 +71,10 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public SpaceModel getSpace() {
-        return new SpaceAdapter(em, document.getSpace());
+    public Set<SpaceModel> getSpaces() {
+        return document.getSpaces().stream()
+                .map(f -> new SpaceAdapter(em , f.getSpace()))
+                .collect(Collectors.toSet());
     }
 
 }

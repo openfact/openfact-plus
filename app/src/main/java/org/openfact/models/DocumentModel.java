@@ -3,7 +3,9 @@ package org.openfact.models;
 import org.openfact.provider.ProviderEvent;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface DocumentModel {
 
@@ -20,7 +22,7 @@ public interface DocumentModel {
     Date getCreatedAt();
     Date getUpdatedAt();
 
-    SpaceModel getSpace();
+    Set<SpaceModel> getSpaces();
 
     interface DocumentCreationEvent extends ProviderEvent {
         String getType();

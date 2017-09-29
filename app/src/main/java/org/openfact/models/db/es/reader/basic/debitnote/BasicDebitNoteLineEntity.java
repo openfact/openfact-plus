@@ -1,12 +1,12 @@
-package org.openfact.models.db.es.reader.basic.invoice;
+package org.openfact.models.db.es.reader.basic.debitnote;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "invoice_line")
-public class DefaultInvoiceLineEntity {
+@Table(name = "debit_note_line")
+public class BasicDebitNoteLineEntity {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
@@ -15,8 +15,8 @@ public class DefaultInvoiceLineEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey, name = "invoice_id")
-    private DefaultInvoiceEntity invoice;
+    @JoinColumn(foreignKey = @ForeignKey, name = "debit_note_id")
+    private BasicDebitNoteEntity debitNote;
 
     @Column(name = "quantity")
     private BigDecimal quantity;
@@ -38,12 +38,12 @@ public class DefaultInvoiceLineEntity {
         this.id = id;
     }
 
-    public DefaultInvoiceEntity getInvoice() {
-        return invoice;
+    public BasicDebitNoteEntity getDebitNote() {
+        return debitNote;
     }
 
-    public void setInvoice(DefaultInvoiceEntity invoice) {
-        this.invoice = invoice;
+    public void setDebitNote(BasicDebitNoteEntity debitNote) {
+        this.debitNote = debitNote;
     }
 
     /**

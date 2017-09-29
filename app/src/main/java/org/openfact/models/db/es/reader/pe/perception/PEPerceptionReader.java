@@ -1,4 +1,4 @@
-package org.openfact.models.db.es.reader.pe.voideddocuments;
+package org.openfact.models.db.es.reader.pe.perception;
 
 import org.jboss.logging.Logger;
 import org.openfact.models.*;
@@ -14,7 +14,6 @@ import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import sunat.names.specification.ubl.peru.schema.xsd.voideddocuments_1.VoidedDocumentsType;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -25,11 +24,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 @Stateless
-@MapperType(value = "VoidedDocuments")
+@MapperType(value = "Perception")
 @LocationType(value = "peru")
-public class PEVoidedDocumentsReader implements DocumentReader {
+public class PEPerceptionReader implements DocumentReader {
 
-    private static final Logger logger = Logger.getLogger(PEVoidedDocumentsReader.class);
+    private static final Logger logger = Logger.getLogger(PEPerceptionReader.class);
 
     @Inject
     private PEUtils peUtils;
@@ -46,14 +45,15 @@ public class PEVoidedDocumentsReader implements DocumentReader {
             throw new ModelException("Could not read document");
         }
 
-        VoidedDocumentsType voidedDocumentsType;
+        PerceptionType perceptionType;
         try {
-            voidedDocumentsType = OpenfactModelUtils.unmarshall(document, VoidedDocumentsType.class);
+            perceptionType = OpenfactModelUtils.unmarshall(document, PerceptionType.class);
         } catch (JAXBException e) {
             throw new ModelParseException("Could not parse document, it could be caused by invalid xml content");
         }
 
-        SpaceEntity senderSpaceEntity = peUtils.getSpace(voidedDocumentsType.getAccountingSupplierParty());
+        SpaceEntity senderSpaceEntity = peUtils.getSpace(perceptionType.getAgentParty());
+        SpaceEntity receiverSpaceEntity = peUtils.getSpace(perceptionType.getReceiverParty());
 
 
         DocumentEntity documentEntity = new DocumentEntity();
@@ -64,9 +64,15 @@ public class PEVoidedDocumentsReader implements DocumentReader {
         documentSpaceSenderEntity.setSpace(senderSpaceEntity);
         documentSpaceSenderEntity.setDocument(documentEntity);
 
+        DocumentSpaceEntity documentSpaceReceiverEntity = new DocumentSpaceEntity();
+        documentSpaceReceiverEntity.setId(OpenfactModelUtils.generateId());
+        documentSpaceReceiverEntity.setType(InteractType.RECEIVER);
+        documentSpaceReceiverEntity.setSpace(receiverSpaceEntity);
+        documentSpaceReceiverEntity.setDocument(documentEntity);
+
         documentEntity.setFileId(file.getId());
-        documentEntity.setAssignedId(voidedDocumentsType.getID().getValue());
-        documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity)));
+        documentEntity.setAssignedId(perceptionType.getId().getValue());
+        documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity, documentSpaceReceiverEntity)));
 
         return new GenericDocument() {
             @Override
@@ -76,7 +82,7 @@ public class PEVoidedDocumentsReader implements DocumentReader {
 
             @Override
             public Object getType() {
-                return voidedDocumentsType;
+                return perceptionType;
             }
         };
     }
