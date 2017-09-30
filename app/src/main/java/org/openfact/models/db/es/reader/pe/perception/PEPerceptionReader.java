@@ -6,24 +6,20 @@ import org.openfact.models.db.es.DocumentReader;
 import org.openfact.models.db.es.GenericDocument;
 import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.entity.DocumentSpaceEntity;
-import org.openfact.models.db.es.reader.MapperType;
+import org.openfact.models.db.es.reader.SupportedType;
 import org.openfact.models.db.es.reader.pe.common.PEUtils;
 import org.openfact.models.db.es.reader.pe.common.jaxb.perception.PerceptionType;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 
 @Stateless
-@MapperType(value = "Perception")
+@SupportedType(value = "Perception")
 public class PEPerceptionReader implements DocumentReader {
 
     private static final Logger logger = Logger.getLogger(PEPerceptionReader.class);
@@ -32,8 +28,13 @@ public class PEPerceptionReader implements DocumentReader {
     private PEUtils peUtils;
 
     @Override
+    public String getSupportedDocumentType() {
+        return "Perception";
+    }
+
+    @Override
     public int getPriority() {
-        return 0;
+        return 1;
     }
 
     @Override

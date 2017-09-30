@@ -1,21 +1,13 @@
 package org.openfact.models.db.es.reader.basic.invoice;
 
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.MonetaryTotalType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.SupplierPartyType;
-import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
-import org.openfact.models.DocumentModel;
 import org.openfact.models.DocumentModel.DocumentCreationEvent;
 import org.openfact.models.DocumentModel.DocumentRemovedEvent;
-import org.openfact.models.db.es.DocumentAdapter;
-import org.openfact.models.db.es.entity.DocumentEntity;
-import org.openfact.models.db.es.reader.MapperType;
-import org.openfact.models.utils.OpenfactModelUtils;
+import org.openfact.models.db.es.reader.SupportedType;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
 @Stateless
 public class BasicInvoiceListener {
@@ -23,7 +15,7 @@ public class BasicInvoiceListener {
     @Inject
     private EntityManager em;
 
-    public void creationListener(@Observes() @MapperType(value = "Invoice") DocumentCreationEvent createdDocument) {
+    public void creationListener(@Observes() @SupportedType(value = "Invoice") DocumentCreationEvent createdDocument) {
 //        DocumentEntity documentEntity = DocumentAdapter.toEntity(createdDocument.getCreatedDocument(), em);
 //        InvoiceType invoiceType = (InvoiceType) createdDocument.getJaxb();
 //
@@ -64,7 +56,7 @@ public class BasicInvoiceListener {
 //        });
     }
 
-    public void removeListener(@Observes() @MapperType(value = "Invoice") DocumentRemovedEvent removedDocument) {
+    public void removeListener(@Observes() @SupportedType(value = "Invoice") DocumentRemovedEvent removedDocument) {
 //        DocumentModel document = removedDocument.getDocument();
 //
 //        TypedQuery<BasicInvoiceEntity> typedQuery = em.createNamedQuery("getInvoiceByDocumentId", BasicInvoiceEntity.class);

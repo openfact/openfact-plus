@@ -8,7 +8,7 @@ import org.openfact.models.db.es.DocumentReader;
 import org.openfact.models.db.es.GenericDocument;
 import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.entity.DocumentSpaceEntity;
-import org.openfact.models.db.es.reader.MapperType;
+import org.openfact.models.db.es.reader.SupportedType;
 import org.openfact.models.db.es.reader.pe.common.PEUtils;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 @Stateless
-@MapperType(value = "Invoice")
+@SupportedType(value = "Invoice")
 public class PEInvoiceReader implements DocumentReader {
 
     private static final Logger logger = Logger.getLogger(PEInvoiceReader.class);
@@ -29,8 +29,13 @@ public class PEInvoiceReader implements DocumentReader {
     private PEUtils peUtils;
 
     @Override
+    public String getSupportedDocumentType() {
+        return "Invoice";
+    }
+
+    @Override
     public int getPriority() {
-        return 0;
+        return 1;
     }
 
     @Override

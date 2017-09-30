@@ -39,17 +39,15 @@ public class ReaderUtil {
             try {
                 cacheReaders = new HashMap<>();
                 for (DocumentReader reader : readers) {
-                    MapperType mapper = reader.getClass().getAnnotation(MapperType.class);
-                    String mapperValue = mapper.value();
-
+                    String supportedDocumentType = reader.getSupportedDocumentType();
                     SortedSet<DocumentReader> readers;
-                    if (cacheReaders.containsKey(mapperValue)) {
-                        readers = cacheReaders.get(mapperValue);
+                    if (cacheReaders.containsKey(supportedDocumentType)) {
+                        readers = cacheReaders.get(supportedDocumentType);
                     } else {
                         readers = new TreeSet<>((r1, r2) -> (r1.getPriority() > r2.getPriority() ? -1 : (r1 == r2 ? 0 : 1)));
                     }
                     readers.add(reader);
-                    cacheReaders.put(mapperValue, readers);
+                    cacheReaders.put(supportedDocumentType, readers);
                 }
             } finally {
                 lock.unlock();
@@ -59,12 +57,12 @@ public class ReaderUtil {
     }
 
     public Event<DocumentCreationEvent> getCreationEvents(String documentType) {
-        Annotation mapperTypeLiteral = new MapperTypeLiteral(documentType);
+        Annotation mapperTypeLiteral = new SupportedTypeLiteral(documentType);
         return creationEvents.select(mapperTypeLiteral);
     }
 
     public Event<DocumentRemovedEvent> getRemovedEvents(String documentType) {
-        Annotation mapperTypeLiteral = new MapperTypeLiteral(documentType);
+        Annotation mapperTypeLiteral = new SupportedTypeLiteral(documentType);
         return removedEvents.select(mapperTypeLiteral);
     }
 

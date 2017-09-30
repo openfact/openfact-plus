@@ -4,14 +4,12 @@ import com.helger.ubl21.UBL21Reader;
 import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
 import org.jboss.logging.Logger;
 import org.openfact.models.InteractType;
-import org.openfact.models.ModelFetchException;
-import org.openfact.models.ModelParseException;
 import org.openfact.models.XmlUBLFileModel;
 import org.openfact.models.db.es.DocumentReader;
 import org.openfact.models.db.es.GenericDocument;
 import org.openfact.models.db.es.entity.DocumentEntity;
 import org.openfact.models.db.es.entity.DocumentSpaceEntity;
-import org.openfact.models.db.es.reader.MapperType;
+import org.openfact.models.db.es.reader.SupportedType;
 import org.openfact.models.db.es.reader.basic.common.BasicUtils;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
@@ -22,13 +20,18 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 @Stateless
-@MapperType(value = "CreditNote")
+@SupportedType(value = "CreditNote")
 public class BasicCreditNoteReader implements DocumentReader {
 
     private static final Logger logger = Logger.getLogger(BasicCreditNoteReader.class);
 
     @Inject
     private BasicUtils basicUtils;
+
+    @Override
+    public String getSupportedDocumentType() {
+        return "CreditNote";
+    }
 
     @Override
     public int getPriority() {
