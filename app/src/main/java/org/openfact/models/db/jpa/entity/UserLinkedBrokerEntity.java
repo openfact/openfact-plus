@@ -1,6 +1,7 @@
 package org.openfact.models.db.jpa.entity;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.openfact.models.BrokerType;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+@Audited
 @Entity
 @Table(name = "user_linked_broker", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"email"}),

@@ -1,0 +1,8 @@
+metadata:
+  name: elasticsearch-client-data
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

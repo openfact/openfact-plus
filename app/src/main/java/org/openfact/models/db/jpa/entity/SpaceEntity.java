@@ -1,5 +1,6 @@
 package org.openfact.models.db.jpa.entity;
 
+import org.hibernate.envers.Audited;
 import org.openfact.models.db.CreatableEntity;
 import org.openfact.models.db.CreatedAtListener;
 import org.openfact.models.db.UpdatableEntity;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@Audited
 @Entity
 @Table(name = "space", uniqueConstraints = {
         @UniqueConstraint(columnNames = "assigned_id"),

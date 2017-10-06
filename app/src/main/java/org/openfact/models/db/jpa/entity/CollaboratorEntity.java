@@ -1,8 +1,11 @@
 package org.openfact.models.db.jpa.entity;
 
+import org.hibernate.envers.Audited;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Audited
 @Entity
 @Table(name = "COLLABORATOR")
 @IdClass(CollaboratorEntity.Key.class)

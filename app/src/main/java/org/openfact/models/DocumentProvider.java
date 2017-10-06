@@ -1,5 +1,7 @@
 package org.openfact.models;
 
+import java.util.List;
+
 public interface DocumentProvider {
 
     /**
@@ -18,4 +20,10 @@ public interface DocumentProvider {
      * @return true if document was removed
      */
     boolean removeDocument(DocumentModel document);
+
+    /**
+     * @return list of documents
+     */
+    List<DocumentModel> getDocuments();
+
 }

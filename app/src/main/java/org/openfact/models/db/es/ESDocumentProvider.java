@@ -1,5 +1,11 @@
 package org.openfact.models.db.es;
 
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.hibernate.search.elasticsearch.ElasticsearchQueries;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.engine.spi.QueryDescriptor;
 import org.jboss.logging.Logger;
 import org.openfact.models.*;
 import org.openfact.models.DocumentModel.DocumentCreationEvent;
@@ -12,7 +18,9 @@ import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 
 @Stateless
 public class ESDocumentProvider implements DocumentProvider {
@@ -88,6 +96,19 @@ public class ESDocumentProvider implements DocumentProvider {
         Event<DocumentRemovedEvent> event = readerUtil.getRemovedEvents(document.getType());
         event.fire(() -> document);
         return true;
+    }
+
+    @Override
+    public List<DocumentModel> getDocuments() {
+        FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
+        QueryDescriptor queryDescriptor = ElasticsearchQueries.fromQueryString("");
+
+        QueryBuilder qb = QueryBuilders.termQuery("", "");
+
+        return (List<DocumentModel>) fullTextEm.createFullTextQuery(queryDescriptor, DocumentEntity.class)
+                .getResultList().stream()
+                .map(f -> new DocumentAdapter(em, (DocumentEntity) f))
+                .collect(Collectors.toList());
     }
 
 }
