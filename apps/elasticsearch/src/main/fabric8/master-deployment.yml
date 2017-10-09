@@ -45,9 +45,9 @@ spec:
           name: transport
           protocol: TCP
         volumeMounts:
-        - name: elasticsearch-master-data
+        - name: storage
           mountPath: /data
       volumes:
-        - name: elasticsearch-master-data
-          persistentVolumeClaim:
-            claimName: elasticsearch-master-data
+        - emptyDir:
+            medium: ""
+          name: "storage"

@@ -11,6 +11,13 @@ spec:
         component: elasticsearch
         role: client
     spec:
+      initContainers:
+      - name: init-sysctl
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
       containers:
       - name: es-client
         securityContext:
@@ -46,9 +53,9 @@ spec:
           name: transport
           protocol: TCP
         volumeMounts:
-        - name: elasticsearch-client-data
+        - name: storage
           mountPath: /data
       volumes:
-        - name: elasticsearch-client-data
-          persistentVolumeClaim:
-            claimName: elasticsearch-client-data
+      - emptyDir:
+          medium: ""
+        name: "storage"
