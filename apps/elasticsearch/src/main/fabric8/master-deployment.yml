@@ -6,7 +6,7 @@ metadata:
   annotations:
     fabric8.io/target-platform: "kubernetes"
 spec:
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:

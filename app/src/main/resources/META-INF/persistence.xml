@@ -12,26 +12,26 @@
             <!--Hibernate ORM-->
             <property name="jboss.as.jpa.providerModule" value="org.hibernate:${version.hibernate}"/>
 
-            <property name="hibernate.hbm2ddl.auto" value="${hibernate.hbm2ddl.auto:create-drop}"/>
-            <property name="hibernate.show_sql" value="${hibernate.show_sql:true}"/>
-            <property name="hibernate.format_sql" value="${hibernate.format_sql:true}"/>
+            <property name="hibernate.hbm2ddl.auto" value="${hibernate.hbm2ddl.auto}"/>
+            <property name="hibernate.show_sql" value="${hibernate.show_sql}"/>
+            <property name="hibernate.format_sql" value="${hibernate.format_sql}"/>
 
-            <property name="hibernate.cache.use_second_level_cache" value="${hibernate.cache.use_second_level_cache:false}"/>
+            <property name="hibernate.cache.use_second_level_cache" value="${hibernate.cache.use_second_level_cache}"/>
 
             <!--Hibernate search-->
             <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>
 
             <property name="hibernate.search.default.indexmanager" value="elasticsearch"/>
-            <property name="hibernate.search.default.elasticsearch.host" value="${hibernate.search.default.elasticsearch.host}"/>
-            <property name="hibernate.search.default.elasticsearch.username" value="${hibernate.search.default.elasticsearch.username}"/>
-            <property name="hibernate.search.default.elasticsearch.password" value="${hibernate.search.default.elasticsearch.password}"/>
-            <property name="hibernate.search.default.elasticsearch.index_schema_management_strategy" value="${hibernate.search.default.elasticsearch.index_schema_management_strategy:CREATE}"/>
-            <property name="hibernate.search.default.elasticsearch.required_index_status" value="${hibernate.search.default.elasticsearch.required_index_status:yellow}"/>
+            <property name="hibernate.search.default.elasticsearch.host" value="${hibernate.es.host}"/>
+            <property name="hibernate.search.default.elasticsearch.username" value="${hibernate.es.username}"/>
+            <property name="hibernate.search.default.elasticsearch.password" value="${hibernate.es.password}"/>
+            <property name="hibernate.search.default.elasticsearch.index_schema_management_strategy" value="${hibernate.es.index_schema_management_strategy}"/>
+            <property name="hibernate.search.default.elasticsearch.required_index_status" value="${hibernate.es.required_index_status}"/>
 
-            <property name="hibernate.search.default.elasticsearch.aws.signing.enabled" value="${hibernate.search.default.elasticsearch.aws.signing.enabled:false}"/>
-            <property name="hibernate.search.default.elasticsearch.aws.access_key" value="${hibernate.search.default.elasticsearch.aws.access_key}"/>
-            <property name="hibernate.search.default.elasticsearch.aws.secret_key" value="${hibernate.search.default.elasticsearch.aws.secret_key}"/>
-            <property name="hibernate.search.default.elasticsearch.aws.region" value="${hibernate.search.default.elasticsearch.aws.region}"/>
+            <property name="hibernate.search.default.elasticsearch.aws.signing.enabled" value="${hibernate.es.aws.enabled}"/>
+            <property name="hibernate.search.default.elasticsearch.aws.access_key" value="${hibernate.es.aws.access_key}"/>
+            <property name="hibernate.search.default.elasticsearch.aws.secret_key" value="${hibernate.es.aws.secret_key}"/>
+            <property name="hibernate.search.default.elasticsearch.aws.region" value="${hibernate.es.aws.region}"/>
         </properties>
     </persistence-unit>
 </persistence>

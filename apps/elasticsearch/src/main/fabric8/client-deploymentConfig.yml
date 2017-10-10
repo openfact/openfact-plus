@@ -6,7 +6,7 @@ metadata:
   annotations:
     fabric8.io/target-platform: "openshift"
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
