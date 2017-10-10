@@ -3,8 +3,8 @@
 mvn clean package -DskipTests=true
 
 oc login -u developer -p developer
-oc new-project openfact-dev
-oc project openfact-dev
+oc new-project openfact-sync-system
+oc project openfact-sync-system
 
 mvn fabric8:deploy -DSSO_REALM=openfact \
     -DSSO_AUTH_SERVER_URL=http://`oc get route keycloak --template={{.spec.host}}`/auth \

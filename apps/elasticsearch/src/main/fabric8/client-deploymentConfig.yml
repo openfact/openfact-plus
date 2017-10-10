@@ -1,20 +1,20 @@
 metadata:
-  name: es-master
+  name: es-client
   labels:
     component: elasticsearch
-    role: master
+    role: client
   annotations:
-    fabric8.io/target-platform: "kubernetes"
+    fabric8.io/target-platform: "openshift"
 spec:
-  replicas: 3
+  replicas: 2
   template:
     metadata:
       labels:
         component: elasticsearch
-        role: master
+        role: client
     spec:
       containers:
-      - name: es-master
+      - name: es-client
         securityContext:
           privileged: true
           capabilities:
@@ -30,19 +30,20 @@ spec:
               fieldPath: metadata.namespace
         - name: "CLUSTER_NAME"
           value: "elasticsearch"
-        - name: "NUMBER_OF_MASTERS"
-          value: "2"
         - name: NODE_MASTER
-          value: "true"
+          value: "false"
         - name: NODE_DATA
           value: "false"
         - name: HTTP_ENABLE
-          value: "false"
+          value: "true"
         - name: ES_JAVA_OPTS
           value: "-Xms256m -Xmx256m"
         - name: "DISCOVERY_SERVICE"
           value: "elasticsearch-discovery"
         ports:
+        - containerPort: 9200
+          name: http
+          protocol: TCP
         - containerPort: 9300
           name: transport
           protocol: TCP
@@ -50,6 +51,6 @@ spec:
         - name: storage
           mountPath: /data
       volumes:
-        - emptyDir:
-            medium: ""
-          name: "storage"
+      - emptyDir:
+          medium: ""
+        name: "storage"

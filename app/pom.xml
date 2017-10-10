@@ -775,33 +775,57 @@
             </build>
         </profile>
 
-        <!--<profile>-->
-            <!--<id>development</id>-->
-            <!--<activation>-->
-                <!--<activeByDefault>true</activeByDefault>-->
-            <!--</activation>-->
-            <!--<properties>-->
-                <!--&lt;!&ndash;Keycloak&ndash;&gt;-->
+        <profile>
+            <id>development</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!--Keycloak-->
+                <sso.realm>openfact</sso.realm>
+                <sso.clientId>openfact-online-platform</sso.clientId>
+                <sso.auth.server.url>http://localhost:8081/auth</sso.auth.server.url>
+                <sso.credentials.secret>external</sso.credentials.secret>
+                <!--persistence.xml-->
+                <hibernate.hbm2ddl.auto>create-drop</hibernate.hbm2ddl.auto>
+                <hibernate.show_sql>true</hibernate.show_sql>
+                <hibernate.format_sql>true</hibernate.format_sql>
+                <hibernate.cache.use_second_level_cache>false</hibernate.cache.use_second_level_cache>
+                <!--<hibernate.search.default.elasticsearch.host>http://127.0.0.1:9200</hibernate.search.default.elasticsearch.host>-->
+                <!--<hibernate.search.default.elasticsearch.username></hibernate.search.default.elasticsearch.username>-->
+                <!--<hibernate.search.default.elasticsearch.password></hibernate.search.default.elasticsearch.password>-->
+                <hibernate.search.default.elasticsearch.index_schema_management_strategy>CREATE</hibernate.search.default.elasticsearch.index_schema_management_strategy>
+                <hibernate.search.default.elasticsearch.required_index_status>yellow</hibernate.search.default.elasticsearch.required_index_status>
+                <hibernate.search.default.elasticsearch.aws.signing.enabled>false</hibernate.search.default.elasticsearch.aws.signing.enabled>
+                <!--<hibernate.search.default.elasticsearch.aws.signing.access_key></hibernate.search.default.elasticsearch.aws.signing.access_key>-->
+                <!--<hibernate.search.default.elasticsearch.aws.signing.secret_key></hibernate.search.default.elasticsearch.aws.signing.secret_key>-->
+                <!--<hibernate.search.default.elasticsearch.aws.signing.region></hibernate.search.default.elasticsearch.aws.signing.region>-->
+            </properties>
+        </profile>
+        <profile>
+            <id>production</id>
+            <properties>
+                <!--Keycloak-->
                 <!--<sso.realm>openfact</sso.realm>-->
                 <!--<sso.clientId>openfact-online-platform</sso.clientId>-->
                 <!--<sso.auth.server.url>http://localhost:8081/auth</sso.auth.server.url>-->
                 <!--<sso.credentials.secret>external</sso.credentials.secret>-->
-                <!--&lt;!&ndash;persistence.xml&ndash;&gt;-->
-                <!--<hibernate.hbm2ddl.auto>create-drop</hibernate.hbm2ddl.auto>-->
-                <!--<hibernate.show_sql>true</hibernate.show_sql>-->
-                <!--<hibernate.format_sql>true</hibernate.format_sql>-->
-                <!--<hibernate.cache.use_second_level_cache>false</hibernate.cache.use_second_level_cache>-->
+                <!--persistence.xml-->
+                <hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto>
+                <hibernate.show_sql>false</hibernate.show_sql>
+                <hibernate.format_sql>false</hibernate.format_sql>
+                <hibernate.cache.use_second_level_cache>true</hibernate.cache.use_second_level_cache>
                 <!--<hibernate.search.default.elasticsearch.host>http://127.0.0.1:9200</hibernate.search.default.elasticsearch.host>-->
                 <!--<hibernate.search.default.elasticsearch.username></hibernate.search.default.elasticsearch.username>-->
                 <!--<hibernate.search.default.elasticsearch.password></hibernate.search.default.elasticsearch.password>-->
-                <!--<hibernate.search.default.elasticsearch.index_schema_management_strategy>CREATE</hibernate.search.default.elasticsearch.index_schema_management_strategy>-->
-                <!--<hibernate.search.default.elasticsearch.required_index_status>yellow</hibernate.search.default.elasticsearch.required_index_status>-->
+                <hibernate.search.default.elasticsearch.index_schema_management_strategy>CREATE</hibernate.search.default.elasticsearch.index_schema_management_strategy>
+                <hibernate.search.default.elasticsearch.required_index_status>yellow</hibernate.search.default.elasticsearch.required_index_status>
                 <!--<hibernate.search.default.elasticsearch.aws.signing.enabled>false</hibernate.search.default.elasticsearch.aws.signing.enabled>-->
                 <!--<hibernate.search.default.elasticsearch.aws.signing.access_key></hibernate.search.default.elasticsearch.aws.signing.access_key>-->
                 <!--<hibernate.search.default.elasticsearch.aws.signing.secret_key></hibernate.search.default.elasticsearch.aws.signing.secret_key>-->
                 <!--<hibernate.search.default.elasticsearch.aws.signing.region></hibernate.search.default.elasticsearch.aws.signing.region>-->
-            <!--</properties>-->
-        <!--</profile>-->
+            </properties>
+        </profile>
     </profiles>
 
 </project>

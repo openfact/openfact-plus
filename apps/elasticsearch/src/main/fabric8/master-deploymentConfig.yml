@@ -4,7 +4,7 @@ metadata:
     component: elasticsearch
     role: master
   annotations:
-    fabric8.io/target-platform: "kubernetes"
+    fabric8.io/target-platform: "openshift"
 spec:
   replicas: 3
   template:

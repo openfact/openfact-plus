@@ -3,27 +3,35 @@ metadata:
   labels:
     component: elasticsearch
     role: data
-  annotations:
-    pod.beta.kubernetes.io/init-containers: |-
-      [
-      {
-          "name": "init-sysctl",
-          "image": "busybox",
-          "imagePullPolicy": "IfNotPresent",
-          "command": ["sysctl", "-w", "vm.max_map_count=262144"],
-          "securityContext": {
-            "privileged": true
-          }
-      }]
 spec:
   serviceName: elasticsearch-data
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
         component: elasticsearch
         role: data
+      annotations:
+        pod.beta.kubernetes.io/init-containers: |-
+          [
+            {
+              "name": "init-sysctl",
+              "image": "busybox",
+              "imagePullPolicy": "IfNotPresent",
+              "command": ["sysctl", "-w", "vm.max_map_count=262144"],
+              "securityContext": {
+                "privileged": true
+              }
+            }
+          ]
     spec:
+      initContainers:
+      - name: init-sysctl
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
       containers:
       - name: es-data
         securityContext:
