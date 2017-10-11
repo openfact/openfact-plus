@@ -274,6 +274,11 @@
             <artifactId>ph-ubl21</artifactId>
             <version>5.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.jmarkstar</groupId>
+            <artifactId>ubl4sunatbinding</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
         <!--Apache utils-->
         <dependency>
@@ -470,18 +475,6 @@
                             </resources>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>add-ubl-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/generated-sources/schemas/ubl</source>
-                            </sources>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -566,34 +559,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--Ubl21 pe-->
-            <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.13.2</version>
-                <executions>
-                    <execution>
-                        <id>generate-ubl21-pe</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <schemaDirectory>src/main/resources/jaxb</schemaDirectory>
-                            <schemaIncludes>
-                                <include>maindoc/*.xsd</include>
-                            </schemaIncludes>
-                            <bindingDirectory>src/main/resources/jaxb/common</bindingDirectory>
-                            <bindingIncludes>
-                                <include>*.xml</include>
-                            </bindingIncludes>
-                            <generateDirectory>${project.build.directory}/generated-sources/schemas/ubl/ubl21/pe</generateDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
     </build>
 
