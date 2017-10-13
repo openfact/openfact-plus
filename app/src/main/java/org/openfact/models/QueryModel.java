@@ -30,11 +30,20 @@ public class QueryModel {
         private String filterText;
         private Map<String, String> filters = new HashMap<>();
 
+        /**
+         * @param filterText that will be searched
+         */
         public Builder filterText(String filterText) {
             this.filterText = filterText;
             return this;
         }
 
+        /**
+         * Filter using LIKE and OR conditions
+         *
+         * @param key   field name
+         * @param value field value
+         */
         public Builder addFilter(String key, String value) {
             this.filters.put(key, value);
             return this;

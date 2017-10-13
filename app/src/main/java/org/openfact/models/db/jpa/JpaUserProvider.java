@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Stateless
 public class JpaUserProvider extends HibernateProvider implements UserProvider {
 
-    private final static String[] SEARCH_FIELDS = {"username"};
+    private final static String[] SEARCH_FIELDS = {"username", "fullName"};
 
     private EntityManager em;
 
@@ -68,16 +68,9 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
     }
 
     @Override
-    public List<UserModel> getUsers() {
-        TypedQuery<UserEntity> query = em.createNamedQuery("getAllUsers", UserEntity.class);
-        return query.getResultList().stream()
-                .map(f -> new UserAdapter(em, f))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<UserModel> getUsers(QueryModel query) {
-        TypedQuery<UserEntity> typedQuery = new JpaCriteria<>(em, UserEntity.class, UserEntity.class, query, SEARCH_FIELDS).buildTypedQuery();
+        TypedQuery<UserEntity> typedQuery = new JpaCriteria<>(em, UserEntity.class, UserEntity.class, query, SEARCH_FIELDS)
+                .buildTypedQuery();
         return typedQuery.getResultList().stream()
                 .map(f -> new UserAdapter(em, f))
                 .collect(Collectors.toList());
@@ -105,8 +98,12 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
             throw new ModelException("User not found");
         }
 
-        userEntity.setOfflineToken(user.getOfflineToken());
-        userEntity.setRegistrationCompleted(user.getRegistrationComplete());
+        if (user.getOfflineToken() != null) {
+            userEntity.setOfflineToken(user.getOfflineToken());
+        }
+        if (user.getRegistrationComplete() != null) {
+            userEntity.setRegistrationCompleted(user.getRegistrationComplete());
+        }
 
         em.merge(userEntity);
     }

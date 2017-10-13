@@ -1,16 +1,13 @@
 package org.openfact.models.db.type.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
-import org.openfact.models.db.jpa.entity.UserEntity;
 import org.openfact.models.utils.JacksonUtil;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Objects;
 
 public class JsonNodeType extends ImmutableType<JsonNode> {
 

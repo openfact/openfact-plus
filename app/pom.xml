@@ -172,12 +172,12 @@
             <version>2.0.0-alpha.4</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.arquillian.cube</groupId>
-            <artifactId>arquillian-cube-docker</artifactId>
-            <version>1.8.0</version>
-            <scope>test</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.arquillian.cube</groupId>-->
+            <!--<artifactId>arquillian-cube-docker</artifactId>-->
+            <!--<version>1.8.0</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
 
         <!--Hibernate-->
         <dependency>

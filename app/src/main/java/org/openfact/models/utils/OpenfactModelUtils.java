@@ -1,14 +1,9 @@
 package org.openfact.models.utils;
 
-import org.openfact.models.OpenfactSession;
-import org.openfact.models.OpenfactSessionFactory;
-import org.openfact.models.OpenfactSessionTask;
-import org.openfact.transaction.OpenfactTransaction;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import sunat.names.specification.ubl.peru.schema.xsd.voideddocuments_1.VoidedDocumentsType;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -70,35 +65,6 @@ public class OpenfactModelUtils {
         Unmarshaller unmarshaller = context.createUnmarshaller();
         JAXBElement<T> jaxbElement = unmarshaller.unmarshal(document, tClass);
         return jaxbElement.getValue();
-    }
-
-    /**
-     * Wrap given runnable job into OpenfactTransaction.
-     *
-     * @param task
-     */
-    public static void runJobInTransaction(OpenfactSessionFactory factory, OpenfactSessionTask task) {
-        OpenfactSession session = factory.create();
-        OpenfactTransaction tx = session.getTransactionManager();
-        try {
-            tx.begin();
-            task.run();
-
-            if (tx.isActive()) {
-                if (tx.getRollbackOnly()) {
-                    tx.rollback();
-                } else {
-                    tx.commit();
-                }
-            }
-        } catch (RuntimeException re) {
-            if (tx.isActive()) {
-                tx.rollback();
-            }
-            throw re;
-        } finally {
-            session.close();
-        }
     }
 
 }

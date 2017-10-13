@@ -1,12 +1,14 @@
 package org.openfact.models.db.jpa;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.openfact.models.*;
+import org.openfact.models.SpaceModel;
+import org.openfact.models.UserModel;
 import org.openfact.models.db.JpaModel;
 import org.openfact.models.db.jpa.entity.UserEntity;
 
 import javax.persistence.EntityManager;
-import java.util.*;
+import java.util.Date;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserAdapter implements UserModel, JpaModel<UserEntity> {

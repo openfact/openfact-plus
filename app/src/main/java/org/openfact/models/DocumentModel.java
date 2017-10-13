@@ -1,9 +1,6 @@
 package org.openfact.models;
 
-import org.openfact.provider.ProviderEvent;
-
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,13 +21,13 @@ public interface DocumentModel {
 
     Set<SpaceModel> getSpaces();
 
-    interface DocumentCreationEvent extends ProviderEvent {
+    interface DocumentCreationEvent {
         String getDocumentType();
         Object getJaxb();
         DocumentModel getCreatedDocument();
     }
 
-    interface DocumentRemovedEvent extends ProviderEvent {
+    interface DocumentRemovedEvent {
         DocumentModel getDocument();
     }
 

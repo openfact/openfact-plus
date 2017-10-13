@@ -31,18 +31,13 @@ public interface UserProvider {
     UserModel getUserByIdentityID(String identityID);
 
     /**
-     * @return all users of that exists on the system
-     */
-    List<UserModel> getUsers();
-
-    /**
      * @param query query to apply on search operation
      * @return all users after apply query
      */
     List<UserModel> getUsers(QueryModel query);
 
     /**
-     * @param user bean. All data on user will be updated on the database. Use this on not EJB components
+     * @param user bean. All data on user will be updated on the database. Use this on not EJB components. Null Fields will never be changed
      */
     void updateUser(UserBean user);
 }

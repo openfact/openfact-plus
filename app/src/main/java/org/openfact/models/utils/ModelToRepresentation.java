@@ -1,6 +1,9 @@
 package org.openfact.models.utils;
 
-import org.openfact.models.*;
+import org.openfact.models.DocumentModel;
+import org.openfact.models.ModelType;
+import org.openfact.models.SpaceModel;
+import org.openfact.models.UserModel;
 import org.openfact.representation.idm.*;
 import org.openfact.services.resources.DocumentsService;
 import org.openfact.services.resources.FilesService;
@@ -10,7 +13,6 @@ import org.openfact.services.resources.UsersService;
 import javax.ejb.Stateless;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,7 +1,5 @@
 package org.openfact.models.db;
 
-import org.openfact.models.db.CreatableEntity;
-
 import javax.persistence.PrePersist;
 import java.util.Calendar;
 
