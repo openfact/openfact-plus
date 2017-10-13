@@ -1,6 +1,6 @@
 package org.openfact.documents;
 
-import org.openfact.documents.entity.DocumentEntity;
+import org.openfact.documents.jpa.entity.DocumentEntity;
 
 public interface GenericDocument {
 

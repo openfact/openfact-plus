@@ -1,4 +1,4 @@
-package org.openfact.documents;
+package org.openfact.documents.jpa;
 
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -7,9 +7,10 @@ import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.engine.spi.QueryDescriptor;
 import org.jboss.logging.Logger;
+import org.openfact.documents.*;
 import org.openfact.documents.DocumentModel.DocumentCreationEvent;
 import org.openfact.documents.DocumentModel.DocumentRemovedEvent;
-import org.openfact.documents.entity.DocumentEntity;
+import org.openfact.documents.jpa.entity.DocumentEntity;
 import org.openfact.documents.reader.ReaderUtil;
 import org.openfact.files.ModelParseException;
 import org.openfact.files.XmlUBLFileModel;

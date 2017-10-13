@@ -1,6 +1,7 @@
-package org.openfact.documents;
+package org.openfact.documents.jpa;
 
-import org.openfact.documents.entity.DocumentEntity;
+import org.openfact.documents.DocumentModel;
+import org.openfact.documents.jpa.entity.DocumentEntity;
 import org.openfact.models.SpaceModel;
 import org.openfact.models.db.JpaModel;
 import org.openfact.models.db.jpa.SpaceAdapter;

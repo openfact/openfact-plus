@@ -1,7 +1,7 @@
 package org.openfact.documents.reader.pe.invoice;
 
 import org.hibernate.search.annotations.Indexed;
-import org.openfact.documents.entity.DocumentEntity;
+import org.openfact.documents.jpa.entity.DocumentEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

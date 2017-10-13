@@ -1,4 +1,4 @@
-package org.openfact.documents.entity;
+package org.openfact.documents.jpa.entity;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.search.annotations.Field;
