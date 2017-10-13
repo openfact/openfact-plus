@@ -4,9 +4,9 @@ import org.openfact.models.SpaceModel;
 import org.openfact.models.SpaceProvider;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
-import org.openfact.utils.ModelToRepresentation;
 import org.openfact.representations.idm.GenericDataRepresentation;
 import org.openfact.representations.idm.SpaceRepresentation;
+import org.openfact.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

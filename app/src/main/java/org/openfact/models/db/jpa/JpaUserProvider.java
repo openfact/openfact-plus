@@ -1,6 +1,9 @@
 package org.openfact.models.db.jpa;
 
-import org.openfact.models.*;
+import org.openfact.models.QueryModel;
+import org.openfact.models.UserBean;
+import org.openfact.models.UserModel;
+import org.openfact.models.UserProvider;
 import org.openfact.models.db.HibernateProvider;
 import org.openfact.models.db.jpa.entity.UserEntity;
 import org.openfact.models.exceptions.ModelException;

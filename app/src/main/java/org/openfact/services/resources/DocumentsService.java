@@ -9,10 +9,10 @@ import org.openfact.documents.ModelUnsupportedTypeException;
 import org.openfact.files.ModelFetchException;
 import org.openfact.files.ModelParseException;
 import org.openfact.files.ModelStorageException;
-import org.openfact.utils.ModelToRepresentation;
 import org.openfact.representations.idm.DocumentRepresentation;
 import org.openfact.services.ErrorResponseException;
 import org.openfact.services.managers.DocumentManager;
+import org.openfact.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

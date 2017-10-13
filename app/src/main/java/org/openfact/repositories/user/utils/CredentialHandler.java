@@ -5,7 +5,6 @@ import com.google.api.client.http.HttpRequest;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.keycloak.adapters.KeycloakDeployment;
-import org.openfact.repositories.user.utils.KeycloakBrokerHttpInterceptor;
 import org.openfact.services.resources.KeycloakDeploymentConfig;
 
 import java.lang.reflect.Method;

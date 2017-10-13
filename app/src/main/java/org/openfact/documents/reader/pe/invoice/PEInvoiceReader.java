@@ -2,14 +2,14 @@ package org.openfact.documents.reader.pe.invoice;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import org.jboss.logging.Logger;
-import org.openfact.models.InteractType;
-import org.openfact.files.XmlUBLFileModel;
 import org.openfact.documents.DocumentReader;
 import org.openfact.documents.GenericDocument;
 import org.openfact.documents.entity.DocumentEntity;
 import org.openfact.documents.entity.DocumentSpaceEntity;
 import org.openfact.documents.reader.SupportedType;
 import org.openfact.documents.reader.pe.common.PEUtils;
+import org.openfact.files.XmlUBLFileModel;
+import org.openfact.models.InteractType;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 

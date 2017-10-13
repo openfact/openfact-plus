@@ -3,10 +3,8 @@ package org.openfact.files.jpa;
 import org.openfact.files.FileModel;
 import org.openfact.files.FileProvider;
 import org.openfact.files.ModelStorageException;
-import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.UUID;

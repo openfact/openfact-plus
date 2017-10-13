@@ -1,6 +1,5 @@
 package org.openfact.services.resources;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.jboss.logging.Logger;
 import org.keycloak.adapters.KeycloakDeployment;
 

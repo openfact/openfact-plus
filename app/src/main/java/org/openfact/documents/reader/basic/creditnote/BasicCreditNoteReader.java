@@ -3,14 +3,14 @@ package org.openfact.documents.reader.basic.creditnote;
 import com.helger.ubl21.UBL21Reader;
 import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
 import org.jboss.logging.Logger;
+import org.openfact.documents.DocumentReader;
+import org.openfact.documents.GenericDocument;
 import org.openfact.documents.entity.DocumentEntity;
 import org.openfact.documents.entity.DocumentSpaceEntity;
 import org.openfact.documents.reader.SupportedType;
 import org.openfact.documents.reader.basic.common.BasicUtils;
-import org.openfact.models.InteractType;
 import org.openfact.files.XmlUBLFileModel;
-import org.openfact.documents.DocumentReader;
-import org.openfact.documents.GenericDocument;
+import org.openfact.models.InteractType;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 

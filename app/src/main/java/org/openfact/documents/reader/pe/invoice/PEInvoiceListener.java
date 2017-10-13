@@ -1,8 +1,8 @@
 package org.openfact.documents.reader.pe.invoice;
 
-import org.openfact.documents.reader.SupportedType;
 import org.openfact.documents.DocumentModel.DocumentCreationEvent;
 import org.openfact.documents.DocumentModel.DocumentRemovedEvent;
+import org.openfact.documents.reader.SupportedType;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Observes;

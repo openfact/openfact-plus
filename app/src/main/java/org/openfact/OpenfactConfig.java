@@ -2,7 +2,6 @@ package org.openfact;
 
 import org.jboss.logging.Logger;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;

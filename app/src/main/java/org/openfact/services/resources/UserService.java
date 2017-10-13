@@ -4,10 +4,10 @@ import org.jboss.logging.Logger;
 import org.keycloak.representations.AccessToken;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
-import org.openfact.utils.ModelToRepresentation;
 import org.openfact.representations.idm.UserRepresentation;
 import org.openfact.services.managers.KeycloakManager;
 import org.openfact.services.util.SSOContext;
+import org.openfact.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
