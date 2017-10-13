@@ -17,6 +17,7 @@ import net.sf.cglib.proxy.Enhancer;
 import org.jboss.logging.Logger;
 import org.openfact.models.BrokerType;
 import org.openfact.repositories.user.*;
+import org.openfact.repositories.user.utils.CredentialHandler;
 import org.openfact.services.resources.oauth2.OAuth2Utils;
 
 import javax.annotation.PostConstruct;
@@ -39,7 +40,6 @@ public class GmailProvider implements MailProvider {
 
     @PostConstruct
     private void init() {
-//        APPLICATION_NAME = OpenfactConfig.getInstance().getProperty("gmail.application.name");
         APPLICATION_NAME = "Openfact Sync";
         try {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -74,7 +74,7 @@ public class GmailProvider implements MailProvider {
 
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(Credential.class);
-        enhancer.setCallback(new CredentialHandler(credential));
+        enhancer.setCallback(new CredentialHandler("google", credential));
 
         Credential proxy = (Credential) enhancer.create(
                 new Class[]{Credential.AccessMethod.class},

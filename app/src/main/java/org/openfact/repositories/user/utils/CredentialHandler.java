@@ -1,17 +1,22 @@
-package org.openfact.repositories.user.gmail;
+package org.openfact.repositories.user.utils;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.HttpRequest;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.keycloak.adapters.KeycloakDeployment;
+import org.openfact.repositories.user.utils.KeycloakBrokerHttpInterceptor;
+import org.openfact.services.resources.KeycloakDeploymentConfig;
 
 import java.lang.reflect.Method;
 
 public class CredentialHandler implements MethodInterceptor {
 
+    private final String broker;
     private final Credential credential;
 
-    public CredentialHandler(Credential credential) {
+    public CredentialHandler(String broker, Credential credential) {
+        this.broker = broker;
         this.credential = credential;
     }
 
@@ -19,7 +24,11 @@ public class CredentialHandler implements MethodInterceptor {
     public Object intercept(Object o, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         if (method.getName().equals("initialize")) {
             HttpRequest request = (HttpRequest) args[0];
-            KeycloakHttpExecuteInterceptor interceptor = new KeycloakHttpExecuteInterceptor(credential);
+
+            KeycloakDeployment keycloakDeployment = KeycloakDeploymentConfig.getInstance().getDeployment();
+            KeycloakBrokerHttpInterceptor interceptor = new KeycloakBrokerHttpInterceptor(
+                    keycloakDeployment.getAuthServerBaseUrl(), keycloakDeployment.getRealm(), broker, credential);
+
             request.setInterceptor(interceptor);
             request.setUnsuccessfulResponseHandler(interceptor);
             return null;

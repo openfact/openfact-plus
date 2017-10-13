@@ -1,11 +1,13 @@
-package org.openfact.repositories.user.gmail;
+package org.openfact.repositories.user.utils;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponseException;
-import com.google.api.client.http.*;
-import org.keycloak.adapters.KeycloakDeployment;
+import com.google.api.client.http.HttpExecuteInterceptor;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpUnsuccessfulResponseHandler;
+import com.google.api.client.util.Clock;
 import org.openfact.representations.idm.TokenRepresentation;
-import org.openfact.services.resources.KeycloakDeploymentConfig;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -16,15 +18,25 @@ import java.io.IOException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class KeycloakHttpExecuteInterceptor implements HttpExecuteInterceptor, HttpUnsuccessfulResponseHandler {
+public class KeycloakBrokerHttpInterceptor implements HttpExecuteInterceptor, HttpUnsuccessfulResponseHandler {
+
+    private final String authServerUrl;
+    private final String realm;
+    private final String broker;
 
     private final Credential credential;
-
     private final Lock lock = new ReentrantLock();
+
     private String keycloakAccessToken;
     private Long keycloakExpirationTimeMilliseconds;
 
-    public KeycloakHttpExecuteInterceptor(Credential credential) {
+    /** Clock used to provide the currentMillis. */
+    private final Clock clock = Clock.SYSTEM;
+
+    public KeycloakBrokerHttpInterceptor(String authServerUrl, String realm, String broker, Credential credential) {
+        this.authServerUrl = authServerUrl;
+        this.realm = realm;
+        this.broker = broker;
         this.credential = credential;
     }
 
@@ -37,7 +49,7 @@ public class KeycloakHttpExecuteInterceptor implements HttpExecuteInterceptor, H
         lock.lock();
         try {
             Long keycloakExpiresIn = getKeycloakExpiresInSeconds();
-            if (!newAccessToken.equals(oldAccessToken) || keycloakAccessToken == null || keycloakExpiresIn != null && keycloakExpiresIn <= 60) {
+            if (keycloakAccessToken == null || !oldAccessToken.equals(newAccessToken) || keycloakExpiresIn != null && keycloakExpiresIn <= 60) {
                 refreshKeycloakToken();
                 if (keycloakAccessToken == null) {
                     // nothing we can do without an access token
@@ -83,19 +95,18 @@ public class KeycloakHttpExecuteInterceptor implements HttpExecuteInterceptor, H
             return null;
         }
         ClientRequestFilter authFilter = requestContext -> {
-            requestContext.getHeaders().add(HttpHeaders.AUTHORIZATION, "Bearer " + credential.getAccessToken());
             requestContext.getHeaders().add(HttpHeaders.ACCEPT, "application/json");
+            requestContext.getHeaders().add(HttpHeaders.AUTHORIZATION, "Bearer " + credential.getAccessToken());
         };
 
         Client client = ClientBuilder.newBuilder().register(authFilter).build();
-        WebTarget target = client.target(getIdentityProviderTokenUrl("google"));
+        WebTarget target = client.target(getIdentityProviderTokenUrl(broker));
 
         return target.request().get().readEntity(TokenRepresentation.class);
     }
 
     private String getIdentityProviderTokenUrl(String broker) {
-        KeycloakDeployment deployment = KeycloakDeploymentConfig.getInstance().getDeployment();
-        return deployment.getAuthServerBaseUrl() + "/realms/" + deployment.getRealm() + "/broker/" + broker + "/token";
+        return authServerUrl + "/realms/" + realm + "/broker/" + broker + "/token";
     }
 
     private void setFromKeycloakTokenResponse(TokenRepresentation tokenResponse) {
@@ -113,7 +124,7 @@ public class KeycloakHttpExecuteInterceptor implements HttpExecuteInterceptor, H
     }
 
     private void setKeycloakExpiresInSeconds(Long expiresIn) {
-        setKeycloakExpirationTimeMilliseconds(expiresIn == null ? null : credential.getClock().currentTimeMillis() + expiresIn * 1000);
+        setKeycloakExpirationTimeMilliseconds(expiresIn == null ? null : clock.currentTimeMillis() + expiresIn * 1000);
     }
 
     private void setKeycloakExpirationTimeMilliseconds(Long expirationTimeMilliseconds) {
@@ -131,7 +142,7 @@ public class KeycloakHttpExecuteInterceptor implements HttpExecuteInterceptor, H
             if (keycloakExpirationTimeMilliseconds == null) {
                 return null;
             }
-            return (keycloakExpirationTimeMilliseconds - credential.getClock().currentTimeMillis()) / 1000;
+            return (keycloakExpirationTimeMilliseconds - clock.currentTimeMillis()) / 1000;
         } finally {
             lock.unlock();
         }
