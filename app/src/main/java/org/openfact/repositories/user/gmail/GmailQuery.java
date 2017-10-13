@@ -1,6 +1,7 @@
 package org.openfact.repositories.user.gmail;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class GmailQuery {
 
@@ -10,19 +11,23 @@ public class GmailQuery {
     private final String filename;
 
     public GmailQuery(Builder builder) {
-        this.before = builder.before.length() > 0 ? builder.before.toString().trim() : "";
         this.after = builder.after.length() > 0 ? builder.after.toString().trim() : "";
+        this.before = builder.before.length() > 0 ? builder.before.toString().trim() : "";
         this.has = builder.has.length() > 0 ? builder.has.toString().trim() : "";
         this.filename = builder.filename.length() > 0 ? builder.filename.toString().trim() : "";
     }
 
     public String query() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(before).append(" ")
+        StringBuilder sb = new StringBuilder()
                 .append(after).append(" ")
+                .append(before).append(" ")
                 .append(has).append(" ")
                 .append(filename).append(" ");
         return sb.toString().trim();
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {
@@ -57,14 +62,14 @@ public class GmailQuery {
         }
 
         public Builder before(LocalDate before) {
-            this.before.append("before:")
-                    .append(before.toString());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            this.before.append("before:").append(before.format(formatter));
             return this;
         }
 
         public Builder after(LocalDate after) {
-            this.after.append("after:")
-                    .append(after.toString());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            this.after.append("after:").append(after.format(formatter));
             return this;
         }
 

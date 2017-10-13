@@ -3,7 +3,7 @@ package org.openfact.repositories.user.gmail;
 import org.openfact.repositories.user.MailQuery;
 import org.openfact.repositories.user.MailQueryParser;
 
-public class GmailQueryParser implements MailQueryParser{
+public class GmailQueryParser implements MailQueryParser {
 
     @Override
     public String parse(MailQuery query) {
