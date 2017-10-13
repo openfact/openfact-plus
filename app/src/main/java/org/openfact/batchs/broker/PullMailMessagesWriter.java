@@ -1,8 +1,8 @@
 package org.openfact.batchs.broker;
 
 import org.jboss.logging.Logger;
-import org.openfact.models.ModelParseException;
-import org.openfact.models.ModelUnsupportedTypeException;
+import org.openfact.files.ModelParseException;
+import org.openfact.documents.ModelUnsupportedTypeException;
 import org.openfact.services.managers.DocumentManager;
 
 import javax.batch.api.chunk.ItemWriter;

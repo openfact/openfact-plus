@@ -1,6 +1,6 @@
 package org.openfact.services;
 
-import org.openfact.representation.idm.ErrorRepresentation;
+import org.openfact.representations.idm.ErrorRepresentation;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

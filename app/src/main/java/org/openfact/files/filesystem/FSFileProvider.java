@@ -1,8 +1,8 @@
 package org.openfact.files.filesystem;
 
-import org.openfact.models.FileModel;
-import org.openfact.models.FileProvider;
-import org.openfact.models.ModelStorageException;
+import org.openfact.files.FileModel;
+import org.openfact.files.FileProvider;
+import org.openfact.files.ModelStorageException;
 import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.annotation.PostConstruct;

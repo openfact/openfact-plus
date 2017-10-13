@@ -4,9 +4,8 @@ import org.jboss.logging.Logger;
 import org.keycloak.representations.AccessToken;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
-import org.openfact.models.utils.ModelToRepresentation;
-import org.openfact.representation.idm.GenericDataRepresentation;
-import org.openfact.representation.idm.UserRepresentation;
+import org.openfact.utils.ModelToRepresentation;
+import org.openfact.representations.idm.UserRepresentation;
 import org.openfact.services.managers.KeycloakManager;
 import org.openfact.services.util.SSOContext;
 

@@ -2,10 +2,9 @@ package org.openfact.services.resources;
 
 import org.openfact.models.QueryModel;
 import org.openfact.models.SpaceProvider;
-import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
-import org.openfact.models.utils.ModelToRepresentation;
-import org.openfact.representation.idm.GenericDataRepresentation;
+import org.openfact.utils.ModelToRepresentation;
+import org.openfact.representations.idm.GenericDataRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

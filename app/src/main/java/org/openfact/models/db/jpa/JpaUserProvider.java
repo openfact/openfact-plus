@@ -3,6 +3,7 @@ package org.openfact.models.db.jpa;
 import org.openfact.models.*;
 import org.openfact.models.db.HibernateProvider;
 import org.openfact.models.db.jpa.entity.UserEntity;
+import org.openfact.models.exceptions.ModelException;
 import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.ejb.Stateless;

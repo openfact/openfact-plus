@@ -11,7 +11,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.keycloak.adapters.KeycloakDeployment;
 import org.openfact.models.BrokerType;
-import org.openfact.representation.idm.TokenRepresentation;
+import org.openfact.representations.idm.TokenRepresentation;
 import org.openfact.services.resources.KeycloakDeploymentConfig;
 import org.openfact.services.resources.oauth2.OAuth2Utils;
 

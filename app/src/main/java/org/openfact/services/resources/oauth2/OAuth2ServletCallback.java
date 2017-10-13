@@ -5,7 +5,7 @@ import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeCallbackServlet;
-import org.openfact.representation.idm.TokenRepresentation;
+import org.openfact.representations.idm.TokenRepresentation;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

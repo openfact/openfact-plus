@@ -1,8 +1,8 @@
 package org.openfact.models.db.connections;
 
 import org.hibernate.exception.ConstraintViolationException;
-import org.openfact.models.ModelDuplicateException;
-import org.openfact.models.ModelException;
+import org.openfact.models.exceptions.ModelDuplicateException;
+import org.openfact.models.exceptions.ModelException;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;

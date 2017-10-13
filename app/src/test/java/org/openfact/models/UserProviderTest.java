@@ -2,68 +2,63 @@ package org.openfact.models;
 
 import org.arquillian.ape.rdbms.Cleanup;
 import org.arquillian.ape.rdbms.CleanupStrategy;
+import org.arquillian.ape.rdbms.CleanupUsingScript;
 import org.arquillian.ape.rdbms.TestExecutionPhase;
-import org.arquillian.ape.rdbms.UsingDataSet;
+import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.wildfly.swarm.arquillian.DefaultDeployment;
 
-import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
-
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserProviderTest extends AbstractModelTest {
+@RunWith(Arquillian.class)
+@DefaultDeployment(type = DefaultDeployment.Type.WAR)
+public class UserProviderTest {
 
     @Inject
     public UserProvider userProvider;
 
     @Test
-    @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
+    @CleanupUsingScript(value = "clean_database.sql", phase = TestExecutionPhase.BEFORE)
     public void createUserTest() {
-        UserModel user1 = userProvider.addUser("carlos", "kc", "carlos");
+        String identityID = UUID.randomUUID().toString();
+        UserModel user1 = userProvider.addUser(identityID, "kc", "carlos");
 
         assertThat(user1).isNotNull()
-                .matches(u -> u.getId() != null)
-                .matches(u -> u.getUsername().equals("carlos"))
-                .matches(u -> !u.isRegistrationCompleted());
+                .matches(u -> u.getId() != null, "invalid id")
+                .matches(u -> u.getIdentityID().equals(identityID), "invalid IdentityID")
+                .matches(u -> u.getUsername().equals("carlos"), "Invalid username")
+                .matches(u -> !u.isRegistrationCompleted(), "RegistrationComplete should be false");
 
-        // getInstance user
-        UserModel user2 = userProvider.getUserByIdentityID("carlos");
+        UserModel user2 = userProvider.getUserByIdentityID(identityID);
         assertThat(user1).isEqualTo(user2);
     }
 
     @Test
-    @UsingDataSet("users.yml")
-    @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
-    public void getByUsernameTest() {
-        UserModel user = userProvider.getUserByIdentityID("carlos");
-
-        assertThat(user).isNotNull()
-                .matches(u -> u.getUsername().equals("carlos"));
-    }
-
-    @Test
-    @UsingDataSet("users.yml")
-    @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
+    @CleanupUsingScript(value = "clean_database.sql", phase = TestExecutionPhase.BEFORE)
     public void getUsersTest() {
-        List<UserModel> users = userProvider.getUsers();
+        userProvider.addUser(UUID.randomUUID().toString(), "kc", "carlos");
+        userProvider.addUser(UUID.randomUUID().toString(), "kc", "carlosferia");
+        userProvider.addUser(UUID.randomUUID().toString(), "kc", "carlosferiavila");
 
-        assertThat(users.size()).isEqualTo(5);
+        QueryModel query = QueryModel.builder()
+                .filterText("carlos")
+                .build();
+        List<UserModel> users = userProvider.getUsers(query);
+        assertThat(users).isNotNull()
+                .matches(u -> u.size() == 3, "Result should be 3 by filterText");
+
+
+        query = QueryModel.builder()
+                .addFilter(UserModel.USERNAME, "carlos")
+                .build();
+        users = userProvider.getUsers(query);
+        assertThat(users).isNotNull()
+                .matches(u -> u.size() == 3, "Result should be 3 by filter");
     }
-
-//    @Test
-//    @UsingDataSet("users.yml")
-//    @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
-//    public void getScrollableUsersTest() {
-//        ScrollableResultsModel<UserModel> users = userProvider.getScrollableUsers();
-//
-//        assertThat(users).isNotNull();
-//
-//        while (users.next()) {
-//            assertThat(users.get()).isNotNull();
-//        }
-//        users.close();
-//    }
 
 }

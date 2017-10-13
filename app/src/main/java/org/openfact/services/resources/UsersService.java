@@ -10,11 +10,13 @@ import org.openfact.models.SpaceProvider;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 import org.openfact.models.utils.JacksonUtil;
-import org.openfact.models.utils.ModelToRepresentation;
-import org.openfact.representation.idm.*;
+import org.openfact.representations.idm.GenericDataRepresentation;
+import org.openfact.representations.idm.UserAttributesRepresentation;
+import org.openfact.representations.idm.UserRepresentation;
 import org.openfact.services.managers.UserManager;
 import org.openfact.services.resources.utils.PATCH;
 import org.openfact.services.util.SSOContext;
+import org.openfact.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -23,7 +25,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless

@@ -1,9 +1,8 @@
 package org.openfact.files.filesystem;
 
 import org.apache.commons.io.FilenameUtils;
-import org.openfact.models.FileModel;
-import org.openfact.models.ModelFetchException;
-import org.openfact.models.ModelStorageException;
+import org.openfact.files.FileModel;
+import org.openfact.files.ModelFetchException;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -2,15 +2,14 @@ package org.openfact.services.managers;
 
 import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
-import org.openfact.models.*;
-import org.openfact.models.utils.OpenfactModelUtils;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
+import org.openfact.documents.DocumentModel;
+import org.openfact.documents.DocumentProvider;
+import org.openfact.documents.ModelUnsupportedTypeException;
+import org.openfact.files.*;
+import org.openfact.models.exceptions.ModelException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.io.InputStream;
 

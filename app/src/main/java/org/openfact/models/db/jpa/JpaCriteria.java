@@ -56,11 +56,11 @@ public class JpaCriteria<T, R> {
         }
 
         if (query.getFilters() != null && !query.getFilters().isEmpty()) {
-            Set<Predicate> orPredicates = new HashSet<>();
+            Set<Predicate> andPredicates = new HashSet<>();
             for (Map.Entry<String, String> entry : query.getFilters().entrySet()) {
-                orPredicates.add(cb.like(cb.upper(root.get(entry.getKey())), "%" + entry.getValue().toUpperCase()));
+                andPredicates.add(cb.like(cb.upper(root.get(entry.getKey())), "%" + entry.getValue().toUpperCase() + "%"));
             }
-            predicates.add(cb.or(orPredicates.toArray(new Predicate[orPredicates.size()])));
+            predicates.add(cb.and(andPredicates.toArray(new Predicate[andPredicates.size()])));
         }
     }
 
@@ -68,7 +68,6 @@ public class JpaCriteria<T, R> {
         if (!predicates.isEmpty()) {
             cq.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
         }
-
         return em.createQuery(cq.select(root));
     }
 

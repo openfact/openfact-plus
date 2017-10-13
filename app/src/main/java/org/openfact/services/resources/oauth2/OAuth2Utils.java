@@ -11,8 +11,8 @@ import org.jboss.logging.Logger;
 import org.keycloak.jose.jws.JWSInputException;
 import org.keycloak.representations.RefreshToken;
 import org.keycloak.util.TokenUtil;
-import org.openfact.models.ModelException;
-import org.openfact.representation.idm.TokenRepresentation;
+import org.openfact.models.exceptions.ModelException;
+import org.openfact.representations.idm.TokenRepresentation;
 import org.openfact.services.resources.KeycloakDeploymentConfig;
 
 import javax.servlet.http.HttpServletRequest;

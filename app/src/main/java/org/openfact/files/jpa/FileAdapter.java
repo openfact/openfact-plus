@@ -1,7 +1,7 @@
 package org.openfact.files.jpa;
 
-import org.openfact.models.FileModel;
-import org.openfact.models.ModelFetchException;
+import org.openfact.files.FileModel;
+import org.openfact.files.ModelFetchException;
 
 import javax.persistence.EntityManager;
 

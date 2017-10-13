@@ -1,17 +1,6 @@
 package org.openfact.services.managers;
 
-import org.keycloak.adapters.KeycloakDeployment;
-import org.keycloak.representations.idm.UserRepresentation;
-import org.openfact.models.ModelFetchException;
-import org.openfact.services.resources.KeycloakDeploymentConfig;
-
 import javax.ejb.Stateless;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
 
 @Stateless
 public class KeycloakManager {

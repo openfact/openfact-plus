@@ -105,35 +105,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-undertow</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-cdi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-cxf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-jaxb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-stream</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-ftp</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.wildfly.core</groupId>
             <artifactId>wildfly-controller-client</artifactId>
             <version>2.2.1.Final</version>
@@ -437,11 +408,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <properties>
-                        <swarm.debug.port>5005</swarm.debug.port>
-                    </properties>
-                </configuration>
             </plugin>
 
             <plugin>
@@ -505,7 +471,7 @@
                 <executions>
                     <execution>
                         <id>unpack</id>
-                        <phase>compile</phase>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
@@ -529,15 +495,6 @@
                                     <overWrite>false</overWrite>
                                     <outputDirectory>${project.build.outputDirectory}/modules</outputDirectory>
                                 </artifactItem>
-                                <!--<artifactItem>-->
-                                <!--<groupId>org.hibernate.validator</groupId>-->
-                                <!--<artifactId>hibernate-validator-modules</artifactId>-->
-                                <!--<version>6.0.2.Final</version>-->
-                                <!--<classifier>wildfly-10.1.0.Final-patch</classifier>-->
-                                <!--<type>zip</type>-->
-                                <!--<overWrite>false</overWrite>-->
-                                <!--<outputDirectory>${project.build.outputDirectory}/modules</outputDirectory>-->
-                                <!--</artifactItem>-->
                             </artifactItems>
                         </configuration>
                     </execution>
@@ -723,6 +680,19 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+
+        <profile>
+            <id>unit-test</id>
+            <properties>
+                <database>h2</database>
+                <database.url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</database.url>
+                <database.username>sa</database.username>
+                <database.password>sa</database.password>
+                <hibernate.hbm2ddl.auto>create-drop</hibernate.hbm2ddl.auto>
+                <hibernate.show_sql>true</hibernate.show_sql>
+                <hibernate.format_sql>true</hibernate.format_sql>
+            </properties>
         </profile>
     </profiles>
 

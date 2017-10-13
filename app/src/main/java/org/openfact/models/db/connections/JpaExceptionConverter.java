@@ -1,6 +1,6 @@
 package org.openfact.models.db.connections;
 
-import org.openfact.provider.ExceptionConverter;
+import org.openfact.models.exceptions.ExceptionConverter;
 
 import javax.ejb.Stateless;
 import javax.persistence.PersistenceException;

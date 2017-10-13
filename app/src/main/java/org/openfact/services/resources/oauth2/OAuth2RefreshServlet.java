@@ -2,16 +2,14 @@ package org.openfact.services.resources.oauth2;
 
 import com.google.api.client.auth.oauth2.Credential;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.openfact.representation.idm.TokenRepresentation;
+import org.openfact.representations.idm.TokenRepresentation;
 
-import javax.ejb.Stateless;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

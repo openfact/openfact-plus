@@ -3,9 +3,14 @@ package org.openfact.services.resources;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.openfact.models.*;
-import org.openfact.models.utils.ModelToRepresentation;
-import org.openfact.representation.idm.DocumentRepresentation;
+import org.openfact.documents.DocumentModel;
+import org.openfact.documents.DocumentProvider;
+import org.openfact.documents.ModelUnsupportedTypeException;
+import org.openfact.files.ModelFetchException;
+import org.openfact.files.ModelParseException;
+import org.openfact.files.ModelStorageException;
+import org.openfact.utils.ModelToRepresentation;
+import org.openfact.representations.idm.DocumentRepresentation;
 import org.openfact.services.ErrorResponseException;
 import org.openfact.services.managers.DocumentManager;
 

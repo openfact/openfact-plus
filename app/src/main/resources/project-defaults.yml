@@ -2,7 +2,7 @@ swarm:
   datasources:
     data-sources:
       SyncDS:
-        driver-name: "${database:h2}"
-        connection-url: "${database.url:jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}"
-        user-name: "${database.username:sa}"
-        password: "${database.password:sa}"
+        driver-name: "${database}"
+        connection-url: "${database.url}"
+        user-name: "${database.username}"
+        password: "${database.password}"

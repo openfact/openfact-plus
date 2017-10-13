@@ -1,11 +1,10 @@
 package org.openfact.repositories.user.gmail;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.auth.oauth2.TokenResponseException;
 import com.google.api.client.http.*;
 import org.keycloak.adapters.KeycloakDeployment;
-import org.openfact.representation.idm.TokenRepresentation;
+import org.openfact.representations.idm.TokenRepresentation;
 import org.openfact.services.resources.KeycloakDeploymentConfig;
 
 import javax.ws.rs.client.Client;

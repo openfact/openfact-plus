@@ -1,27 +1,25 @@
 package org.openfact.files.jpa;
 
-import org.openfact.models.FileModel;
-import org.openfact.models.FileProvider;
-import org.openfact.models.ModelStorageException;
+import org.openfact.files.FileModel;
+import org.openfact.files.FileProvider;
+import org.openfact.files.ModelStorageException;
 import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.UUID;
 
 @Stateless
 public class JpaFileProvider implements FileProvider {
 
+    @PersistenceContext
     private EntityManager em;
 
-    @Inject
-    public JpaFileProvider(EntityManager em) {
-        this.em = em;
-    }
-    
     @Override
     public FileModel addFile(byte[] file, String extension) throws ModelStorageException {
-        String id = OpenfactModelUtils.generateId();
+        String id = UUID.randomUUID().toString();
 
         FileEntity entity = new FileEntity();
         entity.setId(id);
