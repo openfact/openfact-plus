@@ -1,7 +1,7 @@
 package org.openfact.files.jpa;
 
 import org.openfact.files.FileModel;
-import org.openfact.files.ModelFetchException;
+import org.openfact.files.exceptions.FileFetchException;
 
 import javax.persistence.EntityManager;
 
@@ -31,7 +31,7 @@ public class FileAdapter implements FileModel {
     }
 
     @Override
-    public byte[] getFile() throws ModelFetchException {
+    public byte[] getFile() throws FileFetchException {
         return file.getFile();
     }
 

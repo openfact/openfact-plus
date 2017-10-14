@@ -1,5 +1,6 @@
 package org.openfact.files;
 
+import org.openfact.files.exceptions.FileFetchException;
 import org.w3c.dom.Document;
 
 public class FlyWeightXmlFileModel implements XmlFileModel {
@@ -7,7 +8,7 @@ public class FlyWeightXmlFileModel implements XmlFileModel {
     protected final FileModel file;
     protected Document document;
 
-    public FlyWeightXmlFileModel(FileModel file) throws ModelFetchException {
+    public FlyWeightXmlFileModel(FileModel file) throws FileFetchException {
         Document document = XmlFileModel.isXmlFile(file);
         if (document == null) {
             throw new IllegalStateException("File is not xml");
@@ -32,7 +33,7 @@ public class FlyWeightXmlFileModel implements XmlFileModel {
     }
 
     @Override
-    public byte[] getFile() throws ModelFetchException {
+    public byte[] getFile() throws FileFetchException {
         return this.file.getFile();
     }
 

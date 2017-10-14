@@ -2,7 +2,7 @@ package org.openfact.files.jpa;
 
 import org.openfact.files.FileModel;
 import org.openfact.files.FileProvider;
-import org.openfact.files.ModelStorageException;
+import org.openfact.files.exceptions.FileStorageException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,7 +16,7 @@ public class JpaFileProvider implements FileProvider {
     private EntityManager em;
 
     @Override
-    public FileModel addFile(byte[] file, String extension) throws ModelStorageException {
+    public FileModel addFile(byte[] file, String extension) throws FileStorageException {
         String id = UUID.randomUUID().toString();
 
         FileEntity entity = new FileEntity();
@@ -29,7 +29,7 @@ public class JpaFileProvider implements FileProvider {
             em.persist(entity);
             em.flush();
         } catch (Throwable e) {
-            throw new ModelStorageException("Could not persist file", e);
+            throw new FileStorageException("Could not persist file", e);
         }
 
         return new FileAdapter(em, entity);
@@ -43,13 +43,13 @@ public class JpaFileProvider implements FileProvider {
     }
 
     @Override
-    public boolean removeFile(FileModel file) throws ModelStorageException {
+    public boolean removeFile(FileModel file) throws FileStorageException {
         FileEntity entity = em.find(FileEntity.class, file.getId());
         if (entity == null) return false;
         try {
             em.remove(entity);
         } catch (Throwable e) {
-            throw new ModelStorageException("Could not remove file", e);
+            throw new FileStorageException("Could not remove file", e);
         }
         return true;
     }

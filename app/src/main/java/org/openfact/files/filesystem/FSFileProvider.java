@@ -2,7 +2,7 @@ package org.openfact.files.filesystem;
 
 import org.openfact.files.FileModel;
 import org.openfact.files.FileProvider;
-import org.openfact.files.ModelStorageException;
+import org.openfact.files.exceptions.FileStorageException;
 import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.annotation.PostConstruct;
@@ -33,12 +33,12 @@ public class FSFileProvider implements FileProvider {
     }
 
     @Override
-    public FileModel addFile(byte[] file, String extension) throws ModelStorageException {
+    public FileModel addFile(byte[] file, String extension) throws FileStorageException {
         Path path = getBasePath().resolve(OpenfactModelUtils.generateId() + extension);
         try {
             path = Files.write(path, file);
         } catch (IOException e) {
-            throw new ModelStorageException("Could not write file:" + path.toAbsolutePath().toString(), e);
+            throw new FileStorageException("Could not write file:" + path.toAbsolutePath().toString(), e);
         }
 
         return new FileAdapter(path);
@@ -52,12 +52,12 @@ public class FSFileProvider implements FileProvider {
     }
 
     @Override
-    public boolean removeFile(FileModel file) throws ModelStorageException {
+    public boolean removeFile(FileModel file) throws FileStorageException {
         Path path = Paths.get(file.getId());
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new ModelStorageException("Could not delete file:" + path.toAbsolutePath().toString(), e);
+            throw new FileStorageException("Could not delete file:" + path.toAbsolutePath().toString(), e);
         }
         return true;
     }

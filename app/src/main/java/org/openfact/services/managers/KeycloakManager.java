@@ -5,7 +5,7 @@ import javax.ejb.Stateless;
 @Stateless
 public class KeycloakManager {
 
-//    public UserRepresentation getUser(String userID, String accessToken) throws ModelFetchException {
+//    public UserRepresentation getUser(String userID, String accessToken) throws FileFetchException {
 //        WebTarget target = getKeycloakTarget(accessToken, "users", userID);
 //        Response response = target.request().get();
 //
@@ -14,7 +14,7 @@ public class KeycloakManager {
 //        } else if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
 //            return null;
 //        } else {
-//            throw new ModelFetchException("Could not fetch keycloak user");
+//            throw new FileFetchException("Could not fetch keycloak user");
 //        }
 //    }
 //

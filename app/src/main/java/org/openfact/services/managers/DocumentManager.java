@@ -4,8 +4,11 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentProvider;
-import org.openfact.documents.ModelUnsupportedTypeException;
+import org.openfact.documents.exceptions.UnreadableDocumentException;
+import org.openfact.documents.exceptions.UnsupportedDocumentTypeException;
 import org.openfact.files.*;
+import org.openfact.files.exceptions.FileFetchException;
+import org.openfact.files.exceptions.FileStorageException;
 import org.openfact.models.exceptions.ModelException;
 
 import javax.ejb.Stateless;
@@ -26,11 +29,11 @@ public class DocumentManager {
 
     /**
      * @param bytes
-     * @throws ModelParseException   in case InputStream passed could not be processed
-     * @throws ModelStorageException in case could not be persist file on storage
+     * @throws UnreadableDocumentException   in case InputStream passed could not be processed
+     * @throws FileStorageException in case could not be persist file on storage
      * @throws ModelException        in case unexpected error happens
      */
-    public DocumentModel importDocument(byte[] bytes) throws ModelStorageException, ModelUnsupportedTypeException, ModelFetchException, ModelParseException {
+    public DocumentModel importDocument(byte[] bytes) throws FileStorageException, UnsupportedDocumentTypeException, FileFetchException, UnreadableDocumentException {
         FileModel fileModel = fileProvider.addFile(bytes, ".xml");
 
         try {
@@ -39,7 +42,7 @@ public class DocumentManager {
                             new FlyWeightFileModel(fileModel))
             );
             return documentProvider.addDocument(flyWeightFile);
-        } catch (ModelUnsupportedTypeException | ModelParseException e) {
+        } catch (UnsupportedDocumentTypeException | UnreadableDocumentException e) {
             boolean result = fileProvider.removeFile(fileModel);
             logger.debug("Rollback file result=" + result);
             throw e;
@@ -48,11 +51,11 @@ public class DocumentManager {
 
     /**
      * @param inputStream java.io.InputStream
-     * @throws ModelParseException   in case InputStream passed could not be processed
-     * @throws ModelStorageException in case could not be persist file on storage
+     * @throws UnreadableDocumentException   in case InputStream passed could not be processed
+     * @throws FileStorageException in case could not be persist file on storage
      * @throws ModelException        in case unexpected error happens
      */
-    public DocumentModel importDocument(InputStream inputStream) throws IOException, ModelStorageException, ModelUnsupportedTypeException, ModelFetchException, ModelParseException {
+    public DocumentModel importDocument(InputStream inputStream) throws IOException, FileStorageException, UnsupportedDocumentTypeException, FileFetchException, UnreadableDocumentException {
         return importDocument(IOUtils.toByteArray(inputStream));
     }
 
@@ -68,10 +71,10 @@ public class DocumentManager {
         // Delete file
         try {
             fileProvider.removeFile(file);
-        } catch (ModelStorageException e) {
+        } catch (FileStorageException e) {
             try {
                 fileProvider.removeFile(file);
-            } catch (ModelStorageException e1) {
+            } catch (FileStorageException e1) {
                 logger.error("Could not remove file:" + file.getId());
                 logger.warn("Transaction was not rolled back");
             }

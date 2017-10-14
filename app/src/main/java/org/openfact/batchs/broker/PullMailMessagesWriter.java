@@ -1,8 +1,8 @@
 package org.openfact.batchs.broker;
 
 import org.jboss.logging.Logger;
-import org.openfact.documents.ModelUnsupportedTypeException;
-import org.openfact.files.ModelParseException;
+import org.openfact.documents.exceptions.UnreadableDocumentException;
+import org.openfact.documents.exceptions.UnsupportedDocumentTypeException;
 import org.openfact.services.managers.DocumentManager;
 
 import javax.batch.api.chunk.ItemWriter;
@@ -33,10 +33,10 @@ public class PullMailMessagesWriter implements ItemWriter {
             PullMailMessageWrapper wrapper = (PullMailMessageWrapper) o;
             try {
                 documentManager.importDocument(wrapper.getMessage().getXml());
-            } catch (ModelUnsupportedTypeException e) {
+            } catch (UnsupportedDocumentTypeException e) {
                 logger.debug("Unsupported document type");
-            } catch (ModelParseException e) {
-                logger.debug("Unparsed document type");
+            } catch (UnreadableDocumentException e) {
+                logger.debug("Unreadable document type");
             }
         }
     }

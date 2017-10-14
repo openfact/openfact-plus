@@ -1,5 +1,7 @@
 package org.openfact.files;
 
+import org.openfact.files.exceptions.FileFetchException;
+
 public class FlyWeightFileModel implements FileModel {
 
     protected final FileModel fileModel;
@@ -25,7 +27,7 @@ public class FlyWeightFileModel implements FileModel {
     }
 
     @Override
-    public byte[] getFile() throws ModelFetchException {
+    public byte[] getFile() throws FileFetchException {
         if (bytes == null) {
             this.bytes = this.fileModel.getFile();
         }

@@ -2,7 +2,7 @@ package org.openfact.files.filesystem;
 
 import org.apache.commons.io.FilenameUtils;
 import org.openfact.files.FileModel;
-import org.openfact.files.ModelFetchException;
+import org.openfact.files.exceptions.FileFetchException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,11 +32,11 @@ public class FileAdapter implements FileModel {
     }
 
     @Override
-    public byte[] getFile() throws ModelFetchException {
+    public byte[] getFile() throws FileFetchException {
         try {
             return Files.readAllBytes(path);
         } catch (IOException e) {
-            throw new ModelFetchException("Could not fetch file: " + path.toAbsolutePath().toString(), e);
+            throw new FileFetchException("Could not fetch file: " + path.toAbsolutePath().toString(), e);
         }
     }
 }

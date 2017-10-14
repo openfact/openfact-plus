@@ -1,12 +1,14 @@
 package org.openfact.files;
 
+import org.openfact.files.exceptions.FileStorageException;
+
 public interface FileProvider {
 
     /**
      * @param file      file value
      * @param extension file extension e.g. .pdf
      */
-    FileModel addFile(byte[] file, String extension) throws ModelStorageException;
+    FileModel addFile(byte[] file, String extension) throws FileStorageException;
 
     /**
      * @param id file unique identity
@@ -18,6 +20,6 @@ public interface FileProvider {
      * @param file to be removed
      * @return result of operation
      */
-    boolean removeFile(FileModel file) throws ModelStorageException;
+    boolean removeFile(FileModel file) throws FileStorageException;
 
 }

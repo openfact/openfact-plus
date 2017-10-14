@@ -6,6 +6,7 @@ import org.arquillian.ape.rdbms.TestExecutionPhase;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openfact.files.exceptions.FileStorageException;
 import org.wildfly.swarm.arquillian.DefaultDeployment;
 
 import javax.inject.Inject;
@@ -21,7 +22,7 @@ public class FileProviderTest {
 
     @Test
     @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
-    public void createFilesTest() throws ModelStorageException {
+    public void createFilesTest() throws FileStorageException {
         FileModel file1 = fileProvider.addFile(new byte[]{0, 1, 2, 3, 4, 5}, ".xml");
 
         assertThat(file1).isNotNull()
@@ -36,7 +37,7 @@ public class FileProviderTest {
 
     @Test
     @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
-    public void removeFile() throws ModelStorageException {
+    public void removeFile() throws FileStorageException {
         FileModel file = fileProvider.addFile(new byte[]{0, 1, 2, 3, 4, 5}, ".xml");
 
         boolean result = fileProvider.removeFile(file);

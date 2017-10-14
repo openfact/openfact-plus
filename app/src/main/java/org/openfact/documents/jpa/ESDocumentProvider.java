@@ -7,12 +7,16 @@ import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.engine.spi.QueryDescriptor;
 import org.jboss.logging.Logger;
-import org.openfact.documents.*;
+import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentModel.DocumentCreationEvent;
 import org.openfact.documents.DocumentModel.DocumentRemovedEvent;
+import org.openfact.documents.DocumentProvider;
+import org.openfact.documents.DocumentReader;
+import org.openfact.documents.GenericDocument;
+import org.openfact.documents.exceptions.UnreadableDocumentException;
+import org.openfact.documents.exceptions.UnsupportedDocumentTypeException;
 import org.openfact.documents.jpa.entity.DocumentEntity;
 import org.openfact.documents.reader.ReaderUtil;
-import org.openfact.files.ModelParseException;
 import org.openfact.files.XmlUBLFileModel;
 import org.openfact.models.utils.OpenfactModelUtils;
 
@@ -36,10 +40,10 @@ public class ESDocumentProvider implements DocumentProvider {
     private ReaderUtil readerUtil;
 
     @Override
-    public DocumentModel addDocument(XmlUBLFileModel file) throws ModelUnsupportedTypeException, ModelParseException {
+    public DocumentModel addDocument(XmlUBLFileModel file) throws UnsupportedDocumentTypeException, UnreadableDocumentException {
         SortedSet<DocumentReader> readers = readerUtil.getReader(file.getDocumentType());
         if (readers.isEmpty()) {
-            throw new ModelUnsupportedTypeException("Unsupported type=" + file.getDocumentType());
+            throw new UnsupportedDocumentTypeException("Unsupported type=" + file.getDocumentType());
         }
 
         GenericDocument genericDocument = null;
@@ -50,7 +54,7 @@ public class ESDocumentProvider implements DocumentProvider {
             }
         }
         if (genericDocument == null) {
-            throw new ModelParseException(file.getDocumentType() + " Is supported but could not parsed");
+            throw new UnreadableDocumentException(file.getDocumentType() + " Is supported but could not parsed");
         }
         Object jaxb = genericDocument.getJaxb();
 

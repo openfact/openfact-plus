@@ -1,5 +1,7 @@
 package org.openfact.files;
 
+import org.openfact.files.exceptions.FileFetchException;
+
 public interface FileModel {
 
     String getId();
@@ -17,5 +19,5 @@ public interface FileModel {
     /**
      * @return file value on bytes
      */
-    byte[] getFile() throws ModelFetchException;
+    byte[] getFile() throws FileFetchException;
 }

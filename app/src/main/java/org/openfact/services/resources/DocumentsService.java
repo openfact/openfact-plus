@@ -5,10 +5,10 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentProvider;
-import org.openfact.documents.ModelUnsupportedTypeException;
-import org.openfact.files.ModelFetchException;
-import org.openfact.files.ModelParseException;
-import org.openfact.files.ModelStorageException;
+import org.openfact.documents.exceptions.UnreadableDocumentException;
+import org.openfact.documents.exceptions.UnsupportedDocumentTypeException;
+import org.openfact.files.exceptions.FileFetchException;
+import org.openfact.files.exceptions.FileStorageException;
 import org.openfact.representations.idm.DocumentRepresentation;
 import org.openfact.services.ErrorResponseException;
 import org.openfact.services.managers.DocumentManager;
@@ -74,11 +74,11 @@ public class DocumentsService {
             DocumentModel documentModel = null;
             try {
                 documentModel = documentManager.importDocument(inputStream);
-            } catch (ModelUnsupportedTypeException | ModelParseException e) {
+            } catch (UnsupportedDocumentTypeException | UnreadableDocumentException e) {
                 throw new ErrorResponseException("Unsupported type", Response.Status.BAD_REQUEST);
-            } catch (ModelStorageException e) {
+            } catch (FileStorageException e) {
                 throw new ErrorResponseException("Could not save file", Response.Status.INTERNAL_SERVER_ERROR);
-            } catch (ModelFetchException e) {
+            } catch (FileFetchException e) {
                 throw new ErrorResponseException("Could not fetch file", Response.Status.INTERNAL_SERVER_ERROR);
             } catch (IOException e) {
                 throw new ErrorResponseException("Could not read file", Response.Status.INTERNAL_SERVER_ERROR);
