@@ -4,6 +4,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
+import org.openfact.documents.DocumentProviderType;
 import org.openfact.models.db.CreatableEntity;
 import org.openfact.models.db.CreatedAtListener;
 import org.openfact.models.db.UpdatableEntity;
@@ -18,7 +19,9 @@ import java.util.*;
 
 @Entity
 @Indexed
-@Table(name = "document")
+@Table(name = "document", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"type", "assigned_id", "supplier_assigned_id"})
+})
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 //@AnalyzerDefs(value = {
 //        @AnalyzerDef(
@@ -28,6 +31,9 @@ import java.util.*;
 //                        @TokenFilterDef(factory = LowerCaseFilterFactory.class)
 //                })
 //})
+@NamedQueries({
+        @NamedQuery(name = "getDocumentByTypeAssignedIdAndSupplierAssignedId", query = "select d from DocumentEntity d where d.type = :type and d.assignedId = :assignedId and d.supplierAssignedId = :supplierAssignedId")
+})
 public class DocumentEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
     @Id
@@ -72,6 +78,7 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     private String supplierName;
 
     @Field
+    @NotNull
     @Column(name = "supplier_assigned_id")
     private String supplierAssignedId;
 
@@ -83,6 +90,13 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Field
     @Column(name = "customer_assigned_id")
     private String customerAssignedId;
+
+    @Field
+//    @Analyzer(definition = "customanalyzer")
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider_type")
+    private DocumentProviderType providerType;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -193,6 +207,14 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.customerAssignedId = customerAssignedId;
     }
 
+    public DocumentProviderType getProviderType() {
+        return providerType;
+    }
+
+    public void setProviderType(DocumentProviderType providerType) {
+        this.providerType = providerType;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -226,5 +248,4 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     public void setSpaces(Set<DocumentSpaceEntity> spaces) {
         this.spaces = spaces;
     }
-
 }

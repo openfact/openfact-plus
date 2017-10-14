@@ -3,7 +3,7 @@ package org.openfact.documents.jpa.entity;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.IndexedEmbedded;
-import org.openfact.models.InteractType;
+import org.openfact.documents.InteractType;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 
 import javax.persistence.*;

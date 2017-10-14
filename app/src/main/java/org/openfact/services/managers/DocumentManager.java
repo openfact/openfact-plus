@@ -4,6 +4,8 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentProvider;
+import org.openfact.documents.DocumentProviderType;
+import org.openfact.documents.exceptions.PreexistedDocumentException;
 import org.openfact.documents.exceptions.UnreadableDocumentException;
 import org.openfact.documents.exceptions.UnsupportedDocumentTypeException;
 import org.openfact.files.*;
@@ -29,11 +31,16 @@ public class DocumentManager {
 
     /**
      * @param bytes
-     * @throws UnreadableDocumentException   in case InputStream passed could not be processed
-     * @throws FileStorageException in case could not be persist file on storage
-     * @throws ModelException        in case unexpected error happens
+     * @throws UnreadableDocumentException in case InputStream passed could not be processed
+     * @throws FileStorageException        in case could not be persist file on storage
+     * @throws ModelException              in case unexpected error happens
      */
-    public DocumentModel importDocument(byte[] bytes) throws FileStorageException, UnsupportedDocumentTypeException, FileFetchException, UnreadableDocumentException {
+    public DocumentModel importDocument(byte[] bytes, DocumentProviderType providerType) throws
+            FileStorageException,
+            UnsupportedDocumentTypeException,
+            FileFetchException,
+            UnreadableDocumentException,
+            PreexistedDocumentException {
         FileModel fileModel = fileProvider.addFile(bytes, ".xml");
 
         try {
@@ -41,7 +48,7 @@ public class DocumentManager {
                     new FlyWeightXmlFileModel(
                             new FlyWeightFileModel(fileModel))
             );
-            return documentProvider.addDocument(flyWeightFile);
+            return documentProvider.addDocument(flyWeightFile, providerType);
         } catch (UnsupportedDocumentTypeException | UnreadableDocumentException e) {
             boolean result = fileProvider.removeFile(fileModel);
             logger.debug("Rollback file result=" + result);
@@ -51,12 +58,18 @@ public class DocumentManager {
 
     /**
      * @param inputStream java.io.InputStream
-     * @throws UnreadableDocumentException   in case InputStream passed could not be processed
-     * @throws FileStorageException in case could not be persist file on storage
-     * @throws ModelException        in case unexpected error happens
+     * @throws UnreadableDocumentException in case InputStream passed could not be processed
+     * @throws FileStorageException        in case could not be persist file on storage
+     * @throws ModelException              in case unexpected error happens
      */
-    public DocumentModel importDocument(InputStream inputStream) throws IOException, FileStorageException, UnsupportedDocumentTypeException, FileFetchException, UnreadableDocumentException {
-        return importDocument(IOUtils.toByteArray(inputStream));
+    public DocumentModel importDocument(InputStream inputStream, DocumentProviderType providerType)
+            throws IOException,
+            FileStorageException,
+            UnsupportedDocumentTypeException,
+            FileFetchException,
+            UnreadableDocumentException,
+            PreexistedDocumentException {
+        return importDocument(IOUtils.toByteArray(inputStream), providerType);
     }
 
     public boolean removeDocument(DocumentModel ublDocument) {

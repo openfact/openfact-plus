@@ -5,6 +5,8 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentProvider;
+import org.openfact.documents.DocumentProviderType;
+import org.openfact.documents.exceptions.PreexistedDocumentException;
 import org.openfact.documents.exceptions.UnreadableDocumentException;
 import org.openfact.documents.exceptions.UnsupportedDocumentTypeException;
 import org.openfact.files.exceptions.FileFetchException;
@@ -73,7 +75,7 @@ public class DocumentsService {
             // Save document
             DocumentModel documentModel = null;
             try {
-                documentModel = documentManager.importDocument(inputStream);
+                documentModel = documentManager.importDocument(inputStream, DocumentProviderType.USER);
             } catch (UnsupportedDocumentTypeException | UnreadableDocumentException e) {
                 throw new ErrorResponseException("Unsupported type", Response.Status.BAD_REQUEST);
             } catch (FileStorageException e) {
@@ -82,6 +84,8 @@ public class DocumentsService {
                 throw new ErrorResponseException("Could not fetch file", Response.Status.INTERNAL_SERVER_ERROR);
             } catch (IOException e) {
                 throw new ErrorResponseException("Could not read file", Response.Status.INTERNAL_SERVER_ERROR);
+            } catch (PreexistedDocumentException e) {
+                throw new ErrorResponseException("There is a preexisted document, you cannot override it", Response.Status.CONFLICT);
             }
 
             // Return result

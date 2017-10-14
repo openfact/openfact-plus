@@ -1,6 +1,7 @@
 package org.openfact.batchs.broker;
 
 import org.jboss.logging.Logger;
+import org.openfact.documents.DocumentProviderType;
 import org.openfact.documents.exceptions.UnreadableDocumentException;
 import org.openfact.documents.exceptions.UnsupportedDocumentTypeException;
 import org.openfact.services.managers.DocumentManager;
@@ -32,7 +33,7 @@ public class PullMailMessagesWriter implements ItemWriter {
         for (Object o : items) {
             PullMailMessageWrapper wrapper = (PullMailMessageWrapper) o;
             try {
-                documentManager.importDocument(wrapper.getMessage().getXml());
+                documentManager.importDocument(wrapper.getMessage().getXml(), DocumentProviderType.MAIL);
             } catch (UnsupportedDocumentTypeException e) {
                 logger.debug("Unsupported document type");
             } catch (UnreadableDocumentException e) {

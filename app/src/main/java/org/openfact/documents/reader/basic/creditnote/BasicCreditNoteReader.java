@@ -10,7 +10,7 @@ import org.openfact.documents.jpa.entity.DocumentSpaceEntity;
 import org.openfact.documents.reader.SupportedType;
 import org.openfact.documents.reader.basic.common.BasicUtils;
 import org.openfact.files.XmlUBLFileModel;
-import org.openfact.models.InteractType;
+import org.openfact.documents.InteractType;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 
