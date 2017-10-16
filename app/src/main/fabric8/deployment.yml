@@ -21,7 +21,7 @@ spec:
         - name: SSO_AUTH_SERVER_URL
           value: ${SSO_AUTH_SERVER_URL}
         - name: JAVA_OPTIONS
-          value: -Dsso.realm=${SSO_REALM} -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dsso.clientId=${SSO_CLIENT_ID} -Dsso.credentials.secret=${SSO_CREDENTIALS_SECRET} -Dhibernate.hbm2ddl.auto=${HB_AUTO} -Dhibernate.show_sql=${HB_SHOW_SQL} -Dhibernate.format_sql=${HB_FORMAT_SQL} -Dhibernate.cache.use_second_level_cache=${HB_SECOND_LEVEL_CACHE} -Dhibernate.es.host=${ES_SERVER_URL} -Dhibernate.es.username=${ES_USERNAME} -Dhibernate.es.password=${ES_PASSWORD} -Dhibernate.es.index_schema_management_strategy=${ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY} -Dhibernate.es.required_index_status=${ES_REQUIRED_INDEX_STATUS}
+          value: -Dsso.realm=${SSO_REALM} -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dsso.clientId=${SSO_CLIENT_ID} -Dsso.credentials.secret=${SSO_CREDENTIALS_SECRET} -Ddatabase=${DS_DRIVER} -Ddatabase.url=${DS_URL} -Ddatabase.username=${DS_USERNAME} -Ddatabase.password=${DS_PASSWORD} -Dhibernate.hbm2ddl.auto=${HB_AUTO} -Dhibernate.show_sql=${HB_SHOW_SQL} -Dhibernate.format_sql=${HB_FORMAT_SQL} -Dhibernate.cache.use_second_level_cache=${HB_SECOND_LEVEL_CACHE} -Dhibernate.es.host=${ES_SERVER_URL} -Dhibernate.es.username=${ES_USERNAME} -Dhibernate.es.password=${ES_PASSWORD} -Dhibernate.es.index_schema_management_strategy=${ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY} -Dhibernate.es.required_index_status=${ES_REQUIRED_INDEX_STATUS}
         name: ${project.artifactId}
         image: ${project.artifactId}:latest
         imagePullPolicy: IfNotPresent

@@ -323,6 +323,11 @@
         <!--Jberet extensions-->
         <dependency>
             <groupId>org.jberet</groupId>
+            <artifactId>jberet-core</artifactId>
+            <version>${version.jberet-support}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jberet</groupId>
             <artifactId>jberet-support</artifactId>
             <version>${version.jberet-support}</version>
         </dependency>

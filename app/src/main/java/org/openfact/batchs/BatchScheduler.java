@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class BatchScheduler {
 
-    public static final long INITIAL_DELAY = 0;
+    public static final long INITIAL_DELAY = 10;
     public final long PERIOD = 30;
 
     @Resource

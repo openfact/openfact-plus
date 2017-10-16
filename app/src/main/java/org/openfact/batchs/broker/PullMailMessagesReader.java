@@ -1,6 +1,5 @@
 package org.openfact.batchs.broker;
 
-import org.jberet.support.io.JpaItemReader;
 import org.jberet.support.io.JpaItemReaderWriterBase;
 import org.jboss.logging.Logger;
 import org.openfact.models.db.jpa.entity.UserLinkedBrokerEntity;
@@ -25,6 +24,9 @@ public class PullMailMessagesReader extends JpaItemReaderWriterBase implements I
 
     @Inject
     private MailUtils mailUtils;
+
+    @Inject
+    private LinkedBrokers linkedBrokers;
 
     /**
      * {@code javax.enterprise.inject.Instance} that holds optional injection of
@@ -119,7 +121,7 @@ public class PullMailMessagesReader extends JpaItemReaderWriterBase implements I
     /**
      * List to hold query result objects
      */
-    protected List<MailUblMessageModel> resultList;
+    protected List<MailUblMessageModel> resultList = new ArrayList<>();
 
     /**
      * Current read position
@@ -163,6 +165,9 @@ public class PullMailMessagesReader extends JpaItemReaderWriterBase implements I
                 MailRepositoryModel repository = buildRepository(userLinkedBrokerEntity);
                 MailQuery query = buildQuery(userLinkedBrokerEntity);
                 resultList.addAll(mailProvider.getUblMessages(repository, query));
+
+                userLinkedBrokerEntity.setLastTimeSynchronized(LocalDateTime.now());
+                linkedBrokers.add(userLinkedBrokerEntity);
             } else {
                 logger.warn("Skipping Linked Broker because could not find MailProviders for:" + userLinkedBrokerEntity.getType());
             }

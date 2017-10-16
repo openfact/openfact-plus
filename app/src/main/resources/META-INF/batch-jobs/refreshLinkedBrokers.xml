@@ -4,10 +4,21 @@
      xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/jobXML_1_0.xsd"
      version="1.0">
     <listeners>
-        <listener ref="batchLoggerListener"></listener>
+        <listener ref="jobLoggerListener">
+            <properties>
+                <property name="loggerLevel" value="info"></property>
+            </properties>
+        </listener>
     </listeners>
     <flow id="start" next="end">
         <step id="refreshLinkedBrokers" next="pullMailMessages">
+            <listeners>
+                <listener ref="stepLoggerListener">
+                    <properties>
+                        <property name="loggerLevel" value="info"></property>
+                    </properties>
+                </listener>
+            </listeners>
             <chunk>
                 <reader ref="jpaItemReader">
                     <properties>
@@ -15,15 +26,27 @@
                         <property name="beanType" value="org.openfact.models.db.jpa.entity.UserEntity"></property>
                     </properties>
                 </reader>
-                <processor ref="refreshLinkedBrokersProcessor"/>
                 <writer ref="jpaAdvancedWriter">
                     <properties>
                         <property name="operation" value="merge"></property>
+                        <property name="entityTransaction" value="true"></property>
                     </properties>
                 </writer>
             </chunk>
         </step>
         <step id="pullMailMessages">
+            <listeners>
+                <listener ref="stepLoggerListener">
+                    <properties>
+                        <property name="loggerLevel" value="info"></property>
+                    </properties>
+                </listener>
+                <listener ref="pullMailMessagesStepListener">
+                    <properties>
+                        <property name="entityTransaction" value="false"></property>
+                    </properties>
+                </listener>
+            </listeners>
             <chunk>
                 <reader ref="pullMailMessagesReader">
                     <properties>
@@ -31,7 +54,16 @@
                         <property name="beanType" value="org.openfact.models.db.jpa.entity.UserLinkedBrokerEntity"></property>
                     </properties>
                 </reader>
-                <writer ref="pullMailMessagesWriter"/>
+                <writer ref="pullMailMessagesWriter">
+                    <properties>
+                        <property name="entityTransaction" value="true"></property>
+                    </properties>
+                </writer>
+                <skippable-exception-classes>
+                    <include class="org.openfact.documents.exceptions.UnsupportedDocumentTypeException"></include>
+                    <include class="org.openfact.documents.exceptions.UnreadableDocumentException"></include>
+                    <include class="org.openfact.documents.exceptions.PreexistedDocumentException"></include>
+                </skippable-exception-classes>
             </chunk>
         </step>
     </flow>

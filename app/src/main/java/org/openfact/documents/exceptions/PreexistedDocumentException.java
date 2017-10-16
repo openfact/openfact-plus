@@ -2,6 +2,9 @@ package org.openfact.documents.exceptions;
 
 public class PreexistedDocumentException extends Exception {
 
+    public PreexistedDocumentException() {
+    }
+
     public PreexistedDocumentException(String message) {
         super(message);
     }
@@ -9,5 +12,5 @@ public class PreexistedDocumentException extends Exception {
     public PreexistedDocumentException(String message, Throwable e) {
         super(message, e);
     }
-    
+
 }
