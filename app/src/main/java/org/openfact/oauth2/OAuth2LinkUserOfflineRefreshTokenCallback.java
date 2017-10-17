@@ -1,4 +1,4 @@
-package org.openfact.services.resources.oauth2;
+package org.openfact.oauth2;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -18,21 +18,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.UUID;
 
 @WebServlet("/api/login/authorize_offline_callback")
-public class OAuth2LinkOfflineServletCallback extends AbstractAuthorizationCodeCallbackServlet {
+public class OAuth2LinkUserOfflineRefreshTokenCallback extends AbstractAuthorizationCodeCallbackServlet {
 
     @Inject
     private UserProvider userProvider;
 
     @Override
     protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential) throws ServletException, IOException {
+        String redirect = OAuth2Utils.getRedirect(req);
+
         boolean isOfflineToken = false;
         try {
             isOfflineToken = TokenUtil.isOfflineToken(credential.getRefreshToken());
         } catch (JWSInputException e) {
-            resp.sendRedirect(req.getParameter("redirect") + "?error=Could not decode token");
+            resp.sendRedirect(redirect + "?error=Could not decode token");
         }
 
         if (isOfflineToken) {
@@ -45,29 +46,31 @@ public class OAuth2LinkOfflineServletCallback extends AbstractAuthorizationCodeC
             bean.setRegistrationComplete(true);
             userProvider.updateUser(bean);
 
-            resp.sendRedirect(req.getParameter("redirect"));
+            resp.sendRedirect(redirect);
         } else {
-            resp.sendRedirect(req.getParameter("redirect") + "?error=Obtained token is not offline");
+            resp.sendRedirect(redirect + "?error=Obtained token is not offline");
         }
     }
 
     @Override
     protected void onError(HttpServletRequest req, HttpServletResponse resp, AuthorizationCodeResponseUrl errorResponse) throws ServletException, IOException {
-        resp.sendRedirect(req.getParameter("redirect") + "?error=could not get token");
+        String redirect = OAuth2Utils.getRedirect(req);
+        resp.sendRedirect(redirect + "?error=could not get token");
     }
 
     @Override
     protected String getRedirectUri(HttpServletRequest req) throws ServletException, IOException {
-        return OAuth2Utils.buildRedirectURL(req, "/api/login/authorize_offline_callback");
+        String redirect = OAuth2Utils.getRedirect(req);
+        return OAuth2Utils.buildRedirectURL(req, OAuth2LinkUserOfflineRefreshToken.CALLBACK, redirect);
     }
 
     @Override
     protected AuthorizationCodeFlow initializeFlow() throws IOException {
-        return OAuth2Utils.buildAuthCodeFlow(Arrays.asList("openid"));
+        return OAuth2Utils.getAuthorizationCodeFlow(OAuth2LinkUserOfflineRefreshToken.SCOPES);
     }
 
     @Override
     protected String getUserId(HttpServletRequest req) throws ServletException, IOException {
-        return UUID.randomUUID().toString();
+        return null;
     }
 }

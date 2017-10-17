@@ -13,7 +13,7 @@ import org.keycloak.adapters.KeycloakDeployment;
 import org.openfact.models.BrokerType;
 import org.openfact.representations.idm.TokenRepresentation;
 import org.openfact.services.resources.KeycloakDeploymentConfig;
-import org.openfact.services.resources.oauth2.OAuth2Utils;
+import org.openfact.oauth2.OAuth2Utils;
 
 import javax.ejb.Stateless;
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class BrokerManager {
         String authServer = keycloakDeployment.getAuthServerBaseUrl();
         String realmName = keycloakDeployment.getRealm();
 
-        Credential credential = OAuth2Utils.buildCredential().setRefreshToken(refreshToken);
+        Credential credential = OAuth2Utils.getCredential().setRefreshToken(refreshToken);
         HttpTransport transport = new NetHttpTransport();
         HttpRequestFactory requestFactory = transport.createRequestFactory(credential);
 

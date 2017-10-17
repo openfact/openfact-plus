@@ -18,7 +18,7 @@ import org.jboss.logging.Logger;
 import org.openfact.models.BrokerType;
 import org.openfact.repositories.user.*;
 import org.openfact.repositories.user.utils.CredentialHandler;
-import org.openfact.services.resources.oauth2.OAuth2Utils;
+import org.openfact.oauth2.OAuth2Utils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -69,7 +69,7 @@ public class GmailProvider implements MailProvider {
     }
 
     private Gmail buildClient(MailRepositoryModel mailRepository) {
-        Credential credential = OAuth2Utils.buildCredential()
+        Credential credential = OAuth2Utils.getCredential()
                 .setRefreshToken(mailRepository.getRefreshToken());
 
         Enhancer enhancer = new Enhancer();

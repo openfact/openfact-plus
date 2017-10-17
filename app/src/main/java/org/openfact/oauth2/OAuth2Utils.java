@@ -1,4 +1,4 @@
-package org.openfact.services.resources.oauth2;
+package org.openfact.oauth2;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.BearerToken;
@@ -15,6 +15,7 @@ import org.openfact.models.exceptions.ModelException;
 import org.openfact.representations.idm.TokenRepresentation;
 import org.openfact.services.resources.KeycloakDeploymentConfig;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -22,38 +23,51 @@ public class OAuth2Utils {
 
     private static final Logger logger = Logger.getLogger(OAuth2Utils.class);
 
-    public static AuthorizationCodeFlow buildAuthCodeFlow(List<String> scopes) {
-        KeycloakDeploymentConfig kcConfig = KeycloakDeploymentConfig.getInstance();
+    public static final String REDIRECT_REQUEST_ATTRIBUTE_NAME = "redirect";
 
-        return new AuthorizationCodeFlow.Builder(BearerToken.authorizationHeaderAccessMethod(),
-                new NetHttpTransport(),
-                new JacksonFactory(),
-                new GenericUrl(kcConfig.getTokenUrl()),
-                new BasicAuthentication(kcConfig.getClientID(), kcConfig.getClientSecret()),
-                kcConfig.getClientID(),
-                kcConfig.getAuthorizationUrl())
+    public static AuthorizationCodeFlow getAuthorizationCodeFlow(List<String> scopes) {
+        return getAuthorizationCodeFlowBuilder()
                 .setScopes(scopes)
                 .build();
     }
 
-    public static String buildRedirectURL(HttpServletRequest req, String callback) {
-        String redirect = "?redirect=" + req.getParameter("redirect");
+    public static AuthorizationCodeFlow.Builder getAuthorizationCodeFlowBuilder() {
+        KeycloakDeploymentConfig kcDeploymentConfig = KeycloakDeploymentConfig.getInstance();
+
+        return new AuthorizationCodeFlow.Builder(BearerToken.authorizationHeaderAccessMethod(),
+                new NetHttpTransport(),
+                new JacksonFactory(),
+                new GenericUrl(kcDeploymentConfig.getTokenUrl()),
+                new BasicAuthentication(kcDeploymentConfig.getClientID(), kcDeploymentConfig.getClientSecret()),
+                kcDeploymentConfig.getClientID(),
+                kcDeploymentConfig.getAuthorizationUrl());
+    }
+
+    public static String buildRedirectURL(HttpServletRequest req, String callback, String redirect) {
         GenericUrl url = new GenericUrl(req.getRequestURL().toString());
         url.setRawPath(callback);
 
-        String redirect_url = url.build() + redirect;
+        String redirect_url = url.build() + "?redirect=" + redirect;
         logger.debug("redirect_url:" + redirect_url);
         return redirect_url;
     }
 
-    public static Credential buildCredential() {
-        KeycloakDeploymentConfig kcConfig = KeycloakDeploymentConfig.getInstance();
+    public static String getRedirect(HttpServletRequest req) throws ServletException {
+        String redirect = req.getParameter(REDIRECT_REQUEST_ATTRIBUTE_NAME);
+        if (redirect == null) {
+            throw new ServletException("Request attribute[" + REDIRECT_REQUEST_ATTRIBUTE_NAME + "] required");
+        }
+        return redirect;
+    }
+
+    public static Credential getCredential() {
+        KeycloakDeploymentConfig kcDeploymentConfig = KeycloakDeploymentConfig.getInstance();
 
         return new Credential.Builder(BearerToken.authorizationHeaderAccessMethod())
                 .setTransport(new NetHttpTransport())
                 .setJsonFactory(new JacksonFactory())
-                .setTokenServerUrl(new GenericUrl(kcConfig.getTokenUrl()))
-                .setClientAuthentication(new BasicAuthentication(kcConfig.getClientID(), kcConfig.getClientSecret()))
+                .setTokenServerUrl(new GenericUrl(kcDeploymentConfig.getTokenUrl()))
+                .setClientAuthentication(new BasicAuthentication(kcDeploymentConfig.getClientID(), kcDeploymentConfig.getClientSecret()))
                 .build();
     }
 

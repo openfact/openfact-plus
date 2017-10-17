@@ -1,4 +1,4 @@
-package org.openfact.services.resources.oauth2;
+package org.openfact.oauth2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
@@ -12,36 +12,39 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.UUID;
 
 @WebServlet("/api/login/authorize_callback")
-public class OAuth2ServletCallback extends AbstractAuthorizationCodeCallbackServlet {
+public class OAuth2LoginCallback extends AbstractAuthorizationCodeCallbackServlet {
 
     @Override
     protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential) throws ServletException, IOException {
         ObjectMapper mapper = new ObjectMapper();
         TokenRepresentation token = OAuth2Utils.toRepresentation(credential);
-        resp.sendRedirect(req.getParameter("redirect") + "?token_json=" + mapper.writeValueAsString(token));
+
+        String redirect = OAuth2Utils.getRedirect(req);
+        resp.sendRedirect(redirect + "?token_json=" + mapper.writeValueAsString(token));
     }
 
     @Override
     protected void onError(HttpServletRequest req, HttpServletResponse resp, AuthorizationCodeResponseUrl errorResponse) throws ServletException, IOException {
-        resp.sendRedirect(req.getParameter("redirect") + "?error=could not get token");
+        String redirect = OAuth2Utils.getRedirect(req);
+        resp.sendRedirect(redirect + "?error=could not get token");
     }
 
     @Override
     protected String getRedirectUri(HttpServletRequest req) throws ServletException, IOException {
-        return OAuth2Utils.buildRedirectURL(req, "/api/login/authorize_callback");
+        String redirect = OAuth2Utils.getRedirect(req);
+        return OAuth2Utils.buildRedirectURL(req, OAuth2Login.CALLBACK, redirect);
     }
 
     @Override
     protected AuthorizationCodeFlow initializeFlow() throws IOException {
-        return OAuth2Utils.buildAuthCodeFlow(Arrays.asList("openid"));
+        return OAuth2Utils.getAuthorizationCodeFlow(OAuth2Login.SCOPES);
     }
 
     @Override
     protected String getUserId(HttpServletRequest req) throws ServletException, IOException {
-        return UUID.randomUUID().toString();
+        return null;
     }
+
 }

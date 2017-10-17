@@ -1,4 +1,4 @@
-package org.openfact.services.resources.oauth2;
+package org.openfact.oauth2;
 
 import com.google.api.client.auth.oauth2.Credential;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -11,12 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.core.MediaType;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 @WebServlet("/api/login/refresh")
-public class OAuth2RefreshServlet extends HttpServlet {
+public class OAuth2Refresh extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,7 +29,7 @@ public class OAuth2RefreshServlet extends HttpServlet {
         TokenRepresentation tokenRep = mapper.readValue(json, TokenRepresentation.class);
 
         // Refresh token
-        Credential credential = OAuth2Utils.buildCredential().setRefreshToken(tokenRep.getRefresh_token());
+        Credential credential = OAuth2Utils.getCredential().setRefreshToken(tokenRep.getRefresh_token());
         boolean result;
         try {
             result = credential.refreshToken();
@@ -40,7 +41,7 @@ public class OAuth2RefreshServlet extends HttpServlet {
         }
 
         // Result
-        resp.setContentType("application/json");
+        resp.setContentType(MediaType.APPLICATION_JSON);
         mapper.writeValue(resp.getOutputStream(), OAuth2Utils.toRepresentation(credential));
     }
 
