@@ -80,6 +80,26 @@ public class JpaUserProvider extends HibernateProvider implements UserProvider {
     }
 
     @Override
+    public List<UserModel> getUsersWithOfflineToken() {
+        return getUsersWithOfflineToken(-1, -1);
+    }
+
+    @Override
+    public List<UserModel> getUsersWithOfflineToken(int offset, int limit) {
+        TypedQuery<UserEntity> query = em.createNamedQuery("getUserWithOfflineToken", UserEntity.class);
+        if (offset != -1) {
+            query.setFirstResult(offset);
+        }
+        if (limit != -1) {
+            query.setMaxResults(limit);
+        }
+
+        return query.getResultList().stream()
+                .map(f -> new UserAdapter(em, f))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void updateUser(UserBean user) {
         UserEntity userEntity = null;
         if (user.getId() != null) {

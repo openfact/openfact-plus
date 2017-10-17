@@ -2,12 +2,14 @@ package org.openfact.models.db.jpa;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.openfact.models.SpaceModel;
+import org.openfact.models.UserLinkedBrokerModel;
 import org.openfact.models.UserModel;
 import org.openfact.models.db.JpaModel;
 import org.openfact.models.db.jpa.entity.UserEntity;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -158,6 +160,13 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public void setContextInformation(JsonNode contextInformation) {
         user.setContextInformation(contextInformation);
+    }
+
+    @Override
+    public List<UserLinkedBrokerModel> getLinkedBrokers() {
+        return user.getLinkedBrokers().stream()
+                .map(f -> new UserLinkedBrokerAdapter(em, f))
+                .collect(Collectors.toList());
     }
 
 //    @Override
