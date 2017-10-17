@@ -26,7 +26,7 @@ import java.util.List;
 
 })
 @CodingStyleguideUnaware
-public class RetentionType  implements Serializable, Cloneable{
+public class RetentionType implements Serializable, Cloneable {
     @XmlElement(name = "UBLExtensions", namespace = "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2")
     protected UBLExtensionsType ublExtensions;
 
@@ -63,10 +63,10 @@ public class RetentionType  implements Serializable, Cloneable{
     @XmlElement(name = "TotalInvoiceAmount", namespace = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2", required = true)
     protected TotalInvoiceAmountType totalInvoiceAmount;
 
-    @XmlElement(name = "SUNATTotalPaid", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1" , required = true)
+    @XmlElement(name = "SUNATTotalPaid", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1", required = true)
     protected AmountType sunatTotalPaid;
 
-    @XmlElement(name = "SUNATRetentionDocumentReference",namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1")
+    @XmlElement(name = "SUNATRetentionDocumentReference", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1")
     protected List<SUNATRetentionDocumentReferenceType> sunatRetentionDocumentReference;
 
     public UBLExtensionsType getUblExtensions() {
@@ -245,7 +245,7 @@ public class RetentionType  implements Serializable, Cloneable{
     }
 
     public TotalInvoiceAmountType setTotalInvoiceAmount(@Nullable final BigDecimal valueParam,
-            @Nullable final String currencyID) {
+                                                        @Nullable final String currencyID) {
         TotalInvoiceAmountType aObj = getTotalInvoiceAmount();
         if (aObj == null) {
             aObj = new TotalInvoiceAmountType(valueParam);
@@ -259,7 +259,7 @@ public class RetentionType  implements Serializable, Cloneable{
     }
 
     public AmountType setSunatTotalPaid(@Nullable final BigDecimal valueParam,
-            @Nullable final String currencyID) {
+                                        @Nullable final String currencyID) {
         AmountType aObj = getSunatTotalPaid();
         if (aObj == null) {
             aObj = new AmountType(valueParam);

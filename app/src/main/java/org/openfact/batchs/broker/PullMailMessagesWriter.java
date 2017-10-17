@@ -5,8 +5,8 @@ import org.openfact.documents.DocumentProviderType;
 import org.openfact.documents.exceptions.PreexistedDocumentException;
 import org.openfact.documents.exceptions.UnreadableDocumentException;
 import org.openfact.documents.exceptions.UnsupportedDocumentTypeException;
+import org.openfact.managers.DocumentManager;
 import org.openfact.repositories.user.MailUblMessageModel;
-import org.openfact.services.managers.DocumentManager;
 
 import javax.batch.api.chunk.ItemWriter;
 import javax.inject.Inject;

@@ -5,7 +5,6 @@ import org.keycloak.representations.AccessToken;
 import org.openfact.models.UserModel;
 import org.openfact.models.UserProvider;
 import org.openfact.representations.idm.UserRepresentation;
-import org.openfact.services.managers.KeycloakManager;
 import org.openfact.services.util.SSOContext;
 import org.openfact.utils.ModelToRepresentation;
 
@@ -39,9 +38,6 @@ public class UserService {
 
     @Inject
     private ModelToRepresentation modelToRepresentation;
-
-    @Inject
-    private KeycloakManager keycloakManager;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

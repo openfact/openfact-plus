@@ -1,11 +1,11 @@
 package org.openfact.batchs.broker;
 
 import org.jboss.logging.Logger;
+import org.openfact.managers.BrokerManager;
 import org.openfact.models.BrokerType;
 import org.openfact.models.db.jpa.entity.UserEntity;
 import org.openfact.models.db.jpa.entity.UserLinkedBrokerEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
-import org.openfact.services.managers.BrokerManager;
 
 import javax.batch.api.chunk.ItemProcessor;
 import javax.inject.Inject;

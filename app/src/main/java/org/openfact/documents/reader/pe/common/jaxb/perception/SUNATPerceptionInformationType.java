@@ -14,14 +14,14 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "SUNATPerceptionInformationType", propOrder = { "sunatPerceptionAmount",
-        "sunatPerceptionDate", "sunatNetTotalCashed", "exchangeRate" })
+@XmlType(name = "SUNATPerceptionInformationType", propOrder = {"sunatPerceptionAmount",
+        "sunatPerceptionDate", "sunatNetTotalCashed", "exchangeRate"})
 public class SUNATPerceptionInformationType {
-    @XmlElement(name = "SUNATPerceptionAmount", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1" , required = true)
+    @XmlElement(name = "SUNATPerceptionAmount", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1", required = true)
     protected AmountType sunatPerceptionAmount;
-    @XmlElement(name = "SUNATPerceptionDate", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1" , required = true)
+    @XmlElement(name = "SUNATPerceptionDate", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1", required = true)
     protected DateType sunatPerceptionDate;
-    @XmlElement(name = "SUNATNetTotalCashed", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1" , required = true)
+    @XmlElement(name = "SUNATNetTotalCashed", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1", required = true)
     protected AmountType sunatNetTotalCashed;
     @XmlElement(name = "ExchangeRate", namespace = "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2")
     protected ExchangeRateType exchangeRate;
@@ -82,7 +82,7 @@ public class SUNATPerceptionInformationType {
     }
 
     public AmountType setSunatNetTotalCashed(@Nullable final BigDecimal valueParam,
-            @Nullable final String currencyID) {
+                                             @Nullable final String currencyID) {
         AmountType aObj = getSunatNetTotalCashed();
         if (aObj == null) {
             aObj = new AmountType(valueParam);

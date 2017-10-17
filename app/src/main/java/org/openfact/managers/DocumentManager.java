@@ -1,4 +1,4 @@
-package org.openfact.services.managers;
+package org.openfact.managers;
 
 import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;

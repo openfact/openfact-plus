@@ -19,13 +19,16 @@ public interface DocumentModel {
     Map<String, String> getTags();
 
     Date getCreatedAt();
+
     Date getUpdatedAt();
 
     Set<SpaceModel> getSpaces();
 
     interface DocumentCreationEvent {
         String getDocumentType();
+
         Object getJaxb();
+
         DocumentModel getCreatedDocument();
     }
 

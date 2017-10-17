@@ -30,7 +30,9 @@ public class KeycloakBrokerHttpInterceptor implements HttpExecuteInterceptor, Ht
     private String keycloakAccessToken;
     private Long keycloakExpirationTimeMilliseconds;
 
-    /** Clock used to provide the currentMillis. */
+    /**
+     * Clock used to provide the currentMillis.
+     */
     private final Clock clock = Clock.SYSTEM;
 
     public KeycloakBrokerHttpInterceptor(String authServerUrl, String realm, String broker, Credential credential) {

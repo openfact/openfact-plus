@@ -13,7 +13,6 @@ import org.openfact.models.utils.JacksonUtil;
 import org.openfact.representations.idm.GenericDataRepresentation;
 import org.openfact.representations.idm.UserAttributesRepresentation;
 import org.openfact.representations.idm.UserRepresentation;
-import org.openfact.services.managers.UserManager;
 import org.openfact.services.resources.utils.PATCH;
 import org.openfact.services.util.SSOContext;
 import org.openfact.utils.ModelToRepresentation;
@@ -42,9 +41,6 @@ public class UsersService {
 
     @Inject
     private UserProvider userProvider;
-
-    @Inject
-    private UserManager userManager;
 
     @Inject
     private ModelToRepresentation modelToRepresentation;

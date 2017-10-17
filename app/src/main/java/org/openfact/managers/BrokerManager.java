@@ -1,4 +1,4 @@
-package org.openfact.services.managers;
+package org.openfact.managers;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;

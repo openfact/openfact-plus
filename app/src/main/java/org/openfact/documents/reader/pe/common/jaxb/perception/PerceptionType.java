@@ -21,12 +21,12 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PerceptionType", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:Perception-1", propOrder = {
         "ublExtensions", "ublVersionID", "customizationID", "signature", "id", "issueDate", "agentParty",
-        "receiverParty", "sunatPerceptionSystemCode", "sunatPerceptionPercent","note",
+        "receiverParty", "sunatPerceptionSystemCode", "sunatPerceptionPercent", "note",
         "totalInvoiceAmount", "sunatTotalCashed", "sunatPerceptionDocumentReference"
 
 })
 @CodingStyleguideUnaware
-public class PerceptionType   implements Serializable, Cloneable {
+public class PerceptionType implements Serializable, Cloneable {
 
     @XmlElement(name = "UBLExtensions", namespace = "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2")
     protected UBLExtensionsType ublExtensions;
@@ -51,10 +51,10 @@ public class PerceptionType   implements Serializable, Cloneable {
     @XmlElement(name = "ReceiverParty", namespace = "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2")
     protected PartyType receiverParty;
 
-    @XmlElement(name = "SUNATPerceptionSystemCode", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1",required = true)
+    @XmlElement(name = "SUNATPerceptionSystemCode", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1", required = true)
     protected IDType sunatPerceptionSystemCode;
 
-    @XmlElement(name = "SUNATPerceptionPercent",  namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1")
+    @XmlElement(name = "SUNATPerceptionPercent", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1")
     protected PercentType sunatPerceptionPercent;
 
     @XmlElement(name = "Note", namespace = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2")
@@ -63,10 +63,10 @@ public class PerceptionType   implements Serializable, Cloneable {
     @XmlElement(name = "TotalInvoiceAmount", namespace = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2", required = true)
     protected TotalInvoiceAmountType totalInvoiceAmount;
 
-    @XmlElement(name = "SUNATTotalCashed", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1" ,  required = true)
+    @XmlElement(name = "SUNATTotalCashed", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1", required = true)
     protected AmountType sunatTotalCashed;
 
-    @XmlElement(name = "SUNATPerceptionDocumentReference",namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1")
+    @XmlElement(name = "SUNATPerceptionDocumentReference", namespace = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1")
     protected List<SUNATPerceptionDocumentReferenceType> sunatPerceptionDocumentReference;
 
     public UBLExtensionsType getUblExtensions() {
@@ -245,7 +245,7 @@ public class PerceptionType   implements Serializable, Cloneable {
     }
 
     public TotalInvoiceAmountType setTotalInvoiceAmount(@Nullable final BigDecimal valueParam,
-            @Nullable final String currencyID) {
+                                                        @Nullable final String currencyID) {
         TotalInvoiceAmountType aObj = getTotalInvoiceAmount();
         if (aObj == null) {
             aObj = new TotalInvoiceAmountType(valueParam);
@@ -259,7 +259,7 @@ public class PerceptionType   implements Serializable, Cloneable {
     }
 
     public AmountType setSunatTotalCashed(@Nullable final BigDecimal valueParam,
-            @Nullable final String currencyID) {
+                                          @Nullable final String currencyID) {
         AmountType aObj = getSunatTotalCashed();
         if (aObj == null) {
             aObj = new AmountType(valueParam);

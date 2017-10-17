@@ -18,7 +18,7 @@ public class MailUtils {
     @Any
     private Instance<MailProvider> providers;
 
-    public MailProvider getMailReader(BrokerType brokerType){
+    public MailProvider getMailReader(BrokerType brokerType) {
         Annotation annotation = new MailVendorTypeLiteral(brokerType);
         Instance<MailProvider> instance = providers.select(annotation);
         if (instance.isAmbiguous() || instance.isUnsatisfied()) {

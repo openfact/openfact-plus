@@ -11,9 +11,9 @@ import org.openfact.documents.exceptions.UnreadableDocumentException;
 import org.openfact.documents.exceptions.UnsupportedDocumentTypeException;
 import org.openfact.files.exceptions.FileFetchException;
 import org.openfact.files.exceptions.FileStorageException;
+import org.openfact.managers.DocumentManager;
 import org.openfact.representations.idm.DocumentRepresentation;
 import org.openfact.services.ErrorResponseException;
-import org.openfact.services.managers.DocumentManager;
 import org.openfact.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
