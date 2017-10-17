@@ -27,7 +27,6 @@ public class JpaFileProvider implements FileProvider {
 
         try {
             em.persist(entity);
-            em.flush();
         } catch (Throwable e) {
             throw new FileStorageException("Could not persist file", e);
         }

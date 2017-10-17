@@ -36,9 +36,9 @@ public class PullMailMessagesStepListener extends JpaItemReaderWriterBase implem
             em.getTransaction().begin();
         }
 
-        for (final Object e : linkedBrokers.getLinkedBrokers()) {
-            em.merge(e);
-        }
+//        for (final Object e : linkedBrokers.getLinkedBrokers()) {
+//            em.merge(e);
+//        }
 
         if (entityTransaction) {
             em.getTransaction().commit();

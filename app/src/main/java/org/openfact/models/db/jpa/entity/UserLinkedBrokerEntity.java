@@ -16,7 +16,7 @@ import java.util.Map;
         @UniqueConstraint(columnNames = {"user_id", "type"})
 })
 @NamedQueries({
-        @NamedQuery(name = "getAllLinkedBrokers", query = "select b from UserLinkedBrokerEntity b join fetch b.user u left join b.attributes attr order by b.email")
+        @NamedQuery(name = "getAllLinkedBrokers", query = "select b from UserLinkedBrokerEntity b join fetch b.user u order by b.email")
 })
 public class UserLinkedBrokerEntity {
 
@@ -42,12 +42,6 @@ public class UserLinkedBrokerEntity {
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @Column(name = "last_time_ynchronized")
     private LocalDateTime lastTimeSynchronized;
-
-    @ElementCollection
-    @MapKeyColumn(name = "name")
-    @Column(name = "value")
-    @CollectionTable(name = "user_linked_broker_attributes", joinColumns = {@JoinColumn(name = "user_linked_broker_id")})
-    private Map<String, String> attributes;
 
     public String getId() {
         return id;
@@ -89,11 +83,4 @@ public class UserLinkedBrokerEntity {
         this.lastTimeSynchronized = lastTimeSynchronized;
     }
 
-    public Map<String, String> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(Map<String, String> attributes) {
-        this.attributes = attributes;
-    }
 }

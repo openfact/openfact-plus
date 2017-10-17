@@ -17,7 +17,9 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 @Stateless
 @SupportedType(value = "SummaryDocuments")
@@ -49,7 +51,6 @@ public class PESummaryDocumentsReader implements DocumentReader {
 
         SpaceEntity senderSpaceEntity = peUtils.getSpace(summaryDocumentsType.getAccountingSupplierParty());
 
-
         DocumentEntity documentEntity = new DocumentEntity();
 
         DocumentSpaceEntity documentSpaceSenderEntity = new DocumentSpaceEntity();
@@ -58,9 +59,15 @@ public class PESummaryDocumentsReader implements DocumentReader {
         documentSpaceSenderEntity.setSpace(senderSpaceEntity);
         documentSpaceSenderEntity.setDocument(documentEntity);
 
-        documentEntity.setFileId(file.getId());
         documentEntity.setAssignedId(summaryDocumentsType.getID().getValue());
         documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity)));
+        documentEntity.setSupplierAssignedId(summaryDocumentsType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
+        documentEntity.setSupplierName(summaryDocumentsType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        documentEntity.setIssueDate(summaryDocumentsType.getIssueDate().getValue().toGregorianCalendar().getTime());
+
+        Map<String, String> tags = new HashMap<>();
+        tags.put("reader", "peru");
+        documentEntity.setTags(tags);
 
         return new GenericDocument() {
             @Override

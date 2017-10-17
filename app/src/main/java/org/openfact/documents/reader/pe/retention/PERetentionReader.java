@@ -17,7 +17,9 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 @Stateless
 @SupportedType(value = "Retention")
@@ -50,7 +52,6 @@ public class PERetentionReader implements DocumentReader {
         SpaceEntity senderSpaceEntity = peUtils.getSpace(retentionType.getAgentParty());
         SpaceEntity receiverSpaceEntity = peUtils.getSpace(retentionType.getReceiverParty());
 
-
         DocumentEntity documentEntity = new DocumentEntity();
 
         DocumentSpaceEntity documentSpaceSenderEntity = new DocumentSpaceEntity();
@@ -65,9 +66,19 @@ public class PERetentionReader implements DocumentReader {
         documentSpaceReceiverEntity.setSpace(receiverSpaceEntity);
         documentSpaceReceiverEntity.setDocument(documentEntity);
 
-        documentEntity.setFileId(file.getId());
         documentEntity.setAssignedId(retentionType.getId().getValue());
         documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity, documentSpaceReceiverEntity)));
+        documentEntity.setSupplierAssignedId(retentionType.getAgentParty().getPartyIdentification().get(0).getIDValue());
+        documentEntity.setSupplierName(retentionType.getAgentParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        documentEntity.setCustomerAssignedId(retentionType.getReceiverParty().getPartyIdentification().get(0).getIDValue());
+        documentEntity.setCustomerName(retentionType.getReceiverParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        documentEntity.setCurrency(retentionType.getSunatTotalPaid().getCurrencyID());
+        documentEntity.setAmount(retentionType.getSunatTotalPaid().getValue());
+        documentEntity.setIssueDate(retentionType.getIssueDate().getValue().toGregorianCalendar().getTime());
+
+        Map<String, String> tags = new HashMap<>();
+        tags.put("reader", "peru");
+        documentEntity.setTags(tags);
 
         return new GenericDocument() {
             @Override

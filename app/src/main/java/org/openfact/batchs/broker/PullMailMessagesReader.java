@@ -166,8 +166,7 @@ public class PullMailMessagesReader extends JpaItemReaderWriterBase implements I
                 MailQuery query = buildQuery(userLinkedBrokerEntity);
                 resultList.addAll(mailProvider.getUblMessages(repository, query));
 
-                userLinkedBrokerEntity.setLastTimeSynchronized(LocalDateTime.now());
-                linkedBrokers.add(userLinkedBrokerEntity);
+                linkedBrokers.add(userLinkedBrokerEntity, LocalDateTime.now());
             } else {
                 logger.warn("Skipping Linked Broker because could not find MailProviders for:" + userLinkedBrokerEntity.getType());
             }

@@ -7,6 +7,7 @@ import org.openfact.models.db.JpaModel;
 import org.openfact.models.db.jpa.SpaceAdapter;
 
 import javax.persistence.EntityManager;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -17,7 +17,9 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 @Stateless
 @SupportedType(value = "DebitNote")
@@ -40,15 +42,15 @@ public class PEDebitNoteReader implements DocumentReader {
 
     @Override
     public GenericDocument read(XmlUBLFileModel file) {
-        DebitNoteType creditNoteType;
+        DebitNoteType debitNoteType;
         try {
-            creditNoteType = OpenfactModelUtils.unmarshall(file.getDocument(), DebitNoteType.class);
+            debitNoteType = OpenfactModelUtils.unmarshall(file.getDocument(), DebitNoteType.class);
         } catch (JAXBException e) {
             return null;
         }
 
-        SpaceEntity senderSpaceEntity = peUtils.getSpace(creditNoteType.getAccountingSupplierParty());
-        SpaceEntity receiverSpaceEntity = peUtils.getSpace(creditNoteType.getAccountingCustomerParty());
+        SpaceEntity senderSpaceEntity = peUtils.getSpace(debitNoteType.getAccountingSupplierParty());
+        SpaceEntity receiverSpaceEntity = peUtils.getSpace(debitNoteType.getAccountingCustomerParty());
 
         DocumentEntity documentEntity = new DocumentEntity();
 
@@ -64,9 +66,19 @@ public class PEDebitNoteReader implements DocumentReader {
         documentSpaceReceiverEntity.setSpace(receiverSpaceEntity);
         documentSpaceReceiverEntity.setDocument(documentEntity);
 
-        documentEntity.setFileId(file.getId());
-        documentEntity.setAssignedId(creditNoteType.getID().getValue());
+        documentEntity.setAssignedId(debitNoteType.getID().getValue());
         documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity, documentSpaceReceiverEntity)));
+        documentEntity.setSupplierAssignedId(debitNoteType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
+        documentEntity.setSupplierName(debitNoteType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        documentEntity.setCustomerAssignedId(debitNoteType.getAccountingCustomerParty().getCustomerAssignedAccountID().getValue());
+        documentEntity.setCustomerName(debitNoteType.getAccountingCustomerParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        documentEntity.setCurrency(debitNoteType.getRequestedMonetaryTotal().getPayableAmount().getCurrencyID().value());
+        documentEntity.setAmount(debitNoteType.getRequestedMonetaryTotal().getPayableAmount().getValue());
+        documentEntity.setIssueDate(debitNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
+
+        Map<String, String> tags = new HashMap<>();
+        tags.put("reader", "peru");
+        documentEntity.setTags(tags);
 
         return new GenericDocument() {
             @Override
@@ -76,7 +88,7 @@ public class PEDebitNoteReader implements DocumentReader {
 
             @Override
             public Object getJaxb() {
-                return creditNoteType;
+                return debitNoteType;
             }
         };
     }

@@ -10,9 +10,7 @@ import org.openfact.services.managers.BrokerManager;
 import javax.batch.api.chunk.ItemProcessor;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Named
@@ -30,28 +28,21 @@ public class RefreshLinkedBrokersProcessor implements ItemProcessor {
         Set<UserLinkedBrokerEntity> linkedBrokers = userEntity.getLinkedBrokers();
         Map<String, BrokerType> availableLinkedBrokers = brokerManager.getLinkedBrokers(userEntity.getOfflineToken());
 
-        Set<UserLinkedBrokerEntity> toRemove = linkedBrokers.stream()
-                .filter(linkedBrokerEntity -> availableLinkedBrokers.containsKey(linkedBrokerEntity.getEmail()))
-                .collect(Collectors.toSet());
-        Set<String> linkedBrokerKeys = linkedBrokers.stream()
-                .map(UserLinkedBrokerEntity::getEmail)
-                .collect(Collectors.toSet());
+        linkedBrokers.removeIf(p -> !availableLinkedBrokers.containsKey(p.getEmail()));
 
-        Set<UserLinkedBrokerEntity> toCreate = availableLinkedBrokers.keySet()
-                .stream()
-                .filter(email -> !linkedBrokerKeys.contains(email))
-                .map(email -> {
-                    UserLinkedBrokerEntity entity = new UserLinkedBrokerEntity();
-                    entity.setId(OpenfactModelUtils.generateId());
-                    entity.setType(availableLinkedBrokers.get(email));
-                    entity.setEmail(email);
-                    entity.setUser(userEntity);
-                    entity.setAttributes(new HashMap<>());
-                    return entity;
-                }).collect(Collectors.toSet());
+        Set<String> linkedBrokerEmails = linkedBrokers.stream().map(UserLinkedBrokerEntity::getEmail).collect(Collectors.toSet());
+        for (String email : availableLinkedBrokers.keySet()) {
+            if (!linkedBrokerEmails.contains(email)) {
+                UserLinkedBrokerEntity entity = new UserLinkedBrokerEntity();
+                entity.setId(OpenfactModelUtils.generateId());
+                entity.setType(availableLinkedBrokers.get(email));
+                entity.setEmail(email);
+                entity.setUser(userEntity);
 
-        linkedBrokers.removeAll(toRemove);
-        linkedBrokers.addAll(toCreate);
+                linkedBrokers.add(entity);
+            }
+        }
+
         return userEntity;
     }
 

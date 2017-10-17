@@ -26,10 +26,10 @@
                         <property name="beanType" value="org.openfact.models.db.jpa.entity.UserEntity"></property>
                     </properties>
                 </reader>
+                <processor ref="refreshLinkedBrokersProcessor"/>
                 <writer ref="jpaAdvancedWriter">
                     <properties>
                         <property name="operation" value="merge"></property>
-                        <property name="entityTransaction" value="true"></property>
                     </properties>
                 </writer>
             </chunk>
@@ -41,11 +41,11 @@
                         <property name="loggerLevel" value="info"></property>
                     </properties>
                 </listener>
-                <listener ref="pullMailMessagesStepListener">
-                    <properties>
-                        <property name="entityTransaction" value="false"></property>
-                    </properties>
-                </listener>
+                <!--<listener ref="pullMailMessagesStepListener">-->
+                    <!--<properties>-->
+                        <!--<property name="entityTransaction" value="false"></property>-->
+                    <!--</properties>-->
+                <!--</listener>-->
             </listeners>
             <chunk>
                 <reader ref="pullMailMessagesReader">
@@ -54,11 +54,7 @@
                         <property name="beanType" value="org.openfact.models.db.jpa.entity.UserLinkedBrokerEntity"></property>
                     </properties>
                 </reader>
-                <writer ref="pullMailMessagesWriter">
-                    <properties>
-                        <property name="entityTransaction" value="true"></property>
-                    </properties>
-                </writer>
+                <writer ref="pullMailMessagesWriter"/>
                 <skippable-exception-classes>
                     <include class="org.openfact.documents.exceptions.UnsupportedDocumentTypeException"></include>
                     <include class="org.openfact.documents.exceptions.UnreadableDocumentException"></include>

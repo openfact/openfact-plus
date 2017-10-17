@@ -48,11 +48,13 @@ public class ESDocumentProvider implements DocumentProvider {
         final Object jaxb = genericDocument.getJaxb();
 
         DocumentEntity documentEntity = genericDocument.getEntity();
-        checkPreExistingDocuments(documentEntity, providerType);
-
         documentEntity.setId(UUID.randomUUID().toString());
         documentEntity.setType(file.getDocumentType());
         documentEntity.setProviderType(providerType);
+        documentEntity.setFileId(file.getId());
+
+        checkPreExistingDocuments(documentEntity, providerType);
+
         em.persist(documentEntity);
 
         DocumentAdapter document = new DocumentAdapter(em, documentEntity);
@@ -109,11 +111,7 @@ public class ESDocumentProvider implements DocumentProvider {
                     }
                     break;
                 case MAIL:
-                    if (documentEntity.getProviderType().equals(DocumentProviderType.MAIL)) {
-                        removeDocument(document);
-                    } else {
-                        throw new PreexistedDocumentException("There is a preexisted document created by an application, you can't override it");
-                    }
+                    throw new PreexistedDocumentException("There is a preexisted document imported by another mail, you can't override it");
                 default:
                     throw new IllegalStateException("Unsupported document provider type=" + providerType);
             }
@@ -146,9 +144,10 @@ public class ESDocumentProvider implements DocumentProvider {
 
     @Override
     public boolean removeDocument(DocumentModel document) {
-        DocumentEntity entity = em.find(DocumentEntity.class, document);
+        DocumentEntity entity = em.find(DocumentEntity.class, document.getId());
         if (entity == null) return false;
         em.remove(entity);
+        em.flush();
 
         Event<DocumentRemovedEvent> event = readerUtil.getRemovedEvents(document.getType());
         event.fire(() -> document);

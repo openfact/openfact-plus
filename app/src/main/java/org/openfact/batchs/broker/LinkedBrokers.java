@@ -4,20 +4,21 @@ import org.jberet.cdi.StepScoped;
 import org.openfact.models.db.jpa.entity.UserLinkedBrokerEntity;
 
 import javax.inject.Named;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Named
 @StepScoped
 public class LinkedBrokers {
 
-    private List<UserLinkedBrokerEntity> linkedBrokers = new CopyOnWriteArrayList<>();
+    private Map<UserLinkedBrokerEntity, LocalDateTime> linkedBrokers = new ConcurrentHashMap<>();
 
-    public boolean add(UserLinkedBrokerEntity itemBroker) {
-        return linkedBrokers.add(itemBroker);
+    public LocalDateTime add(UserLinkedBrokerEntity itemBroker, LocalDateTime lastSynchronization) {
+        return linkedBrokers.put(itemBroker, lastSynchronization);
     }
 
-    public List<UserLinkedBrokerEntity> getLinkedBrokers() {
+    public Map<UserLinkedBrokerEntity, LocalDateTime> getLinkedBrokers() {
         return linkedBrokers;
     }
 
