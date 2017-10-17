@@ -1,48 +1,36 @@
 package org.openfact.batchs.broker;
 
-import org.jberet.support.io.JpaItemReaderWriterBase;
-import org.jboss.logging.Logger;
+import org.openfact.models.UserLinkedBrokerModel;
 
-import javax.batch.api.BatchProperty;
+import javax.annotation.Resource;
 import javax.batch.api.listener.StepListener;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.UserTransaction;
+import java.time.LocalDateTime;
+import java.util.Map;
 
 @Named
-public class PullMailMessagesStepListener extends JpaItemReaderWriterBase implements StepListener {
-
-    private static final Logger logger = Logger.getLogger(PullMailMessagesStepListener.class);
+public class PullMailMessagesStepListener implements StepListener {
 
     @Inject
     private LinkedBrokers linkedBrokers;
 
-    /**
-     * Flag to control whether to begin entity transaction before writing items,
-     * and to commit entity transaction after writing items.
-     * Optional property, and defaults to {@code false}.
-     */
-    @Inject
-    @BatchProperty
-    protected boolean entityTransaction;
+    @Resource
+    private UserTransaction utx;
 
     @Override
     public void beforeStep() throws Exception {
-        
+
     }
 
     @Override
     public void afterStep() throws Exception {
-        if (entityTransaction) {
-            em.getTransaction().begin();
+        utx.begin();
+        for (Map.Entry<UserLinkedBrokerModel, LocalDateTime> entry : linkedBrokers.getLinkedBrokers().entrySet()) {
+            UserLinkedBrokerModel userLinkedBroker = entry.getKey();
+            userLinkedBroker.setLasTimeSynchronized(entry.getValue());
         }
-
-//        for (final Object e : linkedBrokers.getLinkedBrokers()) {
-//            em.merge(e);
-//        }
-
-        if (entityTransaction) {
-            em.getTransaction().commit();
-        }
+        utx.commit();
     }
-
 }

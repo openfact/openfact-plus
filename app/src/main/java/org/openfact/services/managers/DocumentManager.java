@@ -37,8 +37,8 @@ public class DocumentManager {
      */
     public DocumentModel importDocument(byte[] bytes, DocumentProviderType providerType) throws
             FileStorageException,
-            UnsupportedDocumentTypeException,
             FileFetchException,
+            UnsupportedDocumentTypeException,
             UnreadableDocumentException,
             PreexistedDocumentException {
         FileModel fileModel = fileProvider.addFile(bytes, ".xml");
@@ -49,7 +49,7 @@ public class DocumentManager {
                             new FlyWeightFileModel(fileModel))
             );
             return documentProvider.addDocument(flyWeightFile, providerType);
-        } catch (UnsupportedDocumentTypeException | UnreadableDocumentException e) {
+        } catch (UnsupportedDocumentTypeException | UnreadableDocumentException | PreexistedDocumentException e) {
             boolean result = fileProvider.removeFile(fileModel);
             logger.debug("Rollback file result=" + result);
             throw e;

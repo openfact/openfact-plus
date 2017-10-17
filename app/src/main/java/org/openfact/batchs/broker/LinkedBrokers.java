@@ -1,7 +1,7 @@
 package org.openfact.batchs.broker;
 
 import org.jberet.cdi.StepScoped;
-import org.openfact.models.db.jpa.entity.UserLinkedBrokerEntity;
+import org.openfact.models.UserLinkedBrokerModel;
 
 import javax.inject.Named;
 import java.time.LocalDateTime;
@@ -12,13 +12,13 @@ import java.util.concurrent.ConcurrentHashMap;
 @StepScoped
 public class LinkedBrokers {
 
-    private Map<UserLinkedBrokerEntity, LocalDateTime> linkedBrokers = new ConcurrentHashMap<>();
+    private Map<UserLinkedBrokerModel, LocalDateTime> linkedBrokers = new ConcurrentHashMap<>();
 
-    public LocalDateTime add(UserLinkedBrokerEntity itemBroker, LocalDateTime lastSynchronization) {
+    public LocalDateTime add(UserLinkedBrokerModel itemBroker, LocalDateTime lastSynchronization) {
         return linkedBrokers.put(itemBroker, lastSynchronization);
     }
 
-    public Map<UserLinkedBrokerEntity, LocalDateTime> getLinkedBrokers() {
+    public Map<UserLinkedBrokerModel, LocalDateTime> getLinkedBrokers() {
         return linkedBrokers;
     }
 

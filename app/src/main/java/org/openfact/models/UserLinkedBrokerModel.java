@@ -10,4 +10,6 @@ public interface UserLinkedBrokerModel {
 
     LocalDateTime getLastTimeSynchronized();
     void setLasTimeSynchronized(LocalDateTime lastTimeSynchronized);
+
+    UserModel getUser();
 }

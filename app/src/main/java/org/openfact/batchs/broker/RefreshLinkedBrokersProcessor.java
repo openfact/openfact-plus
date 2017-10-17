@@ -10,7 +10,8 @@ import org.openfact.services.managers.BrokerManager;
 import javax.batch.api.chunk.ItemProcessor;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Named

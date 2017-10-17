@@ -165,67 +165,9 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public List<UserLinkedBrokerModel> getLinkedBrokers() {
         return user.getLinkedBrokers().stream()
-                .map(f -> new UserLinkedBrokerAdapter(em, f))
+                .map(f -> new UserLinkedBrokerAdapter(em, this, f))
                 .collect(Collectors.toList());
     }
-
-//    @Override
-//    public Set<SharedSpaceModel> getSharedSpaces() {
-//        return user.getSharedSpaces().stream()
-//                .read(f -> new SharedSpaceAdapter(em, f))
-//                .collect(Collectors.toSet());
-//    }
-
-//    @Override
-//    public Set<String> getRecentSpaces() {
-//        Set<String> recentSpaces = user.getRecentSpaces();
-//        if (recentSpaces.isEmpty()) return Collections.EMPTY_SET;
-//        Set<String> copy = new HashSet<>();
-//        copy.addAll(recentSpaces);
-//        return Collections.unmodifiableSet(copy);
-//    }
-//
-//    @Override
-//    public void setRecentSpaces(Set<String> recentSpaces) {
-//        user.setRecentSpaces(recentSpaces);
-//        em.flush();
-//    }
-
-//    @Override
-//    public List<RequestAccessToSpaceModel> getSpaceRequests() {
-//        return user.getSpaceRequests().stream()
-//                .read(f -> new RequestAccessToSpaceAdapter(em, f))
-//                .collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    public UserRepositoryModel addRepository(String email, BrokerType type) {
-//        UserLinkedBrokerEntity entity = new UserLinkedBrokerEntity();
-//        entity.setId(OpenfactModelUtils.generateId());
-//        entity.setAlias(email);
-//        entity.setEmail(email);
-//        entity.setType(type);
-//        entity.setUser(user);
-//        em.persist(entity);
-//
-//        // Cache
-//        user.getRepositories().add(entity);
-//
-//        return new UserRepositoryAdapter(em, entity);
-//    }
-//
-//    @Override
-//    public List<UserRepositoryModel> getRepositories() {
-//        return user.getRepositories().stream()
-//                .read(f -> new UserRepositoryAdapter(em, f))
-//                .collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    public boolean removeAllRepositories() {
-//        user.setRepositories(new HashSet<>());
-//        return true;
-//    }
 
     @Override
     public boolean equals(Object obj) {

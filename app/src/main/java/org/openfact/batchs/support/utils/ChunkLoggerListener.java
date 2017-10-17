@@ -3,7 +3,6 @@ package org.openfact.batchs.support.utils;
 import org.jboss.logging.Logger;
 
 import javax.batch.api.chunk.listener.ChunkListener;
-import javax.batch.api.listener.StepListener;
 import javax.inject.Named;
 
 @Named

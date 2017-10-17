@@ -1,6 +1,5 @@
 package org.openfact.batchs.support.utils;
 
-import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 
 import javax.batch.api.BatchProperty;

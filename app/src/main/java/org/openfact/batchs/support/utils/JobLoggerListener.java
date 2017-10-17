@@ -1,7 +1,6 @@
 package org.openfact.batchs.support.utils;
 
 import org.jboss.logging.Logger;
-import org.jboss.logging.Logger.Level;
 
 import javax.batch.api.listener.JobListener;
 import javax.batch.runtime.context.JobContext;

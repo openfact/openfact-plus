@@ -3,13 +3,13 @@ package org.openfact.documents.reader.pe.perception;
 import org.jboss.logging.Logger;
 import org.openfact.documents.DocumentReader;
 import org.openfact.documents.GenericDocument;
+import org.openfact.documents.InteractType;
 import org.openfact.documents.jpa.entity.DocumentEntity;
 import org.openfact.documents.jpa.entity.DocumentSpaceEntity;
 import org.openfact.documents.reader.SupportedType;
 import org.openfact.documents.reader.pe.common.PEUtils;
 import org.openfact.documents.reader.pe.common.jaxb.perception.PerceptionType;
 import org.openfact.files.XmlUBLFileModel;
-import org.openfact.documents.InteractType;
 import org.openfact.models.db.jpa.entity.SpaceEntity;
 import org.openfact.models.utils.OpenfactModelUtils;
 

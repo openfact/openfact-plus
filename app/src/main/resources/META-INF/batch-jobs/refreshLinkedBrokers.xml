@@ -6,7 +6,7 @@
     <listeners>
         <listener ref="jobLoggerListener">
             <properties>
-                <property name="loggerLevel" value="info"></property>
+                <property name="loggerLevel" value="debug"></property>
             </properties>
         </listener>
     </listeners>
@@ -15,7 +15,7 @@
             <listeners>
                 <listener ref="stepLoggerListener">
                     <properties>
-                        <property name="loggerLevel" value="info"></property>
+                        <property name="loggerLevel" value="debug"></property>
                     </properties>
                 </listener>
             </listeners>
@@ -38,28 +38,14 @@
             <listeners>
                 <listener ref="stepLoggerListener">
                     <properties>
-                        <property name="loggerLevel" value="info"></property>
+                        <property name="loggerLevel" value="debug"></property>
                     </properties>
                 </listener>
-                <!--<listener ref="pullMailMessagesStepListener">-->
-                    <!--<properties>-->
-                        <!--<property name="entityTransaction" value="false"></property>-->
-                    <!--</properties>-->
-                <!--</listener>-->
+                <listener ref="pullMailMessagesStepListener"/>
             </listeners>
             <chunk>
-                <reader ref="pullMailMessagesReader">
-                    <properties>
-                        <property name="namedQuery" value="getAllLinkedBrokers"></property>
-                        <property name="beanType" value="org.openfact.models.db.jpa.entity.UserLinkedBrokerEntity"></property>
-                    </properties>
-                </reader>
+                <reader ref="pullMailMessagesReader"/>
                 <writer ref="pullMailMessagesWriter"/>
-                <skippable-exception-classes>
-                    <include class="org.openfact.documents.exceptions.UnsupportedDocumentTypeException"></include>
-                    <include class="org.openfact.documents.exceptions.UnreadableDocumentException"></include>
-                    <include class="org.openfact.documents.exceptions.PreexistedDocumentException"></include>
-                </skippable-exception-classes>
             </chunk>
         </step>
     </flow>

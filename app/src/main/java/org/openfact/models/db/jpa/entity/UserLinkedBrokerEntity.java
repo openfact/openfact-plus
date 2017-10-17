@@ -7,7 +7,6 @@ import org.openfact.models.BrokerType;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Audited
 @Entity
