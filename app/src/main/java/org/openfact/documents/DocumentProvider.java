@@ -1,5 +1,6 @@
 package org.openfact.documents;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.openfact.documents.exceptions.PreexistedDocumentException;
 import org.openfact.documents.exceptions.UnreadableDocumentException;
 import org.openfact.documents.exceptions.UnsupportedDocumentTypeException;
@@ -38,6 +39,10 @@ public interface DocumentProvider {
     /**
      * @return list of documents
      */
-    List<DocumentModel> getDocuments();
+    List<DocumentModel> getDocuments(String nativeQuery);
 
+    /**
+     * @return list of documents
+     */
+    List<DocumentModel> getDocuments(JsonNode json);
 }

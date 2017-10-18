@@ -73,7 +73,7 @@ public class PEDebitNoteReader implements DocumentReader {
         documentEntity.setCustomerAssignedId(debitNoteType.getAccountingCustomerParty().getCustomerAssignedAccountID().getValue());
         documentEntity.setCustomerName(debitNoteType.getAccountingCustomerParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
         documentEntity.setCurrency(debitNoteType.getRequestedMonetaryTotal().getPayableAmount().getCurrencyID().value());
-        documentEntity.setAmount(debitNoteType.getRequestedMonetaryTotal().getPayableAmount().getValue());
+        documentEntity.setAmount(debitNoteType.getRequestedMonetaryTotal().getPayableAmount().getValue().floatValue());
         documentEntity.setIssueDate(debitNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
 
         Map<String, String> tags = new HashMap<>();

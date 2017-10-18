@@ -73,7 +73,7 @@ public class PERetentionReader implements DocumentReader {
         documentEntity.setCustomerAssignedId(retentionType.getReceiverParty().getPartyIdentification().get(0).getIDValue());
         documentEntity.setCustomerName(retentionType.getReceiverParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
         documentEntity.setCurrency(retentionType.getSunatTotalPaid().getCurrencyID());
-        documentEntity.setAmount(retentionType.getSunatTotalPaid().getValue());
+        documentEntity.setAmount(retentionType.getSunatTotalPaid().getValue().floatValue());
         documentEntity.setIssueDate(retentionType.getIssueDate().getValue().toGregorianCalendar().getTime());
 
         Map<String, String> tags = new HashMap<>();

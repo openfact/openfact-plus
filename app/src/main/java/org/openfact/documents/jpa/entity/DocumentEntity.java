@@ -1,9 +1,14 @@
 package org.openfact.documents.jpa.entity;
 
+import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.snowball.SnowballPorterFilterFactory;
+import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.annotations.Type;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.*;
+import org.hibernate.search.annotations.Parameter;
+import org.hibernate.search.elasticsearch.analyzer.ElasticsearchCharFilterFactory;
+import org.hibernate.search.elasticsearch.analyzer.ElasticsearchTokenFilterFactory;
+import org.hibernate.search.elasticsearch.analyzer.ElasticsearchTokenizerFactory;
 import org.openfact.documents.DocumentProviderType;
 import org.openfact.models.db.CreatableEntity;
 import org.openfact.models.db.CreatedAtListener;
@@ -14,7 +19,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.*;
 
 @Entity
@@ -22,17 +26,72 @@ import java.util.*;
 @Table(name = "document", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"type", "assigned_id", "supplier_assigned_id"})
 })
-@EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
-//@AnalyzerDefs(value = {
-//        @AnalyzerDef(
-//                name = "customanalyzer",
-//                tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
-//                filters = {
-//                        @TokenFilterDef(factory = LowerCaseFilterFactory.class)
-//                })
-//})
 @NamedQueries({
         @NamedQuery(name = "getDocumentByTypeAssignedIdAndSupplierAssignedId", query = "select d from DocumentEntity d where d.type = :type and d.assignedId = :assignedId and d.supplierAssignedId = :supplierAssignedId")
+})
+@EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
+@AnalyzerDefs(value = {
+        @AnalyzerDef(
+                name = "staticTextAnalyzer",
+                tokenizer = @TokenizerDef(
+                        factory = ElasticsearchTokenizerFactory.class,
+                        params = {
+                                @Parameter(name = "type", value = "'standard'"),
+                        }
+                ),
+                filters = {
+                        @TokenFilterDef(
+                                factory = ElasticsearchTokenFilterFactory.class,
+                                params = {
+                                        @Parameter(name = "type", value = "'standard'")
+                                }
+                        ),
+                        @TokenFilterDef(
+                                factory = ElasticsearchTokenFilterFactory.class,
+                                params = {
+                                        @Parameter(name = "type", value = "'lowercase'")
+                                }
+                        )
+                }
+        ),
+        @AnalyzerDef(
+                name = "nameTextAnalyzer",
+                tokenizer = @TokenizerDef(
+                        factory = ElasticsearchTokenizerFactory.class,
+                        params = {
+                                @Parameter(name = "type", value = "'standard'"),
+                        }
+                ),
+                filters = {
+                        @TokenFilterDef(
+                                factory = ElasticsearchTokenFilterFactory.class,
+                                params = {
+                                        @Parameter(name = "type", value = "'standard'")
+                                }
+                        ),
+                        @TokenFilterDef(
+                                factory = ElasticsearchTokenFilterFactory.class,
+                                params = {
+                                        @Parameter(name = "type", value = "'lowercase'")
+                                }
+                        ),
+                        @TokenFilterDef(
+                                factory = ElasticsearchTokenFilterFactory.class,
+                                params = {
+                                        @Parameter(name = "type", value = "'apostrophe'")
+                                }
+                        ),
+                        @TokenFilterDef(
+                                factory = ElasticsearchTokenFilterFactory.class,
+                                params = {
+                                        @Parameter(name = "type", value = "'asciifolding'")
+                                }
+                        )
+                }
+        )
+})
+@NormalizerDefs(value = {
+
 })
 public class DocumentEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
@@ -42,7 +101,7 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     private String id;
 
     @Field
-//    @Analyzer(definition = "customanalyzer")
+    @Analyzer(definition = "staticTextAnalyzer")
     @NotNull
     @Column(name = "type")
     private String type;
@@ -56,14 +115,16 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "file_id")
     private String fileId;
 
-    @Field
-    @Digits(integer = 10, fraction = 5)
-    @Type(type = "org.hibernate.type.BigDecimalType")
+    @Field(analyze = Analyze.NO)
+    @SortableField
+    @NumericField
+    @Digits(integer = 10, fraction = 4)
+    @Type(type = "org.hibernate.type.FloatType")
     @Column(name = "amount")
-    private BigDecimal amount;
+    private Float amount;
 
     @Field
-//    @Analyzer(definition = "customanalyzer")
+    @Analyzer(definition = "staticTextAnalyzer")
     @Column(name = "currency")
     private String currency;
 
@@ -73,7 +134,7 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     private Date issueDate;
 
     @Field
-//    @Analyzer(definition = "customanalyzer")
+    @Analyzer(definition = "nameTextAnalyzer")
     @Column(name = "supplier_name")
     private String supplierName;
 
@@ -83,7 +144,7 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     private String supplierAssignedId;
 
     @Field
-//    @Analyzer(definition = "customanalyzer")
+    @Analyzer(definition = "nameTextAnalyzer")
     @Column(name = "customer_name")
     private String customerName;
 
@@ -92,7 +153,7 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     private String customerAssignedId;
 
     @Field
-//    @Analyzer(definition = "customanalyzer")
+    @Analyzer(definition = "staticTextAnalyzer")
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "provider_type")
@@ -116,7 +177,7 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     private Map<String, String> tags = new HashMap<>();
 
     @IndexedEmbedded
-    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Set<DocumentSpaceEntity> spaces = new HashSet<>();
 
     public String getId() {
@@ -151,11 +212,11 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.fileId = fileId;
     }
 
-    public BigDecimal getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 
@@ -249,3 +310,4 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.spaces = spaces;
     }
 }
+

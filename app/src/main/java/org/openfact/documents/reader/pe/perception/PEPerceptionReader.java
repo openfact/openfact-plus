@@ -73,7 +73,7 @@ public class PEPerceptionReader implements DocumentReader {
         documentEntity.setCustomerAssignedId(perceptionType.getReceiverParty().getPartyIdentification().get(0).getIDValue());
         documentEntity.setCustomerName(perceptionType.getReceiverParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
         documentEntity.setCurrency(perceptionType.getSunatTotalCashed().getCurrencyID());
-        documentEntity.setAmount(perceptionType.getSunatTotalCashed().getValue());
+        documentEntity.setAmount(perceptionType.getSunatTotalCashed().getValue().floatValue());
         documentEntity.setIssueDate(perceptionType.getIssueDate().getValue().toGregorianCalendar().getTime());
 
         Map<String, String> tags = new HashMap<>();

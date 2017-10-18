@@ -1,7 +1,6 @@
 package org.openfact.documents.jpa;
 
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.hibernate.search.elasticsearch.ElasticsearchQueries;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
@@ -155,13 +154,20 @@ public class ESDocumentProvider implements DocumentProvider {
     }
 
     @Override
-    public List<DocumentModel> getDocuments() {
+    public List<DocumentModel> getDocuments(String nativeQuery) {
         FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
-        QueryDescriptor queryDescriptor = ElasticsearchQueries.fromQueryString("");
+        QueryDescriptor query = ElasticsearchQueries.fromQueryString(nativeQuery);
+        return (List<DocumentModel>) fullTextEm.createFullTextQuery(query, DocumentEntity.class)
+                .getResultList().stream()
+                .map(f -> new DocumentAdapter(em, (DocumentEntity) f))
+                .collect(Collectors.toList());
+    }
 
-        QueryBuilder qb = QueryBuilders.termQuery("", "");
-
-        return (List<DocumentModel>) fullTextEm.createFullTextQuery(queryDescriptor, DocumentEntity.class)
+    @Override
+    public List<DocumentModel> getDocuments(JsonNode json) {
+        FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
+        QueryDescriptor query = ElasticsearchQueries.fromJson(json.toString());
+        return (List<DocumentModel>) fullTextEm.createFullTextQuery(query, DocumentEntity.class)
                 .getResultList().stream()
                 .map(f -> new DocumentAdapter(em, (DocumentEntity) f))
                 .collect(Collectors.toList());

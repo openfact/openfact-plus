@@ -73,7 +73,7 @@ public class PEInvoiceReader implements DocumentReader {
         documentEntity.setCustomerAssignedId(invoiceType.getAccountingCustomerParty().getCustomerAssignedAccountID().getValue());
         documentEntity.setCustomerName(invoiceType.getAccountingCustomerParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
         documentEntity.setCurrency(invoiceType.getLegalMonetaryTotal().getPayableAmount().getCurrencyID().value());
-        documentEntity.setAmount(invoiceType.getLegalMonetaryTotal().getPayableAmount().getValue());
+        documentEntity.setAmount(invoiceType.getLegalMonetaryTotal().getPayableAmount().getValue().floatValue());
         documentEntity.setIssueDate(invoiceType.getIssueDate().getValue().toGregorianCalendar().getTime());
 
         Map<String, String> tags = new HashMap<>();
