@@ -8,6 +8,16 @@ import java.util.Set;
 
 public interface DocumentModel {
 
+    String SUPPLIER_NAME = "supplier_name";
+    String SUPPLIER_ASSIGNED_ID = "supplier_assigned_id";
+    String CUSTOMER_ASSIGNED_ID = "customer_assigned_id";
+    String CUSTOMER_NAME = "customer_name";
+
+    String TYPE = "type";
+    String CURRENCY = "currency";
+    String ISSUE_DATE = "issue_date";
+    String AMOUNT = "amount";
+
     String getId();
 
     String getType();
@@ -16,6 +26,20 @@ public interface DocumentModel {
 
     String getFileId();
 
+    Float getAmount();
+
+    String getCurrency();
+
+    Date getIssueDate();
+
+    String getSupplierName();
+
+    String getSupplierAssignedId();
+
+    String getCustomerName();
+
+    String getCustomerAssignedId();
+
     Map<String, String> getTags();
 
     Date getCreatedAt();
@@ -23,6 +47,8 @@ public interface DocumentModel {
     Date getUpdatedAt();
 
     Set<SpaceModel> getSpaces();
+
+    DocumentProviderType getProvider();
 
     interface DocumentCreationEvent {
         String getDocumentType();

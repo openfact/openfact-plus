@@ -1,6 +1,5 @@
 package org.openfact.documents.jpa;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.hibernate.search.elasticsearch.ElasticsearchQueries;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
@@ -49,7 +48,7 @@ public class ESDocumentProvider implements DocumentProvider {
         DocumentEntity documentEntity = genericDocument.getEntity();
         documentEntity.setId(UUID.randomUUID().toString());
         documentEntity.setType(file.getDocumentType());
-        documentEntity.setProviderType(providerType);
+        documentEntity.setProvider(providerType);
         documentEntity.setFileId(file.getId());
 
         checkPreExistingDocuments(documentEntity, providerType);
@@ -103,7 +102,7 @@ public class ESDocumentProvider implements DocumentProvider {
                     removeDocument(document);
                     break;
                 case USER:
-                    if (documentEntity.getProviderType().equals(DocumentProviderType.USER) || documentEntity.getProviderType().equals(DocumentProviderType.MAIL)) {
+                    if (documentEntity.getProvider().equals(DocumentProviderType.USER) || documentEntity.getProvider().equals(DocumentProviderType.MAIL)) {
                         removeDocument(document);
                     } else {
                         throw new PreexistedDocumentException("There is a preexisted document created by an application, you can't override it");
@@ -154,23 +153,19 @@ public class ESDocumentProvider implements DocumentProvider {
     }
 
     @Override
-    public List<DocumentModel> getDocuments(String nativeQuery) {
+    public List<DocumentModel> getDocuments(String nativeQuery, boolean fromJson) {
         FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
-        QueryDescriptor query = ElasticsearchQueries.fromQueryString(nativeQuery);
-        return (List<DocumentModel>) fullTextEm.createFullTextQuery(query, DocumentEntity.class)
-                .getResultList().stream()
+        QueryDescriptor query;
+        if (fromJson) {
+            query = ElasticsearchQueries.fromJson(nativeQuery);
+        } else {
+            query = ElasticsearchQueries.fromQueryString(nativeQuery);
+        }
+        List result = fullTextEm.createFullTextQuery(query, DocumentEntity.class).getResultList();
+        return (List<DocumentModel>) result.stream()
                 .map(f -> new DocumentAdapter(em, (DocumentEntity) f))
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<DocumentModel> getDocuments(JsonNode json) {
-        FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
-        QueryDescriptor query = ElasticsearchQueries.fromJson(json.toString());
-        return (List<DocumentModel>) fullTextEm.createFullTextQuery(query, DocumentEntity.class)
-                .getResultList().stream()
-                .map(f -> new DocumentAdapter(em, (DocumentEntity) f))
-                .collect(Collectors.toList());
-    }
 
 }

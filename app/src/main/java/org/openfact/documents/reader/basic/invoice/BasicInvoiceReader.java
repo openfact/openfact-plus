@@ -17,7 +17,9 @@ import org.openfact.models.utils.OpenfactModelUtils;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 @Stateless
 @SupportedType(value = "Invoice")
@@ -63,9 +65,19 @@ public class BasicInvoiceReader implements DocumentReader {
         documentSpaceReceiverEntity.setSpace(receiverSpaceEntity);
         documentSpaceReceiverEntity.setDocument(documentEntity);
 
-        documentEntity.setFileId(file.getId());
         documentEntity.setAssignedId(invoiceType.getIDValue());
         documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity, documentSpaceReceiverEntity)));
+        documentEntity.setSupplierAssignedId(invoiceType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
+        documentEntity.setSupplierName(invoiceType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        documentEntity.setCustomerAssignedId(invoiceType.getAccountingCustomerParty().getCustomerAssignedAccountID().getValue());
+        documentEntity.setCustomerName(invoiceType.getAccountingCustomerParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        documentEntity.setCurrency(invoiceType.getLegalMonetaryTotal().getPayableAmount().getCurrencyID());
+        documentEntity.setAmount(invoiceType.getLegalMonetaryTotal().getPayableAmount().getValue().floatValue());
+        documentEntity.setIssueDate(invoiceType.getIssueDate().getValue().toGregorianCalendar().getTime());
+
+        Map<String, String> tags = new HashMap<>();
+        tags.put("reader", "basic");
+        documentEntity.setTags(tags);
 
         return new GenericDocument() {
             @Override

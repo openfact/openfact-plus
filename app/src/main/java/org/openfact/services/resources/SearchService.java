@@ -1,25 +1,24 @@
 package org.openfact.services.resources;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentProvider;
 import org.openfact.models.QueryModel;
 import org.openfact.models.SpaceProvider;
 import org.openfact.models.UserProvider;
 import org.openfact.representations.idm.GenericDataRepresentation;
-import org.openfact.services.ErrorResponse;
 import org.openfact.services.ErrorResponseException;
 import org.openfact.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,24 +72,58 @@ public class SearchService {
 
     @GET
     @Path("documents")
-    public Response searchDocuments(
-            @QueryParam("q") String query,
-            @QueryParam("type") @DefaultValue("string") String type) throws ErrorResponseException {
-        List<DocumentModel> documents;
-        if (type.toLowerCase().equals("string")) {
-            documents = documentProvider.getDocuments(query);
-        } else if (type.toLowerCase().equals("json")) {
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                JsonNode json = mapper.readTree(query);
-                documents = documentProvider.getDocuments(json);
-            } catch (IOException e) {
-                throw new ErrorResponseException("Invalid Json", Response.Status.BAD_REQUEST);
-            }
-        } else {
-            return ErrorResponse.error("Invalid query type", Response.Status.BAD_REQUEST);
-        }
+    public Response searchDocuments(@QueryParam("q") String  query) throws ErrorResponseException {
+//        QueryBuilders.queryStringQuery()
+//        MultiMatchQueryBuilder filterTextQuery = null;
+//        if (query.getFilterText() != null) {
+//            filterTextQuery = QueryBuilders.multiMatchQuery(
+//                    query.getFilterText(),
+//                    DocumentModel.SUPPLIER_NAME,
+//                    DocumentModel.CUSTOMER_NAME,
+//                    DocumentModel.SUPPLIER_ASSIGNED_ID,
+//                    DocumentModel.CUSTOMER_ASSIGNED_ID
+//            );
+//        }
+//
+//        TermQueryBuilder typeQuery = null;
+//        if (query.getType() != null) {
+//            typeQuery = QueryBuilders.termQuery(DocumentModel.TYPE, query.getType());
+//        }
+//
+//        TermQueryBuilder currencyQuery = null;
+//        if (query.getCurrency() != null) {
+//            currencyQuery = QueryBuilders.termQuery(DocumentModel.CURRENCY, query.getCurrency());
+//        }
+//
+//        RangeQueryBuilder issueDateQuery = QueryBuilders.rangeQuery(DocumentModel.ISSUE_DATE);
+//        if (query.getAfter() != null || query.getBefore() != null) {
+//            issueDateQuery
+//                    .gte(query.getAfter())
+//                    .lte(query.getBefore());
+//        }
+//
+//        RangeQueryBuilder amountQuery = QueryBuilders.rangeQuery(DocumentModel.AMOUNT);
+//        if (query.getGreater() != null || query.getLess() != null) {
+//            amountQuery
+//                    .gte(query.getGreater())
+//                    .lte(query.getLess());
+//        }
+//
+//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
+//                .must(amountQuery)
+//                .must(issueDateQuery);
+//        if (filterTextQuery != null) {
+//            boolQueryBuilder.must(filterTextQuery);
+//        }
+//        if (typeQuery != null) {
+//            boolQueryBuilder.must(typeQuery);
+//        }
+//        if (currencyQuery != null) {
+//            boolQueryBuilder.must(currencyQuery);boolQueryBuilder.toString())
+//        }
 
+
+        List<DocumentModel> documents = documentProvider.getDocuments(query, true);
         return Response.ok(new GenericDataRepresentation(documents.stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
                 .collect(Collectors.toList()))).build();

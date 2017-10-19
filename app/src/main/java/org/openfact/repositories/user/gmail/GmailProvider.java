@@ -16,9 +16,9 @@ import com.google.common.collect.Lists;
 import net.sf.cglib.proxy.Enhancer;
 import org.jboss.logging.Logger;
 import org.openfact.models.BrokerType;
+import org.openfact.oauth2.OAuth2Utils;
 import org.openfact.repositories.user.*;
 import org.openfact.repositories.user.utils.CredentialHandler;
-import org.openfact.oauth2.OAuth2Utils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;

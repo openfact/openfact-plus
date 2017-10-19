@@ -52,6 +52,7 @@ public class PECreditNoteReader implements DocumentReader {
         SpaceEntity senderSpaceEntity = peUtils.getSpace(creditNoteType.getAccountingSupplierParty());
         SpaceEntity receiverSpaceEntity = peUtils.getSpace(creditNoteType.getAccountingCustomerParty());
 
+
         DocumentEntity documentEntity = new DocumentEntity();
 
         DocumentSpaceEntity documentSpaceSenderEntity = new DocumentSpaceEntity();

@@ -17,7 +17,9 @@ import org.openfact.models.utils.OpenfactModelUtils;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 @Stateless
 @SupportedType(value = "DebitNote")
@@ -48,6 +50,7 @@ public class BasicDebitNoteReader implements DocumentReader {
         SpaceEntity senderSpaceEntity = basicUtils.getSenderSpace(debitNoteType.getAccountingSupplierParty());
         SpaceEntity receiverSpaceEntity = basicUtils.getReceiverSpace(debitNoteType.getAccountingCustomerParty());
 
+
         DocumentEntity documentEntity = new DocumentEntity();
 
         DocumentSpaceEntity documentSpaceSenderEntity = new DocumentSpaceEntity();
@@ -62,9 +65,19 @@ public class BasicDebitNoteReader implements DocumentReader {
         documentSpaceReceiverEntity.setSpace(receiverSpaceEntity);
         documentSpaceReceiverEntity.setDocument(documentEntity);
 
-        documentEntity.setFileId(file.getId());
         documentEntity.setAssignedId(debitNoteType.getIDValue());
         documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity, documentSpaceReceiverEntity)));
+        documentEntity.setSupplierAssignedId(debitNoteType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
+        documentEntity.setSupplierName(debitNoteType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        documentEntity.setCustomerAssignedId(debitNoteType.getAccountingCustomerParty().getCustomerAssignedAccountID().getValue());
+        documentEntity.setCustomerName(debitNoteType.getAccountingCustomerParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        documentEntity.setCurrency(debitNoteType.getRequestedMonetaryTotal().getPayableAmount().getCurrencyID());
+        documentEntity.setAmount(debitNoteType.getRequestedMonetaryTotal().getPayableAmount().getValue().floatValue());
+        documentEntity.setIssueDate(debitNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
+
+        Map<String, String> tags = new HashMap<>();
+        tags.put("reader", "basic");
+        documentEntity.setTags(tags);
 
         return new GenericDocument() {
             @Override

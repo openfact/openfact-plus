@@ -21,7 +21,7 @@ mvn fabric8:deploy -DSSO_REALM=openfact \
     -DES_SERVER_URL=http://elasticsearch:9200 \
     -DES_USERNAME='' \
     -DES_PASSWORD='' \
-    -DES_INDEX_SCHEMA_MANAGEMENT_STRATEGY=CREATE \
+    -DES_INDEX_SCHEMA_MANAGEMENT_STRATEGY=drop-and-create \
     -DES_REQUIRED_INDEX_STATUS=yellow \
     -Popenshift \
     -DskipTests=true \

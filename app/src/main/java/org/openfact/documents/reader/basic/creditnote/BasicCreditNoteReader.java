@@ -17,7 +17,9 @@ import org.openfact.models.utils.OpenfactModelUtils;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 @Stateless
 @SupportedType(value = "CreditNote")
@@ -48,6 +50,7 @@ public class BasicCreditNoteReader implements DocumentReader {
         SpaceEntity senderSpaceEntity = basicUtils.getSenderSpace(creditNoteType.getAccountingSupplierParty());
         SpaceEntity receiverSpaceEntity = basicUtils.getReceiverSpace(creditNoteType.getAccountingCustomerParty());
 
+
         DocumentEntity documentEntity = new DocumentEntity();
 
         DocumentSpaceEntity documentSpaceSenderEntity = new DocumentSpaceEntity();
@@ -62,9 +65,19 @@ public class BasicCreditNoteReader implements DocumentReader {
         documentSpaceReceiverEntity.setSpace(receiverSpaceEntity);
         documentSpaceReceiverEntity.setDocument(documentEntity);
 
-        documentEntity.setFileId(file.getId());
         documentEntity.setAssignedId(creditNoteType.getIDValue());
         documentEntity.setSpaces(new HashSet<>(Arrays.asList(documentSpaceSenderEntity, documentSpaceReceiverEntity)));
+        documentEntity.setSupplierAssignedId(creditNoteType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
+        documentEntity.setSupplierName(creditNoteType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        documentEntity.setCustomerAssignedId(creditNoteType.getAccountingCustomerParty().getCustomerAssignedAccountID().getValue());
+        documentEntity.setCustomerName(creditNoteType.getAccountingCustomerParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        documentEntity.setCurrency(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getCurrencyID());
+        documentEntity.setAmount(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getValue().floatValue());
+        documentEntity.setIssueDate(creditNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
+
+        Map<String, String> tags = new HashMap<>();
+        tags.put("reader", "basic");
+        documentEntity.setTags(tags);
 
         return new GenericDocument() {
             @Override

@@ -1,12 +1,8 @@
 package org.openfact.documents.jpa.entity;
 
-import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
-import org.apache.lucene.analysis.snowball.SnowballPorterFilterFactory;
-import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.annotations.Type;
 import org.hibernate.search.annotations.*;
 import org.hibernate.search.annotations.Parameter;
-import org.hibernate.search.elasticsearch.analyzer.ElasticsearchCharFilterFactory;
 import org.hibernate.search.elasticsearch.analyzer.ElasticsearchTokenFilterFactory;
 import org.hibernate.search.elasticsearch.analyzer.ElasticsearchTokenizerFactory;
 import org.openfact.documents.DocumentProviderType;
@@ -100,13 +96,13 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "id", length = 36)
     private String id;
 
-    @Field
+    @Field(name = "type")
     @Analyzer(definition = "staticTextAnalyzer")
     @NotNull
     @Column(name = "type")
     private String type;
 
-    @Field
+    @Field(name = "assigned_id")
     @NotNull
     @Column(name = "assigned_id")
     private String assignedId;
@@ -115,7 +111,7 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "file_id")
     private String fileId;
 
-    @Field(analyze = Analyze.NO)
+    @Field(name = "amount", analyze = Analyze.NO)
     @SortableField
     @NumericField
     @Digits(integer = 10, fraction = 4)
@@ -123,41 +119,41 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "amount")
     private Float amount;
 
-    @Field
+    @Field(name = "currency")
     @Analyzer(definition = "staticTextAnalyzer")
     @Column(name = "currency")
     private String currency;
 
-    @Field
+    @Field(name = "issue_date")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "issue_date")
     private Date issueDate;
 
-    @Field
+    @Field(name = "supplier_name")
     @Analyzer(definition = "nameTextAnalyzer")
     @Column(name = "supplier_name")
     private String supplierName;
 
-    @Field
+    @Field(name = "supplier_assigned_id")
     @NotNull
     @Column(name = "supplier_assigned_id")
     private String supplierAssignedId;
 
-    @Field
+    @Field(name = "customer_name")
     @Analyzer(definition = "nameTextAnalyzer")
     @Column(name = "customer_name")
     private String customerName;
 
-    @Field
+    @Field(name = "customer_assigned_id")
     @Column(name = "customer_assigned_id")
     private String customerAssignedId;
 
-    @Field
+    @Field(name = "provider")
     @Analyzer(definition = "staticTextAnalyzer")
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "provider_type")
-    private DocumentProviderType providerType;
+    @Column(name = "provider")
+    private DocumentProviderType provider;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -268,12 +264,12 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.customerAssignedId = customerAssignedId;
     }
 
-    public DocumentProviderType getProviderType() {
-        return providerType;
+    public DocumentProviderType getProvider() {
+        return provider;
     }
 
-    public void setProviderType(DocumentProviderType providerType) {
-        this.providerType = providerType;
+    public void setProvider(DocumentProviderType providerType) {
+        this.provider = providerType;
     }
 
     public Date getCreatedAt() {

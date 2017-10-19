@@ -43,6 +43,7 @@ public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider
         entity.setName(name);
         entity.setOwner(userEntity);
         em.persist(entity);
+        em.flush();
 
         // Cache
         userEntity.getOwnedSpaces().add(entity);

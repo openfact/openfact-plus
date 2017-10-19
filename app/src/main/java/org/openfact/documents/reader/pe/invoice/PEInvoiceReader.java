@@ -54,6 +54,7 @@ public class PEInvoiceReader implements DocumentReader {
 
         DocumentEntity documentEntity = new DocumentEntity();
 
+
         DocumentSpaceEntity documentSpaceSenderEntity = new DocumentSpaceEntity();
         documentSpaceSenderEntity.setId(OpenfactModelUtils.generateId());
         documentSpaceSenderEntity.setType(InteractType.SENDER);

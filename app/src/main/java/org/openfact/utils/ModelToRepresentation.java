@@ -158,7 +158,15 @@ public class ModelToRepresentation {
 
         attributes.setId(model.getId());
         attributes.setAssignedId(model.getAssignedId());
-        attributes.setDocumentType(model.getType());
+        attributes.setType(model.getType());
+        attributes.setAmount(model.getAmount());
+        attributes.setCurrency(model.getCurrency());
+        attributes.setIssueDate(model.getIssueDate());
+        attributes.setSupplierName(model.getSupplierName());
+        attributes.setSupplierAssignedId(model.getSupplierAssignedId());
+        attributes.setCustomerName(model.getCustomerName());
+        attributes.setCustomerAssignedId(model.getCustomerAssignedId());
+        attributes.setProvider(model.getProvider().toString());
         attributes.setTags(new HashMap<>(model.getTags()));
         attributes.setCreatedAt(model.getCreatedAt());
         attributes.setUpdatedAt(model.getUpdatedAt());

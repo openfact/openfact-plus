@@ -52,6 +52,7 @@ public class PEDebitNoteReader implements DocumentReader {
         SpaceEntity senderSpaceEntity = peUtils.getSpace(debitNoteType.getAccountingSupplierParty());
         SpaceEntity receiverSpaceEntity = peUtils.getSpace(debitNoteType.getAccountingCustomerParty());
 
+
         DocumentEntity documentEntity = new DocumentEntity();
 
         DocumentSpaceEntity documentSpaceSenderEntity = new DocumentSpaceEntity();

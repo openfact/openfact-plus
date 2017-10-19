@@ -80,8 +80,17 @@ public class DocumentRepresentation {
     public static class Attributes {
         private String id;
         private String assignedId;
-        private String documentType;
+        private String type;
+        private String currency;
+        private Float amount;
+        private Date issueDate;
+        private String supplierName;
+        private String supplierAssignedId;
+        private String customerName;
+        private String customerAssignedId;
+        private String provider;
         private Map<String, String> tags;
+
 
         @JsonProperty("created-at")
         private Date createdAt;
@@ -105,12 +114,12 @@ public class DocumentRepresentation {
             this.assignedId = assignedId;
         }
 
-        public String getDocumentType() {
-            return documentType;
+        public String getType() {
+            return type;
         }
 
-        public void setDocumentType(String documentType) {
-            this.documentType = documentType;
+        public void setType(String type) {
+            this.type = type;
         }
 
         public Map<String, String> getTags() {
@@ -135,6 +144,70 @@ public class DocumentRepresentation {
 
         public void setUpdatedAt(Date updatedAt) {
             this.updatedAt = updatedAt;
+        }
+
+        public void setAmount(Float amount) {
+            this.amount = amount;
+        }
+
+        public Float getAmount() {
+            return amount;
+        }
+
+        public String getCurrency() {
+            return currency;
+        }
+
+        public void setCurrency(String currency) {
+            this.currency = currency;
+        }
+
+        public Date getIssueDate() {
+            return issueDate;
+        }
+
+        public void setIssueDate(Date issueDate) {
+            this.issueDate = issueDate;
+        }
+
+        public String getSupplierName() {
+            return supplierName;
+        }
+
+        public void setSupplierName(String supplierName) {
+            this.supplierName = supplierName;
+        }
+
+        public String getSupplierAssignedId() {
+            return supplierAssignedId;
+        }
+
+        public void setSupplierAssignedId(String supplierAssignedId) {
+            this.supplierAssignedId = supplierAssignedId;
+        }
+
+        public String getCustomerName() {
+            return customerName;
+        }
+
+        public void setCustomerName(String customerName) {
+            this.customerName = customerName;
+        }
+
+        public String getCustomerAssignedId() {
+            return customerAssignedId;
+        }
+
+        public void setCustomerAssignedId(String customerAssignedId) {
+            this.customerAssignedId = customerAssignedId;
+        }
+
+        public String getProvider() {
+            return provider;
+        }
+
+        public void setProvider(String provider) {
+            this.provider = provider;
         }
     }
 

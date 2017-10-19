@@ -1,6 +1,7 @@
 package org.openfact.documents.jpa;
 
 import org.openfact.documents.DocumentModel;
+import org.openfact.documents.DocumentProviderType;
 import org.openfact.documents.jpa.entity.DocumentEntity;
 import org.openfact.models.SpaceModel;
 import org.openfact.models.db.JpaModel;
@@ -53,6 +54,41 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
+    public Float getAmount() {
+        return document.getAmount();
+    }
+
+    @Override
+    public String getCurrency() {
+        return document.getCurrency();
+    }
+
+    @Override
+    public Date getIssueDate() {
+        return document.getIssueDate();
+    }
+
+    @Override
+    public String getSupplierName() {
+        return document.getSupplierName();
+    }
+
+    @Override
+    public String getSupplierAssignedId() {
+        return document.getSupplierAssignedId();
+    }
+
+    @Override
+    public String getCustomerName() {
+        return document.getCustomerName();
+    }
+
+    @Override
+    public String getCustomerAssignedId() {
+        return document.getCustomerAssignedId();
+    }
+
+    @Override
     public Map<String, String> getTags() {
         Map<String, String> config = new HashMap<>();
         config.putAll(document.getTags());
@@ -74,6 +110,11 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
         return document.getSpaces().stream()
                 .map(f -> new SpaceAdapter(em, f.getSpace()))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public DocumentProviderType getProvider() {
+        return document.getProvider();
     }
 
 }
