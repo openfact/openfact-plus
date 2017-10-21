@@ -1,10 +1,15 @@
 package org.openfact.services.resources;
 
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentProvider;
 import org.openfact.models.QueryModel;
 import org.openfact.models.SpaceProvider;
 import org.openfact.models.UserProvider;
+import org.openfact.representations.idm.DocumentQueryRepresentation;
 import org.openfact.representations.idm.GenericDataRepresentation;
 import org.openfact.services.ErrorResponseException;
 import org.openfact.utils.ModelToRepresentation;
@@ -73,41 +78,42 @@ public class SearchService {
     @GET
     @Path("documents")
     public Response searchDocuments(@QueryParam("q") String  query) throws ErrorResponseException {
-//        QueryBuilders.queryStringQuery()
-//        MultiMatchQueryBuilder filterTextQuery = null;
-//        if (query.getFilterText() != null) {
-//            filterTextQuery = QueryBuilders.multiMatchQuery(
-//                    query.getFilterText(),
+//        DocumentQueryRepresentation query = null;
+//
+//        QueryBuilder filterTextQuery;
+//        if (query.getFilterText() != null && !query.getFilterText().trim().isEmpty() && !query.getFilterText().trim().equals("*")) {
+//            filterTextQuery = QueryBuilders.multiMatchQuery(query.getFilterText(),
 //                    DocumentModel.SUPPLIER_NAME,
 //                    DocumentModel.CUSTOMER_NAME,
 //                    DocumentModel.SUPPLIER_ASSIGNED_ID,
 //                    DocumentModel.CUSTOMER_ASSIGNED_ID
 //            );
+//        } else {
+//            filterTextQuery = QueryBuilders.matchAllQuery();
 //        }
 //
-//        TermQueryBuilder typeQuery = null;
-//        if (query.getType() != null) {
-//            typeQuery = QueryBuilders.termQuery(DocumentModel.TYPE, query.getType());
-//        }
-//
-//        TermQueryBuilder currencyQuery = null;
-//        if (query.getCurrency() != null) {
-//            currencyQuery = QueryBuilders.termQuery(DocumentModel.CURRENCY, query.getCurrency());
-//        }
-//
-//        RangeQueryBuilder issueDateQuery = QueryBuilders.rangeQuery(DocumentModel.ISSUE_DATE);
-//        if (query.getAfter() != null || query.getBefore() != null) {
-//            issueDateQuery
-//                    .gte(query.getAfter())
-//                    .lte(query.getBefore());
-//        }
-//
-//        RangeQueryBuilder amountQuery = QueryBuilders.rangeQuery(DocumentModel.AMOUNT);
+//        RangeQueryBuilder amountQuery;
 //        if (query.getGreater() != null || query.getLess() != null) {
-//            amountQuery
-//                    .gte(query.getGreater())
-//                    .lte(query.getLess());
+//            amountQuery = QueryBuilders.rangeQuery(DocumentModel.AMOUNT);
+//            if (query.getGreater() != null) {
+//                amountQuery.gte(query.getGreater());
+//            }
+//            if (query.getLess() != null) {
+//                amountQuery.lte(query.getLess());
+//            }
 //        }
+//
+//        RangeQueryBuilder issueDateQuery;
+//        if (query.getAfter() != null || query.getBefore() != null) {
+//            issueDateQuery = QueryBuilders.rangeQuery(DocumentModel.ISSUE_DATE);
+//            if (query.getAfter() != null) {
+//                issueDateQuery.gte(query.getAfter());
+//            }
+//            if (query.getBefore() != null) {
+//                issueDateQuery.lte(query.getBefore());
+//            }
+//        }
+//
 //
 //        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
 //                .must(amountQuery)
