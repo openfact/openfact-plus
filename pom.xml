@@ -12,7 +12,7 @@
     <packaging>pom</packaging>
 
     <name>parent</name>
-    <description>Openfact Sync</description>
+    <description>Openfact Synchronization</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,6 +27,60 @@
         <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>2.20</maven-failsafe-plugin.version>
     </properties>
+
+    <url>http://openfact.org</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>carlosthe19916</id>
+            <name>Carlos Esteban Feria Vila</name>
+            <email>carlosthe19916@gmail.com</email>
+            <organization>SistCoop</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/openfact/openfact-sync.git</connection>
+        <developerConnection>scm:git:git@github.com:openfact/openfact-sync.git</developerConnection>
+        <url>https://github.com/openfact/openfact-sync/tree/master/</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+   <!--<repositories>-->
+       <!--<repository>-->
+           <!--<id>sonatype.snapshots</id>-->
+           <!--<name>Apache Development Snapshot Repository</name>-->
+           <!--<url>https://oss.sonatype.org/content/repositories/snapshots/</url>-->
+           <!--<releases>-->
+               <!--<enabled>false</enabled>-->
+           <!--</releases>-->
+           <!--<snapshots>-->
+               <!--<enabled>true</enabled>-->
+           <!--</snapshots>-->
+       <!--</repository>-->
+   <!--</repositories>-->
 
     <modules>
         <module>app</module>

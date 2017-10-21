@@ -192,11 +192,11 @@
             <artifactId>hibernate-search-engine</artifactId>
             <version>${version.hibernate-search}</version>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-search-serialization-avro</artifactId>
-            <version>${version.hibernate-search}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.hibernate</groupId>-->
+            <!--<artifactId>hibernate-search-serialization-avro</artifactId>-->
+            <!--<version>${version.hibernate-search}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-infinispan</artifactId>
@@ -230,6 +230,13 @@
             <artifactId>keycloak-test-helper</artifactId>
             <version>3.2.0.Final</version>
             <scope>test</scope>
+        </dependency>
+
+        <!--Elasticsearch-->
+        <dependency>
+            <groupId>org.sistcoop</groupId>
+            <artifactId>elasticsearch-shaded</artifactId>
+            <version>1.0.3</version>
         </dependency>
 
         <!--Ubl21-->
