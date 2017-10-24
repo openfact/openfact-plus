@@ -332,6 +332,13 @@
             <version>${version.jberet-support}</version>
         </dependency>
 
+        <!--Google Guava-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
+        </dependency>
+
         <!-- Proxy utils -->
         <dependency>
             <groupId>cglib</groupId>

@@ -1,9 +1,6 @@
 package org.openfact.services.resources;
 
-import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentProvider;
 import org.openfact.models.QueryModel;
@@ -11,6 +8,7 @@ import org.openfact.models.SpaceProvider;
 import org.openfact.models.UserProvider;
 import org.openfact.representations.idm.DocumentQueryRepresentation;
 import org.openfact.representations.idm.GenericDataRepresentation;
+import org.openfact.services.ErrorResponse;
 import org.openfact.services.ErrorResponseException;
 import org.openfact.utils.ModelToRepresentation;
 
@@ -24,6 +22,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,59 +76,84 @@ public class SearchService {
 
     @GET
     @Path("documents")
-    public Response searchDocuments(@QueryParam("q") String  query) throws ErrorResponseException {
-//        DocumentQueryRepresentation query = null;
-//
-//        QueryBuilder filterTextQuery;
-//        if (query.getFilterText() != null && !query.getFilterText().trim().isEmpty() && !query.getFilterText().trim().equals("*")) {
-//            filterTextQuery = QueryBuilders.multiMatchQuery(query.getFilterText(),
-//                    DocumentModel.SUPPLIER_NAME,
-//                    DocumentModel.CUSTOMER_NAME,
-//                    DocumentModel.SUPPLIER_ASSIGNED_ID,
-//                    DocumentModel.CUSTOMER_ASSIGNED_ID
-//            );
-//        } else {
-//            filterTextQuery = QueryBuilders.matchAllQuery();
-//        }
-//
-//        RangeQueryBuilder amountQuery;
-//        if (query.getGreater() != null || query.getLess() != null) {
-//            amountQuery = QueryBuilders.rangeQuery(DocumentModel.AMOUNT);
-//            if (query.getGreater() != null) {
-//                amountQuery.gte(query.getGreater());
-//            }
-//            if (query.getLess() != null) {
-//                amountQuery.lte(query.getLess());
-//            }
-//        }
-//
-//        RangeQueryBuilder issueDateQuery;
-//        if (query.getAfter() != null || query.getBefore() != null) {
-//            issueDateQuery = QueryBuilders.rangeQuery(DocumentModel.ISSUE_DATE);
-//            if (query.getAfter() != null) {
-//                issueDateQuery.gte(query.getAfter());
-//            }
-//            if (query.getBefore() != null) {
-//                issueDateQuery.lte(query.getBefore());
-//            }
-//        }
-//
-//
-//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
-//                .must(amountQuery)
-//                .must(issueDateQuery);
-//        if (filterTextQuery != null) {
-//            boolQueryBuilder.must(filterTextQuery);
-//        }
-//        if (typeQuery != null) {
-//            boolQueryBuilder.must(typeQuery);
-//        }
-//        if (currencyQuery != null) {
-//            boolQueryBuilder.must(currencyQuery);boolQueryBuilder.toString())
-//        }
+    public Response searchDocuments(@QueryParam("q") String q) throws ErrorResponseException {
+        DocumentQueryRepresentation query;
+        try {
+            query = new DocumentQueryRepresentation(q);
+        } catch (ParseException e) {
+            return ErrorResponse.error("Bad query request", Response.Status.BAD_REQUEST);
+        }
+
+        QueryBuilder filterTextQuery;
+        if (query.getFilterText() != null && !query.getFilterText().trim().isEmpty() && !query.getFilterText().trim().equals("*")) {
+            filterTextQuery = QueryBuilders.multiMatchQuery(query.getFilterText(),
+                    DocumentModel.ASSIGNED_ID,
+                    DocumentModel.SUPPLIER_NAME,
+                    DocumentModel.CUSTOMER_NAME,
+                    DocumentModel.SUPPLIER_ASSIGNED_ID,
+                    DocumentModel.CUSTOMER_ASSIGNED_ID
+            );
+        } else {
+            filterTextQuery = QueryBuilders.matchAllQuery();
+        }
+
+        QueryBuilder typeQuery = null;
+        if (query.getTypes() != null && !query.getTypes().isEmpty()) {
+            typeQuery = QueryBuilders.termsQuery(DocumentModel.TYPE, query.getTypes());
+        }
+
+        QueryBuilder currencyQuery = null;
+        if (query.getCurrencies() != null && !query.getCurrencies().isEmpty()) {
+            currencyQuery = QueryBuilders.termsQuery(DocumentModel.CURRENCY, query.getCurrencies());
+        }
+
+        QueryBuilder tagSQuery = null;
+        if (query.getTags() != null && !query.getTags().isEmpty()) {
+            tagSQuery = QueryBuilders.termsQuery(DocumentModel.TAGS, query.getTags());
+        }
+
+        RangeQueryBuilder amountQuery = null;
+        if (query.getGreaterThan() != null || query.getLessThan() != null) {
+            amountQuery = QueryBuilders.rangeQuery(DocumentModel.AMOUNT);
+            if (query.getGreaterThan() != null) {
+                amountQuery.gte(query.getGreaterThan());
+            }
+            if (query.getLessThan() != null) {
+                amountQuery.lte(query.getLessThan());
+            }
+        }
+
+        RangeQueryBuilder issueDateQuery = null;
+        if (query.getAfter() != null || query.getBefore() != null) {
+            issueDateQuery = QueryBuilders.rangeQuery(DocumentModel.ISSUE_DATE);
+            if (query.getAfter() != null) {
+                issueDateQuery.gte(query.getAfter());
+            }
+            if (query.getBefore() != null) {
+                issueDateQuery.lte(query.getBefore());
+            }
+        }
 
 
-        List<DocumentModel> documents = documentProvider.getDocuments(query, true);
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
+                .must(filterTextQuery);
+        if (typeQuery != null) {
+            boolQueryBuilder.filter(typeQuery);
+        }
+        if (currencyQuery != null) {
+            boolQueryBuilder.filter(currencyQuery);
+        }
+        if (tagSQuery != null) {
+            boolQueryBuilder.filter(tagSQuery);
+        }
+        if (amountQuery != null) {
+            boolQueryBuilder.filter(amountQuery);
+        }
+        if (issueDateQuery != null) {
+            boolQueryBuilder.filter(issueDateQuery);
+        }
+
+        List<DocumentModel> documents = documentProvider.getDocuments("{\"query\":" + boolQueryBuilder.toString() + "}", true);
         return Response.ok(new GenericDataRepresentation(documents.stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
                 .collect(Collectors.toList()))).build();

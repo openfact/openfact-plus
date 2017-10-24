@@ -8,6 +8,8 @@ import java.util.Set;
 
 public interface DocumentModel {
 
+    String ASSIGNED_ID = "assigned_id";
+
     String SUPPLIER_NAME = "supplier_name";
     String SUPPLIER_ASSIGNED_ID = "supplier_assigned_id";
     String CUSTOMER_ASSIGNED_ID = "customer_assigned_id";
@@ -17,6 +19,8 @@ public interface DocumentModel {
     String CURRENCY = "currency";
     String ISSUE_DATE = "issue_date";
     String AMOUNT = "amount";
+
+    String TAGS = "tags";
 
     String getId();
 
