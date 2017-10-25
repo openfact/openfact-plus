@@ -56,6 +56,8 @@ public interface UserModel {
 
     Set<SpaceModel> getOwnedSpaces();
 
+    Set<SpaceModel> getCollaboratedSpaces();
+
     JsonNode getContextInformation();
 
     void setContextInformation(JsonNode contextInformation);

@@ -97,21 +97,14 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Set<SpaceEntity> ownedSpaces = new HashSet<>();
 
-//    @ElementCollection
-//    @Column(name="value")
-//    @CollectionTable(name="recent_spaces", joinColumns={ @JoinColumn(name="user_id") })
-//    private Set<String> recentSpaces = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<CollaboratorEntity> collaboratedSpaces = new HashSet<>();
 
     @Type(type = "org.openfact.models.db.type.json.JsonNodeType")
     @Column(name = "context_information", length = 4096)
     private JsonNode contextInformation;
 
-    //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    private Set<SharedSpaceEntity> sharedSpaces = new HashSet<>();
-//
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    private Set<RequestAccessToSpaceEntity> spaceRequests = new HashSet<>();
-//
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Set<UserLinkedBrokerEntity> linkedBrokers = new HashSet<>();
 
@@ -254,14 +247,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.ownedSpaces = ownedSpaces;
     }
 
-//    public Set<String> getRecentSpaces() {
-//        return recentSpaces;
-//    }
-//
-//    public void setRecentSpaces(Set<String> recentSpaces) {
-//        this.recentSpaces = recentSpaces;
-//    }
-
     public void setContextInformation(JsonNode contextInformation) {
         this.contextInformation = contextInformation;
     }
@@ -269,30 +254,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     public JsonNode getContextInformation() {
         return contextInformation;
     }
-
-//    public Set<SharedSpaceEntity> getSharedSpaces() {
-//        return sharedSpaces;
-//    }
-//
-//    public void setSharedSpaces(Set<SharedSpaceEntity> sharedSpaces) {
-//        this.sharedSpaces = sharedSpaces;
-//    }
-//
-//    public Set<RequestAccessToSpaceEntity> getSpaceRequests() {
-//        return spaceRequests;
-//    }
-//
-//    public void setSpaceRequests(Set<RequestAccessToSpaceEntity> spaceRequests) {
-//        this.spaceRequests = spaceRequests;
-//    }
-//
-//    public Set<UserLinkedBrokerEntity> getRepositories() {
-//        return repositories;
-//    }
-//
-//    public void setRepositories(Set<UserLinkedBrokerEntity> repositories) {
-//        this.repositories = repositories;
-//    }
 
     public int getVersion() {
         return version;
@@ -309,4 +270,5 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     public void setLinkedBrokers(Set<UserLinkedBrokerEntity> linkedBrokers) {
         this.linkedBrokers = linkedBrokers;
     }
+
 }

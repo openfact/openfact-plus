@@ -1,10 +1,7 @@
 package org.openfact.documents;
 
-import org.openfact.models.SpaceModel;
-
 import java.util.Date;
 import java.util.Map;
-import java.util.Set;
 
 public interface DocumentModel {
 
@@ -49,8 +46,6 @@ public interface DocumentModel {
     Date getCreatedAt();
 
     Date getUpdatedAt();
-
-    Set<SpaceModel> getSpaces();
 
     DocumentProviderType getProvider();
 

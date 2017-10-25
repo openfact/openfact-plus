@@ -106,13 +106,6 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public Set<SpaceModel> getSpaces() {
-        return document.getSpaces().stream()
-                .map(f -> new SpaceAdapter(em, f.getSpace()))
-                .collect(Collectors.toSet());
-    }
-
-    @Override
     public DocumentProviderType getProvider() {
         return document.getProvider();
     }

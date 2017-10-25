@@ -137,13 +137,13 @@ public class ModelToRepresentation {
         relationships.setOwnedBy(ownedBy);
         rep.setRelationships(relationships);
 
-        List<SpaceRepresentation.Data> owners = model.getSpaces().stream().map(space -> {
-            SpaceRepresentation.Data spaceData = new SpaceRepresentation.Data();
-            spaceData.setId(space.getId());
-            spaceData.setType(ModelType.SPACES.getAlias());
-            return spaceData;
-        }).collect(Collectors.toList());
-        ownedBy.setData(owners); // save
+//        List<SpaceRepresentation.Data> owners = model.getSpaces().stream().map(space -> {
+//            SpaceRepresentation.Data spaceData = new SpaceRepresentation.Data();
+//            spaceData.setId(space.getId());
+//            spaceData.setType(ModelType.SPACES.getAlias());
+//            return spaceData;
+//        }).collect(Collectors.toList());
+//        ownedBy.setData(owners); // save
 
 //        GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
 //        ownedLinks.setSelf(uriInfo.getBaseUriBuilder()

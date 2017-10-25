@@ -1,8 +1,12 @@
 package org.openfact.documents.jpa;
 
+import org.apache.lucene.search.Sort;
 import org.hibernate.search.elasticsearch.ElasticsearchQueries;
 import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
+import org.hibernate.search.query.dsl.sort.SortFieldContext;
 import org.hibernate.search.query.engine.spi.QueryDescriptor;
 import org.jboss.logging.Logger;
 import org.openfact.documents.*;
@@ -153,18 +157,55 @@ public class ESDocumentProvider implements DocumentProvider {
     }
 
     @Override
-    public List<DocumentModel> getDocuments(String nativeQuery, boolean fromJson) {
+    public List<DocumentModel> getDocuments(DocumentQueryModel query) {
         FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
-        QueryDescriptor query;
-        if (fromJson) {
-            query = ElasticsearchQueries.fromJson(nativeQuery);
+        QueryDescriptor queryDescriptor;
+        if (query.isJsonQuery()) {
+            queryDescriptor = ElasticsearchQueries.fromJson(query.getQuery());
         } else {
-            query = ElasticsearchQueries.fromQueryString(nativeQuery);
+            queryDescriptor = ElasticsearchQueries.fromQueryString(query.getQuery());
         }
-        List result = fullTextEm.createFullTextQuery(query, DocumentEntity.class).getResultList();
-        return (List<DocumentModel>) result.stream()
+
+        Sort sort = null;
+        if (query.getOrderBy() != null) {
+            QueryBuilder queryBuilder = fullTextEm.getSearchFactory().buildQueryBuilder().forEntity(DocumentEntity.class).get();
+            SortFieldContext sortFieldContext = queryBuilder.sort().byField(query.getOrderBy());
+            if (query.isAsc()) {
+                sort = sortFieldContext.asc().createSort();
+            } else {
+                sort = sortFieldContext.desc().createSort();
+            }
+        }
+
+        FullTextQuery fullTextQuery = fullTextEm.createFullTextQuery(queryDescriptor, DocumentEntity.class);
+        if (sort != null) {
+            fullTextQuery.setSort(sort);
+        }
+
+        if (query.getOffset() != null && query.getOffset() != -1) {
+            fullTextQuery.setFirstResult(query.getOffset());
+        }
+        if (query.getLimit() != null && query.getLimit() != -1) {
+            fullTextQuery.setMaxResults(query.getLimit());
+        }
+
+        return (List<DocumentModel>) fullTextQuery.getResultList().stream()
                 .map(f -> new DocumentAdapter(em, (DocumentEntity) f))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public int getDocumentsSize(DocumentQueryModel query) {
+        FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
+        QueryDescriptor queryDescriptor;
+        if (query.isJsonQuery()) {
+            queryDescriptor = ElasticsearchQueries.fromJson(query.getQuery());
+        } else {
+            queryDescriptor = ElasticsearchQueries.fromQueryString(query.getQuery());
+        }
+
+        return fullTextEm.createFullTextQuery(queryDescriptor, DocumentEntity.class)
+                .getResultSize();
     }
 
 

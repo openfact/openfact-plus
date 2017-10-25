@@ -38,6 +38,11 @@ public interface DocumentProvider {
     /**
      * @return list of documents
      */
-    List<DocumentModel> getDocuments(String nativeQuery, boolean fromJson);
+    List<DocumentModel> getDocuments(DocumentQueryModel query);
+
+    /**
+     * @return count results
+     */
+    int getDocumentsSize(DocumentQueryModel query);
 
 }

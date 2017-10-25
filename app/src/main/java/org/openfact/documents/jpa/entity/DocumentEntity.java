@@ -172,10 +172,6 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @CollectionTable(name = "document_tags", joinColumns = {@JoinColumn(name = "document_id")})
     private Map<String, String> tags = new HashMap<>();
 
-    @IndexedEmbedded
-    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private Set<DocumentSpaceEntity> spaces = new HashSet<>();
-
     public String getId() {
         return id;
     }
@@ -298,12 +294,5 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.tags = tags;
     }
 
-    public Set<DocumentSpaceEntity> getSpaces() {
-        return spaces;
-    }
-
-    public void setSpaces(Set<DocumentSpaceEntity> spaces) {
-        this.spaces = spaces;
-    }
 }
 

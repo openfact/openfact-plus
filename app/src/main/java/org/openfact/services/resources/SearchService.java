@@ -1,29 +1,28 @@
 package org.openfact.services.resources;
 
 import org.elasticsearch.index.query.*;
+import org.keycloak.representations.AccessToken;
 import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentProvider;
-import org.openfact.models.QueryModel;
-import org.openfact.models.SpaceProvider;
-import org.openfact.models.UserProvider;
+import org.openfact.documents.DocumentQueryModel;
+import org.openfact.models.*;
 import org.openfact.representations.idm.DocumentQueryRepresentation;
 import org.openfact.representations.idm.GenericDataRepresentation;
 import org.openfact.services.ErrorResponse;
 import org.openfact.services.ErrorResponseException;
+import org.openfact.services.util.SSOContext;
 import org.openfact.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.text.ParseException;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -45,6 +44,14 @@ public class SearchService {
 
     @Inject
     private ModelToRepresentation modelToRepresentation;
+
+    private UserModel getUserByIdentityID(String identityID) {
+        UserModel user = userProvider.getUserByIdentityID(identityID);
+        if (user == null) {
+            throw new NotFoundException();
+        }
+        return user;
+    }
 
     @GET
     @Path("spaces")
@@ -76,7 +83,9 @@ public class SearchService {
 
     @GET
     @Path("documents")
-    public Response searchDocuments(@QueryParam("q") String q) throws ErrorResponseException {
+    public Response searchDocuments(@Context HttpServletRequest httpServletRequest,
+                                    @QueryParam("q") String q) throws ErrorResponseException {
+        // Query
         DocumentQueryRepresentation query;
         try {
             query = new DocumentQueryRepresentation(q);
@@ -84,6 +93,26 @@ public class SearchService {
             return ErrorResponse.error("Bad query request", Response.Status.BAD_REQUEST);
         }
 
+        // User context
+        SSOContext ssoContext = new SSOContext(httpServletRequest);
+        AccessToken accessToken = ssoContext.getParsedAccessToken();
+        String kcUserID = (String) accessToken.getOtherClaims().get("userID");
+        UserModel user = getUserByIdentityID(kcUserID);
+
+        Set<SpaceModel> ownedSpaces = user.getOwnedSpaces();
+        Set<SpaceModel> collaboratedSpaces = user.getCollaboratedSpaces();
+
+        Set<String> allSpaces = new HashSet<>();
+        allSpaces.addAll(ownedSpaces.stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
+        allSpaces.addAll(collaboratedSpaces.stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
+        if (query.getSpaces() != null && !query.getSpaces().isEmpty()) {
+            allSpaces.retainAll(query.getSpaces());
+        }
+        if (allSpaces.isEmpty()) {
+            return Response.ok(new GenericDataRepresentation(new ArrayList<>())).build();
+        }
+
+        // ES
         QueryBuilder filterTextQuery;
         if (query.getFilterText() != null && !query.getFilterText().trim().isEmpty() && !query.getFilterText().trim().equals("*")) {
             filterTextQuery = QueryBuilders.multiMatchQuery(query.getFilterText(),
@@ -134,9 +163,27 @@ public class SearchService {
             }
         }
 
+        QueryBuilder roleQuery = null;
+        if (query.getRole() != null) {
+            switch (query.getRole()) {
+                case SENDER:
+                    roleQuery = QueryBuilders.termsQuery(DocumentModel.SUPPLIER_ASSIGNED_ID, allSpaces);
+                    break;
+                case RECEIVER:
+                    roleQuery = QueryBuilders.termsQuery(DocumentModel.CUSTOMER_ASSIGNED_ID, allSpaces);
+                    break;
+                default:
+                    throw new IllegalStateException("Invalid role:" + query.getRole());
+            }
+        }
+
+        QueryBuilder supplierQuery = QueryBuilders.termsQuery(DocumentModel.SUPPLIER_ASSIGNED_ID, allSpaces);
+        QueryBuilder customerQuery = QueryBuilders.termsQuery(DocumentModel.CUSTOMER_ASSIGNED_ID, allSpaces);
 
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
-                .must(filterTextQuery);
+                .must(filterTextQuery)
+                .should(supplierQuery)
+                .should(customerQuery);
         if (typeQuery != null) {
             boolQueryBuilder.filter(typeQuery);
         }
@@ -152,11 +199,29 @@ public class SearchService {
         if (issueDateQuery != null) {
             boolQueryBuilder.filter(issueDateQuery);
         }
+        if (roleQuery != null) {
+            boolQueryBuilder.must(roleQuery);
+        }
 
-        List<DocumentModel> documents = documentProvider.getDocuments("{\"query\":" + boolQueryBuilder.toString() + "}", true);
+        DocumentQueryModel documentQuery = DocumentQueryModel.builder()
+                .query("{\"query\":" + boolQueryBuilder.toString() + "}", true)
+                .orderBy(query.getOrderBy(), query.isAsc())
+                .offset(query.getOffset())
+                .limit(query.getLimit())
+                .build();
+        List<DocumentModel> documents = documentProvider.getDocuments(documentQuery);
+        int totalResults = documentProvider.getDocumentsSize(documentQuery);
+
+        // Meta
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("totalCount", totalResults);
+
+        // Links
+        Map<String, String> links = new HashMap<>();
+
         return Response.ok(new GenericDataRepresentation(documents.stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
-                .collect(Collectors.toList()))).build();
+                .collect(Collectors.toList()), links, meta)).build();
     }
 
 }

@@ -8,6 +8,44 @@ import java.util.*;
 
 public class DocumentQueryRepresentation {
 
+    /**
+     * Order by
+     */
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
+    /**
+     * Asc
+     */
+    public boolean isAsc() {
+        return asc;
+    }
+
+    public void setAsc(boolean asc) {
+        this.asc = asc;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
     public static enum SpaceRole {
         SENDER, RECEIVER
     }
@@ -58,6 +96,13 @@ public class DocumentQueryRepresentation {
      * Space filter
      */
     private Set<String> spaces;
+
+    private String orderBy;
+
+    private boolean asc;
+
+    private Integer offset;
+    private Integer limit;
 
     public String getFilterText() {
         return filterText;
@@ -163,11 +208,11 @@ public class DocumentQueryRepresentation {
         }
 
         if (split.get("types") != null) {
-            this.setTypes(new HashSet<String>(Arrays.asList(split.get("types").split(","))));
+            this.setTypes(new HashSet<>(Arrays.asList(split.get("types").split(","))));
         }
 
         if (split.get("currencies") != null) {
-            this.setCurrencies(new HashSet<String>(Arrays.asList(split.get("currencies").split(","))));
+            this.setCurrencies(new HashSet<>(Arrays.asList(split.get("currencies").split(","))));
         }
 
         if (split.get("after") != null) {
@@ -187,11 +232,25 @@ public class DocumentQueryRepresentation {
         }
 
         if (split.get("tags") != null) {
-            this.setTags(new HashSet<String>(Arrays.asList(split.get("tags").split(","))));
+            this.setTags(new HashSet<>(Arrays.asList(split.get("tags").split(","))));
         }
 
         if (split.get("spaces") != null) {
-            this.setSpaces(new HashSet<String>(Arrays.asList(split.get("spaces").split(","))));
+            this.setSpaces(new HashSet<>(Arrays.asList(split.get("spaces").split(","))));
+        }
+
+        if (split.get("orderBy") != null) {
+            this.setOrderBy(split.get("orderBy").trim());
+        }
+        if (split.get("asc") != null) {
+            this.setAsc(Boolean.parseBoolean(split.get("asc")));
+        }
+
+        if (split.get("offset") != null) {
+            this.setOffset(Integer.parseInt(split.get("offset").trim()));
+        }
+        if (split.get("limit") != null) {
+            this.setOffset(Integer.parseInt(split.get("limit").trim()));
         }
     }
 

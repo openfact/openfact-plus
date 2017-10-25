@@ -153,6 +153,13 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     }
 
     @Override
+    public Set<SpaceModel> getCollaboratedSpaces() {
+        return user.getCollaboratedSpaces().stream()
+                .map(f -> new SpaceAdapter(em, f.getSpace()))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
     public JsonNode getContextInformation() {
         return user.getContextInformation();
     }
