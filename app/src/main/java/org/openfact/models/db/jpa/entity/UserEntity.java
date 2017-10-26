@@ -97,7 +97,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Set<SpaceEntity> ownedSpaces = new HashSet<>();
 
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<CollaboratorEntity> collaboratedSpaces = new HashSet<>();
 
@@ -271,4 +270,11 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.linkedBrokers = linkedBrokers;
     }
 
+    public Set<CollaboratorEntity> getCollaboratedSpaces() {
+        return collaboratedSpaces;
+    }
+
+    public void setCollaboratedSpaces(Set<CollaboratorEntity> collaboratedSpaces) {
+        this.collaboratedSpaces = collaboratedSpaces;
+    }
 }
