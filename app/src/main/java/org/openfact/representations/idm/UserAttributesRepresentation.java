@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class UserAttributesRepresentation {
 
@@ -54,6 +55,10 @@ public class UserAttributesRepresentation {
 
     private String refreshToken;
     private JsonNode contextInformation;
+
+    private Set<String> favoriteSpaces;
+    private Set<String> ownedSpaces;
+    private Set<String> collaboratedSpaces;
 
     public String getUserID() {
         return userID;
@@ -189,5 +194,29 @@ public class UserAttributesRepresentation {
 
     public void setContextInformation(JsonNode contextInformation) {
         this.contextInformation = contextInformation;
+    }
+
+    public Set<String> getFavoriteSpaces() {
+        return favoriteSpaces;
+    }
+
+    public void setFavoriteSpaces(Set<String> favoriteSpaces) {
+        this.favoriteSpaces = favoriteSpaces;
+    }
+
+    public Set<String> getOwnedSpaces() {
+        return ownedSpaces;
+    }
+
+    public void setOwnedSpaces(Set<String> ownedSpaces) {
+        this.ownedSpaces = ownedSpaces;
+    }
+
+    public Set<String> getCollaboratedSpaces() {
+        return collaboratedSpaces;
+    }
+
+    public void setCollaboratedSpaces(Set<String> collaboratedSpaces) {
+        this.collaboratedSpaces = collaboratedSpaces;
     }
 }

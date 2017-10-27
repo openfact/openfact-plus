@@ -52,9 +52,10 @@ public class ModelToRepresentation {
         attributes.setCreatedAt(model.getCreatedAt());
         attributes.setUpdatedAt(model.getUpdatedAt());
 
-//        ContextInformationRepresentation contextInformation = new ContextInformationRepresentation();
         attributes.setContextInformation(model.getContextInformation());
-//        contextInformation.setRecentSpaces(model.getRecentSpaces());
+        attributes.setFavoriteSpaces(model.getFavoriteSpaces());
+        attributes.setOwnedSpaces(model.getOwnedSpaces().stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
+        attributes.setCollaboratedSpaces(model.getCollaboratedSpaces().stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
 
         rep.setAttributes(attributes);
         return rep;

@@ -24,6 +24,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -93,6 +94,12 @@ public class UsersService {
             JsonNode contextInformation = attributes.getContextInformation();
             if (contextInformation != null) {
                 user.setContextInformation(JacksonUtil.clone(JacksonUtil.merge(user.getContextInformation(), contextInformation)));
+            }
+
+            // Favorite Spaces
+            Set<String> favoriteSpaces = attributes.getFavoriteSpaces();
+            if (favoriteSpaces != null && !favoriteSpaces.isEmpty()) {
+                user.setFavoriteSpaces(favoriteSpaces);
             }
         }
 

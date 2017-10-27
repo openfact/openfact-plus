@@ -107,6 +107,11 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Set<UserLinkedBrokerEntity> linkedBrokers = new HashSet<>();
 
+    @ElementCollection
+    @Column(name="value")
+    @CollectionTable(name = "favorite_spaces", joinColumns={ @JoinColumn(name="user_id") })
+    private Set<String> favoriteSpaces = new HashSet<>();
+
     @Version
     @Column(name = "version")
     private int version;
@@ -276,5 +281,13 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     public void setCollaboratedSpaces(Set<CollaboratorEntity> collaboratedSpaces) {
         this.collaboratedSpaces = collaboratedSpaces;
+    }
+
+    public Set<String> getFavoriteSpaces() {
+        return favoriteSpaces;
+    }
+
+    public void setFavoriteSpaces(Set<String> favoriteSpaces) {
+        this.favoriteSpaces = favoriteSpaces;
     }
 }

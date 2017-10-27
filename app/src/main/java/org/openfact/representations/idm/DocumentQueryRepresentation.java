@@ -250,7 +250,7 @@ public class DocumentQueryRepresentation {
             this.setOffset(Integer.parseInt(split.get("offset").trim()));
         }
         if (split.get("limit") != null) {
-            this.setOffset(Integer.parseInt(split.get("limit").trim()));
+            this.setLimit(Integer.parseInt(split.get("limit").trim()));
         }
     }
 

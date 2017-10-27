@@ -9,6 +9,7 @@ import org.openfact.models.db.jpa.entity.UserEntity;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -162,6 +163,18 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public JsonNode getContextInformation() {
         return user.getContextInformation();
+    }
+
+    @Override
+    public Set<String> getFavoriteSpaces() {
+        Set<String> result = new HashSet<>();
+        result.addAll(user.getFavoriteSpaces());
+        return result;
+    }
+
+    @Override
+    public void setFavoriteSpaces(Set<String> spaces) {
+        user.setFavoriteSpaces(spaces);
     }
 
     @Override
