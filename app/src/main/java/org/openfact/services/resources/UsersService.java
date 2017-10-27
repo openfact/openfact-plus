@@ -101,6 +101,23 @@ public class UsersService {
             if (favoriteSpaces != null && !favoriteSpaces.isEmpty()) {
                 user.setFavoriteSpaces(favoriteSpaces);
             }
+
+            // Profile
+            if (attributes.getFullName() != null) {
+                user.setFullName(attributes.getFullName());
+            }
+            if(attributes.getCompany() != null) {
+                user.setCompany(attributes.getCompany());
+            }
+            if(attributes.getImageURL() != null) {
+                user.setImageURL(attributes.getImageURL());
+            }
+            if(attributes.getUrl() != null) {
+                user.setUrl(attributes.getUrl());
+            }
+            if(attributes.getBio() != null) {
+                user.setBio(attributes.getBio());
+            }
         }
 
         // Build result
@@ -128,65 +145,5 @@ public class UsersService {
         UserModel user = getUserByIdentityID(identityID);
         return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
     }
-
-//    @GET
-//    @Path("/{userId}/repositories")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<RepositoryRepresentation> getRepositories(@PathParam("userId") String userId) {
-//        UserModel user = getUser(userId);
-//
-//        return user.getRepositories().stream()
-//                .read(f -> modelToRepresentation.toRepresentation(f))
-//                .collect(Collectors.toList());
-//    }
-//
-//    @POST
-//    @Path("/{userId}/repositories")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public void refreshRepositories(@PathParam("userId") String userId) {
-//        UserModel user = getUser(userId);
-//
-//        userManager.refreshUserAvailableRepositories(user);
-//        userManager.syncUserRepositories(user);
-//    }
-//
-//    /**
-//     * Search spaces from user and getInstance back it to you.
-//     *
-//     * @return spaces from user
-//     */
-//    @GET
-//    @Path("/{userId}/spaces")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<SpaceRepresentation> getSpaces(@PathParam("userId") String userId) {
-//        UserModel user = getUser(userId);
-//
-//        Stream<SpaceRepresentation> sharedSpaces = user.getSharedSpaces().stream()
-//                .read(f -> modelToRepresentation.toRepresentation(f));
-//        Stream<SpaceRepresentation> ownedSpaces = user.getOwnedSpaces().stream()
-//                .read(f -> modelToRepresentation.toRepresentation(f, true));
-//
-//        return Stream.concat(ownedSpaces, sharedSpaces).collect(Collectors.toList());
-//    }
-//
-//    @POST
-//    @Path("/{userId}/spaces")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response createSpace(@PathParam("userId") String userId, final SpaceRepresentation rep) {
-//        UserModel user = getUser(userId);
-//
-//        SpaceModel space = spaceProvider.getByAssignedId(rep.getAssignedId());
-//        if (space == null) {
-//            // Claim space
-//            space = spaceProvider.addSpace(rep.getAssignedId(), user);
-//        } else {
-//            space.requestAccess(user, new HashSet<>(Collections.singletonList(PermissionType.READ)));
-//        }
-//
-//        URI location = uriInfo.getBaseUriBuilder().path(space.getId()).build();
-//        logger.debugv("space claimed success, sending back: {0}", location.toString());
-//
-//        return Response.status(Response.Status.CREATED).entity(modelToRepresentation.toRepresentation(space, false)).build();
-//    }
 
 }
