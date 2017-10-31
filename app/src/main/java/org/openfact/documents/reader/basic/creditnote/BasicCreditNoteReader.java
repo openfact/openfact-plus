@@ -45,11 +45,7 @@ public class BasicCreditNoteReader implements DocumentReader {
         documentEntity.setCurrency(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getCurrencyID());
         documentEntity.setAmount(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getValue().floatValue());
         documentEntity.setIssueDate(creditNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
-
-        Map<String, String> tags = new HashMap<>();
-        tags.put("reader", "basic");
-        documentEntity.setTags(tags);
-
+        
         return new GenericDocument() {
             @Override
             public DocumentEntity getEntity() {

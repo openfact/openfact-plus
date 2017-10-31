@@ -14,6 +14,7 @@ import org.openfact.files.exceptions.FileStorageException;
 import org.openfact.managers.DocumentManager;
 import org.openfact.representations.idm.DocumentRepresentation;
 import org.openfact.services.ErrorResponseException;
+import org.openfact.services.resources.utils.PATCH;
 import org.openfact.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
@@ -112,6 +113,24 @@ public class DocumentsService {
     @Produces(MediaType.APPLICATION_JSON)
     public DocumentRepresentation getDocument(@PathParam("documentId") String documentId) {
         DocumentModel document = getDocumentById(documentId);
+        return modelToRepresentation.toRepresentation(document, uriInfo).toSpaceRepresentation();
+    }
+
+    @PATCH
+    @Path("{documentId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public DocumentRepresentation updateDocument(@PathParam("documentId") String documentId, DocumentRepresentation documentRepresentation) {
+        DocumentModel document = getDocumentById(documentId);
+
+        DocumentRepresentation.Data data = documentRepresentation.getData();
+        DocumentRepresentation.Attributes attributes = data.getAttributes();
+
+        if (attributes.getStared() != null) {
+            document.setStared(attributes.getStared());
+        }
+        if (attributes.getTags() != null && !attributes.getTags().isEmpty()) {
+            document.setTags(attributes.getTags());
+        }
         return modelToRepresentation.toRepresentation(document, uriInfo).toSpaceRepresentation();
     }
 

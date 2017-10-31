@@ -49,10 +49,6 @@ public class PEInvoiceReader implements DocumentReader {
         documentEntity.setAmount(invoiceType.getLegalMonetaryTotal().getPayableAmount().getValue().floatValue());
         documentEntity.setIssueDate(invoiceType.getIssueDate().getValue().toGregorianCalendar().getTime());
 
-        Map<String, String> tags = new HashMap<>();
-        tags.put("reader", "peru");
-        documentEntity.setTags(tags);
-
         return new GenericDocument() {
             @Override
             public DocumentEntity getEntity() {

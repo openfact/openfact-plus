@@ -2,6 +2,7 @@ package org.openfact.documents;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 public interface DocumentModel {
 
@@ -41,7 +42,13 @@ public interface DocumentModel {
 
     String getCustomerAssignedId();
 
-    Map<String, String> getTags();
+    Set<String> getTags();
+
+    void setTags(Set<String> tags);
+
+    boolean isStared();
+
+    void setStared(boolean star);
 
     Date getCreatedAt();
 

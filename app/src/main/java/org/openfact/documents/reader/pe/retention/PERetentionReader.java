@@ -50,10 +50,6 @@ public class PERetentionReader implements DocumentReader {
         documentEntity.setAmount(retentionType.getSunatTotalPaid().getValue().floatValue());
         documentEntity.setIssueDate(retentionType.getIssueDate().getValue().toGregorianCalendar().getTime());
 
-        Map<String, String> tags = new HashMap<>();
-        tags.put("reader", "peru");
-        documentEntity.setTags(tags);
-
         return new GenericDocument() {
             @Override
             public DocumentEntity getEntity() {

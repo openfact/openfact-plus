@@ -49,10 +49,6 @@ public class PECreditNoteReader implements DocumentReader {
         documentEntity.setAmount(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getValue().floatValue());
         documentEntity.setIssueDate(creditNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
 
-        Map<String, String> tags = new HashMap<>();
-        tags.put("reader", "peru");
-        documentEntity.setTags(tags);
-
         return new GenericDocument() {
             @Override
             public DocumentEntity getEntity() {

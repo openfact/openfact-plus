@@ -45,11 +45,6 @@ public class PEVoidedDocumentsReader implements DocumentReader {
         documentEntity.setSupplierName(voidedDocumentsType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
         documentEntity.setIssueDate(voidedDocumentsType.getIssueDate().getValue().toGregorianCalendar().getTime());
 
-        Map<String, String> tags = new HashMap<>();
-        tags.put("reader", "peru");
-        documentEntity.setTags(tags);
-
-
         return new GenericDocument() {
             @Override
             public DocumentEntity getEntity() {

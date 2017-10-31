@@ -49,10 +49,6 @@ public class PEDebitNoteReader implements DocumentReader {
         documentEntity.setAmount(debitNoteType.getRequestedMonetaryTotal().getPayableAmount().getValue().floatValue());
         documentEntity.setIssueDate(debitNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
 
-        Map<String, String> tags = new HashMap<>();
-        tags.put("reader", "peru");
-        documentEntity.setTags(tags);
-
         return new GenericDocument() {
             @Override
             public DocumentEntity getEntity() {

@@ -155,6 +155,12 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "provider")
     private DocumentProviderType provider;
 
+    @Field(name = "stared")
+    @NotNull
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    @Column(name = "stared")
+    private boolean stared;
+
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
@@ -167,10 +173,9 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
 
     @IndexedEmbedded
     @ElementCollection
-    @MapKeyColumn(name = "name")
-    @Column(name = "value")
-    @CollectionTable(name = "document_tags", joinColumns = {@JoinColumn(name = "document_id")})
-    private Map<String, String> tags = new HashMap<>();
+    @Column(name="value")
+    @CollectionTable(name = "document_tags", joinColumns={ @JoinColumn(name="document_id") })
+    private Set<String> tags = new HashSet<>();
 
     public String getId() {
         return id;
@@ -286,13 +291,20 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.updatedAt = updatedAt;
     }
 
-    public Map<String, String> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
-    public void setTags(Map<String, String> tags) {
+    public void setTags(Set<String> tags) {
         this.tags = tags;
     }
 
+    public boolean isStared() {
+        return stared;
+    }
+
+    public void setStared(boolean stared) {
+        this.stared = stared;
+    }
 }
 

@@ -50,11 +50,6 @@ public class PEPerceptionReader implements DocumentReader {
         documentEntity.setAmount(perceptionType.getSunatTotalCashed().getValue().floatValue());
         documentEntity.setIssueDate(perceptionType.getIssueDate().getValue().toGregorianCalendar().getTime());
 
-        Map<String, String> tags = new HashMap<>();
-        tags.put("reader", "peru");
-        documentEntity.setTags(tags);
-
-
         return new GenericDocument() {
             @Override
             public DocumentEntity getEntity() {

@@ -89,10 +89,25 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public Map<String, String> getTags() {
-        Map<String, String> config = new HashMap<>();
-        config.putAll(document.getTags());
-        return Collections.unmodifiableMap(config);
+    public Set<String> getTags() {
+        Set<String> tags = new HashSet<>();
+        tags.addAll(document.getTags());
+        return Collections.unmodifiableSet(tags);
+    }
+
+    @Override
+    public void setTags(Set<String> tags) {
+        document.setTags(tags);
+    }
+
+    @Override
+    public boolean isStared() {
+        return document.isStared();
+    }
+
+    @Override
+    public void setStared(boolean star) {
+        document.setStared(star);
     }
 
     @Override

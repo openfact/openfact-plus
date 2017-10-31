@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public class DocumentRepresentation {
 
@@ -89,7 +89,8 @@ public class DocumentRepresentation {
         private String customerName;
         private String customerAssignedId;
         private String provider;
-        private Map<String, String> tags;
+        private Boolean stared;
+        private Set<String> tags;
 
 
         @JsonProperty("created-at")
@@ -122,11 +123,11 @@ public class DocumentRepresentation {
             this.type = type;
         }
 
-        public Map<String, String> getTags() {
+        public Set<String> getTags() {
             return tags;
         }
 
-        public void setTags(Map<String, String> tags) {
+        public void setTags(Set<String> tags) {
             this.tags = tags;
         }
 
@@ -208,6 +209,14 @@ public class DocumentRepresentation {
 
         public void setProvider(String provider) {
             this.provider = provider;
+        }
+
+        public Boolean getStared() {
+            return stared;
+        }
+
+        public void setStared(Boolean stared) {
+            this.stared = stared;
         }
     }
 
