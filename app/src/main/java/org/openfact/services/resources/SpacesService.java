@@ -9,6 +9,7 @@ import org.openfact.representations.idm.SpaceRepresentation;
 import org.openfact.representations.idm.TypedGenericDataRepresentation;
 import org.openfact.representations.idm.UserRepresentation;
 import org.openfact.services.ErrorResponseException;
+import org.openfact.services.resources.utils.PATCH;
 import org.openfact.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
@@ -80,6 +81,24 @@ public class SpacesService {
     @Produces(MediaType.APPLICATION_JSON)
     public SpaceRepresentation getSpace(@PathParam("spaceId") String spaceId) {
         SpaceModel space = getSpaceById(spaceId);
+        return modelToRepresentation.toRepresentation(space, uriInfo).toSpaceRepresentation();
+    }
+
+    @PATCH
+    @Path("{spaceId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public SpaceRepresentation updateSpace(@PathParam("spaceId") String spaceId, SpaceRepresentation spaceRepresentation) {
+        SpaceModel space = getSpaceById(spaceId);
+
+        SpaceRepresentation.Data data = spaceRepresentation.getData();
+        SpaceRepresentation.Attributes attributes = data.getAttributes();
+        if (attributes.getName() != null) {
+            space.setName(attributes.getName());
+        }
+        if (attributes.getDescription() != null) {
+            space.setDescription(attributes.getDescription());
+        }
+
         return modelToRepresentation.toRepresentation(space, uriInfo).toSpaceRepresentation();
     }
 
