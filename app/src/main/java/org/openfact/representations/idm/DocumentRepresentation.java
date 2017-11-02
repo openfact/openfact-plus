@@ -89,7 +89,7 @@ public class DocumentRepresentation {
         private String customerName;
         private String customerAssignedId;
         private String provider;
-        private Boolean stared;
+        private Boolean starred;
         private Set<String> tags;
 
 
@@ -211,12 +211,12 @@ public class DocumentRepresentation {
             this.provider = provider;
         }
 
-        public Boolean getStared() {
-            return stared;
+        public Boolean getStarred() {
+            return starred;
         }
 
-        public void setStared(Boolean stared) {
-            this.stared = stared;
+        public void setStarred(Boolean starred) {
+            this.starred = starred;
         }
     }
 

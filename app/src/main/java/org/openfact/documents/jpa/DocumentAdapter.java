@@ -3,13 +3,10 @@ package org.openfact.documents.jpa;
 import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentProviderType;
 import org.openfact.documents.jpa.entity.DocumentEntity;
-import org.openfact.models.SpaceModel;
 import org.openfact.models.db.JpaModel;
-import org.openfact.models.db.jpa.SpaceAdapter;
 
 import javax.persistence.EntityManager;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> {
 
@@ -101,13 +98,13 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public boolean isStared() {
-        return document.isStared();
+    public boolean isStarred() {
+        return document.isStarred();
     }
 
     @Override
-    public void setStared(boolean star) {
-        document.setStared(star);
+    public void setStarred(boolean starred) {
+        document.setStarred(starred);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class BasicCreditNoteReader implements DocumentReader {
         documentEntity.setCurrency(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getCurrencyID());
         documentEntity.setAmount(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getValue().floatValue());
         documentEntity.setIssueDate(creditNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
-        
+
         return new GenericDocument() {
             @Override
             public DocumentEntity getEntity() {

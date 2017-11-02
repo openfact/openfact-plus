@@ -155,11 +155,11 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "provider")
     private DocumentProviderType provider;
 
-    @Field(name = "stared")
+    @Field(name = "starred")
     @NotNull
     @Type(type = "org.hibernate.type.NumericBooleanType")
-    @Column(name = "stared")
-    private boolean stared;
+    @Column(name = "starred")
+    private boolean starred;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -299,12 +299,12 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.tags = tags;
     }
 
-    public boolean isStared() {
-        return stared;
+    public boolean isStarred() {
+        return starred;
     }
 
-    public void setStared(boolean stared) {
-        this.stared = stared;
+    public void setStarred(boolean stared) {
+        this.starred = stared;
     }
 }
 

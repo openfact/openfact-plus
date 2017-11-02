@@ -13,9 +13,7 @@ import org.openfact.services.resources.UsersService;
 import javax.ejb.Stateless;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -169,7 +167,7 @@ public class ModelToRepresentation {
         attributes.setCustomerName(model.getCustomerName());
         attributes.setCustomerAssignedId(model.getCustomerAssignedId());
         attributes.setProvider(model.getProvider().toString());
-        attributes.setStared(model.isStared());
+        attributes.setStarred(model.isStarred());
         attributes.setTags(new HashSet<>(model.getTags()));
         attributes.setCreatedAt(model.getCreatedAt());
         attributes.setUpdatedAt(model.getUpdatedAt());

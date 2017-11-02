@@ -46,6 +46,14 @@ public class DocumentQueryRepresentation {
         this.limit = limit;
     }
 
+    public Boolean getStarred() {
+        return starred;
+    }
+
+    public void setStarred(Boolean starred) {
+        this.starred = starred;
+    }
+
     public static enum SpaceRole {
         SENDER, RECEIVER
     }
@@ -103,6 +111,8 @@ public class DocumentQueryRepresentation {
 
     private Integer offset;
     private Integer limit;
+
+    private Boolean starred;
 
     public String getFilterText() {
         return filterText;
@@ -251,6 +261,10 @@ public class DocumentQueryRepresentation {
         }
         if (split.get("limit") != null) {
             this.setLimit(Integer.parseInt(split.get("limit").trim()));
+        }
+
+        if (split.get("starred") != null) {
+            this.setStarred(Boolean.parseBoolean(split.get("starred").trim()));
         }
     }
 

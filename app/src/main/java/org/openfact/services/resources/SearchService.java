@@ -141,6 +141,11 @@ public class SearchService {
             tagSQuery = QueryBuilders.termsQuery(DocumentModel.TAGS, query.getTags());
         }
 
+        QueryBuilder starQuery = null;
+        if (query.getStarred() != null) {
+            starQuery = QueryBuilders.termQuery(DocumentModel.STARRED, query.getStarred());
+        }
+
         RangeQueryBuilder amountQuery = null;
         if (query.getGreaterThan() != null || query.getLessThan() != null) {
             amountQuery = QueryBuilders.rangeQuery(DocumentModel.AMOUNT);
@@ -192,6 +197,9 @@ public class SearchService {
         }
         if (tagSQuery != null) {
             boolQueryBuilder.filter(tagSQuery);
+        }
+        if (starQuery != null) {
+            boolQueryBuilder.filter(starQuery);
         }
         if (amountQuery != null) {
             boolQueryBuilder.filter(amountQuery);

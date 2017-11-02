@@ -19,6 +19,7 @@ public interface DocumentModel {
     String AMOUNT = "amount";
 
     String TAGS = "tags";
+    String STARRED = "starred";
 
     String getId();
 
@@ -46,9 +47,9 @@ public interface DocumentModel {
 
     void setTags(Set<String> tags);
 
-    boolean isStared();
+    boolean isStarred();
 
-    void setStared(boolean star);
+    void setStarred(boolean starred);
 
     Date getCreatedAt();
 

@@ -125,8 +125,8 @@ public class DocumentsService {
         DocumentRepresentation.Data data = documentRepresentation.getData();
         DocumentRepresentation.Attributes attributes = data.getAttributes();
 
-        if (attributes.getStared() != null) {
-            document.setStared(attributes.getStared());
+        if (attributes.getStarred() != null) {
+            document.setStarred(attributes.getStarred());
         }
         if (attributes.getTags() != null && !attributes.getTags().isEmpty()) {
             document.setTags(attributes.getTags());
