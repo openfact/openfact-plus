@@ -12,7 +12,13 @@ import org.openfact.documents.exceptions.UnsupportedDocumentTypeException;
 import org.openfact.files.exceptions.FileFetchException;
 import org.openfact.files.exceptions.FileStorageException;
 import org.openfact.managers.DocumentManager;
+import org.openfact.reports.ExportFormat;
+import org.openfact.reports.ReportTemplateConfiguration;
+import org.openfact.reports.ReportTemplateProvider;
+import org.openfact.reports.exceptions.ReportException;
+import org.openfact.representations.idm.DocumentReportQueryRepresentation;
 import org.openfact.representations.idm.DocumentRepresentation;
+import org.openfact.services.ErrorResponse;
 import org.openfact.services.ErrorResponseException;
 import org.openfact.services.resources.utils.PATCH;
 import org.openfact.utils.ModelToRepresentation;
@@ -43,6 +49,9 @@ public class DocumentsService {
 
     @Inject
     private ModelToRepresentation modelToRepresentation;
+
+    @Inject
+    private ReportTemplateProvider reportTemplateProvider;
 
     private DocumentModel getDocumentById(String documentId) {
         DocumentModel ublDocument = documentProvider.getDocument(documentId);
@@ -140,6 +149,41 @@ public class DocumentsService {
     public void deleteDocument(@PathParam("documentId") String documentId) {
         DocumentModel ublDocument = getDocumentById(documentId);
         documentManager.removeDocument(ublDocument);
+    }
+
+    @POST
+    @Path("/{documentId}/report")
+    public Response getPdf(@PathParam("documentId") String documentId, DocumentReportQueryRepresentation query) {
+        if (query.getFormat() == null) {
+            query.setFormat("PDF");
+        }
+        ExportFormat exportFormat = ExportFormat.valueOf(query.getFormat().toUpperCase());
+
+        DocumentModel document = getDocumentById(documentId);
+        ReportTemplateConfiguration reportConfig = ReportTemplateConfiguration.builder()
+                .themeName(query.getFormat())
+                .addAllAttributes(query.getAttributes())
+                .build();
+
+        byte[] reportBytes;
+        try {
+            reportBytes = reportTemplateProvider.getReport(reportConfig, document, exportFormat);
+        } catch (ReportException | FileFetchException e) {
+            return ErrorResponse.error("Could not generate report, please try again", Response.Status.INTERNAL_SERVER_ERROR);
+        }
+
+        Response.ResponseBuilder response = Response.ok(reportBytes);
+        switch (exportFormat) {
+            case PDF:
+                response.type("application/pdf");
+                response.header("Content-Disposition", "attachment; filename=\"" + document.getAssignedId() + ".pdf\"");
+                break;
+            case HTML:
+                response.type("application/html");
+                break;
+        }
+
+        return response.build();
     }
 
 }
