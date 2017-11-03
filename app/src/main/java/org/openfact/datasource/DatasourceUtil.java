@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 
 @Stateless
-public class DatasourceUtils {
+public class DatasourceUtil {
 
     @Inject
     @Any

@@ -68,7 +68,7 @@
         </repository>
     </distributionManagement>
 
-   <!--<repositories>-->
+   <repositories>
        <!--<repository>-->
            <!--<id>sonatype.snapshots</id>-->
            <!--<name>Apache Development Snapshot Repository</name>-->
@@ -80,7 +80,19 @@
                <!--<enabled>true</enabled>-->
            <!--</snapshots>-->
        <!--</repository>-->
-   <!--</repositories>-->
+
+       <!--Jasper reports-->
+       <repository>
+           <id>jasper</id>
+           <url>http://jaspersoft.artifactoryonline.com/jaspersoft/jaspersoft-repo/</url>
+           <releases>
+               <enabled>true</enabled>
+           </releases>
+           <snapshots>
+               <enabled>false</enabled>
+           </snapshots>
+       </repository>
+   </repositories>
 
     <modules>
         <module>app</module>
