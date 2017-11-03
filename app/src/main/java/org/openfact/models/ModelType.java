@@ -8,7 +8,9 @@ public enum ModelType {
 
     USER("user"),
 
-    UBL_DOCUMENT("ubl-document");
+    UBL_DOCUMENT("ubl-document"),
+
+    THEMES("themes");
 
     private String alias;
 
