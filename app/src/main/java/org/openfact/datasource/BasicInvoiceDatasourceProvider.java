@@ -9,7 +9,7 @@ import org.openfact.datasource.beans.InvoiceBean;
 import javax.ejb.Stateless;
 
 @Stateless
-@DatasourceType(region = "basic", documentType = "Invoice")
+@DatasourceType(datasource = "BasicInvoiceDS")
 public class BasicInvoiceDatasourceProvider implements DatasourceProvider {
 
     @Override

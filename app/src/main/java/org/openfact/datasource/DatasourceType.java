@@ -8,7 +8,5 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE})
 @Documented
 public @interface DatasourceType {
-    String region();
-
-    String documentType();
+    String datasource();
 }

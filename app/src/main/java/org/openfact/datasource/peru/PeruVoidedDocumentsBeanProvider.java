@@ -1,6 +1,5 @@
 package org.openfact.datasource.peru;
 
-
 import org.openfact.files.*;
 import org.openfact.files.exceptions.FileFetchException;
 import org.openfact.models.utils.OpenfactModelUtils;
@@ -13,7 +12,7 @@ import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
 
 @Stateless
-@DatasourceType(region = "peru", documentType = "VoidedDocuments")
+@DatasourceType(datasource = "PeruVoidedDocumentsDS")
 public class PeruVoidedDocumentsBeanProvider implements DatasourceProvider {
 
     @Override

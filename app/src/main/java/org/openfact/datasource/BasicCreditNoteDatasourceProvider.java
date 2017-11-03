@@ -9,7 +9,7 @@ import org.openfact.datasource.beans.CreditNoteBean;
 import javax.ejb.Stateless;
 
 @Stateless
-@DatasourceType(region = "basic", documentType = "CreditNote")
+@DatasourceType(datasource = "BasicCreditNoteDS")
 public class BasicCreditNoteDatasourceProvider implements DatasourceProvider {
 
     @Override

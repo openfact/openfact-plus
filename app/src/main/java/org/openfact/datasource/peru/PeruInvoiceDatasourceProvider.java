@@ -13,7 +13,7 @@ import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
 
 @Stateless
-@DatasourceType(region = "peru", documentType = "Invoice")
+@DatasourceType(datasource = "PeruInvoiceDS")
 public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
 
     @Override

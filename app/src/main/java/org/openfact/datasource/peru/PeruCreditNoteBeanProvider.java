@@ -12,7 +12,7 @@ import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
 
 @Stateless
-@DatasourceType(region = "peru", documentType = "CreditNote")
+@DatasourceType(datasource = "PeruCreditNoteDS")
 public class PeruCreditNoteBeanProvider implements DatasourceProvider {
 
     @Override

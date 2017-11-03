@@ -13,8 +13,8 @@ public class DatasourceUtils {
     @Any
     private Instance<DatasourceProvider> datasourceProviders;
 
-    public DatasourceProvider getDatasourceProvider(String documentType, String region) {
-        Annotation annotation = new DatasourceTypeLiteral(documentType, region);
+    public DatasourceProvider getDatasourceProvider(String datasource) {
+        Annotation annotation = new DatasourceTypeLiteral(datasource);
         Instance<DatasourceProvider> instance = datasourceProviders.select(annotation);
         if (instance.isAmbiguous() || instance.isUnsatisfied()) {
             return null;

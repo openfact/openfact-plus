@@ -9,7 +9,7 @@ import org.openfact.datasource.beans.DebitNoteBean;
 import javax.ejb.Stateless;
 
 @Stateless
-@DatasourceType(region = "basic", documentType = "DebitNote")
+@DatasourceType(datasource = "BasicDebitNoteDS")
 public class BasicDebitNoteDatasourceProvider implements DatasourceProvider {
 
     @Override
