@@ -11,8 +11,6 @@ import sunat.names.specification.ubl.peru.schema.xsd.summarydocuments_1.SummaryD
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Stateless
 @SupportedType(value = "SummaryDocuments")

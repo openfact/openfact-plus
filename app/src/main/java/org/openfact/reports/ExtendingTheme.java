@@ -1,7 +1,5 @@
 package org.openfact.reports;
 
-import org.openfact.services.resources.ThemesService;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;

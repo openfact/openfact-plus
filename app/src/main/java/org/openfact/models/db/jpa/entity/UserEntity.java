@@ -108,8 +108,8 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     private Set<UserLinkedBrokerEntity> linkedBrokers = new HashSet<>();
 
     @ElementCollection
-    @Column(name="value")
-    @CollectionTable(name = "favorite_spaces", joinColumns={ @JoinColumn(name="user_id") })
+    @Column(name = "value")
+    @CollectionTable(name = "favorite_spaces", joinColumns = {@JoinColumn(name = "user_id")})
     private Set<String> favoriteSpaces = new HashSet<>();
 
     @Version

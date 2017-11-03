@@ -10,8 +10,6 @@ import org.openfact.documents.reader.SupportedType;
 import org.openfact.files.XmlUBLFileModel;
 
 import javax.ejb.Stateless;
-import java.util.HashMap;
-import java.util.Map;
 
 @Stateless
 @SupportedType(value = "CreditNote")

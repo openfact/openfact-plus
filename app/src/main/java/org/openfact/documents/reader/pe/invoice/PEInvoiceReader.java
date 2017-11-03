@@ -11,8 +11,6 @@ import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Stateless
 @SupportedType(value = "Invoice")

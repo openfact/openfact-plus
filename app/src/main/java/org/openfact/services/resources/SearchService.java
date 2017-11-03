@@ -1,6 +1,9 @@
 package org.openfact.services.resources;
 
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.keycloak.representations.AccessToken;
 import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentProvider;

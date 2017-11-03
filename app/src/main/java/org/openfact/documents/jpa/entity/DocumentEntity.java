@@ -15,7 +15,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Indexed
@@ -173,8 +175,8 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
 
     @IndexedEmbedded
     @ElementCollection
-    @Column(name="value")
-    @CollectionTable(name = "document_tags", joinColumns={ @JoinColumn(name="document_id") })
+    @Column(name = "value")
+    @CollectionTable(name = "document_tags", joinColumns = {@JoinColumn(name = "document_id")})
     private Set<String> tags = new HashSet<>();
 
     public String getId() {

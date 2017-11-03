@@ -106,16 +106,16 @@ public class UsersService {
             if (attributes.getFullName() != null) {
                 user.setFullName(attributes.getFullName());
             }
-            if(attributes.getCompany() != null) {
+            if (attributes.getCompany() != null) {
                 user.setCompany(attributes.getCompany());
             }
-            if(attributes.getImageURL() != null) {
+            if (attributes.getImageURL() != null) {
                 user.setImageURL(attributes.getImageURL());
             }
-            if(attributes.getUrl() != null) {
+            if (attributes.getUrl() != null) {
                 user.setUrl(attributes.getUrl());
             }
-            if(attributes.getBio() != null) {
+            if (attributes.getBio() != null) {
                 user.setBio(attributes.getBio());
             }
         }
