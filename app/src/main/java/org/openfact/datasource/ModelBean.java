@@ -2,7 +2,7 @@ package org.openfact.datasource;
 
 import java.util.Date;
 
-public class BaseBean {
+public class ModelBean {
 
     private String id;
     private String type;

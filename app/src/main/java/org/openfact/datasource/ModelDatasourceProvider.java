@@ -7,8 +7,8 @@ import org.openfact.files.exceptions.FileFetchException;
 import javax.ejb.Stateless;
 
 @Stateless
-@DatasourceType(datasource = "BaseDS")
-public class BaseDatasourceProvider implements DatasourceProvider {
+@DatasourceType(datasource = "ModelDS")
+public class ModelDatasourceProvider implements DatasourceProvider {
 
     @Override
     public boolean support(DocumentModel document, XmlFileModel file) throws FileFetchException {
@@ -17,7 +17,7 @@ public class BaseDatasourceProvider implements DatasourceProvider {
 
     @Override
     public Object getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
-        BaseBean bean = new BaseBean();
+        ModelBean bean = new ModelBean();
         bean.setId(document.getId());
         bean.setType(document.getType());
         bean.setAssignedId(document.getAssignedId());

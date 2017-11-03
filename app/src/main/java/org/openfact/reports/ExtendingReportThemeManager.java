@@ -36,7 +36,7 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
 
     @PostConstruct
     public void init() {
-        this.defaultTheme = "base";
+        this.defaultTheme = "openfact";
         loadProviders();
 
         themeCache = new ConcurrentHashMap<>();
@@ -67,10 +67,7 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
             if (theme == null) {
                 theme = loadTheme(type, name);
                 if (theme == null) {
-                    theme = loadTheme(type, "openfact");
-                    if (theme == null) {
-                        theme = loadTheme(type, "base");
-                    }
+                    theme = loadTheme("common", "openfact");
                     log.errorv("Failed to find {0} report theme {1}, using built-in report themes", type, name);
                 } else if (themeCache.putIfAbsent(key, theme) != null) {
                     theme = themeCache.get(key);

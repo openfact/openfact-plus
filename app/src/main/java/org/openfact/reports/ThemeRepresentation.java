@@ -4,7 +4,6 @@ public class ThemeRepresentation {
 
     private String type;
     private String name;
-    private String datasource;
 
     public String getName() {
         return name;
@@ -20,13 +19,5 @@ public class ThemeRepresentation {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getDatasource() {
-        return datasource;
-    }
-
-    public void setDatasource(String datasource) {
-        this.datasource = datasource;
     }
 }

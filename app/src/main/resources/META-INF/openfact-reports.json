@@ -1,0 +1,12 @@
+{
+  "themes": [
+    {
+      "type": "invoice",
+      "name": "openfact"
+    },
+    {
+      "type": "creditnote",
+      "name": "openfact"
+    }
+  ]
+}
