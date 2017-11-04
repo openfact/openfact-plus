@@ -61,7 +61,7 @@ public class DefaultEmailSenderProvider implements EmailSenderProvider {
         Transport transport = null;
         try {
             String address = retrieveEmailAddress(user);
-            Map<String, String> config = organization.getSmtpConfig();
+            Map<String, String> config = null;
 
             Properties props = new Properties();
             props.setProperty("mail.smtp.host", config.get("host"));
