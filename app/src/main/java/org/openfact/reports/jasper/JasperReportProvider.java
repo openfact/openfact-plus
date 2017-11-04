@@ -78,9 +78,11 @@ public class JasperReportProvider implements ReportTemplateProvider {
     @Override
     public byte[] getReport(ReportTemplateConfiguration config, DocumentModel document, ExportFormat exportFormat) throws FileFetchException, ReportException {
         try {
-            ReportTheme theme = themeProvider.getTheme(document.getType(), config.getThemeName());
-            XmlFileModel file = new FlyWeightXmlFileModel(new FlyWeightFileModel(fileProvider.getFile(document.getFileId())));
+            String themeType = document.getType().toLowerCase();
+            String themeName = config.getThemeName() != null ? config.getThemeName().toLowerCase() : null;
+            ReportTheme theme = themeProvider.getTheme(themeType, themeName);
 
+            XmlFileModel file = new FlyWeightXmlFileModel(new FlyWeightFileModel(fileProvider.getFile(document.getFileId())));
             DatasourceProvider datasourceProvider = datasourceUtil.getDatasourceProvider(theme.getDatasource());
             Object bean = datasourceProvider.getDatasource(document, file);
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(Collections.singletonList(bean));

@@ -67,7 +67,7 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
             if (theme == null) {
                 theme = loadTheme(type, name);
                 if (theme == null) {
-                    theme = loadTheme("common", "openfact");
+                    theme = loadTheme("model", "openfact");
                     log.errorv("Failed to find {0} report theme {1}, using built-in report themes", type, name);
                 } else if (themeCache.putIfAbsent(key, theme) != null) {
                     theme = themeCache.get(key);

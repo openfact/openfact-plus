@@ -1,12 +1,28 @@
 {
-  "themes": [
-    {
+  "themes": [{
+      "type": "base",
+      "name": "model"
+    }, {
+      "type": "model",
+      "name": "openfact"
+    }, {
+      "type": "base",
+      "name": "invoice"
+    }, {
+      "type": "base",
+      "name": "creditnote"
+    }, {
       "type": "invoice",
-      "name": "openfact"
-    },
-    {
+      "name": "material"
+    }, {
+      "type": "invoice",
+      "name": "sunat"
+    }, {
       "type": "creditnote",
-      "name": "openfact"
+      "name": "material"
+    }, {
+      "type": "creditnote",
+      "name": "sunat"
     }
   ]
 }

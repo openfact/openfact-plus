@@ -9,6 +9,8 @@ import org.openfact.documents.DocumentProviderType;
 import org.openfact.documents.exceptions.PreexistedDocumentException;
 import org.openfact.documents.exceptions.UnreadableDocumentException;
 import org.openfact.documents.exceptions.UnsupportedDocumentTypeException;
+import org.openfact.files.FileModel;
+import org.openfact.files.FileProvider;
 import org.openfact.files.exceptions.FileFetchException;
 import org.openfact.files.exceptions.FileStorageException;
 import org.openfact.managers.DocumentManager;
@@ -40,6 +42,9 @@ public class DocumentsService {
 
     @Context
     private UriInfo uriInfo;
+
+    @Inject
+    private FileProvider fileProvider;
 
     @Inject
     private DocumentProvider documentProvider;
@@ -151,18 +156,17 @@ public class DocumentsService {
         documentManager.removeDocument(ublDocument);
     }
 
-    @POST
+    @GET
     @Path("/{documentId}/report")
-    public Response getPdf(@PathParam("documentId") String documentId, DocumentReportQueryRepresentation query) {
-        if (query.getFormat() == null) {
-            query.setFormat("PDF");
-        }
-        ExportFormat exportFormat = ExportFormat.valueOf(query.getFormat().toUpperCase());
+    public Response getPdf(
+            @PathParam("documentId") String documentId,
+            @QueryParam("theme") String theme,
+            @QueryParam("format") @DefaultValue("PDF") String format) {
+        ExportFormat exportFormat = ExportFormat.valueOf(format.toUpperCase());
 
         DocumentModel document = getDocumentById(documentId);
         ReportTemplateConfiguration reportConfig = ReportTemplateConfiguration.builder()
-                .themeName(query.getFormat())
-                .addAllAttributes(query.getAttributes())
+                .themeName(theme)
                 .build();
 
         byte[] reportBytes;
@@ -183,6 +187,26 @@ public class DocumentsService {
                 break;
         }
 
+        return response.build();
+    }
+
+    @GET
+    @Path("/{documentId}/xml")
+    @Produces("application/xml")
+    public Response getXml(@PathParam("documentId") String documentId) {
+        DocumentModel document = getDocumentById(documentId);
+
+        FileModel file = fileProvider.getFile(document.getFileId());
+
+        byte[] reportBytes;
+        try {
+            reportBytes = file.getFile();
+        } catch (FileFetchException e) {
+            return ErrorResponse.error("Could not fetch file, please try again", Response.Status.INTERNAL_SERVER_ERROR);
+        }
+
+        Response.ResponseBuilder response = Response.ok(reportBytes);
+        response.header("Content-Disposition", "attachment; filename=\"" + document.getAssignedId() + ".xml\"");
         return response.build();
     }
 
