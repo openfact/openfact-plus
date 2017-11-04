@@ -18,7 +18,6 @@ import org.openfact.reports.ExportFormat;
 import org.openfact.reports.ReportTemplateConfiguration;
 import org.openfact.reports.ReportTemplateProvider;
 import org.openfact.reports.exceptions.ReportException;
-import org.openfact.representations.idm.DocumentReportQueryRepresentation;
 import org.openfact.representations.idm.DocumentRepresentation;
 import org.openfact.services.ErrorResponse;
 import org.openfact.services.ErrorResponseException;
