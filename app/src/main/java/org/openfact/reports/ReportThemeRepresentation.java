@@ -1,6 +1,6 @@
 package org.openfact.reports;
 
-public class ThemeRepresentation {
+public class ReportThemeRepresentation {
 
     private String type;
     private String name;

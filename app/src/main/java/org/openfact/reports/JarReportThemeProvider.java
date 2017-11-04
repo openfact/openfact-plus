@@ -59,9 +59,9 @@ public class JarReportThemeProvider implements ReportThemeProvider {
 
     protected void loadThemes(ClassLoader classLoader, InputStream themesInputStream) {
         try {
-            ThemesRepresentation themesRep = JsonSerialization.readValue(themesInputStream, ThemesRepresentation.class);
+            ReportThemesRepresentation themesRep = JsonSerialization.readValue(themesInputStream, ReportThemesRepresentation.class);
 
-            for (ThemeRepresentation themeRep : themesRep.getThemes()) {
+            for (ReportThemeRepresentation themeRep : themesRep.getThemes()) {
                 String type = themeRep.getType();
                 if (!themes.containsKey(type)) {
                     themes.put(type, new HashMap<>());

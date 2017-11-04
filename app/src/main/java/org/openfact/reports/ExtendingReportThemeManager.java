@@ -26,7 +26,7 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
     private static final Logger log = Logger.getLogger(ExtendingReportThemeManager.class);
 
     private String defaultTheme;
-    private ConcurrentHashMap<ThemeKey, ReportTheme> themeCache;
+    private ConcurrentHashMap<ReportThemeKey, ReportTheme> themeCache;
     private CopyOnWriteArrayList<ReportThemeProvider> providers;
 
     @Inject
@@ -62,7 +62,7 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
         }
 
         if (themeCache != null) {
-            ThemeKey key = ThemeKey.get(name);
+            ReportThemeKey key = ReportThemeKey.get(name);
             ReportTheme theme = themeCache.get(key);
             if (theme == null) {
                 theme = loadTheme(type, name);
@@ -102,7 +102,7 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
                 }
             }
 
-            return new ExtendingTheme(themes);
+            return new ExtendingReportTheme(themes);
         } else {
             return theme;
         }

@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ExtendingTheme implements ReportTheme {
+public class ExtendingReportTheme implements ReportTheme {
 
     private List<ReportTheme> themes;
 
@@ -17,7 +17,7 @@ public class ExtendingTheme implements ReportTheme {
 
     private ConcurrentHashMap<String, ConcurrentHashMap<Locale, Properties>> messages = new ConcurrentHashMap<>();
 
-    public ExtendingTheme(List<ReportTheme> themes) {
+    public ExtendingReportTheme(List<ReportTheme> themes) {
         this.themes = themes;
     }
 
@@ -94,13 +94,13 @@ public class ExtendingTheme implements ReportTheme {
     @Override
     public URL getImagePreview() throws IOException {
         URL url = getResource(ReportTheme.PREVIEW_IMG_NAME);
-        return url != null ? url : ExtendingTheme.class.getResource("/images/defaultReportThemePreview.png");
+        return url != null ? url : ExtendingReportTheme.class.getResource("/images/defaultReportThemePreview.png");
     }
 
     @Override
     public InputStream getImagePreviewAsStream() throws IOException {
         InputStream is = getResourceAsStream(ReportTheme.PREVIEW_IMG_NAME);
-        return is != null ? is : ExtendingTheme.class.getResource("/images/defaultReportThemePreview.png").openStream();
+        return is != null ? is : ExtendingReportTheme.class.getResource("/images/defaultReportThemePreview.png").openStream();
     }
 
     @Override

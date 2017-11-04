@@ -1,14 +1,14 @@
 package org.openfact.reports;
 
-public class ThemeKey {
+public class ReportThemeKey {
 
     private String name;
 
-    public static ThemeKey get(String name) {
-        return new ThemeKey(name);
+    public static ReportThemeKey get(String name) {
+        return new ReportThemeKey(name);
     }
 
-    private ThemeKey(String name) {
+    private ReportThemeKey(String name) {
         this.name = name;
     }
 
@@ -25,7 +25,7 @@ public class ThemeKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ThemeKey themeKey = (ThemeKey) o;
+        ReportThemeKey themeKey = (ReportThemeKey) o;
 
         if (name != null ? !name.equals(themeKey.name) : themeKey.name != null) return false;
 
