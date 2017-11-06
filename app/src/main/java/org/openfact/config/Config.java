@@ -2,10 +2,10 @@ package org.openfact.config;
 
 import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.Singleton;
 import javax.inject.Inject;
 
-@ApplicationScoped
+@Singleton
 public class Config {
 
     private OpenfactConfig openfactConfig;
@@ -87,6 +87,43 @@ public class Config {
     @ConfigurationValue("openfact.mail.smtp.password")
     private String smtpPassword;
 
+    /**
+     * Gmail config
+     */
+    @Inject
+    @ConfigurationValue("openfact.mail.vendor.gmail.applicationName")
+    private String gmailApplicationName;
+
+    @Inject
+    @ConfigurationValue("openfact.mail.vendor.gmail.batchSize")
+    private Integer gmailBatchSize;
+
+    /**
+     * File Storage
+     */
+    @Inject
+    @ConfigurationValue("openfact.fileStorage.provider")
+    private String fileStorageProvider;
+
+    /**
+     * Truststore
+     */
+    @Inject
+    @ConfigurationValue("openfact.truststore.file.file")
+    private String truststoreFile;
+
+    @Inject
+    @ConfigurationValue("openfact.truststore.file.password")
+    private String truststoreFilePassword;
+
+    @Inject
+    @ConfigurationValue("openfact.truststore.file.hostname-verification-policy")
+    private String truststoreFileHostnameVerificationPolicy;
+
+    @Inject
+    @ConfigurationValue("openfact.truststore.file.disabled")
+    private Boolean truststoreFileDisabled;
+
     public OpenfactConfig openfact() {
         if (openfactConfig == null) {
             openfactConfig = new OpenfactConfig();
@@ -97,6 +134,9 @@ public class Config {
     public class OpenfactConfig {
         private ReportConfig reportConfig;
         private ThemeConfig themeConfig;
+        private SmtpConfig smtpConfig;
+        private FileStorage fileStorage;
+        private FileTruststore fileTruststore;
 
         private OpenfactConfig() {
         }
@@ -115,13 +155,25 @@ public class Config {
             return themeConfig;
         }
 
-        public void mail() {
+        public SmtpConfig smtpConfig() {
+            if (smtpConfig == null) {
+                smtpConfig = new SmtpConfig();
+            }
+            return smtpConfig;
         }
 
-        public void fileStorage() {
+        public FileStorage fileStorage() {
+            if (fileStorage == null) {
+                fileStorage = new FileStorage();
+            }
+            return fileStorage;
         }
 
-        public void truststore() {
+        public FileTruststore fileTruststore() {
+            if (fileTruststore == null) {
+                fileTruststore = new FileTruststore();
+            }
+            return fileTruststore;
         }
     }
 
@@ -205,6 +257,49 @@ public class Config {
 
         public String password() {
             return smtpPassword;
+        }
+    }
+
+    public class GmailConfig {
+        private GmailConfig() {
+        }
+
+        public String applicationName() {
+            return gmailApplicationName;
+        }
+
+        public int batchSize() {
+            return gmailBatchSize != null ? gmailBatchSize : 1000;
+        }
+    }
+
+    public class FileStorage {
+        private FileStorage() {
+        }
+
+        public String provider() {
+            return fileStorageProvider;
+        }
+    }
+
+    public class FileTruststore {
+        private FileTruststore() {
+        }
+
+        public String file() {
+            return truststoreFile;
+        }
+
+        public String password() {
+            return truststoreFilePassword;
+        }
+
+        public String hostnameVerificationPolicy() {
+            return truststoreFileHostnameVerificationPolicy;
+        }
+
+        public boolean disabled() {
+            return truststoreFileDisabled != null ? truststoreFileDisabled : false;
         }
     }
 
