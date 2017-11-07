@@ -75,6 +75,12 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "url")
     private String url;
 
+    @Column(name = "emailTheme")
+    private String emailTheme;
+
+    @Column(name = "language")
+    private String language;
+
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
@@ -289,5 +295,21 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     public void setFavoriteSpaces(Set<String> favoriteSpaces) {
         this.favoriteSpaces = favoriteSpaces;
+    }
+
+    public String getEmailTheme() {
+        return emailTheme;
+    }
+
+    public void setEmailTheme(String emailTheme) {
+        this.emailTheme = emailTheme;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String locale) {
+        this.language = locale;
     }
 }

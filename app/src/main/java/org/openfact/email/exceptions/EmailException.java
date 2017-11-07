@@ -1,4 +1,4 @@
-package org.openfact.email;
+package org.openfact.email.exceptions;
 
 public class EmailException extends Exception {
 

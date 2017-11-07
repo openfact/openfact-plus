@@ -28,6 +28,10 @@ openfact:
       starttls: "${openfact.mail.smpt.starttls}"
       port: "${openfact.mail.smpt.port}"
       from: "${openfact.mail.smpt.from}"
+      fromDisplayName: "${openfact.mail.smpt.fromDisplayName}"
+      replyTo: "${openfact.mail.smpt.replyTo}"
+      replyToDisplayName: "${openfact.mail.smpt.replyToDisplayName}"
+      envelopeFrom: "${openfact.mail.smpt.envelopeFrom}"
       user: "${openfact.mail.smpt.user}"
       password: "${openfact.mail.smpt.password}"
     vendor:

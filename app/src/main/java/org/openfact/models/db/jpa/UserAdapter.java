@@ -8,10 +8,7 @@ import org.openfact.models.db.JpaModel;
 import org.openfact.models.db.jpa.entity.UserEntity;
 
 import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserAdapter implements UserModel, JpaModel<UserEntity> {
@@ -114,6 +111,26 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public void setUrl(String url) {
         user.setUrl(url);
+    }
+
+    @Override
+    public String getEmailTheme() {
+        return user.getEmailTheme();
+    }
+
+    @Override
+    public void setEmailTheme(String emailTheme) {
+        user.setEmailTheme(emailTheme);
+    }
+
+    @Override
+    public String getLanguage() {
+        return user.getLanguage();
+    }
+
+    @Override
+    public void setLanguage(String language) {
+        user.setLanguage(language);
     }
 
     @Override

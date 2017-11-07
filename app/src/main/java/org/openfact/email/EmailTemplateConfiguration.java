@@ -1,17 +1,21 @@
 package org.openfact.email;
 
+import org.openfact.models.UserModel;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class EmailTemplateConfiguration {
 
-    private EmailUserModel user;
+    private final UserModel user;
+    private final String recipient;
     private List<EmailFileModel> attachments;
     private final Map<String, Object> attributes = new HashMap<>();
 
-    public EmailTemplateConfiguration(EmailUserModel user) {
+    public EmailTemplateConfiguration(UserModel user, String recipient) {
         this.user = user;
+        this.recipient = recipient;
     }
 
     public EmailTemplateConfiguration setAttribute(String name, Object value) {
@@ -28,7 +32,7 @@ public class EmailTemplateConfiguration {
         return attributes;
     }
 
-    public EmailUserModel getUser() {
+    public UserModel getUser() {
         return user;
     }
 
@@ -36,4 +40,7 @@ public class EmailTemplateConfiguration {
         return attachments;
     }
 
+    public String getRecipient() {
+        return recipient;
+    }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public interface UserModel {
@@ -49,6 +50,14 @@ public interface UserModel {
     String getUrl();
 
     void setUrl(String url);
+
+    String getEmailTheme();
+
+    void setEmailTheme(String emailTheme);
+
+    String getLanguage();
+
+    void setLanguage(String language);
 
     Date getCreatedAt();
 
