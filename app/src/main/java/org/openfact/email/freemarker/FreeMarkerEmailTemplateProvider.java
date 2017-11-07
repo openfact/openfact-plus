@@ -6,7 +6,7 @@ import org.openfact.email.EmailException;
 import org.openfact.email.EmailSenderProvider;
 import org.openfact.email.EmailTemplateConfiguration;
 import org.openfact.email.EmailTemplateProvider;
-import org.openfact.theme.FreeMarkerUtil;
+import org.openfact.theme.freemarker.FreeMarkerUtil;
 import org.openfact.theme.ThemeProvider;
 import org.openfact.theme.ThemeProviderType;
 

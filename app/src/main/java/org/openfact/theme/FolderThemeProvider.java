@@ -1,4 +1,4 @@
-package org.openfact.theme.freemarker;
+package org.openfact.theme;
 
 import org.openfact.config.ThemeConfig;
 import org.openfact.theme.*;

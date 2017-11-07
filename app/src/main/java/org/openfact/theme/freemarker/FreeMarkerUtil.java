@@ -1,9 +1,10 @@
-package org.openfact.theme;
+package org.openfact.theme.freemarker;
 
 import freemarker.cache.URLTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.openfact.config.ThemeConfig;
+import org.openfact.theme.Theme;
 import org.openfact.theme.exceptions.FreeMarkerException;
 
 import javax.annotation.PostConstruct;
