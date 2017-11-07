@@ -23,6 +23,7 @@ mvn fabric8:deploy -DSSO_REALM=openfact \
     -DES_PASSWORD='' \
     -DES_INDEX_SCHEMA_MANAGEMENT_STRATEGY=drop-and-create \
     -DES_REQUIRED_INDEX_STATUS=yellow \
+    -DGMAIL_APPLICATION_NAME='openfactsync' \
     -Popenshift \
     -DskipTests=true \
     -Dfabric8.debug.enabled=true

@@ -7,42 +7,22 @@ swarm:
         user-name: "${database.username}"
         password: "${database.password}"
 openfact:
+  fileStorage:
+    provider: "${openfact.fileStorage.provider:jpa}"
   report:
-    default: "${openfact.report.default}"
-    cacheTemplates: "${openfact.report.cacheTemplates}"
+    default: "${openfact.report.default:openfact}"
+    cacheTemplates: "${openfact.report.cacheTemplates:true}"
     cacheReports: "${openfact.report.cacheThemes:true}"
     folder:
-      dir: "${openfact.theme.dir}"
+      dir: "${openfact.report.dir:report}"
   theme:
-    default: "${openfact.theme.default}"
-    staticMaxAge: "${openfact.theme.staticMaxAge}"
-    cacheTemplates: "${openfact.theme.cacheTemplates}"
+    default: "${openfact.theme.default:openfact}"
+    staticMaxAge: "${openfact.theme.staticMaxAge:2592000}"
+    cacheTemplates: "${openfact.theme.cacheTemplates:true}"
     cacheThemes: "${openfact.theme.cacheThemes:true}"
     folder:
-      dir: "${openfact.theme.dir}"
+      dir: "${openfact.theme.dir:theme}"
   mail:
-    smtp:
-      host: "${openfact.mail.smpt.host}"
-      auth: "${openfact.mail.smpt.auth}"
-      ssl: "${openfact.mail.smpt.ssl}"
-      starttls: "${openfact.mail.smpt.starttls}"
-      port: "${openfact.mail.smpt.port}"
-      from: "${openfact.mail.smpt.from}"
-      fromDisplayName: "${openfact.mail.smpt.fromDisplayName}"
-      replyTo: "${openfact.mail.smpt.replyTo}"
-      replyToDisplayName: "${openfact.mail.smpt.replyToDisplayName}"
-      envelopeFrom: "${openfact.mail.smpt.envelopeFrom}"
-      user: "${openfact.mail.smpt.user}"
-      password: "${openfact.mail.smpt.password}"
     vendor:
       gmail:
         applicationName: "${openfact.mail.vendor.gmail.applicationName}"
-        batchSize: "${openfact.mail.vendor.gmail.batchSize}"
-  fileStorage:
-    provider: "${openfact.fileStorage.provider}"
-  truststore:
-    file:
-      file: "${openfact.truststore.file}",
-      password: "${openfact.truststore.password}",
-      hostname-verification-policy: "${openfact.truststore.policy}",
-      disabled: "${openfact.truststore.disabled}"

@@ -15,6 +15,7 @@ import com.google.api.services.gmail.model.Message;
 import com.google.common.collect.Lists;
 import net.sf.cglib.proxy.Enhancer;
 import org.jboss.logging.Logger;
+import org.openfact.config.GmailClientConfig;
 import org.openfact.models.BrokerType;
 import org.openfact.oauth2.OAuth2Utils;
 import org.openfact.repositories.user.*;
@@ -22,6 +23,7 @@ import org.openfact.repositories.user.utils.CredentialHandler;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -32,20 +34,28 @@ import java.util.List;
 public class GmailProvider implements MailProvider {
 
     private static final Logger logger = Logger.getLogger(GmailProvider.class);
-    private static final int BATCH_SIZE = 1000;
+    private static final int batchSize = 1000;
 
-    private String APPLICATION_NAME;
+    private final GmailClientConfig config;
+
     private HttpTransport HTTP_TRANSPORT;
     private JsonFactory JSON_FACTORY;
 
+    private String applicationName;
+
+    @Inject
+    public GmailProvider(GmailClientConfig config) {
+        this.config = config;
+    }
+
     @PostConstruct
     private void init() {
-        APPLICATION_NAME = "Openfact Sync";
+        applicationName = config.getApplicationName("openfactsync");
         try {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             JSON_FACTORY = JacksonFactory.getDefaultInstance();
         } catch (GeneralSecurityException | IOException e) {
-            throw new IllegalStateException("Could not initialize http transport and/or json factory");
+            throw new RuntimeException("Could not initialize http transport and/or json factory");
         }
     }
 
@@ -56,7 +66,7 @@ public class GmailProvider implements MailProvider {
         List<MailUblMessageModel> result = new ArrayList<>();
         try {
             List<Message> messages = pullMessages(gmail, repository, query);
-            for (List<Message> chunk : Lists.partition(messages, BATCH_SIZE)) {
+            for (List<Message> chunk : Lists.partition(messages, batchSize)) {
                 execBatch(chunk, gmail, repository).forEach(message -> {
                     result.add(new MailUblMessageAdapter(gmail, repository, message));
                 });
@@ -81,7 +91,7 @@ public class GmailProvider implements MailProvider {
                 new Credential.AccessMethod[]{credential.getMethod()});
 
         return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, proxy)
-                .setApplicationName(APPLICATION_NAME)
+                .setApplicationName(applicationName)
                 .build();
     }
 

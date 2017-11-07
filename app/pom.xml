@@ -105,6 +105,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>mail</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.wildfly.core</groupId>
             <artifactId>wildfly-controller-client</artifactId>
             <version>2.2.1.Final</version>
@@ -144,10 +149,10 @@
             <scope>test</scope>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.arquillian.cube</groupId>-->
-            <!--<artifactId>arquillian-cube-docker</artifactId>-->
-            <!--<version>1.8.0</version>-->
-            <!--<scope>test</scope>-->
+        <!--<groupId>org.arquillian.cube</groupId>-->
+        <!--<artifactId>arquillian-cube-docker</artifactId>-->
+        <!--<version>1.8.0</version>-->
+        <!--<scope>test</scope>-->
         <!--</dependency>-->
 
         <!--Hibernate-->
@@ -193,9 +198,9 @@
             <version>${version.hibernate-search}</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.hibernate</groupId>-->
-            <!--<artifactId>hibernate-search-serialization-avro</artifactId>-->
-            <!--<version>${version.hibernate-search}</version>-->
+        <!--<groupId>org.hibernate</groupId>-->
+        <!--<artifactId>hibernate-search-serialization-avro</artifactId>-->
+        <!--<version>${version.hibernate-search}</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -246,9 +251,9 @@
             <version>5.1.0</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>com.github.jmarkstar</groupId>-->
-            <!--<artifactId>ubl4sunatbinding</artifactId>-->
-            <!--<version>1.0.0</version>-->
+        <!--<groupId>com.github.jmarkstar</groupId>-->
+        <!--<artifactId>ubl4sunatbinding</artifactId>-->
+        <!--<version>1.0.0</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.sistcoop</groupId>
@@ -597,7 +602,9 @@
             </activation>
             <properties>
                 <product.name>Openfact</product.name>
-                <product.name-html>\u003Cdiv class="of-logo-text"\u003E\u003Cspan\u003EOpenfact\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E</product.name-html>
+                <product.name-html>\u003Cdiv
+                    class="of-logo-text"\u003E\u003Cspan\u003EOpenfact\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E
+                </product.name-html>
                 <product.version>${project.version}</product.version>
                 <product.default-profile>community</product.default-profile>
             </properties>
@@ -611,7 +618,9 @@
             </activation>
             <properties>
                 <product.name>Openfact</product.name>
-                <product.name-html>\u003Cstrong\u003EOpenfact\u003C\u002Fstrong\u003E\u003Csup\u003E\u00AE\u003C\u002Fsup\u003E Sync EE</product.name-html>
+                <product.name-html>
+                    \u003Cstrong\u003EOpenfact\u003C\u002Fstrong\u003E\u003Csup\u003E\u00AE\u003C\u002Fsup\u003E Sync EE
+                </product.name-html>
                 <product.version>${project.version}</product.version>
                 <product.default-profile>product</product.default-profile>
             </properties>

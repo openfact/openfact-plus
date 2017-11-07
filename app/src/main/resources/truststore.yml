@@ -1,0 +1,7 @@
+openfact:
+  truststore:
+    file:
+      file: "${openfact.truststore.file}",
+      password: "${openfact.truststore.password}",
+      hostname-verification-policy: "${openfact.truststore.policy}",
+      disabled: "${openfact.truststore.disabled}"
