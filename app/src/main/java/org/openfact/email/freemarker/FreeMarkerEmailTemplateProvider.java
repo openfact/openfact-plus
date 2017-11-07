@@ -24,7 +24,7 @@ public class FreeMarkerEmailTemplateProvider implements EmailTemplateProvider {
     private FreeMarkerUtil freeMarker;
 
     @Inject
-    @ThemeProviderType(type = ThemeProviderType.ProviderType.EXTENDING)
+    @ThemeProviderType(type = ThemeProviderType.Type.EXTENDING)
     private ThemeProvider themeProvider;
 
     @Inject

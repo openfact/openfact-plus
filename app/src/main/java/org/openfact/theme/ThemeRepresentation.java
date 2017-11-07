@@ -1,6 +1,7 @@
 package org.openfact.theme;
 
 public class ThemeRepresentation {
+
     private String name;
     private String[] types;
 
@@ -19,4 +20,5 @@ public class ThemeRepresentation {
     public void setTypes(String[] types) {
         this.types = types;
     }
+
 }

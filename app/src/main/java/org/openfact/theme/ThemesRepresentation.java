@@ -1,6 +1,7 @@
 package org.openfact.theme;
 
 public class ThemesRepresentation {
+
     private ThemeRepresentation[] themes;
 
     public ThemeRepresentation[] getThemes() {
@@ -10,4 +11,5 @@ public class ThemesRepresentation {
     public void setThemes(ThemeRepresentation[] themes) {
         this.themes = themes;
     }
+
 }

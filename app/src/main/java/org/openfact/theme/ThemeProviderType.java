@@ -9,9 +9,9 @@ import java.lang.annotation.*;
 @Documented
 public @interface ThemeProviderType {
 
-    ProviderType type();
+    Type type();
 
-    enum ProviderType {
+    enum Type {
         EXTENDING, FOLDER, JAR
     }
 

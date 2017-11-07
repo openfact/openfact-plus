@@ -1,4 +1,4 @@
-package org.openfact.reports;
+package org.openfact.utils;
 
 import org.jboss.logging.Logger;
 

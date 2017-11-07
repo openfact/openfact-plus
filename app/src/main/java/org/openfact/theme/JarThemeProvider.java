@@ -1,6 +1,7 @@
 package org.openfact.theme;
 
 import org.keycloak.util.JsonSerialization;
+import org.openfact.theme.ThemeProviderType.Type;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
@@ -9,12 +10,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
-@Startup
-@Singleton(name = "JarThemeProvider")
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-@Lock(LockType.READ)
+@Singleton
 @ThemeManagerSelector
-@ThemeProviderType(type = ThemeProviderType.ProviderType.JAR)
+@ThemeProviderType(type = Type.JAR)
 public class JarThemeProvider implements ThemeProvider {
 
     protected static final String OPENFACT_THEMES_JSON = "META-INF/openfact-themes.json";
@@ -34,16 +32,19 @@ public class JarThemeProvider implements ThemeProvider {
     }
 
     @Override
+    @Lock(LockType.READ)
     public int getProviderPriority() {
         return 0;
     }
 
     @Override
+    @Lock(LockType.READ)
     public Theme getTheme(String name, Theme.Type type) throws IOException {
         return hasTheme(name, type) ? themes.get(type).get(name) : null;
     }
 
     @Override
+    @Lock(LockType.READ)
     public Set<String> nameSet(Theme.Type type) {
         if (themes.containsKey(type)) {
             return themes.get(type).keySet();
@@ -53,6 +54,7 @@ public class JarThemeProvider implements ThemeProvider {
     }
 
     @Override
+    @Lock(LockType.READ)
     public boolean hasTheme(String name, Theme.Type type) {
         return themes.containsKey(type) && themes.get(type).containsKey(name);
     }

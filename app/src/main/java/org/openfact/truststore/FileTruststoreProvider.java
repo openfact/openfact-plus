@@ -22,6 +22,7 @@ public class FileTruststoreProvider implements TruststoreProvider {
     private static final Logger logger = Logger.getLogger(FileTruststoreProvider.class);
 
     private final FileTruststoreConfig config;
+
     private HostnameVerificationPolicy policy;
     private KeyStore truststore;
 

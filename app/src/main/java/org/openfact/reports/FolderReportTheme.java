@@ -1,5 +1,7 @@
 package org.openfact.reports;
 
+import org.openfact.utils.PropertiesUtil;
+
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;

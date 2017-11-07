@@ -1,5 +1,7 @@
 package org.openfact.theme;
 
+import org.openfact.utils.PropertiesUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;

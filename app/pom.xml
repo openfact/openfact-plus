@@ -589,6 +589,35 @@
 
     <profiles>
         <profile>
+            <id>community</id>
+            <activation>
+                <property>
+                    <name>!product</name>
+                </property>
+            </activation>
+            <properties>
+                <product.name>Openfact</product.name>
+                <product.name-html>\u003Cdiv class="of-logo-text"\u003E\u003Cspan\u003EOpenfact\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E</product.name-html>
+                <product.version>${project.version}</product.version>
+                <product.default-profile>community</product.default-profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>product</id>
+            <activation>
+                <property>
+                    <name>product</name>
+                </property>
+            </activation>
+            <properties>
+                <product.name>Openfact</product.name>
+                <product.name-html>\u003Cstrong\u003EOpenfact\u003C\u002Fstrong\u003E\u003Csup\u003E\u00AE\u003C\u002Fsup\u003E Sync EE</product.name-html>
+                <product.version>${project.version}</product.version>
+                <product.default-profile>product</product.default-profile>
+            </properties>
+        </profile>
+
+        <profile>
             <id>openshift</id>
             <build>
                 <plugins>

@@ -1,7 +1,11 @@
 package org.openfact.theme;
 
+import org.openfact.config.ThemeConfig;
+import org.openfact.theme.ThemeProviderType.Type;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -10,14 +14,25 @@ import java.util.Set;
 
 @Stateless
 @ThemeManagerSelector
-@ThemeProviderType(type = ThemeProviderType.ProviderType.FOLDER)
+@ThemeProviderType(type = Type.FOLDER)
 public class FolderThemeProvider implements ThemeProvider {
 
+    private final ThemeConfig config;
     private File themesDir;
+
+    @Inject
+    public FolderThemeProvider(ThemeConfig config) {
+        this.config = config;
+    }
 
     @PostConstruct
     public void init() {
-        themesDir = new File("themes");
+        String d = config.getFolderDir();
+        File rootDir = null;
+        if (d != null) {
+            rootDir = new File(d);
+        }
+        themesDir = rootDir;
     }
 
     @Override

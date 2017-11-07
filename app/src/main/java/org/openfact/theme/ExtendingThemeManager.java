@@ -1,7 +1,9 @@
 package org.openfact.theme;
 
 import org.jboss.logging.Logger;
-import org.openfact.theme.ThemeProviderType.ProviderType;
+import org.openfact.common.Version;
+import org.openfact.config.ThemeConfig;
+import org.openfact.theme.ThemeProviderType.Type;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
@@ -13,31 +15,31 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
-@Startup
-@DependsOn(value = {"JarThemeProvider"})
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-@Lock(LockType.READ)
-@ThemeProviderType(type = ProviderType.EXTENDING)
+@ThemeProviderType(type = Type.EXTENDING)
 public class ExtendingThemeManager implements ThemeProvider {
 
     private static final Logger log = Logger.getLogger(ExtendingThemeManager.class);
 
-    private ConcurrentHashMap<ThemeKey, Theme> themeCache;
+    private final ThemeConfig config;
+    private final Instance<ThemeProvider> themeProviders;
 
-    private List<ThemeProvider> providers;
     private String defaultTheme;
+    private ConcurrentHashMap<ThemeKey, Theme> themeCache;
+    private List<ThemeProvider> providers;
 
     @Inject
-    @Any
-    @ThemeManagerSelector
-    private Instance<ThemeProvider> themeProviders;
+    public ExtendingThemeManager(ThemeConfig config, @Any @ThemeManagerSelector Instance<ThemeProvider> themeProviders) {
+        this.config = config;
+        this.themeProviders = themeProviders;
+    }
 
     @PostConstruct
     public void init() {
-        this.defaultTheme = "openfact";
+        defaultTheme = config.getDefaultTheme(Version.NAME.toLowerCase());
+        if (config.getCacheThemes(true)) {
+            themeCache = new ConcurrentHashMap<>();
+        }
         loadProviders();
-
-        themeCache = new ConcurrentHashMap<>();
     }
 
     private void loadProviders() {
@@ -49,11 +51,13 @@ public class ExtendingThemeManager implements ThemeProvider {
     }
 
     @Override
+    @Lock(LockType.READ)
     public int getProviderPriority() {
         return 0;
     }
 
     @Override
+    @Lock(LockType.READ)
     public Theme getTheme(String name, Theme.Type type) throws IOException {
         if (name == null) {
             name = defaultTheme;
@@ -110,6 +114,7 @@ public class ExtendingThemeManager implements ThemeProvider {
     }
 
     @Override
+    @Lock(LockType.READ)
     public Set<String> nameSet(Theme.Type type) {
         Set<String> themes = new HashSet<>();
         for (ThemeProvider p : providers) {
@@ -119,6 +124,7 @@ public class ExtendingThemeManager implements ThemeProvider {
     }
 
     @Override
+    @Lock(LockType.READ)
     public boolean hasTheme(String name, Theme.Type type) {
         for (ThemeProvider p : providers) {
             if (p.hasTheme(name, type)) {
