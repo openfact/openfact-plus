@@ -1,4 +1,4 @@
-package org.openfact.reports.jasper;
+package org.openfact.report.jasper;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -18,8 +18,9 @@ import org.openfact.files.FlyWeightFileModel;
 import org.openfact.files.FlyWeightXmlFileModel;
 import org.openfact.files.XmlFileModel;
 import org.openfact.files.exceptions.FileFetchException;
-import org.openfact.reports.*;
-import org.openfact.reports.exceptions.ReportException;
+import org.openfact.report.*;
+import org.openfact.report.ReportProviderType.Type;
+import org.openfact.report.exceptions.ReportException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -41,7 +42,7 @@ public class JasperReportProvider implements ReportTemplateProvider {
     private JasperReportUtil jasperReportUtil;
 
     @Inject
-    @ReportProviderType(type = ReportProviderType.ProviderType.EXTENDING)
+    @ReportProviderType(type = Type.EXTENDING)
     private ReportThemeProvider themeProvider;
 
     @Inject

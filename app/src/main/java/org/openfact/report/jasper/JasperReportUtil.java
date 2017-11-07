@@ -1,27 +1,34 @@
-package org.openfact.reports.jasper;
+package org.openfact.report.jasper;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.util.JRLoader;
-import org.openfact.reports.ReportTheme;
+import org.openfact.config.ReportThemeConfig;
+import org.openfact.report.ReportTheme;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Singleton;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class JasperReportUtil {
 
+    private final ReportThemeConfig config;
     private ConcurrentHashMap<String, JasperReport> cache;
+
+    @Inject
+    public JasperReportUtil(ReportThemeConfig config) {
+        this.config = config;
+    }
 
     @PostConstruct
     private void init() {
-        cache = new ConcurrentHashMap<>();
+        if (config.getCacheTemplates(true)) {
+            cache = new ConcurrentHashMap<>();
+        }
     }
 
     public JasperPrint processReport(ReportTheme theme, String templateName, Map<String, Object> parameters, JRDataSource dataSource) throws JRException, IOException {

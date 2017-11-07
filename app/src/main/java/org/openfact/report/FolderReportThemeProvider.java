@@ -1,7 +1,7 @@
-package org.openfact.theme;
+package org.openfact.report;
 
-import org.openfact.config.ThemeConfig;
-import org.openfact.theme.ThemeProviderType.Type;
+import org.openfact.config.ReportThemeConfig;
+import org.openfact.report.ReportProviderType.Type;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -13,15 +13,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Stateless
-@ThemeManagerSelector
-@ThemeProviderType(type = Type.FOLDER)
-public class FolderThemeProvider implements ThemeProvider {
+@ReportThemeManagerSelector
+@ReportProviderType(type = Type.FOLDER)
+public class FolderReportThemeProvider implements ReportThemeProvider {
 
-    private final ThemeConfig config;
+    private final ReportThemeConfig config;
     private File themesDir;
 
     @Inject
-    public FolderThemeProvider(ThemeConfig config) {
+    public FolderReportThemeProvider(ReportThemeConfig config) {
         this.config = config;
     }
 
@@ -41,14 +41,14 @@ public class FolderThemeProvider implements ThemeProvider {
     }
 
     @Override
-    public Theme getTheme(String name, Theme.Type type) throws IOException {
-        File themeDir = getThemeDir(name, type);
-        return themeDir.isDirectory() ? new FolderTheme(themeDir, name, type) : null;
+    public ReportTheme getTheme(String type, String name) throws IOException {
+        File themeDir = getThemeDir(type, name);
+        return themeDir.isDirectory() ? new FolderReportTheme(themeDir, type, name) : null;
     }
 
     @Override
-    public Set<String> nameSet(Theme.Type type) {
-        final String typeName = type.name().toLowerCase();
+    public Set<String> nameSet(String type) {
+        final String typeName = type.toLowerCase();
         File[] themeDirs = themesDir.listFiles(pathname -> pathname.isDirectory() && new File(pathname, typeName).isDirectory());
         if (themeDirs != null) {
             Set<String> names = new HashSet<>();
@@ -62,12 +62,12 @@ public class FolderThemeProvider implements ThemeProvider {
     }
 
     @Override
-    public boolean hasTheme(String name, Theme.Type type) {
-        return getThemeDir(name, type).isDirectory();
+    public boolean hasTheme(String type, String name) {
+        return getThemeDir(type, name).isDirectory();
     }
 
-    private File getThemeDir(String name, Theme.Type type) {
-        return new File(themesDir, name + File.separator + type.name().toLowerCase());
+    private File getThemeDir(String type, String name) {
+        return new File(themesDir, type.toLowerCase() + File.separator + name.toLowerCase());
     }
 
 }

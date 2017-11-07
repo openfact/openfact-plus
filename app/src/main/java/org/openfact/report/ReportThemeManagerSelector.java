@@ -1,4 +1,4 @@
-package org.openfact.reports;
+package org.openfact.report;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.*;

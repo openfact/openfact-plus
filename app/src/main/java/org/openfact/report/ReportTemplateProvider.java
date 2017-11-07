@@ -1,8 +1,8 @@
-package org.openfact.reports;
+package org.openfact.report;
 
 import org.openfact.documents.DocumentModel;
 import org.openfact.files.exceptions.FileFetchException;
-import org.openfact.reports.exceptions.ReportException;
+import org.openfact.report.exceptions.ReportException;
 
 import java.util.Set;
 

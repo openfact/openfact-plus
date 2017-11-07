@@ -1,4 +1,4 @@
-package org.openfact.reports;
+package org.openfact.report;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public interface ReportTheme {
 
-    static final String PREVIEW_IMG_NAME = "preview.png";
+    String PREVIEW_IMG_NAME = "preview.png";
 
     String getType();
 

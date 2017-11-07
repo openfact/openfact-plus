@@ -1,4 +1,4 @@
-package org.openfact.reports;
+package org.openfact.report;
 
 import org.openfact.utils.PropertiesUtil;
 

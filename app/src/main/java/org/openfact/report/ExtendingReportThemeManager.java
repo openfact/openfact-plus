@@ -1,6 +1,8 @@
-package org.openfact.reports;
+package org.openfact.report;
 
 import org.jboss.logging.Logger;
+import org.openfact.common.Version;
+import org.openfact.config.ReportThemeConfig;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
@@ -13,37 +15,37 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Singleton
-@Startup
-@DependsOn(value = {"JarReportThemeProvider"})
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-@Lock(LockType.READ)
-@ReportProviderType(type = ReportProviderType.ProviderType.EXTENDING)
+@ReportProviderType(type = ReportProviderType.Type.EXTENDING)
 public class ExtendingReportThemeManager implements ReportThemeProvider {
 
     private static final Logger log = Logger.getLogger(ExtendingReportThemeManager.class);
 
+    private final ReportThemeConfig config;
+    private final Instance<ReportThemeProvider> themeProviders;
+
     private String defaultTheme;
     private ConcurrentHashMap<ReportThemeKey, ReportTheme> themeCache;
-    private CopyOnWriteArrayList<ReportThemeProvider> providers;
+    private List<ReportThemeProvider> providers;
 
     @Inject
-    @Any
-    @ReportThemeManagerSelector
-    private Instance<ReportThemeProvider> themeProviders;
+    public ExtendingReportThemeManager(ReportThemeConfig config, @Any @ReportThemeManagerSelector Instance<ReportThemeProvider> themeProviders) {
+        this.config = config;
+        this.themeProviders = themeProviders;
+    }
 
     @PostConstruct
     public void init() {
-        this.defaultTheme = "openfact";
+        defaultTheme = config.getDefaultTheme(Version.NAME.toLowerCase());
+        if (config.getCacheReports(true)) {
+            themeCache = new ConcurrentHashMap<>();
+        }
         loadProviders();
-
-        themeCache = new ConcurrentHashMap<>();
     }
 
     private void loadProviders() {
-        providers = new CopyOnWriteArrayList<>();
+        providers = new LinkedList<>();
         for (ReportThemeProvider themeProvider : themeProviders) {
             providers.add(themeProvider);
         }
@@ -51,11 +53,13 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
     }
 
     @Override
+    @Lock(LockType.READ)
     public int getProviderPriority() {
         return 0;
     }
 
     @Override
+    @Lock(LockType.READ)
     public ReportTheme getTheme(String type, String name) throws IOException {
         if (name == null) {
             name = defaultTheme;
@@ -109,6 +113,7 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
     }
 
     @Override
+    @Lock(LockType.READ)
     public Set<String> nameSet(String type) {
         Set<String> themes = new HashSet<>();
         for (ReportThemeProvider p : providers) {
@@ -118,6 +123,7 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
     }
 
     @Override
+    @Lock(LockType.READ)
     public boolean hasTheme(String type, String name) {
         for (ReportThemeProvider p : providers) {
             if (p.hasTheme(type, name)) {

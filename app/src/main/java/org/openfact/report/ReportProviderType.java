@@ -1,4 +1,4 @@
-package org.openfact.reports;
+package org.openfact.report;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.*;
@@ -9,9 +9,9 @@ import java.lang.annotation.*;
 @Documented
 public @interface ReportProviderType {
 
-    ProviderType type();
+    Type type();
 
-    enum ProviderType {
+    enum Type {
         EXTENDING, FOLDER, JAR
     }
 

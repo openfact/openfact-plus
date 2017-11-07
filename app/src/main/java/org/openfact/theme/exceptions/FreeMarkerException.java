@@ -1,4 +1,4 @@
-package org.openfact.theme;
+package org.openfact.theme.exceptions;
 
 public class FreeMarkerException extends Exception {
 

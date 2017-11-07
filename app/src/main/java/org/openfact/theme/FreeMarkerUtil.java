@@ -4,6 +4,7 @@ import freemarker.cache.URLTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.openfact.config.ThemeConfig;
+import org.openfact.theme.exceptions.FreeMarkerException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;

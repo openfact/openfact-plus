@@ -6,8 +6,8 @@ import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentProvider;
 import org.openfact.files.exceptions.FileFetchException;
 import org.openfact.models.ModelType;
-import org.openfact.reports.ReportTemplateProvider;
-import org.openfact.reports.ReportTheme;
+import org.openfact.report.ReportTemplateProvider;
+import org.openfact.report.ReportTheme;
 import org.openfact.representations.idm.GenericDataRepresentation;
 import org.openfact.representations.idm.UserThemeRepresentation;
 

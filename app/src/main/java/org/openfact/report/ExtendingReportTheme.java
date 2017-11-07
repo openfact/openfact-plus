@@ -1,4 +1,4 @@
-package org.openfact.reports;
+package org.openfact.report;
 
 import java.io.IOException;
 import java.io.InputStream;

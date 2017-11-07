@@ -1,4 +1,4 @@
-package org.openfact.reports.exceptions;
+package org.openfact.report.exceptions;
 
 public class ReportException extends Exception {
 

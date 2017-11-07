@@ -1,6 +1,7 @@
-package org.openfact.reports;
+package org.openfact.report;
 
 import org.keycloak.util.JsonSerialization;
+import org.openfact.report.ReportProviderType.Type;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
@@ -9,12 +10,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
-@Startup
-@Singleton(name = "JarReportThemeProvider")
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-@Lock(LockType.READ)
+@Singleton
 @ReportThemeManagerSelector
-@ReportProviderType(type = ReportProviderType.ProviderType.JAR)
+@ReportProviderType(type = Type.JAR)
 public class JarReportThemeProvider implements ReportThemeProvider {
 
     protected static final String OPENFACT_REPORT_THEMES_JSON = "META-INF/openfact-reports.json";
@@ -34,16 +32,19 @@ public class JarReportThemeProvider implements ReportThemeProvider {
     }
 
     @Override
+    @Lock(LockType.READ)
     public int getProviderPriority() {
         return 0;
     }
 
     @Override
+    @Lock(LockType.READ)
     public ReportTheme getTheme(String type, String name) throws IOException {
         return hasTheme(type, name) ? themes.get(type).get(name) : null;
     }
 
     @Override
+    @Lock(LockType.READ)
     public Set<String> nameSet(String type) {
         if (themes.containsKey(type)) {
             return themes.get(type).keySet();
@@ -53,6 +54,7 @@ public class JarReportThemeProvider implements ReportThemeProvider {
     }
 
     @Override
+    @Lock(LockType.READ)
     public boolean hasTheme(String type, String name) {
         return themes.containsKey(type) && themes.get(type).containsKey(name);
     }
