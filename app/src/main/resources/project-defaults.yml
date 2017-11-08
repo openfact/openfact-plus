@@ -3,7 +3,7 @@ swarm:
     spec-descriptor-property-replacement: true
   datasources:
     data-sources:
-      SyncDS:
+      OpenfactSyncDS:
         driver-name: "${env.DB_DRIVER_NAME}"
         connection-url: "${env.DB_CONNECTION_URL}"
         user-name: "${env.DB_USER_NAME}"
