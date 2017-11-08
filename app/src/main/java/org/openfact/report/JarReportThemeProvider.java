@@ -4,7 +4,9 @@ import org.keycloak.util.JsonSerialization;
 import org.openfact.report.ReportProviderType.Type;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.*;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
+import javax.ejb.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;

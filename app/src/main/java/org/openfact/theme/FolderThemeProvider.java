@@ -1,7 +1,6 @@
 package org.openfact.theme;
 
 import org.openfact.config.ThemeConfig;
-import org.openfact.theme.*;
 import org.openfact.theme.ThemeProviderType.Type;
 
 import javax.annotation.PostConstruct;

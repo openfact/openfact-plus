@@ -2,7 +2,10 @@ package org.openfact.email.freemarker;
 
 import org.keycloak.common.util.ObjectUtil;
 import org.openfact.documents.DocumentModel;
-import org.openfact.email.*;
+import org.openfact.email.EmailFileModel;
+import org.openfact.email.EmailSenderProvider;
+import org.openfact.email.EmailTemplateConfiguration;
+import org.openfact.email.EmailTemplateProvider;
 import org.openfact.email.exceptions.EmailException;
 import org.openfact.models.UserModel;
 import org.openfact.theme.Theme;

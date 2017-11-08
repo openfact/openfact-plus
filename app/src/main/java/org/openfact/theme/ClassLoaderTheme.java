@@ -108,7 +108,7 @@ public class ClassLoaderTheme implements Theme {
 
     @Override
     public Properties getMessages(String baseBundlename, Locale locale) throws IOException {
-        if(locale == null){
+        if (locale == null) {
             return null;
         }
         Properties m = new Properties();

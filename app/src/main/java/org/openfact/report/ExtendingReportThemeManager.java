@@ -5,7 +5,9 @@ import org.openfact.common.Version;
 import org.openfact.config.ReportThemeConfig;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.*;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
+import javax.ejb.Singleton;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;

@@ -5,9 +5,12 @@ import org.apache.http.conn.ssl.StrictHostnameVerifier;
 import org.openfact.truststore.Truststore.Type;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.*;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.net.ssl.*;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 
 @Stateless
 public class JSSETruststoreConfigurator {

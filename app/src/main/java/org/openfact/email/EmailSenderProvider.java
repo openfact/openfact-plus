@@ -1,7 +1,6 @@
 package org.openfact.email;
 
 import org.openfact.email.exceptions.EmailException;
-import org.openfact.models.UserModel;
 
 import java.util.List;
 

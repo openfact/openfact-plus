@@ -26,7 +26,7 @@ public class MessageFormatterMethod implements TemplateMethodModelEx {
             // resolve any remaining ${} expressions
             List<Object> resolved = resolve(list.subList(1, list.size()));
             String key = list.get(0).toString();
-            return new MessageFormat(messages.getProperty(key,key),locale).format(resolved.toArray());
+            return new MessageFormat(messages.getProperty(key, key), locale).format(resolved.toArray());
         } else {
             return null;
         }
@@ -34,7 +34,7 @@ public class MessageFormatterMethod implements TemplateMethodModelEx {
 
     private List<Object> resolve(List<Object> list) {
         ArrayList<Object> result = new ArrayList<>();
-        for (Object item: list) {
+        for (Object item : list) {
             if (item instanceof SimpleScalar) {
                 item = ((SimpleScalar) item).getAsString();
             }
