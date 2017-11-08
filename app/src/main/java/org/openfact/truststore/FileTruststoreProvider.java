@@ -23,15 +23,11 @@ public class FileTruststoreProvider implements TruststoreProvider {
 
     private static final Logger logger = Logger.getLogger(FileTruststoreProvider.class);
 
-    private final FileTruststoreConfig config;
+    @Inject
+    private FileTruststoreConfig config;
 
     private HostnameVerificationPolicy policy;
     private KeyStore truststore;
-
-    @Inject
-    public FileTruststoreProvider(FileTruststoreConfig config) {
-        this.config = config;
-    }
 
     @PostConstruct
     private void init() {

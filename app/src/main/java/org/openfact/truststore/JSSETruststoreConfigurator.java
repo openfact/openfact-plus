@@ -12,15 +12,16 @@ import javax.net.ssl.*;
 @Stateless
 public class JSSETruststoreConfigurator {
 
-    private final TruststoreProvider provider;
+    @Inject
+    @Truststore(Type.FILE)
+    private TruststoreProvider provider;
 
     private javax.net.ssl.SSLSocketFactory sslFactory;
     private TrustManager[] tm;
     private HostnameVerifier hostnameVerifier;
 
-    @Inject
-    public JSSETruststoreConfigurator(@Truststore(Type.FILE) TruststoreProvider provider) {
-        this.provider = provider;
+    public JSSETruststoreConfigurator() {
+        throw new IllegalStateException("Not allowed");
     }
 
     @PostConstruct

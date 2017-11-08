@@ -19,13 +19,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Singleton
 public class FreeMarkerUtil {
 
-    private final ThemeConfig config;
-    private ConcurrentHashMap<String, Template> cache;
-
     @Inject
-    public FreeMarkerUtil(ThemeConfig config) {
-        this.config = config;
-    }
+    private ThemeConfig config;
+
+    private ConcurrentHashMap<String, Template> cache;
 
     @PostConstruct
     private void init() {

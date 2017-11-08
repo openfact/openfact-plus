@@ -20,18 +20,17 @@ public class ExtendingThemeManager implements ThemeProvider {
 
     private static final Logger log = Logger.getLogger(ExtendingThemeManager.class);
 
-    private final ThemeConfig config;
-    private final Instance<ThemeProvider> themeProviders;
+    @Inject
+    private ThemeConfig config;
+
+    @Inject
+    @Any
+    @ThemeManagerSelector
+    private Instance<ThemeProvider> themeProviders;
 
     private String defaultTheme;
     private ConcurrentHashMap<ThemeKey, Theme> themeCache;
     private List<ThemeProvider> providers;
-
-    @Inject
-    public ExtendingThemeManager(ThemeConfig config, @Any @ThemeManagerSelector Instance<ThemeProvider> themeProviders) {
-        this.config = config;
-        this.themeProviders = themeProviders;
-    }
 
     @PostConstruct
     public void init() {

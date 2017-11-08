@@ -18,13 +18,10 @@ import java.util.Set;
 @ThemeProviderType(type = Type.FOLDER)
 public class FolderThemeProvider implements ThemeProvider {
 
-    private final ThemeConfig config;
-    private File themesDir;
-
     @Inject
-    public FolderThemeProvider(ThemeConfig config) {
-        this.config = config;
-    }
+    private ThemeConfig config;
+
+    private File themesDir;
 
     @PostConstruct
     public void init() {
