@@ -8,21 +8,21 @@ swarm:
         password: "${database.password}"
 openfact:
   fileStorage:
-    provider: "${openfact.fileStorage.provider:jpa}"
+    provider: "${env.OPENFACT_FILE_STORAGE_PROVIDER}"
   report:
-    default: "${openfact.report.default:openfact}"
-    cacheTemplates: "${openfact.report.cacheTemplates:true}"
-    cacheReports: "${openfact.report.cacheThemes:true}"
+    default: "${env.OPENFACT_REPORT_DEFAULT}"
+    cacheReports: "${env.OPENFACT_REPORT_CACHE_REPORTS}"
+    cacheTemplates: "${env.OPENFACT_REPORT_CACHE_TEMPLATES}"
     folder:
-      dir: "${openfact.report.dir:report}"
+      dir: "${env.OPENFACT_REPORT_FOLDER_DIR}"
   theme:
-    default: "${openfact.theme.default:openfact}"
-    staticMaxAge: "${openfact.theme.staticMaxAge:2592000}"
-    cacheTemplates: "${openfact.theme.cacheTemplates:true}"
-    cacheThemes: "${openfact.theme.cacheThemes:true}"
+    default: "${env.OPENFACT_THEME_DEFAULT}"
+    staticMaxAge: "${env.OPENFACT_THEME_STATIC_MAX_AGE}"
+    cacheThemes: "${env.OPENFACT_THEME_CACHE_THEMES}"
+    cacheTemplates: "${env.OPENFACT_THEME_CACHE_TEMPLATES}"
     folder:
-      dir: "${openfact.theme.dir:theme}"
+      dir: "${env.OPENFACT_THEME_FOLDER_DIR}"
   mail:
     vendor:
       gmail:
-        applicationName: "${openfact.mail.vendor.gmail.applicationName}"
+        applicationName: "${env.GMAIL_CLIENT_APPLICATION_NAME}"

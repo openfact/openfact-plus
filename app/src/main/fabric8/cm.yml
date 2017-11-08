@@ -1,2 +1,11 @@
 data:
-
+  openfact.report.default: openfact
+  openfact.report.cacheReports: true
+  openfact.report.cacheTemplates: true
+  openfact.report.folder.dir: reports
+  openfact.theme.default: openfact
+  openfact.theme.staticMaxAge: 2592000
+  openfact.theme.cacheThemes: true
+  openfact.theme.cacheTemplates: true
+  openfact.theme.folder.dir: themes
+  openfact.fileStorage.provider: jpa
