@@ -1,4 +1,13 @@
 data:
+  db.url: 'jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
+  db.driver: 'h2'
+  hibernate.strategy: create-drop
+  hibernate.show_sql: true
+  hibernate.format_sql: true
+  hibernate.second_level_cache: true
+  es.url: http://elasticsearch:9200
+  es.index_strategy: drop-and-create
+  es.required_index_status: yellow
   openfact.report.default: openfact
   openfact.report.cacheReports: true
   openfact.report.cacheTemplates: true
