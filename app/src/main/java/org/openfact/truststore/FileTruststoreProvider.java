@@ -5,18 +5,20 @@ import org.openfact.config.FileTruststoreConfig;
 import org.openfact.truststore.Truststore.Type;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.*;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
-import java.util.Properties;
 
 @Startup
+@Singleton
 @Truststore(Type.FILE)
-@Singleton(name = "FileTruststoreProvider")
 public class FileTruststoreProvider implements TruststoreProvider {
 
     private static final Logger logger = Logger.getLogger(FileTruststoreProvider.class);
