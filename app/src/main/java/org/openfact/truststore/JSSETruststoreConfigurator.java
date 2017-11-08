@@ -23,10 +23,6 @@ public class JSSETruststoreConfigurator {
     private TrustManager[] tm;
     private HostnameVerifier hostnameVerifier;
 
-    public JSSETruststoreConfigurator() {
-        throw new IllegalStateException("Not allowed");
-    }
-
     @PostConstruct
     private void init() {
         if (provider.getTruststore() != null && provider.getPolicy() != null) {
