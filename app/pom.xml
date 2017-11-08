@@ -5,16 +5,16 @@
 
     <parent>
         <groupId>org.openfact</groupId>
-        <artifactId>openfact-sync</artifactId>
+        <artifactId>openfact-sync-app</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
-    <artifactId>sync</artifactId>
+    <artifactId>openfact-sync</artifactId>
     <packaging>war</packaging>
 
-    <name>sync</name>
-    <description>Sync - Application</description>
+    <name>Openfact Sync</name>
+    <description>Openfact Sync EE - Application</description>
 
     <properties>
         <failOnMissingWebXml>false</failOnMissingWebXml>

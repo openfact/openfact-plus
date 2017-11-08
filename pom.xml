@@ -7,7 +7,7 @@
     </parent>
 
     <groupId>org.openfact</groupId>
-    <artifactId>openfact-sync</artifactId>
+    <artifactId>openfact-sync-app</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -162,7 +162,7 @@
             <!-- This -->
             <dependency>
                 <groupId>org.openfact</groupId>
-                <artifactId>openfact-sync</artifactId>
+                <artifactId>openfact-sync-app</artifactId>
                 <version>${project.version}</version>
                 <type>war</type>
             </dependency>
