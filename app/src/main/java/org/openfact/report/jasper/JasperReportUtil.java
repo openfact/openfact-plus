@@ -16,13 +16,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Singleton
 public class JasperReportUtil {
 
-    private final ReportThemeConfig config;
-    private ConcurrentHashMap<String, JasperReport> cache;
-
     @Inject
-    public JasperReportUtil(ReportThemeConfig config) {
-        this.config = config;
-    }
+    private ReportThemeConfig config;
+
+    private ConcurrentHashMap<String, JasperReport> cache;
 
     @PostConstruct
     private void init() {

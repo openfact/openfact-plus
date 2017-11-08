@@ -21,18 +21,15 @@ import java.util.*;
 @Stateless
 public class FreeMarkerEmailTemplateProvider implements EmailTemplateProvider {
 
-    private final FreeMarkerUtil freeMarker;
-    private final ThemeProvider themeProvider;
-    private final EmailSenderProvider emailSender;
+    @Inject
+    private FreeMarkerUtil freeMarker;
 
     @Inject
-    public FreeMarkerEmailTemplateProvider(FreeMarkerUtil freeMarker,
-                                           @ThemeProviderType(type = Type.EXTENDING) ThemeProvider themeProvider,
-                                           EmailSenderProvider emailSender) {
-        this.freeMarker = freeMarker;
-        this.themeProvider = themeProvider;
-        this.emailSender = emailSender;
-    }
+    @ThemeProviderType(type = Type.EXTENDING)
+    private ThemeProvider themeProvider;
+
+    @Inject
+    private EmailSenderProvider emailSender;
 
     @Override
     public void send(EmailTemplateConfiguration config, DocumentModel document) throws EmailException {

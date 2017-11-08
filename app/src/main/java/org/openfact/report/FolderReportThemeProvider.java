@@ -17,13 +17,10 @@ import java.util.Set;
 @ReportProviderType(type = Type.FOLDER)
 public class FolderReportThemeProvider implements ReportThemeProvider {
 
-    private final ReportThemeConfig config;
-    private File themesDir;
-
     @Inject
-    public FolderReportThemeProvider(ReportThemeConfig config) {
-        this.config = config;
-    }
+    private ReportThemeConfig config;
+
+    private File themesDir;
 
     @PostConstruct
     public void init() {

@@ -22,18 +22,17 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
 
     private static final Logger log = Logger.getLogger(ExtendingReportThemeManager.class);
 
-    private final ReportThemeConfig config;
-    private final Instance<ReportThemeProvider> themeProviders;
+    @Inject
+    private ReportThemeConfig config;
+
+    @Inject
+    @Any
+    @ReportThemeManagerSelector
+    private Instance<ReportThemeProvider> themeProviders;
 
     private String defaultTheme;
     private ConcurrentHashMap<ReportThemeKey, ReportTheme> themeCache;
     private List<ReportThemeProvider> providers;
-
-    @Inject
-    public ExtendingReportThemeManager(ReportThemeConfig config, @Any @ReportThemeManagerSelector Instance<ReportThemeProvider> themeProviders) {
-        this.config = config;
-        this.themeProviders = themeProviders;
-    }
 
     @PostConstruct
     public void init() {

@@ -6,6 +6,8 @@ import org.openfact.config.SmtpConfig;
 import org.openfact.email.exceptions.EmailException;
 import org.openfact.truststore.HostnameVerificationPolicy;
 import org.openfact.truststore.JSSETruststoreConfigurator;
+import org.openfact.truststore.Truststore;
+import org.openfact.truststore.Truststore.Type;
 import org.openfact.truststore.TruststoreProvider;
 
 import javax.activation.DataHandler;
@@ -28,16 +30,15 @@ public class DefaultEmailSenderProvider implements EmailSenderProvider {
 
     private static final Logger logger = Logger.getLogger(DefaultEmailSenderProvider.class);
 
-    private final SmtpConfig config;
-    private final JSSETruststoreConfigurator configurator;
-    private final TruststoreProvider truststore;
+    @Inject
+    private SmtpConfig config;
 
     @Inject
-    public DefaultEmailSenderProvider(SmtpConfig config, JSSETruststoreConfigurator configurator, TruststoreProvider truststore) {
-        this.config = config;
-        this.configurator = configurator;
-        this.truststore = truststore;
-    }
+    private JSSETruststoreConfigurator configurator;
+
+    @Inject
+    @Truststore(Type.FILE)
+    private TruststoreProvider truststore;
 
     @Override
     public void send(String recipient, String subject, String textBody, String htmlBody) throws EmailException {
