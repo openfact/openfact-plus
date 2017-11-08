@@ -2,9 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ${project.artifactId}
+  labels:
+    expose: true
+  annotations:
+    service.alpha.openshift.io/dependencies: '[{"name":"openfact-sync-db","namespace":"","kind":"Service"}]'
 spec:
   ports:
-    - protocol: TCP
-      port: 8080
+    - name: "http"
+      port: 80
+      protocol: "TCP"
       targetPort: 8080
   type: ClusterIP
