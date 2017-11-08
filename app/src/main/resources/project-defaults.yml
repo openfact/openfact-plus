@@ -2,10 +2,10 @@ swarm:
   datasources:
     data-sources:
       SyncDS:
-        driver-name: "${database}"
-        connection-url: "${database.url}"
-        user-name: "${database.username}"
-        password: "${database.password}"
+        driver-name: "${env.DB_DRIVER_NAME}"
+        connection-url: "${env.DB_CONNECTION_URL}"
+        user-name: "${env.DB_USER_NAME}"
+        password: "${env.DB_PASSWORD}"
 openfact:
   fileStorage:
     provider: "${env.OPENFACT_FILE_STORAGE_PROVIDER}"

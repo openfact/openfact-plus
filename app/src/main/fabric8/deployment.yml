@@ -24,12 +24,31 @@ spec:
         - name: SSO_AUTH_SERVER_URL
           value: ${SSO_AUTH_SERVER_URL}
         - name: JAVA_OPTIONS
-          value: -Dsso.realm=${SSO_REALM} -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dsso.clientId=${SSO_CLIENT_ID} -Dsso.credentials.secret=${SSO_CREDENTIALS_SECRET} -Ddatabase=${DS_DRIVER} -Ddatabase.url=${DS_URL} -Ddatabase.username=${DS_USERNAME} -Ddatabase.password=${DS_PASSWORD} -Dhibernate.hbm2ddl.auto=${HB_AUTO} -Dhibernate.show_sql=${HB_SHOW_SQL} -Dhibernate.format_sql=${HB_FORMAT_SQL} -Dhibernate.cache.use_second_level_cache=${HB_SECOND_LEVEL_CACHE} -Dhibernate.es.host=${ES_SERVER_URL} -Dhibernate.es.username=${ES_USERNAME} -Dhibernate.es.password=${ES_PASSWORD} -Dhibernate.es.index_schema_management_strategy=${ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY} -Dhibernate.es.required_index_status=${ES_REQUIRED_INDEX_STATUS}
+          value: -Dsso.realm=${SSO_REALM} -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dsso.clientId=${SSO_CLIENT_ID} -Dsso.credentials.secret=${SSO_CREDENTIALS_SECRET} -Dhibernate.hbm2ddl.auto=${HB_AUTO} -Dhibernate.show_sql=${HB_SHOW_SQL} -Dhibernate.format_sql=${HB_FORMAT_SQL} -Dhibernate.cache.use_second_level_cache=${HB_SECOND_LEVEL_CACHE} -Dhibernate.es.host=${ES_SERVER_URL} -Dhibernate.es.username=${ES_USERNAME} -Dhibernate.es.password=${ES_PASSWORD} -Dhibernate.es.index_schema_management_strategy=${ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY} -Dhibernate.es.required_index_status=${ES_REQUIRED_INDEX_STATUS}
+        - name: DB_DRIVER_NAME
+          value: 'h2'
+        - name: DB_CONNECTION_URL
+          value: 'jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
+        - name: DB_USER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: ${project.artifactId}
+              key: db.user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ${project.artifactId}
+              key: db.password
+        - name: KEYCLOAK_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: keycloak
+              key: kc.password
         - name: GMAIL_CLIENT_APPLICATION_NAME
           valueFrom:
             secretKeyRef:
-              name: openfact-sync
-              key: gmail.client.applicationName
+              name: ${project.artifactId}
+              key: gmail.applicationName
         - name: OPENFACT_FILE_STORAGE_PROVIDER
           valueFrom:
             configMapKeyRef:
