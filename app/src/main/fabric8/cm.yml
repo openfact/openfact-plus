@@ -18,3 +18,13 @@ data:
   openfact.theme.cacheTemplates: true
   openfact.theme.folder.dir: themes
   openfact.fileStorage.provider: jpa
+  openfact.smtp.host: ${OPENFACT_SMTP_HOST}
+  openfact.smtp.port: ${OPENFACT_SMTP_PORT}
+  openfact.smtp.fromDisplayName: OpenfactSync
+  openfact.smtp.from: ${OPENFACT_SMTP_FROM}
+  openfact.smtp.replyToDisplayName: OpenfactSync
+  openfact.smtp.replyTo: info@openfact.com
+  openfact.smtp.envelopeFrom: info@openfact.com
+  openfact.smtp.ssl: ${OPENFACT_SMTP_SSL}
+  openfact.smtp.starttls: ${OPENFACT_SMTP_STARTTLS}
+  openfact.smtp.auth: ${OPENFACT_SMTP_AUTH}

@@ -28,3 +28,16 @@ openfact:
     vendor:
       gmail:
         applicationName: "${env.GMAIL_CLIENT_APPLICATION_NAME}"
+    smtp:
+      host: "${env.OPENFACT_SMTP_HOST}"
+      port: "${env.OPENFACT_SMTP_PORT}"
+      fromDisplayName: "${env.OPENFACT_SMTP_FROM_DISPLAY_NAME}"
+      from: "${env.OPENFACT_SMTP_FROM}"
+      replyToDisplayName: "${env.OPENFACT_SMTP_REPLY_TO_DISPLAY_NAME}"
+      replyTo: "${env.OPENFACT_SMTP_REPLY_TO}"
+      envelopeFrom: "${env.OPENFACT_SMTP_ENVELOPE_FROM}"
+      ssl: "${env.OPENFACT_SMTP_SSL}"
+      starttls: "${env.OPENFACT_SMTP_STARTTLS}"
+      auth: "${env.OPENFACT_SMTP_AUTH}"
+      user: "${env.OPENFACT_SMTP_USER}"
+      password: "${env.OPENFACT_SMTP_PASSWORD}"
