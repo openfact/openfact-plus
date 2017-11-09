@@ -8,23 +8,23 @@ data:
   es.url: http://elasticsearch:9200
   es.index_strategy: drop-and-create
   es.required_index_status: yellow
-  openfact.report.default: openfact
-  openfact.report.cacheReports: true
-  openfact.report.cacheTemplates: true
-  openfact.report.folder.dir: reports
-  openfact.theme.default: openfact
-  openfact.theme.staticMaxAge: 2592000
-  openfact.theme.cacheThemes: true
-  openfact.theme.cacheTemplates: true
-  openfact.theme.folder.dir: themes
-  openfact.fileStorage.provider: jpa
-  openfact.smtp.host: ${OPENFACT_SMTP_HOST}
-  openfact.smtp.port: ${OPENFACT_SMTP_PORT}
-  openfact.smtp.fromDisplayName: OpenfactSync
-  openfact.smtp.from: ${OPENFACT_SMTP_FROM}
-  openfact.smtp.replyToDisplayName: OpenfactSync
-  openfact.smtp.replyTo: info@openfact.com
-  openfact.smtp.envelopeFrom: info@openfact.com
-  openfact.smtp.ssl: ${OPENFACT_SMTP_SSL}
-  openfact.smtp.starttls: ${OPENFACT_SMTP_STARTTLS}
-  openfact.smtp.auth: ${OPENFACT_SMTP_AUTH}
+  report.default: openfact
+  report.cacheReports: true
+  report.cacheTemplates: true
+  report.folder.dir: reports
+  theme.default: openfact
+  theme.staticMaxAge: 2592000
+  theme.cacheThemes: true
+  theme.cacheTemplates: true
+  theme.folder.dir: themes
+  fileStorage.provider: jpa
+  smtp.host: ${OPENFACT_SMTP_HOST}
+  smtp.port: ${OPENFACT_SMTP_PORT}
+  smtp.fromDisplayName: OpenfactSync
+  smtp.from: ${OPENFACT_SMTP_FROM}
+  smtp.replyToDisplayName: OpenfactSync
+  smtp.replyTo: info@openfact.com
+  smtp.envelopeFrom: info@openfact.com
+  smtp.ssl: ${OPENFACT_SMTP_SSL}
+  smtp.starttls: ${OPENFACT_SMTP_STARTTLS}
+  smtp.auth: ${OPENFACT_SMTP_AUTH}

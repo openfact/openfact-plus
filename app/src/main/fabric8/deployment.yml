@@ -99,102 +99,102 @@ spec:
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.fileStorage.provider
+              key: fileStorage.provider
         - name: OPENFACT_REPORT_DEFAULT
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.report.default
+              key: report.default
         - name: OPENFACT_REPORT_CACHE_REPORTS
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.report.cacheReports
+              key: report.cacheReports
         - name: OPENFACT_REPORT_CACHE_TEMPLATES
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.report.cacheTemplates
+              key: report.cacheTemplates
         - name: OPENFACT_REPORT_FOLDER_DIR
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.report.folder.dir
+              key: report.folder.dir
         - name: OPENFACT_THEME_DEFAULT
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.theme.default
+              key: theme.default
         - name: OPENFACT_THEME_STATIC_MAX_AGE
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.theme.staticMaxAge
+              key: theme.staticMaxAge
         - name: OPENFACT_THEME_CACHE_THEMES
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.theme.cacheThemes
+              key: theme.cacheThemes
         - name: OPENFACT_THEME_CACHE_TEMPLATES
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.theme.cacheTemplates
+              key: theme.cacheTemplates
         - name: OPENFACT_THEME_FOLDER_DIR
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.theme.folder.dir
+              key: theme.folder.dir
         - name: OPENFACT_SMTP_HOST
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.smtp.host
+              key: smtp.host
         - name: OPENFACT_SMTP_PORT
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.smtp.port
+              key: smtp.port
         - name: OPENFACT_SMTP_FROM_DISPLAY_NAME
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.smtp.fromDisplayName
+              key: smtp.fromDisplayName
         - name: OPENFACT_SMTP_FROM
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.smtp.from
+              key: smtp.from
         - name: OPENFACT_SMTP_REPLY_TO_DISPLAY_NAME
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.smtp.replyToDisplayName
+              key: smtp.replyToDisplayName
         - name: OPENFACT_SMTP_REPLY_TO
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.smtp.replyTo
+              key: smtp.replyTo
         - name: OPENFACT_SMTP_ENVELOPE_FROM
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.smtp.envelopeFrom
+              key: smtp.envelopeFrom
         - name: OPENFACT_SMTP_SSL
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.smtp.ssl
+              key: smtp.ssl
         - name: OPENFACT_SMTP_STARTTLS
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.smtp.starttls
+              key: smtp.starttls
         - name: OPENFACT_SMTP_AUTH
           valueFrom:
             configMapKeyRef:
               name: ${project.artifactId}
-              key: openfact.smtp.auth
+              key: smtp.auth
         - name: OPENFACT_SMTP_USER
           valueFrom:
             secretKeyRef:
