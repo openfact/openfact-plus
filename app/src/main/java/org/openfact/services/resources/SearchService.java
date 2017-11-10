@@ -27,6 +27,7 @@ import javax.ws.rs.core.UriInfo;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Stateless
 @Path("search")
@@ -214,11 +215,18 @@ public class SearchService {
             boolQueryBuilder.must(roleQuery);
         }
 
+        String orderBy;
+        if (query.getOrderBy() == null) {
+            orderBy = DocumentModel.ISSUE_DATE;
+        } else {
+            orderBy = Stream.of(query.getOrderBy().split("(?<=[a-z])(?=[A-Z])")).collect(Collectors.joining("_")).toLowerCase();
+        }
+
         DocumentQueryModel documentQuery = DocumentQueryModel.builder()
                 .query("{\"query\":" + boolQueryBuilder.toString() + "}", true)
-                .orderBy(query.getOrderBy(), query.isAsc())
-                .offset(query.getOffset())
-                .limit(query.getLimit())
+                .orderBy(orderBy, query.isAsc())
+                .offset(query.getOffset() != null ? query.getOffset() : 0)
+                .limit(query.getLimit() != null ? query.getLimit() : 10)
                 .build();
         List<DocumentModel> documents = documentProvider.getDocuments(documentQuery);
         int totalResults = documentProvider.getDocumentsSize(documentQuery);
@@ -235,4 +243,10 @@ public class SearchService {
                 .collect(Collectors.toList()), links, meta)).build();
     }
 
+    public static void main(String[] args) {
+        String str = "issueDate";
+        String s = Stream.of(str.split("(?<=[a-z])(?=[A-Z])")).collect(Collectors.joining("_"));
+        String[] split = str.split("(?<=[a-z])(?=[A-Z])");
+        System.out.println(s);
+    }
 }
