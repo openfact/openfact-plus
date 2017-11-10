@@ -15,6 +15,7 @@ import javax.activation.DataSource;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.mail.*;
+import javax.mail.Message.RecipientType;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -24,9 +25,7 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 @Stateless
 public class DefaultEmailSenderProvider implements EmailSenderProvider {
@@ -44,12 +43,12 @@ public class DefaultEmailSenderProvider implements EmailSenderProvider {
     private TruststoreProvider truststore;
 
     @Override
-    public void send(String recipient, String subject, String textBody, String htmlBody) throws EmailException {
-        send(recipient, subject, textBody, htmlBody, null);
+    public void send(Set<String> recipients, String subject, String textBody, String htmlBody) throws EmailException {
+        send(recipients, subject, textBody, htmlBody, null);
     }
 
     @Override
-    public void send(String address, String subject, String textBody, String htmlBody, List<EmailFileModel> attachments) throws EmailException {
+    public void send(Set<String> addresses, String subject, String textBody, String htmlBody, Set<EmailFileModel> attachments) throws EmailException {
         Transport transport = null;
         try {
             Properties props = new Properties();
@@ -129,8 +128,17 @@ public class DefaultEmailSenderProvider implements EmailSenderProvider {
                 msg.setEnvelopeFrom(envelopeFrom);
             }
 
+            InternetAddress[] internetAddresses = addresses.stream().map(address -> {
+                try {
+                    return new InternetAddress(address);
+                } catch (AddressException e) {
+                    logger.error("Could not create an internet address from:" + address);
+                    return null;
+                }
+            }).filter(Objects::nonNull).toArray(InternetAddress[]::new);
+
             msg.setFrom(new InternetAddress(from));
-            msg.setHeader("To", address);
+            msg.setRecipients(RecipientType.TO, internetAddresses);
             msg.setSubject(subject, "utf-8");
             msg.setContent(multipart);
             msg.saveChanges();
@@ -142,7 +150,8 @@ public class DefaultEmailSenderProvider implements EmailSenderProvider {
             } else {
                 transport.connect();
             }
-            transport.sendMessage(msg, new InternetAddress[]{new InternetAddress(address)});
+
+            transport.sendMessage(msg, internetAddresses);
         } catch (Exception e) {
             logger.error("Failed to send email", e);
             throw new EmailException(e);
@@ -176,5 +185,4 @@ public class DefaultEmailSenderProvider implements EmailSenderProvider {
             }
         }
     }
-
 }

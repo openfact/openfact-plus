@@ -1,13 +1,18 @@
 package org.openfact.email.freemarker;
 
+import org.jboss.logging.Logger;
 import org.keycloak.common.util.ObjectUtil;
 import org.openfact.documents.DocumentModel;
 import org.openfact.email.EmailFileModel;
 import org.openfact.email.EmailSenderProvider;
-import org.openfact.email.EmailTemplateConfiguration;
 import org.openfact.email.EmailTemplateProvider;
 import org.openfact.email.exceptions.EmailException;
+import org.openfact.files.FileModel;
+import org.openfact.files.FileProvider;
+import org.openfact.files.exceptions.FileFetchException;
 import org.openfact.models.UserModel;
+import org.openfact.report.ReportTemplateProvider;
+import org.openfact.services.resources.DocumentsService;
 import org.openfact.theme.Theme;
 import org.openfact.theme.ThemeProvider;
 import org.openfact.theme.ThemeProviderType;
@@ -20,9 +25,12 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Stateless
 public class FreeMarkerEmailTemplateProvider implements EmailTemplateProvider {
+
+    private static final Logger logger = Logger.getLogger(FreeMarkerEmailTemplateProvider.class);
 
     @Inject
     private FreeMarkerUtil freeMarker;
@@ -34,27 +42,43 @@ public class FreeMarkerEmailTemplateProvider implements EmailTemplateProvider {
     @Inject
     private EmailSenderProvider emailSender;
 
+    @Inject
+    private FileProvider fileProvider;
+
     @Override
-    public void send(EmailTemplateConfiguration config, DocumentModel document) throws EmailException {
-        StringBuilder subject = new StringBuilder()
-                .append("/")
-                .append(toCamelCase(document.getType()))
-                .append(" ")
-                .append(document.getAssignedId());
-        send(config.getUser(), config.getRecipient(), subject.toString(), "document.ftl", config.getAttributes(), config.getAttachments());
+    public void send(UserModel user, Set<String> recipients, Set<DocumentModel> documents) throws EmailException {
+        send(user, recipients, documents, "", "");
     }
 
-    private void send(UserModel user, String recipient, String subjectKey, String template, Map<String, Object> attributes, List<EmailFileModel> attachments) throws EmailException {
-        send(user, recipient, subjectKey, Collections.emptyList(), template, attributes, attachments);
+    @Override
+    public void send(UserModel user, Set<String> recipients, Set<DocumentModel> documents, String subject, String message) throws EmailException {
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("userMessage", message);
+
+        Set<EmailFileModel> xmlFiles = documents.stream()
+                .map(DocumentModel::getFileId)
+                .map(fileId -> fileProvider.getFile(fileId))
+                .map(fileModel -> {
+                    try {
+                        return new EmailFileModel(fileModel.getFile(), fileModel.getFilename(), "application/xml");
+                    } catch (FileFetchException e) {
+                        logger.error("Error fetching file", e);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        send(user, recipients, "mailDocumentSubject", Collections.singletonList(subject), "mail-documents.ftl", attributes, xmlFiles);
     }
 
-    private void send(UserModel user, String recipient, String subjectKey, List<Object> subjectAttributes, String template, Map<String, Object> attributes, List<EmailFileModel> attachments) throws EmailException {
+    private void send(UserModel user, Set<String> recipients, String subjectKey, List<Object> subjectAttributes, String template, Map<String, Object> attributes, Set<EmailFileModel> attachments) throws EmailException {
         try {
             EmailTemplate email = processTemplate(user, subjectKey, subjectAttributes, template, attributes);
             if (attachments != null && !attachments.isEmpty()) {
-                emailSender.send(recipient, email.getSubject(), email.getTextBody(), email.getHtmlBody());
+                emailSender.send(recipients, email.getSubject(), email.getTextBody(), email.getHtmlBody());
             } else {
-                emailSender.send(recipient, email.getSubject(), email.getTextBody(), email.getHtmlBody(), attachments);
+                emailSender.send(recipients, email.getSubject(), email.getTextBody(), email.getHtmlBody(), attachments);
             }
         } catch (EmailException e) {
             throw e;
@@ -91,14 +115,6 @@ public class FreeMarkerEmailTemplateProvider implements EmailTemplateProvider {
         } catch (Exception e) {
             throw new EmailException("Failed to template email", e);
         }
-    }
-
-    private String toCamelCase(String event) {
-        StringBuilder sb = new StringBuilder();
-        for (String s : event.toLowerCase().split("_")) {
-            sb.append(ObjectUtil.capitalize(s));
-        }
-        return sb.toString();
     }
 
     private static Locale getLocale(UserModel user) {

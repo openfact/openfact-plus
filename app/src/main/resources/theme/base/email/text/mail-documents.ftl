@@ -1,0 +1,1 @@
+${msg("mailDocumentBody", userMessage)}

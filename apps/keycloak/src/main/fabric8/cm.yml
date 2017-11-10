@@ -12,7 +12,7 @@ data:
   openfact.url: http://openfact
   jenkins.url: http://jenkins
   keycloak.url: http://keycloak
-  sync.api.url: http://sync
+  sync.api.url: http://openfact-sync
   openfact-realm.json: |-
     {
       "realm": "openfact",
