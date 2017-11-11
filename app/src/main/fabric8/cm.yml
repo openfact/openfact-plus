@@ -8,56 +8,35 @@ data:
   es.url: http://elasticsearch:9200
   es.index_strategy: drop-and-create
   es.required_index_status: yellow
-  report.default: openfact
-  report.cacheReports: true
-  report.cacheTemplates: true
-  report.folder.dir: reports
-  theme.default: openfact
-  theme.staticMaxAge: 2592000
-  theme.cacheThemes: true
-  theme.cacheTemplates: true
-  theme.folder.dir: themes
-  fileStorage.provider: jpa
-  smtp.host: ${OPENFACT_SMTP_HOST}
-  smtp.port: ${OPENFACT_SMTP_PORT}
-  smtp.fromDisplayName: OpenfactSync
-  smtp.from: ${OPENFACT_SMTP_FROM}
-  smtp.replyToDisplayName: OpenfactSync
-  smtp.replyTo: info@openfact.com
-  smtp.envelopeFrom: info@openfact.com
-  smtp.ssl: ${OPENFACT_SMTP_SSL}
-  smtp.starttls: ${OPENFACT_SMTP_STARTTLS}
-  smtp.auth: ${OPENFACT_SMTP_AUTH}
-  gmail.applicationName: 'Openfact Sync'
   openfact-sync-config.yml: |-
       openfact:
         fileStorage:
-          provider: "${OPENFACT_FILE_STORAGE_PROVIDER}"
+          provider: jpa
         report:
-          default: "${OPENFACT_REPORT_DEFAULT}"
-          cacheReports: "${OPENFACT_REPORT_CACHE_REPORTS}"
-          cacheTemplates: "${OPENFACT_REPORT_CACHE_TEMPLATES}"
+          default: openfact
+          cacheReports: true
+          cacheTemplates: true
           folder:
-            dir: "${OPENFACT_REPORT_FOLDER_DIR}"
+            dir: /reports
         theme:
-          default: "${OPENFACT_THEME_DEFAULT}"
-          staticMaxAge: "${OPENFACT_THEME_STATIC_MAX_AGE}"
-          cacheThemes: "${OPENFACT_THEME_CACHE_THEMES}"
-          cacheTemplates: "${OPENFACT_THEME_CACHE_TEMPLATES}"
+          default: openfact
+          staticMaxAge: 2592000
+          cacheThemes: true
+          cacheTemplates: true
           folder:
-            dir: "${OPENFACT_THEME_FOLDER_DIR}"
+            dir: /themes
         mail:
           vendor:
             gmail:
-              applicationName: "${GMAIL_CLIENT_APPLICATION_NAME}"
+              applicationName: 'Openfact Sync'
           smtp:
             host: "${OPENFACT_SMTP_HOST}"
             port: "${OPENFACT_SMTP_PORT}"
-            fromDisplayName: "${OPENFACT_SMTP_FROM_DISPLAY_NAME}"
+            fromDisplayName: 'Openfact Sync Display Name'
             from: "${OPENFACT_SMTP_FROM}"
-            replyToDisplayName: "${OPENFACT_SMTP_REPLY_TO_DISPLAY_NAME}"
-            replyTo: "${OPENFACT_SMTP_REPLY_TO}"
-            envelopeFrom: "${OPENFACT_SMTP_ENVELOPE_FROM}"
+            replyToDisplayName: 'Openfact Sync Reply Display Name'
+            replyTo: reply@openfactsync.com
+            envelopeFrom: envelope@openfactsync.com
             ssl: "${OPENFACT_SMTP_SSL}"
             starttls: "${OPENFACT_SMTP_STARTTLS}"
             auth: "${OPENFACT_SMTP_AUTH}"
