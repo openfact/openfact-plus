@@ -1,5 +1,15 @@
 package org.openfact.report;
 
 public enum ExportFormat {
-    HTML, PDF
+    HTML("html"), PDF("pdf");
+
+    private String extension;
+
+    ExportFormat(String extension) {
+        this.extension = extension;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
 }

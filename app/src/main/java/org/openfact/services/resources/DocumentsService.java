@@ -1,5 +1,6 @@
 package org.openfact.services.resources;
 
+import jodd.io.ZipBuilder;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
@@ -19,6 +20,7 @@ import org.openfact.report.ReportTemplateConfiguration;
 import org.openfact.report.ReportTemplateProvider;
 import org.openfact.report.exceptions.ReportException;
 import org.openfact.representations.idm.DocumentRepresentation;
+import org.openfact.representations.idm.GenericDataRepresentation;
 import org.openfact.services.ErrorResponse;
 import org.openfact.services.ErrorResponseException;
 import org.openfact.services.resources.utils.PATCH;
@@ -32,6 +34,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Stateless
 @Path("/documents")
@@ -155,9 +160,109 @@ public class DocumentsService {
         documentManager.removeDocument(ublDocument);
     }
 
+    @PATCH
+    @Path("massive")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void updateDocuments(GenericDataRepresentation<List<DocumentRepresentation.Data>> representation) {
+        representation.getData().forEach(documentRepresentation -> {
+            DocumentModel document = getDocumentById(documentRepresentation.getId());
+
+            DocumentRepresentation.Attributes attributes = documentRepresentation.getAttributes();
+            if (attributes.getStarred() != null) {
+                document.setStarred(attributes.getStarred());
+            }
+            if (attributes.getTags() != null && !attributes.getTags().isEmpty()) {
+                document.setTags(attributes.getTags());
+            }
+        });
+    }
+
     @GET
-    @Path("/{documentId}/report")
-    public Response getPdf(
+    @Path("/massive/download")
+    @Produces("application/zip")
+    public Response downloadDocuments(@QueryParam("documents") List<String> documentsId) {
+        Set<FileModel> files = documentsId.stream()
+                .map(this::getDocumentById)
+                .map(document -> fileProvider.getFile(document.getFileId()))
+                .collect(Collectors.toSet());
+
+        ZipBuilder zipInMemory = ZipBuilder.createZipInMemory();
+        for (FileModel file : files) {
+            try {
+                byte[] bytes = file.getFile();
+                zipInMemory.add(bytes).path(file.getFilename()).save();
+            } catch (FileFetchException e) {
+                logger.error("could not fetch file for zip", e);
+            } catch (IOException e) {
+                logger.error("Could not add file to zip", e);
+            }
+        }
+        byte[] zip = zipInMemory.toBytes();
+
+        Response.ResponseBuilder response = Response.ok(zip);
+        response.header("Content-Disposition", "attachment; filename=\"" + UUID.randomUUID().toString() + ".xml\"");
+        return response.build();
+    }
+
+    @GET
+    @Path("/massive/print")
+    @Produces("application/zip")
+    public Response printDocuments(
+            @QueryParam("documents") List<String> documentsId,
+            @QueryParam("theme") String theme,
+            @QueryParam("format") @DefaultValue("PDF") String format
+    ) {
+        ExportFormat exportFormat = ExportFormat.valueOf(format.toUpperCase());
+
+        Set<DocumentModel> documents = documentsId.stream()
+                .map(this::getDocumentById)
+                .collect(Collectors.toSet());
+
+        ReportTemplateConfiguration reportConfig = ReportTemplateConfiguration.builder()
+                .themeName(theme)
+                .build();
+
+        ZipBuilder zipInMemory = ZipBuilder.createZipInMemory();
+        for (DocumentModel document : documents) {
+            try {
+                byte[] bytes = reportTemplateProvider.getReport(reportConfig, document, exportFormat);
+                zipInMemory.add(bytes).path(document.getAssignedId() + "." + exportFormat.getExtension()).save();
+            } catch (FileFetchException | ReportException e) {
+                logger.error("Could not generate a report", e);
+            } catch (IOException e) {
+                logger.error("Could not add file to zip", e);
+            }
+        }
+        byte[] zip = zipInMemory.toBytes();
+
+        Response.ResponseBuilder response = Response.ok(zip);
+        response.header("Content-Disposition", "attachment; filename=\"" + UUID.randomUUID().toString() + ".xml\"");
+        return response.build();
+    }
+
+    @GET
+    @Path("/{documentId}/download")
+    @Produces("application/xml")
+    public Response getXml(@PathParam("documentId") String documentId) {
+        DocumentModel document = getDocumentById(documentId);
+
+        FileModel file = fileProvider.getFile(document.getFileId());
+
+        byte[] reportBytes;
+        try {
+            reportBytes = file.getFile();
+        } catch (FileFetchException e) {
+            return ErrorResponse.error("Could not fetch file, please try again", Response.Status.INTERNAL_SERVER_ERROR);
+        }
+
+        Response.ResponseBuilder response = Response.ok(reportBytes);
+        response.header("Content-Disposition", "attachment; filename=\"" + document.getAssignedId() + ".xml\"");
+        return response.build();
+    }
+
+    @GET
+    @Path("/{documentId}/print")
+    public Response printDocument(
             @PathParam("documentId") String documentId,
             @QueryParam("theme") String theme,
             @QueryParam("format") @DefaultValue("PDF") String format) {
@@ -186,26 +291,6 @@ public class DocumentsService {
                 break;
         }
 
-        return response.build();
-    }
-
-    @GET
-    @Path("/{documentId}/xml")
-    @Produces("application/xml")
-    public Response getXml(@PathParam("documentId") String documentId) {
-        DocumentModel document = getDocumentById(documentId);
-
-        FileModel file = fileProvider.getFile(document.getFileId());
-
-        byte[] reportBytes;
-        try {
-            reportBytes = file.getFile();
-        } catch (FileFetchException e) {
-            return ErrorResponse.error("Could not fetch file, please try again", Response.Status.INTERNAL_SERVER_ERROR);
-        }
-
-        Response.ResponseBuilder response = Response.ok(reportBytes);
-        response.header("Content-Disposition", "attachment; filename=\"" + document.getAssignedId() + ".xml\"");
         return response.build();
     }
 

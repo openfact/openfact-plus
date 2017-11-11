@@ -363,6 +363,13 @@
             <version>6.4.3</version>
         </dependency>
 
+        <!--Zip builder-->
+        <dependency>
+            <groupId>org.jodd</groupId>
+            <artifactId>jodd-core</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+
         <!-- Others -->
         <dependency>
             <groupId>org.freemarker</groupId>

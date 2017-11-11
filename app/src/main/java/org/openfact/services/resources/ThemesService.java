@@ -21,6 +21,7 @@ import javax.ws.rs.core.UriInfo;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -92,7 +93,10 @@ public class ThemesService {
             return data;
         };
 
-        return new GenericDataRepresentation(themes.stream().map(mapper).collect(Collectors.toList()));
+        List<UserThemeRepresentation.Data> data = themes.stream()
+                .map(mapper)
+                .collect(Collectors.toList());
+        return new GenericDataRepresentation<>(data);
     }
 
     @GET

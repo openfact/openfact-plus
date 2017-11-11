@@ -11,6 +11,8 @@ import org.openfact.documents.DocumentQueryModel;
 import org.openfact.models.*;
 import org.openfact.representations.idm.DocumentQueryRepresentation;
 import org.openfact.representations.idm.GenericDataRepresentation;
+import org.openfact.representations.idm.SpaceRepresentation;
+import org.openfact.representations.idm.UserRepresentation;
 import org.openfact.services.ErrorResponse;
 import org.openfact.services.ErrorResponseException;
 import org.openfact.services.util.SSOContext;
@@ -66,9 +68,10 @@ public class SearchService {
             queryBuilder.filterText(filterText);
         }
 
-        return new GenericDataRepresentation(spaceProvider.getSpaces(queryBuilder.build()).stream()
+        List<SpaceRepresentation.Data> data = spaceProvider.getSpaces(queryBuilder.build()).stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        return new GenericDataRepresentation<>(data);
     }
 
     @GET
@@ -80,9 +83,10 @@ public class SearchService {
             queryBuilder.filterText(filterText);
         }
 
-        return new GenericDataRepresentation(userProvider.getUsers(queryBuilder.build()).stream()
+        List<UserRepresentation.Data> data = userProvider.getUsers(queryBuilder.build()).stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        return new GenericDataRepresentation<>(data);
     }
 
     @GET
@@ -113,7 +117,9 @@ public class SearchService {
             allSpaces.retainAll(query.getSpaces());
         }
         if (allSpaces.isEmpty()) {
-            return Response.ok(new GenericDataRepresentation(new ArrayList<>())).build();
+            Map<String, Object> meta = new HashMap<>();
+            meta.put("totalCount", 0);
+            return Response.ok(new GenericDataRepresentation<>(new ArrayList<>(), Collections.emptyMap(), meta)).build();
         }
 
         // ES
@@ -238,7 +244,7 @@ public class SearchService {
         // Links
         Map<String, String> links = new HashMap<>();
 
-        return Response.ok(new GenericDataRepresentation(documents.stream()
+        return Response.ok(new GenericDataRepresentation<>(documents.stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
                 .collect(Collectors.toList()), links, meta)).build();
     }

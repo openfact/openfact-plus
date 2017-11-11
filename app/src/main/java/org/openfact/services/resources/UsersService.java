@@ -24,6 +24,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -133,9 +134,10 @@ public class UsersService {
             queryBuilder.addFilter(UserModel.USERNAME, usernameFilter);
         }
 
-        return new GenericDataRepresentation(userProvider.getUsers(queryBuilder.build()).stream()
+        List<UserRepresentation.Data> data = userProvider.getUsers(queryBuilder.build()).stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        return new GenericDataRepresentation<>(data);
     }
 
     @GET

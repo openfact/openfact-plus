@@ -104,7 +104,7 @@ public class NamedSpacesService {
             spaces.remove(links.size() - 1);
         }
 
-        return new GenericDataRepresentation(spaces.stream()
+        return new GenericDataRepresentation<>(spaces.stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
                 .collect(Collectors.toList()), links, meta);
     }

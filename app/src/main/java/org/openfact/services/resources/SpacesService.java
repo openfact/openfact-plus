@@ -163,7 +163,7 @@ public class SpacesService {
             collaborators.remove(links.size() - 1);
         }
 
-        return new GenericDataRepresentation(collaborators.stream()
+        return new GenericDataRepresentation<>(collaborators.stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
                 .collect(Collectors.toList()), links, meta);
     }
