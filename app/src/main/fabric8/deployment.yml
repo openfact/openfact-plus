@@ -11,6 +11,216 @@ spec:
       annotations:
         pod.beta.kubernetes.io/init-containers: |-
             [
+              {
+                "name": "envvar-substitution",
+                "image": "fabric8/envsubst-file:1.0.0",
+                "imagePullPolicy": "IfNotPresent",
+                "args": [
+                  "openfact-sync-config.yml"
+                ],
+                "env": [
+                  {
+                    "name": "OPENFACT_FILE_STORAGE_PROVIDER",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "fileStorage.provider"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_REPORT_DEFAULT",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "report.default"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_REPORT_CACHE_REPORTS",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "report.cacheReports"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_REPORT_CACHE_TEMPLATES",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "report.cacheTemplates"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_REPORT_FOLDER_DIR",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "report.folder.dir"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_THEME_DEFAULT",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "theme.default"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_THEME_STATIC_MAX_AGE",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "theme.staticMaxAge"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_THEME_CACHE_THEMES",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "theme.cacheThemes"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_THEME_CACHE_TEMPLATES",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "theme.cacheTemplates"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_THEME_FOLDER_DIR",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "theme.folder.dir"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_SMTP_HOST",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "smtp.host"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_SMTP_PORT",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "smtp.port"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_SMTP_FROM_DISPLAY_NAME",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "smtp.fromDisplayName"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_SMTP_FROM",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "smtp.from"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_SMTP_REPLY_TO_DISPLAY_NAME",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "smtp.replyToDisplayName"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_SMTP_REPLY_TO",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "smtp.replyTo"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_SMTP_ENVELOPE_FROM",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "smtp.envelopeFrom"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_SMTP_SSL",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "smtp.ssl"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_SMTP_AUTH",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "smtp.auth"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_SMTP_USER",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "smtp.user"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_SMTP_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "smtp.password"
+                      }
+                    }
+                  }
+                ],
+                "volumeMounts": [
+                  {
+                    "name": "openfact-sync-config",
+                    "mountPath": "/workdir/openfact-sync-config.yml",
+                    "subPath": "config/openfact-sync-config.yml"
+                  },
+                  {
+                    "name": "openfact-sync-subst-config",
+                    "mountPath": "/processed"
+                  }
+                ]
+              }
             ]
     spec:
       containers:
@@ -92,7 +302,7 @@ spec:
               key: es.required_index_status
         - name: GMAIL_CLIENT_APPLICATION_NAME
           valueFrom:
-            secretKeyRef:
+            configMapKeyRef:
               name: ${project.artifactId}
               key: gmail.applicationName
         - name: OPENFACT_FILE_STORAGE_PROVIDER
@@ -225,6 +435,18 @@ spec:
           periodSeconds: 30
         securityContext:
           privileged: false
+        volumeMounts:
+        - name: openfact-sync-subst-config
+          mountPath: /deployments/stages
+      volumes:
+      - name: openfact-sync-subst-config
+        emptyDir: {}
+      - name: openfact-sync-config
+        configMap:
+          name: openfact-sync
+          items:
+          - key: openfact-sync-config.yml
+            path: config/openfact-sync-config.yml
   triggers:
   - type: ConfigChange
   - imageChangeParams:

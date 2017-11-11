@@ -28,3 +28,38 @@ data:
   smtp.ssl: ${OPENFACT_SMTP_SSL}
   smtp.starttls: ${OPENFACT_SMTP_STARTTLS}
   smtp.auth: ${OPENFACT_SMTP_AUTH}
+  gmail.applicationName: 'Openfact Sync'
+  openfact-sync-config.yml: |-
+      openfact:
+        fileStorage:
+          provider: "${OPENFACT_FILE_STORAGE_PROVIDER}"
+        report:
+          default: "${OPENFACT_REPORT_DEFAULT}"
+          cacheReports: "${OPENFACT_REPORT_CACHE_REPORTS}"
+          cacheTemplates: "${OPENFACT_REPORT_CACHE_TEMPLATES}"
+          folder:
+            dir: "${OPENFACT_REPORT_FOLDER_DIR}"
+        theme:
+          default: "${OPENFACT_THEME_DEFAULT}"
+          staticMaxAge: "${OPENFACT_THEME_STATIC_MAX_AGE}"
+          cacheThemes: "${OPENFACT_THEME_CACHE_THEMES}"
+          cacheTemplates: "${OPENFACT_THEME_CACHE_TEMPLATES}"
+          folder:
+            dir: "${OPENFACT_THEME_FOLDER_DIR}"
+        mail:
+          vendor:
+            gmail:
+              applicationName: "${GMAIL_CLIENT_APPLICATION_NAME}"
+          smtp:
+            host: "${OPENFACT_SMTP_HOST}"
+            port: "${OPENFACT_SMTP_PORT}"
+            fromDisplayName: "${OPENFACT_SMTP_FROM_DISPLAY_NAME}"
+            from: "${OPENFACT_SMTP_FROM}"
+            replyToDisplayName: "${OPENFACT_SMTP_REPLY_TO_DISPLAY_NAME}"
+            replyTo: "${OPENFACT_SMTP_REPLY_TO}"
+            envelopeFrom: "${OPENFACT_SMTP_ENVELOPE_FROM}"
+            ssl: "${OPENFACT_SMTP_SSL}"
+            starttls: "${OPENFACT_SMTP_STARTTLS}"
+            auth: "${OPENFACT_SMTP_AUTH}"
+            user: "${OPENFACT_SMTP_USER}"
+            password: "${OPENFACT_SMTP_PASSWORD}"
