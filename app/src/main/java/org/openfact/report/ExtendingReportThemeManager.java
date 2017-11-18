@@ -80,7 +80,12 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
             }
             return theme;
         } else {
-            return loadTheme(type, name);
+            ReportTheme theme = loadTheme(type, name);
+            if (theme == null) {
+                theme = loadTheme("model", "openfact");
+                log.errorv("Failed to find {0} report theme {1}, using built-in report themes", type, name);
+            }
+            return theme;
         }
     }
 

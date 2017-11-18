@@ -21,8 +21,8 @@
 
         <version.wildfly.swarm>2017.11.0</version.wildfly.swarm>
 
-        <fabric8.version>2.3.6</fabric8.version>
-        <fabric8.maven.plugin.version>3.5.31</fabric8.maven.plugin.version>
+        <fabric8.version>3.0.8</fabric8.version>
+        <fabric8.maven.plugin.version>3.5.33</fabric8.maven.plugin.version>
 
         <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>2.20</maven-failsafe-plugin.version>

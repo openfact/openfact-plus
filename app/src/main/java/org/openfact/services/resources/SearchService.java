@@ -198,7 +198,8 @@ public class SearchService {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
                 .must(filterTextQuery)
                 .should(supplierQuery)
-                .should(customerQuery);
+                .should(customerQuery)
+                .minimumShouldMatch(1);
         if (typeQuery != null) {
             boolQueryBuilder.filter(typeQuery);
         }

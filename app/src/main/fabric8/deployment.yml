@@ -20,96 +20,6 @@ spec:
                 ],
                 "env": [
                   {
-                    "name": "OPENFACT_FILE_STORAGE_PROVIDER",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "fileStorage.provider"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_REPORT_DEFAULT",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "report.default"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_REPORT_CACHE_REPORTS",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "report.cacheReports"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_REPORT_CACHE_TEMPLATES",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "report.cacheTemplates"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_REPORT_FOLDER_DIR",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "report.folder.dir"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_THEME_DEFAULT",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "theme.default"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_THEME_STATIC_MAX_AGE",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "theme.staticMaxAge"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_THEME_CACHE_THEMES",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "theme.cacheThemes"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_THEME_CACHE_TEMPLATES",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "theme.cacheTemplates"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_THEME_FOLDER_DIR",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "theme.folder.dir"
-                      }
-                    }
-                  },
-                  {
                     "name": "OPENFACT_SMTP_HOST",
                     "valueFrom": {
                       "configMapKeyRef": {
@@ -128,15 +38,6 @@ spec:
                     }
                   },
                   {
-                    "name": "OPENFACT_SMTP_FROM_DISPLAY_NAME",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "smtp.fromDisplayName"
-                      }
-                    }
-                  },
-                  {
                     "name": "OPENFACT_SMTP_FROM",
                     "valueFrom": {
                       "configMapKeyRef": {
@@ -146,38 +47,20 @@ spec:
                     }
                   },
                   {
-                    "name": "OPENFACT_SMTP_REPLY_TO_DISPLAY_NAME",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "smtp.replyToDisplayName"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_SMTP_REPLY_TO",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "smtp.replyTo"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_SMTP_ENVELOPE_FROM",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "smtp.envelopeFrom"
-                      }
-                    }
-                  },
-                  {
                     "name": "OPENFACT_SMTP_SSL",
                     "valueFrom": {
                       "configMapKeyRef": {
                         "name": "openfact-sync",
                         "key": "smtp.ssl"
+                      }
+                    }
+                  },
+                  {
+                    "name": "OPENFACT_SMTP_STARTTLS",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "openfact-sync",
+                        "key": "smtp.starttls"
                       }
                     }
                   },
@@ -234,7 +117,7 @@ spec:
         - name: SSO_AUTH_SERVER_URL
           value: ${SSO_AUTH_SERVER_URL}
         - name: JAVA_OPTIONS
-          value: -Dsso.realm=${SSO_REALM} -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dsso.clientId=${SSO_CLIENT_ID} -Dsso.credentials.secret=${SSO_CREDENTIALS_SECRET} -Dswarm.project.stage.file=/deployments/stages/openfact-sync-config.yml
+          value: -Dsso.realm=${SSO_REALM} -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dsso.clientId=${SSO_CLIENT_ID} -Dsso.credentials.secret=${SSO_CREDENTIALS_SECRET} -Dswarm.project.stage=production
         - name: DB_DRIVER_NAME
           valueFrom:
             configMapKeyRef:

@@ -8,6 +8,12 @@ data:
   es.url: http://elasticsearch:9200
   es.index_strategy: drop-and-create
   es.required_index_status: yellow
+  smtp.host: smtp.gmail.com
+  smtp.port: 465
+  smtp.from: carlosthe19916@gmail.com
+  smtp.ssl: true
+  smtp.starttls: true
+  smtp.auth: true
   openfact-sync-config.yml: |-
       openfact:
         fileStorage:
