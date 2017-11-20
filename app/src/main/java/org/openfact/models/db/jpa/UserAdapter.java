@@ -5,7 +5,9 @@ import org.openfact.models.SpaceModel;
 import org.openfact.models.UserLinkedBrokerModel;
 import org.openfact.models.UserModel;
 import org.openfact.models.db.JpaModel;
+import org.openfact.models.db.jpa.entity.UserContextInformationEntity;
 import org.openfact.models.db.jpa.entity.UserEntity;
+import org.openfact.models.utils.JacksonUtil;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
@@ -182,7 +184,25 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
 
     @Override
     public JsonNode getContextInformation() {
-        return user.getContextInformation();
+        if (user.getContextInformation() != null) {
+            return user.getContextInformation().getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public void setContextInformation(JsonNode json) {
+        UserContextInformationEntity contextInformationEntity = user.getContextInformation();
+        if (contextInformationEntity == null) {
+            contextInformationEntity = new UserContextInformationEntity();
+            contextInformationEntity.setValue(json);
+            contextInformationEntity.setUser(user);
+            em.persist(contextInformationEntity);
+        } else {
+            contextInformationEntity.setValue(json);
+            em.merge(contextInformationEntity);
+            em.flush();
+        }
     }
 
     @Override
@@ -195,11 +215,6 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public void setFavoriteSpaces(Set<String> spaces) {
         user.setFavoriteSpaces(spaces);
-    }
-
-    @Override
-    public void setContextInformation(JsonNode contextInformation) {
-        user.setContextInformation(contextInformation);
     }
 
     @Override

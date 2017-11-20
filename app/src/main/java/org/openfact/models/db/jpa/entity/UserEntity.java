@@ -106,9 +106,8 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<CollaboratorEntity> collaboratedSpaces = new HashSet<>();
 
-    @Type(type = "org.openfact.models.db.type.json.JsonNodeType")
-    @Column(name = "context_information", length = 4096)
-    private JsonNode contextInformation;
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private UserContextInformationEntity contextInformation;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Set<UserLinkedBrokerEntity> linkedBrokers = new HashSet<>();
@@ -257,11 +256,11 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.ownedSpaces = ownedSpaces;
     }
 
-    public void setContextInformation(JsonNode contextInformation) {
+    public void setContextInformation(UserContextInformationEntity contextInformation) {
         this.contextInformation = contextInformation;
     }
 
-    public JsonNode getContextInformation() {
+    public UserContextInformationEntity getContextInformation() {
         return contextInformation;
     }
 

@@ -38,12 +38,7 @@ public class JacksonUtil {
         }
     }
 
-    public static <T> T clone(T value) {
-        return fromString(toString(value), (Class<T>) value.getClass());
-    }
-
-
-    public static JsonNode merge(final JsonNode target, final JsonNode source) {
+    public static JsonNode merge(JsonNode target, JsonNode source) {
         if (target instanceof ArrayNode && source instanceof ArrayNode) {
             // Both the target and source are array nodes, then append the
             // contents of the source array to the target array without
@@ -80,6 +75,20 @@ public class JacksonUtil {
             // the source node since subsequent merges may modify it.
             return source.deepCopy();
         }
+    }
+
+    public static JsonNode override(JsonNode target, JsonNode source) {
+        target = target.deepCopy();
+        source = source.deepCopy();
+        if (target instanceof ObjectNode && source instanceof ObjectNode) {
+            final Iterator<Map.Entry<String, JsonNode>> iterator = source.fields();
+            while (iterator.hasNext()) {
+                final Map.Entry<String, JsonNode> sourceFieldEntry = iterator.next();
+                ((ObjectNode) target).set(sourceFieldEntry.getKey(), sourceFieldEntry.getValue().deepCopy());
+            }
+            return target;
+        }
+        return source;
     }
 
 }

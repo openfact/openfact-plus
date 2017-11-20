@@ -94,7 +94,8 @@ public class UsersService {
             // Context Information
             JsonNode contextInformation = attributes.getContextInformation();
             if (contextInformation != null) {
-                user.setContextInformation(JacksonUtil.clone(JacksonUtil.merge(user.getContextInformation(), contextInformation)));
+                JsonNode currentContextInformation = user.getContextInformation() != null ? user.getContextInformation() : JacksonUtil.toJsonNode("{}");
+                user.setContextInformation(JacksonUtil.override(currentContextInformation, contextInformation));
             }
 
             // Favorite Spaces
