@@ -120,6 +120,10 @@ public class UsersService {
             if (attributes.getBio() != null) {
                 user.setBio(attributes.getBio());
             }
+
+            if (attributes.getLanguage() != null) {
+                user.setLanguage(attributes.getLanguage());
+            }
         }
 
         // Build result

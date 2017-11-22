@@ -119,11 +119,11 @@ public class NamedSpacesService {
         SpaceModel space = getSpaceByAssignedID(assignedID);
 
         // TODO check if user has access to space
-        if (space.getOwner() != null && space.getOwner().equals(user)) {
+        if (space.getOwner() != null && (space.getOwner().equals(user) || user.getCollaboratedSpaces().contains(space))) {
             return modelToRepresentation.toRepresentation(space, uriInfo).toSpaceRepresentation();
-        } else {
-            throw new BadRequestException();
         }
+
+        throw new BadRequestException();
     }
 
 }

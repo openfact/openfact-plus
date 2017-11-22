@@ -56,6 +56,8 @@ public class ModelToRepresentation {
         attributes.setOwnedSpaces(model.getOwnedSpaces().stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
         attributes.setCollaboratedSpaces(model.getCollaboratedSpaces().stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
 
+        attributes.setLanguage(model.getLanguage());
+
         rep.setAttributes(attributes);
         return rep;
     }

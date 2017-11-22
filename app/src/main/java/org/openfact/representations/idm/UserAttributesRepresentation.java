@@ -60,6 +60,8 @@ public class UserAttributesRepresentation {
     private Set<String> ownedSpaces;
     private Set<String> collaboratedSpaces;
 
+    private String language;
+
     public String getUserID() {
         return userID;
     }
@@ -218,5 +220,13 @@ public class UserAttributesRepresentation {
 
     public void setCollaboratedSpaces(Set<String> collaboratedSpaces) {
         this.collaboratedSpaces = collaboratedSpaces;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }
