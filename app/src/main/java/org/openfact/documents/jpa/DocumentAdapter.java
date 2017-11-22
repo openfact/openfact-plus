@@ -59,6 +59,11 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
+    public Float getTax() {
+        return document.getTax();
+    }
+
+    @Override
     public String getCurrency() {
         return document.getCurrency();
     }
@@ -79,6 +84,21 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
+    public String getSupplierStreetAddress() {
+        return document.getSupplierStreetAddress();
+    }
+
+    @Override
+    public String getSupplierCity() {
+        return document.getSupplierCity();
+    }
+
+    @Override
+    public String getSupplierCountry() {
+        return document.getSupplierCountry();
+    }
+
+    @Override
     public String getCustomerName() {
         return document.getCustomerName();
     }
@@ -86,6 +106,21 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     @Override
     public String getCustomerAssignedId() {
         return document.getCustomerAssignedId();
+    }
+
+    @Override
+    public String getCustomerStreetAddress() {
+        return document.getCustomerStreetAddress();
+    }
+
+    @Override
+    public String getCustomerCity() {
+        return document.getCustomerCity();
+    }
+
+    @Override
+    public String getCustomerCountry() {
+        return document.getCustomerCountry();
     }
 
     @Override

@@ -121,6 +121,11 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "amount")
     private Float amount;
 
+    @Digits(integer = 10, fraction = 4)
+    @Type(type = "org.hibernate.type.FloatType")
+    @Column(name = "tax")
+    private Float tax;
+
     @Field(name = "currency")
     @Analyzer(definition = "staticTextAnalyzer")
     @Column(name = "currency")
@@ -141,6 +146,15 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "supplier_assigned_id")
     private String supplierAssignedId;
 
+    @Column(name = "supplier_street_address")
+    private String supplierStreetAddress;
+
+    @Column(name = "supplier_city")
+    private String supplierCity;
+
+    @Column(name = "supplier_country")
+    private String supplierCountry;
+
     @Field(name = "customer_name")
     @Analyzer(definition = "nameTextAnalyzer")
     @Column(name = "customer_name")
@@ -149,6 +163,15 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Field(name = "customer_assigned_id")
     @Column(name = "customer_assigned_id")
     private String customerAssignedId;
+
+    @Column(name = "customer_street_address")
+    private String customerStreetAddress;
+
+    @Column(name = "customer_city")
+    private String customerCity;
+
+    @Column(name = "customer_country")
+    private String customerCountry;
 
     @Field(name = "provider")
     @Analyzer(definition = "staticTextAnalyzer")
@@ -307,6 +330,62 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
 
     public void setStarred(boolean stared) {
         this.starred = stared;
+    }
+
+    public String getSupplierStreetAddress() {
+        return supplierStreetAddress;
+    }
+
+    public void setSupplierStreetAddress(String supplierStreetAddress) {
+        this.supplierStreetAddress = supplierStreetAddress;
+    }
+
+    public String getSupplierCity() {
+        return supplierCity;
+    }
+
+    public void setSupplierCity(String supplierCity) {
+        this.supplierCity = supplierCity;
+    }
+
+    public String getSupplierCountry() {
+        return supplierCountry;
+    }
+
+    public void setSupplierCountry(String supplierCountry) {
+        this.supplierCountry = supplierCountry;
+    }
+
+    public String getCustomerStreetAddress() {
+        return customerStreetAddress;
+    }
+
+    public void setCustomerStreetAddress(String customerStreetAddress) {
+        this.customerStreetAddress = customerStreetAddress;
+    }
+
+    public String getCustomerCity() {
+        return customerCity;
+    }
+
+    public void setCustomerCity(String customerCity) {
+        this.customerCity = customerCity;
+    }
+
+    public String getCustomerCountry() {
+        return customerCountry;
+    }
+
+    public void setCustomerCountry(String customerCountry) {
+        this.customerCountry = customerCountry;
+    }
+
+    public Float getTax() {
+        return tax;
+    }
+
+    public void setTax(Float tax) {
+        this.tax = tax;
     }
 }
 

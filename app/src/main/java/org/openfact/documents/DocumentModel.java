@@ -30,6 +30,8 @@ public interface DocumentModel {
 
     Float getAmount();
 
+    Float getTax();
+
     String getCurrency();
 
     Date getIssueDate();
@@ -38,9 +40,21 @@ public interface DocumentModel {
 
     String getSupplierAssignedId();
 
+    String getSupplierStreetAddress();
+
+    String getSupplierCity();
+
+    String getSupplierCountry();
+
     String getCustomerName();
 
     String getCustomerAssignedId();
+
+    String getCustomerStreetAddress();
+
+    String getCustomerCity();
+
+    String getCustomerCountry();
 
     Set<String> getTags();
 

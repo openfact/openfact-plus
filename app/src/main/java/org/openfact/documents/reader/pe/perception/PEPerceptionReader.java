@@ -1,5 +1,6 @@
 package org.openfact.documents.reader.pe.perception;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType;
 import org.jboss.logging.Logger;
 import org.openfact.documents.DocumentReader;
 import org.openfact.documents.GenericDocument;
@@ -47,6 +48,17 @@ public class PEPerceptionReader implements DocumentReader {
         documentEntity.setCurrency(perceptionType.getSunatTotalCashed().getCurrencyID());
         documentEntity.setAmount(perceptionType.getSunatTotalCashed().getValue().floatValue());
         documentEntity.setIssueDate(perceptionType.getIssueDate().getValue().toGregorianCalendar().getTime());
+
+        // Postal address
+        AddressType supplierPostalAddressType = perceptionType.getAgentParty().getPostalAddress();
+        documentEntity.setSupplierStreetAddress(supplierPostalAddressType.getStreetName().getValue());
+        documentEntity.setSupplierCity(supplierPostalAddressType.getCitySubdivisionName().getValue() + ", " + supplierPostalAddressType.getCityName().getValue() + ", " + supplierPostalAddressType.getCitySubdivisionName().getValue());
+        documentEntity.setSupplierCountry(supplierPostalAddressType.getCountry().getIdentificationCode().getValue());
+
+        AddressType customerPostalAddressType = perceptionType.getReceiverParty().getPostalAddress();
+        documentEntity.setCustomerStreetAddress(customerPostalAddressType.getStreetName().getValue());
+        documentEntity.setCustomerCity(customerPostalAddressType.getCitySubdivisionName().getValue() + ", " + customerPostalAddressType.getCityName().getValue() + ", " + customerPostalAddressType.getCitySubdivisionName().getValue());
+        documentEntity.setCustomerCountry(customerPostalAddressType.getCountry().getIdentificationCode().getValue());
 
         return new GenericDocument() {
             @Override

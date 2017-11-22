@@ -1,5 +1,6 @@
 package org.openfact.documents.reader.pe.creditnote;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
 import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
 import org.jboss.logging.Logger;
 import org.openfact.documents.DocumentReader;
@@ -11,6 +12,7 @@ import org.openfact.models.utils.OpenfactModelUtils;
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
+import java.math.BigDecimal;
 
 @Stateless
 @SupportedType(value = "CreditNote")
@@ -46,6 +48,24 @@ public class PECreditNoteReader implements DocumentReader {
         documentEntity.setCurrency(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getCurrencyID().value());
         documentEntity.setAmount(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getValue().floatValue());
         documentEntity.setIssueDate(creditNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
+
+        // Tax
+        documentEntity.setTax(creditNoteType.getTaxTotal().stream()
+                .map(f -> f.getTaxAmount().getValue())
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .floatValue()
+        );
+
+        // Postal address
+        AddressType postalAddressType = creditNoteType.getAccountingSupplierParty().getParty().getPostalAddress();
+        documentEntity.setSupplierStreetAddress(postalAddressType.getStreetName().getValue());
+        documentEntity.setSupplierCity(postalAddressType.getCitySubdivisionName().getValue() + ", " + postalAddressType.getCityName().getValue() + ", " + postalAddressType.getCitySubdivisionName().getValue());
+        documentEntity.setSupplierCountry(postalAddressType.getCountry().getIdentificationCode().getValue());
+
+        AddressType customerPostalAddressType = creditNoteType.getAccountingCustomerParty().getParty().getPostalAddress();
+        documentEntity.setCustomerStreetAddress(customerPostalAddressType.getStreetName().getValue());
+        documentEntity.setCustomerCity(customerPostalAddressType.getCitySubdivisionName().getValue() + ", " + customerPostalAddressType.getCityName().getValue() + ", " + customerPostalAddressType.getCitySubdivisionName().getValue());
+        documentEntity.setCustomerCountry(customerPostalAddressType.getCountry().getIdentificationCode().getValue());
 
         return new GenericDocument() {
             @Override

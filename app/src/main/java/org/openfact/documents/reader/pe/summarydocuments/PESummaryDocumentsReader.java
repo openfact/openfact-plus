@@ -1,5 +1,6 @@
 package org.openfact.documents.reader.pe.summarydocuments;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
 import org.jboss.logging.Logger;
 import org.openfact.documents.DocumentReader;
 import org.openfact.documents.GenericDocument;
@@ -42,6 +43,12 @@ public class PESummaryDocumentsReader implements DocumentReader {
         documentEntity.setSupplierAssignedId(summaryDocumentsType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
         documentEntity.setSupplierName(summaryDocumentsType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
         documentEntity.setIssueDate(summaryDocumentsType.getIssueDate().getValue().toGregorianCalendar().getTime());
+
+        // Postal address
+        AddressType postalAddressType = summaryDocumentsType.getAccountingSupplierParty().getParty().getPostalAddress();
+        documentEntity.setSupplierStreetAddress(postalAddressType.getStreetName().getValue());
+        documentEntity.setSupplierCity(postalAddressType.getCitySubdivisionName().getValue() + ", " + postalAddressType.getCityName().getValue() + ", " + postalAddressType.getCitySubdivisionName().getValue());
+        documentEntity.setSupplierCountry(postalAddressType.getCountry().getIdentificationCode().getValue());
 
         return new GenericDocument() {
             @Override
