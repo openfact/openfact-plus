@@ -9,14 +9,14 @@ public class JacksonUtilTest {
 
     @Test
     public void merge() {
-        JsonNode node1 = JacksonUtil.toJsonNode("{\"recentContexts\":[{\"user\":\"carlos\",\"space\":null,\"document\":null}]}");
-        JsonNode node2 = JacksonUtil.toJsonNode("{\"recentSpaces\":[\"sistcoop\"]}");
+        JsonNode node1 = JacksonUtil.toJsonNode("{\"key1\": \"value1\", \"key2\": \"value2\"}");
+        JsonNode node2 = JacksonUtil.toJsonNode("{\"key2\": \"newValue\",\"key3\": \"value3\"}");
 
         JsonNode mergedJson = JacksonUtil.merge(node1, node2);
 
-        assertThat(mergedJson).isEqualTo(JacksonUtil.toJsonNode("{\"recentContexts\": [{\"user\": \"carlos\", \"space\": null, \"document\": null}], \"recentSpaces\": [\"sistcoop\"]}"));
-        assertThat(node1).isEqualTo(JacksonUtil.toJsonNode("{\"recentContexts\":[{\"user\":\"carlos\",\"space\":null,\"document\":null}]}"));
-        assertThat(node2).isEqualTo(JacksonUtil.toJsonNode("{\"recentSpaces\":[\"sistcoop\"]}"));
+        assertThat(mergedJson).isEqualTo(JacksonUtil.toJsonNode("{\"key1\": \"value1\",\"key2\": \"newValue\",\"key3\": \"value3\"}"));
+        assertThat(node1).isEqualTo(mergedJson);
+        assertThat(node2).isEqualTo(JacksonUtil.toJsonNode("{\"key2\": \"newValue\",\"key3\": \"value3\"}"));
     }
 
     @Test

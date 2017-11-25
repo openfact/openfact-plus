@@ -81,6 +81,21 @@
            <!--</snapshots>-->
        <!--</repository>-->
 
+       <!--Wildfly-Swarm Glassfish-->
+       <repository>
+           <id>jboss-public-repository-group</id>
+           <name>JBoss Public Repository Group</name>
+           <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+           <releases>
+               <enabled>true</enabled>
+               <updatePolicy>never</updatePolicy>
+           </releases>
+           <snapshots>
+               <enabled>false</enabled>
+               <updatePolicy>daily</updatePolicy>
+           </snapshots>
+       </repository>
+
        <!--Jasper reports-->
        <repository>
            <id>jasper</id>
