@@ -1,15 +1,21 @@
 package org.openfact.report;
 
+import org.openfact.theme.ThemeKey;
+
+import java.util.Objects;
+
 public class ReportThemeKey {
 
     private String name;
+    private String type;
 
-    public static ReportThemeKey get(String name) {
-        return new ReportThemeKey(name);
+    public static ReportThemeKey get(String name, String type) {
+        return new ReportThemeKey(name, type);
     }
 
-    private ReportThemeKey(String name) {
+    private ReportThemeKey(String name, String type) {
         this.name = name;
+        this.type = type;
     }
 
     public String getName() {
@@ -20,6 +26,14 @@ public class ReportThemeKey {
         this.name = name;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -28,6 +42,7 @@ public class ReportThemeKey {
         ReportThemeKey themeKey = (ReportThemeKey) o;
 
         if (name != null ? !name.equals(themeKey.name) : themeKey.name != null) return false;
+        if (!Objects.equals(type, themeKey.type)) return false;
 
         return true;
     }
@@ -35,6 +50,7 @@ public class ReportThemeKey {
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
     }
 

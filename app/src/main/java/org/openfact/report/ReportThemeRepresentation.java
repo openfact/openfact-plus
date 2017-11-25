@@ -2,8 +2,8 @@ package org.openfact.report;
 
 public class ReportThemeRepresentation {
 
-    private String type;
     private String name;
+    private String[] types;
 
     public String getName() {
         return name;
@@ -13,11 +13,11 @@ public class ReportThemeRepresentation {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String[] getTypes() {
+        return types;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTypes(String[] types) {
+        this.types = types;
     }
 }

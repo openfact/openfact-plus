@@ -2,10 +2,7 @@ package org.openfact.report;
 
 import org.openfact.utils.PropertiesUtil;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Locale;
@@ -33,21 +30,24 @@ public class ClassLoaderReportTheme implements ReportTheme {
 
     private Properties properties;
 
+    private Properties paramResources;
+
     public ClassLoaderReportTheme(String type, String name, ClassLoader classLoader) throws IOException {
         init(type, name, classLoader);
     }
 
-    public void init(String type, String name, ClassLoader classLoader) throws IOException {
-        this.type = type;
-        this.name = name;
+    public void init(String name, String type, ClassLoader classLoader) throws IOException {
+        this.type = name;
+        this.name = type;
         this.classLoader = classLoader;
 
-        String themeRoot = "report/" + type.toLowerCase() + "/" + name.toLowerCase() + "/";
+        String themeRoot = "report/" + name.toLowerCase() + "/" + type.toLowerCase() + "/";
 
         this.templateRoot = themeRoot;
         this.resourceRoot = themeRoot + "resources/";
         this.messageRoot = themeRoot + "messages/";
         this.properties = new Properties();
+        this.paramResources = new Properties();
 
         URL p = classLoader.getResource(themeRoot + "theme.properties");
         if (p != null) {
@@ -62,6 +62,14 @@ public class ClassLoaderReportTheme implements ReportTheme {
             this.parentName = null;
             this.importName = null;
         }
+
+        URL resourcesMapperURL = classLoader.getResource(themeRoot + "resources.properties");
+        if (resourcesMapperURL != null) {
+            try (Reader reader = new InputStreamReader(resourcesMapperURL.openStream())) {
+                paramResources.load(reader);
+            }
+        }
+
     }
 
     @Override
@@ -144,6 +152,11 @@ public class ClassLoaderReportTheme implements ReportTheme {
     @Override
     public Properties getProperties() {
         return properties;
+    }
+
+    @Override
+    public Properties getParamResources() throws IOException {
+        return paramResources;
     }
 
 }

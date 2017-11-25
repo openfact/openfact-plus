@@ -7,6 +7,7 @@ public class ModelBean {
     private String id;
     private String type;
     private String assignedId;
+    private Float tax;
     private Float amount;
     private String currency;
     private Date issueDate;
@@ -14,6 +15,16 @@ public class ModelBean {
     private String supplierAssignedId;
     private String customerName;
     private String customerAssignedId;
+
+    private String supplierStreetAddress;
+    private String supplierCity;
+    private String supplierCountry;
+
+    private String customerStreetAddress;
+    private String customerCity;
+    private String customerCountry;
+
+    private String location;
 
     public String getId() {
         return id;
@@ -37,6 +48,14 @@ public class ModelBean {
 
     public void setAssignedId(String assignedId) {
         this.assignedId = assignedId;
+    }
+
+    public Float getTax() {
+        return tax;
+    }
+
+    public void setTax(Float tax) {
+        this.tax = tax;
     }
 
     public Float getAmount() {
@@ -93,5 +112,61 @@ public class ModelBean {
 
     public void setCustomerAssignedId(String customerAssignedId) {
         this.customerAssignedId = customerAssignedId;
+    }
+
+    public String getSupplierStreetAddress() {
+        return supplierStreetAddress;
+    }
+
+    public void setSupplierStreetAddress(String supplierStreetAddress) {
+        this.supplierStreetAddress = supplierStreetAddress;
+    }
+
+    public String getSupplierCity() {
+        return supplierCity;
+    }
+
+    public void setSupplierCity(String supplierCity) {
+        this.supplierCity = supplierCity;
+    }
+
+    public String getSupplierCountry() {
+        return supplierCountry;
+    }
+
+    public void setSupplierCountry(String supplierCountry) {
+        this.supplierCountry = supplierCountry;
+    }
+
+    public String getCustomerStreetAddress() {
+        return customerStreetAddress;
+    }
+
+    public void setCustomerStreetAddress(String customerStreetAddress) {
+        this.customerStreetAddress = customerStreetAddress;
+    }
+
+    public String getCustomerCity() {
+        return customerCity;
+    }
+
+    public void setCustomerCity(String customerCity) {
+        this.customerCity = customerCity;
+    }
+
+    public String getCustomerCountry() {
+        return customerCountry;
+    }
+
+    public void setCustomerCountry(String customerCountry) {
+        this.customerCountry = customerCountry;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

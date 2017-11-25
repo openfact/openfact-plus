@@ -52,51 +52,52 @@ public class ThemesService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public GenericDataRepresentation getThemes(@QueryParam("documentId") String documentId) {
-        Set<ReportTheme> themes = null;
-        if (documentId != null) {
-            DocumentModel document = getDocumentById(documentId);
-            try {
-                themes = reportTemplateProvider.getSupportedThemes(document);
-            } catch (FileFetchException e) {
-                logger.error("Error fetching file", e);
-            }
-
-        }
-
-        if (themes == null) {
-            return null;
-        }
-
-        Function<ReportTheme, UserThemeRepresentation.Data> mapper = reportTheme -> {
-            UserThemeRepresentation.Data data = new UserThemeRepresentation.Data();
-            String id = reportTheme.getType() + "_" + reportTheme.getName();
-
-            data.setId(id);
-            data.setType(ModelType.THEMES.getAlias());
-
-            // Attributes
-            UserThemeRepresentation.Attributes attributes = new UserThemeRepresentation.Attributes();
-            attributes.setId(id);
-            attributes.setName(reportTheme.getName());
-            attributes.setType(reportTheme.getType());
-            data.setAttributes(attributes);
-
-            // Links
-            UserThemeRepresentation.ThemeLink links = new UserThemeRepresentation.ThemeLink();
-            String previewImgLink = uriInfo.getBaseUriBuilder()
-                    .path(ThemesService.class)
-                    .path(ThemesService.class, "getThemePreview")
-                    .build(id).toString();
-            links.setPreviewImg(previewImgLink);
-            data.setLinks(links);
-
-            return data;
-        };
-
-        List<UserThemeRepresentation.Data> data = themes.stream()
-                .map(mapper)
-                .collect(Collectors.toList());
-        return new GenericDataRepresentation<>(data);
+//        Set<ReportTheme> themes = null;
+//        if (documentId != null) {
+//            DocumentModel document = getDocumentById(documentId);
+//            try {
+//                themes = reportTemplateProvider.getSupportedThemes(document);
+//            } catch (FileFetchException e) {
+//                logger.error("Error fetching file", e);
+//            }
+//
+//        }
+//
+//        if (themes == null) {
+//            return null;
+//        }
+//
+//        Function<ReportTheme, UserThemeRepresentation.Data> mapper = reportTheme -> {
+//            UserThemeRepresentation.Data data = new UserThemeRepresentation.Data();
+//            String id = reportTheme.getType() + "_" + reportTheme.getName();
+//
+//            data.setId(id);
+//            data.setType(ModelType.THEMES.getAlias());
+//
+//            // Attributes
+//            UserThemeRepresentation.Attributes attributes = new UserThemeRepresentation.Attributes();
+//            attributes.setId(id);
+//            attributes.setName(reportTheme.getName());
+//            attributes.setType(reportTheme.getType());
+//            data.setAttributes(attributes);
+//
+//            // Links
+//            UserThemeRepresentation.ThemeLink links = new UserThemeRepresentation.ThemeLink();
+//            String previewImgLink = uriInfo.getBaseUriBuilder()
+//                    .path(ThemesService.class)
+//                    .path(ThemesService.class, "getThemePreview")
+//                    .build(id).toString();
+//            links.setPreviewImg(previewImgLink);
+//            data.setLinks(links);
+//
+//            return data;
+//        };
+//
+//        List<UserThemeRepresentation.Data> data = themes.stream()
+//                .map(mapper)
+//                .collect(Collectors.toList());
+//        return new GenericDataRepresentation<>(data);
+        return null;
     }
 
     @GET

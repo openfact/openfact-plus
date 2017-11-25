@@ -7,10 +7,10 @@ public interface ReportThemeProvider {
 
     int getProviderPriority();
 
-    ReportTheme getTheme(String type, String name) throws IOException;
+    ReportTheme getTheme(String name, String type) throws IOException;
 
     Set<String> nameSet(String type);
 
-    boolean hasTheme(String type, String name);
+    boolean hasTheme(String name, String type);
 
 }

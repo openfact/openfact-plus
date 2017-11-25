@@ -3,6 +3,9 @@ package org.openfact.report;
 import org.jboss.logging.Logger;
 import org.openfact.common.Version;
 import org.openfact.config.ReportThemeConfig;
+import org.openfact.theme.ExtendingTheme;
+import org.openfact.theme.Theme;
+import org.openfact.theme.ThemeProvider;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
@@ -61,43 +64,55 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
 
     @Override
     @Lock(LockType.READ)
-    public ReportTheme getTheme(String type, String name) throws IOException {
+    public ReportTheme getTheme(String name, String type) throws IOException {
         if (name == null) {
             name = defaultTheme;
         }
 
         if (themeCache != null) {
-            ReportThemeKey key = ReportThemeKey.get(name);
+            ReportThemeKey key = ReportThemeKey.get(name, type);
             ReportTheme theme = themeCache.get(key);
             if (theme == null) {
-                theme = loadTheme(type, name);
+                theme = loadTheme(name, type);
                 if (theme == null) {
-                    theme = loadTheme("model", "openfact");
-                    log.errorv("Failed to find {0} report theme {1}, using built-in report themes", type, name);
+                    theme = loadTheme(name, "model");
+                    if (theme == null) {
+                        theme = loadTheme("openfact", type);
+                        if (theme == null) {
+                            theme = loadTheme("openfact", "model");
+                        }
+                        log.errorv("Failed to find {0} report report {1}, using built-in report themes", type, name);
+                    }
                 } else if (themeCache.putIfAbsent(key, theme) != null) {
                     theme = themeCache.get(key);
                 }
             }
             return theme;
         } else {
-            ReportTheme theme = loadTheme(type, name);
+            ReportTheme theme = loadTheme(name, type);
             if (theme == null) {
-                theme = loadTheme("model", "openfact");
-                log.errorv("Failed to find {0} report theme {1}, using built-in report themes", type, name);
+                theme = loadTheme(name, "model");
+                if (theme == null) {
+                    theme = loadTheme("openfact", type);
+                    if (theme == null) {
+                        theme = loadTheme("openfact", "model");
+                    }
+                    log.errorv("Failed to find {0} report report {1}, using built-in report themes", type, name);
+                }
             }
             return theme;
         }
     }
 
-    private ReportTheme loadTheme(String type, String name) throws IOException {
-        ReportTheme theme = findTheme(type, name);
+    private ReportTheme loadTheme(String name, String type) throws IOException {
+        ReportTheme theme = findTheme(name, type);
         if (theme != null && (theme.getParentName() != null || theme.getImportName() != null)) {
             List<ReportTheme> themes = new LinkedList<>();
             themes.add(theme);
 
             if (theme.getImportName() != null) {
                 String[] s = theme.getImportName().split("/");
-                themes.add(findTheme(s[0], s[1]));
+                themes.add(findTheme(s[1], type));
             }
 
             if (theme.getParentName() != null) {
@@ -107,7 +122,7 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
 
                     if (theme.getImportName() != null) {
                         String[] s = theme.getImportName().split("/");
-                        themes.add(findTheme(s[0], s[1]));
+                        themes.add(findTheme(s[1], type));
                     }
                 }
             }
@@ -130,22 +145,22 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
 
     @Override
     @Lock(LockType.READ)
-    public boolean hasTheme(String type, String name) {
+    public boolean hasTheme(String name, String type) {
         for (ReportThemeProvider p : providers) {
-            if (p.hasTheme(type, name)) {
+            if (p.hasTheme(name, type)) {
                 return true;
             }
         }
         return false;
     }
 
-    private ReportTheme findTheme(String type, String name) {
+    private ReportTheme findTheme(String name, String type) {
         for (ReportThemeProvider p : providers) {
-            if (p.hasTheme(type, name)) {
+            if (p.hasTheme(name, type)) {
                 try {
-                    return p.getTheme(type, name);
+                    return p.getTheme(name, type);
                 } catch (IOException e) {
-                    log.errorv(e, p.getClass() + " failed to load report theme, type={0}, name={1}", type, name);
+                    log.errorv(e, p.getClass() + " failed to load report, type={0}, name={1}", type, name);
                 }
             }
         }

@@ -27,8 +27,6 @@ import javax.inject.Inject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 @Stateless
 public class JasperReportProvider implements ReportTemplateProvider {
@@ -49,46 +47,27 @@ public class JasperReportProvider implements ReportTemplateProvider {
     private DatasourceUtil datasourceUtil;
 
     @Override
-    public ReportTheme getTheme(String type, String name) {
+    public ReportTheme getTheme(String name, String type) {
         try {
-            return themeProvider.getTheme(type, name);
+            return themeProvider.getTheme(name, type);
         } catch (IOException e) {
             return null;
         }
     }
 
     @Override
-    public Set<ReportTheme> getSupportedThemes(DocumentModel document) throws FileFetchException {
-        Set<ReportTheme> themes = new HashSet<>();
-
-        for (String themeName : themeProvider.nameSet(document.getType())) {
-            XmlFileModel file = new FlyWeightXmlFileModel(new FlyWeightFileModel(fileProvider.getFile(document.getFileId())));
-            try {
-                ReportTheme theme = themeProvider.getTheme(document.getType(), themeName);
-                DatasourceProvider datasourceProvider = datasourceUtil.getDatasourceProvider(theme.getDatasource());
-                if (datasourceProvider.support(document, file)) {
-                    themes.add(theme);
-                }
-            } catch (IOException e) {
-                logger.error("Could not read a resource on template", e);
-            }
-        }
-        return themes;
-    }
-
-    @Override
     public byte[] getReport(ReportTemplateConfiguration config, DocumentModel document, ExportFormat exportFormat) throws FileFetchException, ReportException {
         try {
-            String themeType = document.getType().toLowerCase();
             String themeName = config.getThemeName() != null ? config.getThemeName().toLowerCase() : null;
-            ReportTheme theme = themeProvider.getTheme(themeType, themeName);
+            String themeType = document.getType().toLowerCase();
+            ReportTheme theme = themeProvider.getTheme(themeName, themeType);
 
             XmlFileModel file = new FlyWeightXmlFileModel(new FlyWeightFileModel(fileProvider.getFile(document.getFileId())));
             DatasourceProvider datasourceProvider = datasourceUtil.getDatasourceProvider(theme.getDatasource());
             Object bean = datasourceProvider.getDatasource(document, file);
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(Collections.singletonList(bean));
 
-            JasperPrint jasperPrint = jasperReportUtil.processReport(theme, theme.getName(), config.getAttributes(), dataSource);
+            JasperPrint jasperPrint = jasperReportUtil.processReport(theme, theme.getName(), config.getAttributes(), dataSource, config.getLocale());
             return export(jasperPrint, exportFormat);
         } catch (IOException e) {
             throw new ReportException("Could not read a resource on template", e);

@@ -63,9 +63,11 @@ public class PEDebitNoteReader implements DocumentReader {
         documentEntity.setSupplierCountry(postalAddressType.getCountry().getIdentificationCode().getValue());
 
         AddressType customerPostalAddressType = debitNoteType.getAccountingCustomerParty().getParty().getPostalAddress();
-        documentEntity.setCustomerStreetAddress(customerPostalAddressType.getStreetName().getValue());
-        documentEntity.setCustomerCity(customerPostalAddressType.getCitySubdivisionName().getValue() + ", " + customerPostalAddressType.getCityName().getValue() + ", " + customerPostalAddressType.getCitySubdivisionName().getValue());
-        documentEntity.setCustomerCountry(customerPostalAddressType.getCountry().getIdentificationCode().getValue());
+        if (customerPostalAddressType != null) {
+            documentEntity.setCustomerStreetAddress(customerPostalAddressType.getStreetName().getValue());
+            documentEntity.setCustomerCity(customerPostalAddressType.getCitySubdivisionName().getValue() + ", " + customerPostalAddressType.getCityName().getValue() + ", " + customerPostalAddressType.getCitySubdivisionName().getValue());
+            documentEntity.setCustomerCountry(customerPostalAddressType.getCountry().getIdentificationCode().getValue());
+        }
 
         return new GenericDocument() {
             @Override

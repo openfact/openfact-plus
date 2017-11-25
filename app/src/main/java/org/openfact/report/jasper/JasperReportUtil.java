@@ -7,10 +7,13 @@ import org.openfact.report.ReportTheme;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
@@ -28,7 +31,7 @@ public class JasperReportUtil {
         }
     }
 
-    public JasperPrint processReport(ReportTheme theme, String templateName, Map<String, Object> parameters, JRDataSource dataSource) throws JRException, IOException {
+    public JasperPrint processReport(ReportTheme theme, String templateName, Map<String, Object> parameters, JRDataSource dataSource, Locale locale) throws JRException, IOException {
         JasperReport jr;
         if (cache != null) {
             String key = theme.getName() + "/" + templateName;
@@ -43,11 +46,27 @@ public class JasperReportUtil {
             jr = getReport(templateName, theme);
         }
 
-        JasperPrint jp = JasperFillManager.fillReport(jr, parameters, dataSource);
-        return jp;
+        // Location
+        Properties messages = theme.getMessages(locale);
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        messages.store(output, null);
+        ByteArrayInputStream is = new ByteArrayInputStream(output.toByteArray());
+
+        parameters.put(JRParameter.REPORT_LOCALE, locale);
+        parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, new PropertyResourceBundle(is));
+
+        // Image resources
+        Properties paramResources = theme.getParamResources();
+        for (Map.Entry<Object, Object> entry : paramResources.entrySet()) {
+            String paramName = (String) entry.getKey();
+            String resourceName = (String) entry.getValue();
+            parameters.put(paramName, ImageIO.read(theme.getResource(resourceName)));
+        }
+
+        return JasperFillManager.fillReport(jr, parameters, dataSource);
     }
 
-    private JasperReport getReport(String templateName, ReportTheme theme) throws IOException, JRException {
+    public JasperReport getReport(String templateName, ReportTheme theme) throws IOException, JRException {
         URL url = theme.getTemplate(templateName + ".jasper");
         if (url != null) {
             return (JasperReport) JRLoader.loadObject(url);

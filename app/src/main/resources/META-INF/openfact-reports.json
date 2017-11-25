@@ -1,28 +1,12 @@
 {
   "themes": [{
-      "type": "base",
-      "name": "model"
-    }, {
-      "type": "model",
-      "name": "openfact"
-    }, {
-      "type": "base",
-      "name": "invoice"
-    }, {
-      "type": "base",
-      "name": "creditnote"
-    }, {
-      "type": "invoice",
-      "name": "material"
-    }, {
-      "type": "invoice",
-      "name": "sunat"
-    }, {
-      "type": "creditnote",
-      "name": "material"
-    }, {
-      "type": "creditnote",
-      "name": "sunat"
-    }
-  ]
+    "name" : "base",
+    "types": [ "model" ]
+  }, {
+    "name" : "openfact",
+    "types": [ "model" ]
+  }, {
+    "name" : "sunat",
+    "types": [ "model", "invoice", "creditnote", "debitnote", "perception", "retention", "voideddocuments", "summarydocuments" ]
+  }]
 }

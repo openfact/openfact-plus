@@ -18,12 +18,14 @@ public class FolderReportTheme implements ReportTheme {
     private String type;
     private String name;
     private final Properties properties;
+    private final Properties paramResources;
 
-    public FolderReportTheme(File themeDir, String type, String name) throws IOException {
+    public FolderReportTheme(File themeDir, String name, String type) throws IOException {
         this.themeDir = themeDir;
-        this.type = type;
-        this.name = name;
+        this.type = name;
+        this.name = type;
         this.properties = new Properties();
+        this.paramResources = new Properties();
 
         File propertiesFile = new File(themeDir, "theme.properties");
         if (propertiesFile.isFile()) {
@@ -34,6 +36,13 @@ public class FolderReportTheme implements ReportTheme {
             parentName = properties.getProperty("parent");
             importName = properties.getProperty("import");
             datasource = properties.getProperty("datasource");
+        }
+
+        File paramResourcesPropertiesFile = new File(themeDir, "resources.properties");
+        if (paramResourcesPropertiesFile.isFile()) {
+            try (Reader reader = new InputStreamReader(new FileInputStream(paramResourcesPropertiesFile))) {
+                paramResources.load(reader);
+            }
         }
 
         resourcesDir = new File(themeDir, "resources");
@@ -132,6 +141,11 @@ public class FolderReportTheme implements ReportTheme {
     @Override
     public Properties getProperties() {
         return properties;
+    }
+
+    @Override
+    public Properties getParamResources() {
+        return paramResources;
     }
 
 }

@@ -4,6 +4,7 @@ import jodd.io.ZipBuilder;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.keycloak.representations.AccessToken;
 import org.openfact.documents.DocumentModel;
 import org.openfact.documents.DocumentProvider;
 import org.openfact.documents.DocumentProviderType;
@@ -15,6 +16,8 @@ import org.openfact.files.FileProvider;
 import org.openfact.files.exceptions.FileFetchException;
 import org.openfact.files.exceptions.FileStorageException;
 import org.openfact.managers.DocumentManager;
+import org.openfact.models.UserModel;
+import org.openfact.models.UserProvider;
 import org.openfact.report.ExportFormat;
 import org.openfact.report.ReportTemplateConfiguration;
 import org.openfact.report.ReportTemplateProvider;
@@ -24,18 +27,17 @@ import org.openfact.representations.idm.GenericDataRepresentation;
 import org.openfact.services.ErrorResponse;
 import org.openfact.services.ErrorResponseException;
 import org.openfact.services.resources.utils.PATCH;
+import org.openfact.services.util.SSOContext;
 import org.openfact.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -46,6 +48,9 @@ public class DocumentsService {
 
     @Context
     private UriInfo uriInfo;
+
+    @Inject
+    private UserProvider userProvider;
 
     @Inject
     private FileProvider fileProvider;
@@ -68,6 +73,14 @@ public class DocumentsService {
             throw new NotFoundException();
         }
         return ublDocument;
+    }
+
+    private UserModel getUserByIdentityID(String identityID) {
+        UserModel user = userProvider.getUserByIdentityID(identityID);
+        if (user == null) {
+            throw new NotFoundException();
+        }
+        return user;
     }
 
     /**
@@ -119,8 +132,7 @@ public class DocumentsService {
         for (String name : contentDispositionHeader) {
             if ((name.trim().startsWith("filename"))) {
                 String[] tmp = name.split("=");
-                String fileName = tmp[1].trim().replaceAll("\"", "");
-                return fileName;
+                return tmp[1].trim().replaceAll("\"", "");
             }
         }
         return null;
@@ -208,10 +220,18 @@ public class DocumentsService {
     @Path("/massive/print")
     @Produces("application/zip")
     public Response printDocuments(
+            @Context final HttpServletRequest httpServletRequest,
             @QueryParam("documents") List<String> documentsId,
             @QueryParam("theme") String theme,
             @QueryParam("format") @DefaultValue("PDF") String format
     ) {
+        SSOContext ssoContext = new SSOContext(httpServletRequest);
+        AccessToken accessToken = ssoContext.getParsedAccessToken();
+
+        String kcUserID = (String) accessToken.getOtherClaims().get("userID");
+        UserModel user = getUserByIdentityID(kcUserID);
+
+        //
         ExportFormat exportFormat = ExportFormat.valueOf(format.toUpperCase());
 
         Set<DocumentModel> documents = documentsId.stream()
@@ -220,6 +240,7 @@ public class DocumentsService {
 
         ReportTemplateConfiguration reportConfig = ReportTemplateConfiguration.builder()
                 .themeName(theme)
+                .locale(user.getLanguage() != null ? new Locale(user.getLanguage()) : Locale.ENGLISH)
                 .build();
 
         ZipBuilder zipInMemory = ZipBuilder.createZipInMemory();
@@ -263,14 +284,23 @@ public class DocumentsService {
     @GET
     @Path("/{documentId}/print")
     public Response printDocument(
+            @Context final HttpServletRequest httpServletRequest,
             @PathParam("documentId") String documentId,
             @QueryParam("theme") String theme,
             @QueryParam("format") @DefaultValue("PDF") String format) {
+        SSOContext ssoContext = new SSOContext(httpServletRequest);
+        AccessToken accessToken = ssoContext.getParsedAccessToken();
+
+        String kcUserID = (String) accessToken.getOtherClaims().get("userID");
+        UserModel user = getUserByIdentityID(kcUserID);
+
+        //
         ExportFormat exportFormat = ExportFormat.valueOf(format.toUpperCase());
 
         DocumentModel document = getDocumentById(documentId);
         ReportTemplateConfiguration reportConfig = ReportTemplateConfiguration.builder()
                 .themeName(theme)
+                .locale(user.getLanguage() != null ? new Locale(user.getLanguage()) : Locale.ENGLISH)
                 .build();
 
         byte[] reportBytes;

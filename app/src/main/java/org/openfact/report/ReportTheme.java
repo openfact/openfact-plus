@@ -55,4 +55,5 @@ public interface ReportTheme {
 
     Properties getProperties() throws IOException;
 
+    Properties getParamResources() throws IOException;
 }

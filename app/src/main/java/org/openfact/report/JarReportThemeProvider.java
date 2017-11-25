@@ -2,6 +2,10 @@ package org.openfact.report;
 
 import org.keycloak.util.JsonSerialization;
 import org.openfact.report.ReportProviderType.Type;
+import org.openfact.theme.ClassLoaderTheme;
+import org.openfact.theme.Theme;
+import org.openfact.theme.ThemeRepresentation;
+import org.openfact.theme.ThemesRepresentation;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
@@ -41,8 +45,8 @@ public class JarReportThemeProvider implements ReportThemeProvider {
 
     @Override
     @Lock(LockType.READ)
-    public ReportTheme getTheme(String type, String name) throws IOException {
-        return hasTheme(type, name) ? themes.get(type).get(name) : null;
+    public ReportTheme getTheme(String name, String type) throws IOException {
+        return hasTheme(name, type) ? themes.get(type).get(name) : null;
     }
 
     @Override
@@ -57,7 +61,7 @@ public class JarReportThemeProvider implements ReportThemeProvider {
 
     @Override
     @Lock(LockType.READ)
-    public boolean hasTheme(String type, String name) {
+    public boolean hasTheme(String name, String type) {
         return themes.containsKey(type) && themes.get(type).containsKey(name);
     }
 
@@ -66,11 +70,12 @@ public class JarReportThemeProvider implements ReportThemeProvider {
             ReportThemesRepresentation themesRep = JsonSerialization.readValue(themesInputStream, ReportThemesRepresentation.class);
 
             for (ReportThemeRepresentation themeRep : themesRep.getThemes()) {
-                String type = themeRep.getType();
-                if (!themes.containsKey(type)) {
-                    themes.put(type, new HashMap<>());
+                for (String type : themeRep.getTypes()) {
+                    if (!themes.containsKey(type)) {
+                        themes.put(type, new HashMap<>());
+                    }
+                    themes.get(type).put(themeRep.getName(), new ClassLoaderReportTheme(themeRep.getName(), type, classLoader));
                 }
-                themes.get(type).put(themeRep.getName(), new ClassLoaderReportTheme(type, themeRep.getName(), classLoader));
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to load report themes", e);

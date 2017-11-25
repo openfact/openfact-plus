@@ -15,6 +15,8 @@ public class ExtendingReportTheme implements ReportTheme {
 
     private Properties properties;
 
+    private Properties paramResources;
+
     private ConcurrentHashMap<String, ConcurrentHashMap<Locale, Properties>> messages = new ConcurrentHashMap<>();
 
     public ExtendingReportTheme(List<ReportTheme> themes) {
@@ -149,6 +151,24 @@ public class ExtendingReportTheme implements ReportTheme {
             return properties;
         } else {
             return properties;
+        }
+    }
+
+    @Override
+    public Properties getParamResources() throws IOException {
+        if (paramResources == null) {
+            Properties properties = new Properties();
+            ListIterator<ReportTheme> itr = themes.listIterator(themes.size());
+            while (itr.hasPrevious()) {
+                Properties p = itr.previous().getParamResources();
+                if (p != null) {
+                    properties.putAll(p);
+                }
+            }
+            this.paramResources = properties;
+            return properties;
+        } else {
+            return paramResources;
         }
     }
 

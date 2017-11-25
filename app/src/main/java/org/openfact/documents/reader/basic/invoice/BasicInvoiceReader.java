@@ -61,9 +61,11 @@ public class BasicInvoiceReader implements DocumentReader {
         documentEntity.setSupplierCountry(supplierPostalAddressType.getCountry().getIdentificationCodeValue());
 
         AddressType customerPostalAddressType = invoiceType.getAccountingCustomerParty().getParty().getPostalAddress();
-        documentEntity.setCustomerStreetAddress(customerPostalAddressType.getStreetNameValue());
-        documentEntity.setCustomerCity(customerPostalAddressType.getCitySubdivisionNameValue() + ", " + customerPostalAddressType.getCityNameValue() + ", " + customerPostalAddressType.getCitySubdivisionNameValue());
-        documentEntity.setCustomerCountry(customerPostalAddressType.getCountry().getIdentificationCodeValue());
+        if (customerPostalAddressType != null) {
+            documentEntity.setCustomerStreetAddress(customerPostalAddressType.getStreetNameValue());
+            documentEntity.setCustomerCity(customerPostalAddressType.getCitySubdivisionNameValue() + ", " + customerPostalAddressType.getCityNameValue() + ", " + customerPostalAddressType.getCitySubdivisionNameValue());
+            documentEntity.setCustomerCountry(customerPostalAddressType.getCountry().getIdentificationCodeValue());
+        }
 
         return new GenericDocument() {
             @Override

@@ -2,6 +2,8 @@ package org.openfact.report;
 
 import org.openfact.config.ReportThemeConfig;
 import org.openfact.report.ReportProviderType.Type;
+import org.openfact.theme.FolderTheme;
+import org.openfact.theme.Theme;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -38,9 +40,9 @@ public class FolderReportThemeProvider implements ReportThemeProvider {
     }
 
     @Override
-    public ReportTheme getTheme(String type, String name) throws IOException {
-        File themeDir = getThemeDir(type, name);
-        return themeDir.isDirectory() ? new FolderReportTheme(themeDir, type, name) : null;
+    public ReportTheme getTheme(String name, String type) throws IOException {
+        File themeDir = getThemeDir(name, type);
+        return themeDir.isDirectory() ? new FolderReportTheme(themeDir, name, type) : null;
     }
 
     @Override
@@ -59,12 +61,13 @@ public class FolderReportThemeProvider implements ReportThemeProvider {
     }
 
     @Override
-    public boolean hasTheme(String type, String name) {
-        return getThemeDir(type, name).isDirectory();
+    public boolean hasTheme(String name, String type) {
+        return getThemeDir(name, type).isDirectory();
     }
 
-    private File getThemeDir(String type, String name) {
-        return new File(themesDir, type.toLowerCase() + File.separator + name.toLowerCase());
+    private File getThemeDir(String name, String type) {
+        return new File(themesDir, name + File.separator + type.toLowerCase());
     }
+
 
 }

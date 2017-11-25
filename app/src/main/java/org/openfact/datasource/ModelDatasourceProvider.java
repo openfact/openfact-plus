@@ -22,12 +22,23 @@ public class ModelDatasourceProvider implements DatasourceProvider {
         bean.setType(document.getType());
         bean.setAssignedId(document.getAssignedId());
         bean.setAmount(document.getAmount());
+        bean.setTax(document.getTax());
         bean.setCurrency(document.getCurrency());
         bean.setIssueDate(document.getIssueDate());
         bean.setSupplierName(document.getSupplierName());
         bean.setSupplierAssignedId(document.getSupplierAssignedId());
         bean.setCustomerName(document.getCustomerName());
         bean.setCustomerAssignedId(document.getCustomerAssignedId());
+
+        bean.setSupplierStreetAddress(document.getSupplierStreetAddress());
+        bean.setSupplierCity(document.getSupplierCity());
+        bean.setSupplierCountry(document.getSupplierCountry());
+
+        bean.setCustomerStreetAddress(document.getCustomerStreetAddress());
+        bean.setCustomerCity(document.getCustomerCity());
+        bean.setCustomerCountry(document.getCustomerCountry());
+
+        bean.setLocation("www.openfact.com");
 
         return bean;
     }
