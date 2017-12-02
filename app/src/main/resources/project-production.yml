@@ -1,8 +1,0 @@
-openfact:
-  report:
-    cacheReports: true
-    cacheTemplates: true
-  theme:
-    staticMaxAge: 2592000
-    cacheThemes: true
-    cacheTemplates: true
