@@ -1,0 +1,14 @@
+<subsystem xmlns="urn:jboss:domain:infinispan:4.0">
+    <cache-container name="hibernate" module="org.hibernate.infinispan:${version.hibernate}">
+        <local-cache name="entity">
+            <transaction mode="NON_XA"/>
+            <eviction strategy="LRU" max-entries="10000"/>
+            <expiration max-idle="100000"/>
+        </local-cache>
+        <local-cache name="local-query">
+            <eviction strategy="LRU" max-entries="10000"/>
+            <expiration max-idle="100000"/>
+        </local-cache>
+        <local-cache name="timestamps"/>
+    </cache-container>
+</subsystem>
