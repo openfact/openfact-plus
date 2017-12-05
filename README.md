@@ -64,10 +64,12 @@ export ES_HOST=[my_elasticsearch_host]
 export ES_USER=[my_elasticsearch_username]
 export ES_PASSWORD=[my_elasticsearch_password]
 export ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY=[none|validate|update|create|drop-and-create|drop-and-create-and-drop]
+export ES_REQUIRED_INDEX_STATUS=[green|yellow]
 ```
 Default values:
 ```
 ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY=update
+ES_REQUIRED_INDEX_STATUS=green
 ```
 
 ### Elasticsearch AWS (Production)
@@ -89,7 +91,7 @@ HIBERNATE_ES_AWS_ENABLED=false
 After configure the basic environment variables, then execute:
 
 ```
-mvn wildfly-swarm:run -pl app
+mvn wildfly-swarm:run -pl app -DskipTests
 ```
 
 Wait until the server starts, and then go to:
