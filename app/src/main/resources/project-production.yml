@@ -1,8 +1,30 @@
+swarm:
+  ee:
+    spec-descriptor-property-replacement: true
+  datasources:
+    data-sources:
+      OpenfactSyncDS:
+        driver-name: "${env.DB_DRIVER_NAME:h2}"
+        connection-url: "${env.DB_CONNECTION_URL:jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}"
+        user-name: "${env.DB_USER_NAME:sa}"
+        password: "${env.DB_PASSWORD:sa}"
 openfact:
+  fileStorage:
+    provider: jpa
   report:
+    default: openfact
     cacheReports: true
     cacheTemplates: true
+    folder:
+      dir: "/reports"
   theme:
+    default: openfact
     staticMaxAge: 2592000
     cacheThemes: true
     cacheTemplates: true
+    folder:
+      dir: "/themes"
+  mail:
+    vendor:
+      gmail:
+        applicationName: "Openfact Sync"

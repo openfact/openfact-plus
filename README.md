@@ -85,7 +85,7 @@ export HIBERNATE_ES_AWS_REGION=[my_aws_region]
 Default values:
 ```
 HIBERNATE_ES_AWS_ENABLED=false
-```
+```      
 
 # Start project
 After configure the basic environment variables, then execute:
@@ -103,4 +103,38 @@ After configure the basic environment variables, then execute:
 
 ```
 mvn fabric8:deploy -Popenshift
+```
+
+# Configure Openfact
+Openfact has its own configuration and you can override using .yml file:
+
+openfact.yml:
+
+```
+openfact:
+  fileStorage:
+    provider: [jpa|filesystem]
+  report:
+    default: openfact
+    cacheReports: false
+    cacheTemplates: false
+    folder:
+      dir: "/reports"
+  theme:
+    default: openfact
+    staticMaxAge: 2592000
+    cacheThemes: false
+    cacheTemplates: false
+    folder:
+      dir: "/themes"
+  mail:
+    vendor:
+      gmail:
+        applicationName: "Openfact Sync"
+``` 
+
+After that you can start the project with the command:
+
+```
+mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.project.stage=production
 ```
