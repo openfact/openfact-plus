@@ -20,6 +20,7 @@
 
             <!--Hibernate search-->
             <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>
+            <property name="hibernate.search.lucene.analysis_definition_provider" value="org.openfact.documents.es.OpenfactAnalyzerProvider"/>
 
             <property name="hibernate.search.default.indexmanager" value="${env.HIBERNATE_INDEX_MANAGER:directory-based}"/>
             <property name="hibernate.search.default.elasticsearch.host" value="${env.ES_HOST:}"/>

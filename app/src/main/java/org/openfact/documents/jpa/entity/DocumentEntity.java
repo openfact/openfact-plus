@@ -2,9 +2,6 @@ package org.openfact.documents.jpa.entity;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.search.annotations.*;
-import org.hibernate.search.annotations.Parameter;
-import org.hibernate.search.elasticsearch.analyzer.ElasticsearchTokenFilterFactory;
-import org.hibernate.search.elasticsearch.analyzer.ElasticsearchTokenizerFactory;
 import org.openfact.documents.DocumentProviderType;
 import org.openfact.models.db.CreatableEntity;
 import org.openfact.models.db.CreatedAtListener;
@@ -28,69 +25,6 @@ import java.util.Set;
         @NamedQuery(name = "getDocumentByTypeAssignedIdAndSupplierAssignedId", query = "select d from DocumentEntity d where d.type = :type and d.assignedId = :assignedId and d.supplierAssignedId = :supplierAssignedId")
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
-@AnalyzerDefs(value = {
-        @AnalyzerDef(
-                name = "staticTextAnalyzer",
-                tokenizer = @TokenizerDef(
-                        factory = ElasticsearchTokenizerFactory.class,
-                        params = {
-                                @Parameter(name = "type", value = "'standard'"),
-                        }
-                ),
-                filters = {
-                        @TokenFilterDef(
-                                factory = ElasticsearchTokenFilterFactory.class,
-                                params = {
-                                        @Parameter(name = "type", value = "'standard'")
-                                }
-                        ),
-                        @TokenFilterDef(
-                                factory = ElasticsearchTokenFilterFactory.class,
-                                params = {
-                                        @Parameter(name = "type", value = "'lowercase'")
-                                }
-                        )
-                }
-        ),
-        @AnalyzerDef(
-                name = "nameTextAnalyzer",
-                tokenizer = @TokenizerDef(
-                        factory = ElasticsearchTokenizerFactory.class,
-                        params = {
-                                @Parameter(name = "type", value = "'standard'"),
-                        }
-                ),
-                filters = {
-                        @TokenFilterDef(
-                                factory = ElasticsearchTokenFilterFactory.class,
-                                params = {
-                                        @Parameter(name = "type", value = "'standard'")
-                                }
-                        ),
-                        @TokenFilterDef(
-                                factory = ElasticsearchTokenFilterFactory.class,
-                                params = {
-                                        @Parameter(name = "type", value = "'lowercase'")
-                                }
-                        ),
-                        @TokenFilterDef(
-                                factory = ElasticsearchTokenFilterFactory.class,
-                                params = {
-                                        @Parameter(name = "type", value = "'apostrophe'")
-                                }
-                        ),
-                        @TokenFilterDef(
-                                factory = ElasticsearchTokenFilterFactory.class,
-                                params = {
-                                        @Parameter(name = "type", value = "'asciifolding'")
-                                }
-                        )
-                }
-        )
-})
-@NormalizerDefs(value = {
-
-})
 public class DocumentEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
     @Id
