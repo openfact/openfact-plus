@@ -1,24 +1,104 @@
-# Checking out the Repository
-To properly clone this repository, use the --recursive option to clone so that the sso submodule is checked out fully:
+# Openfact Sync
+Openfact Sync allows you to centralize all your XML-UBL Documents on on site.
+
+# Project Configuration
+
+## Clone the repository:
+```
+git clone https://github.com/openfact/openfact-sync.git
+```
+## Configure database:
+
+The database connection can be configured using environment variables:
+```
+export DB_DRIVER_NAME=[h2|mysql|postgresql]
+export DB_CONNECTION_URL=[database_url]
+export DB_USER_NAME=[database_username]
+export DB_PASSWORD=[database_password]
+```
+
+Default values:
+```
+DB_DRIVER_NAME=h2
+DB_CONNECTION_URL=jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+DB_USER_NAME=sa
+DB_PASSWORD=sa
+```
+
+
+## Configure database creation strategy (Optional):
+
+Database strategy can be configured using environment variables:
+```
+export HIBERNATE_STRATEGY=[validate|update|create|create-drop]
+export HIBERNATE_SHOW_SQL=[true|false]
+export HIBERNATE_FORMAT_SQL=[true|false]
+export HIBERNATE_SECOND_LEVEL_CACHE=[true|false]
+```
+
+Default values:
+```
+HIBERNATE_STRATEGY=update
+HIBERNATE_SHOW_SQL=false
+HIBERNATE_FORMAT_SQL=false
+HIBERNATE_SECOND_LEVEL_CACHE=true
+```
+
+## Configure database search strategy (Optional):
+
+Database search strategy can be configured using environment variables:
+```
+export HIBERNATE_INDEX_MANAGER=[directory-based|near-real-time|elasticsearch]
+```
+Default values:
+```
+HIBERNATE_INDEX_MANAGER=directory-based
+```
+
+### Elasticsearch (Production)
+This configuration should be considered in production environments.
+
+In case elasticsearch was selected as index manager, then you need to configure additional environment variables:
+```
+export ES_HOST=[my_elasticsearch_host]
+export ES_USER=[my_elasticsearch_username]
+export ES_PASSWORD=[my_elasticsearch_password]
+export ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY=[none|validate|update|create|drop-and-create|drop-and-create-and-drop]
+```
+Default values:
+```
+ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY=update
+```
+
+### Elasticsearch AWS (Production)
+In case your elasticsearch cluster is provided by AWS you need to follow previous step and additionally:
 
 ```
-[sstark@sstark ObsidianToaster]$ git clone --recursive https://github.com/wildfly-swarm-openshiftio-boosters/wfswarm-rest-http-secured
-Cloning into 'rest-secured'...
-remote: Counting objects: 535, done.
-remote: Compressing objects: 100% (3/3), done.
-remote: Total 535 (delta 0), reused 0 (delta 0), pack-reused 532
-Receiving objects: 100% (535/535), 92.67 KiB | 0 bytes/s, done.
-Resolving deltas: 100% (193/193), done.
-Submodule 'sso' (https://github.com/obsidian-toaster-quickstarts/redhat-sso) registered for path 'sso'
-Cloning into 'sso'...
-remote: Counting objects: 162, done.
-remote: Total 162 (delta 0), reused 0 (delta 0), pack-reused 162
-Receiving objects: 100% (162/162), 162.46 KiB | 0 bytes/s, done.
-Resolving deltas: 100% (55/55), done.
-Submodule path 'sso': checked out 'cd9fbf0980a3930ca7da1f1814a040bf5b032e96'
+export HIBERNATE_ES_AWS_ENABLED=[true|false]
+export HIBERNATE_ES_AWS_ACCESS_KEY=[my_aws_access_key]
+export HIBERNATE_ES_AWS_SECRET_KEY=[my_aws_secret_key]
+export HIBERNATE_ES_AWS_REGION=[my_aws_region]
 ```
 
-# Full Booster Experience Docs
-See the full booster experience docs online at:
+Default values:
+```
+HIBERNATE_ES_AWS_ENABLED=false
+```
 
-<http://appdev.openshift.io/docs/mission-secured-wf-swarm.html>
+# Start project
+After configure the basic environment variables, then execute:
+
+```
+mvn wildfly-swarm:run -pl app
+```
+
+Wait until the server starts, and then go to:
+
+<http://localhost:8080>
+
+# Start project on Openshift
+After configure the basic environment variables, then execute:
+
+```
+mvn fabric8:deploy -Popenshift
+```

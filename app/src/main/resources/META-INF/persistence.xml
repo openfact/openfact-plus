@@ -21,17 +21,17 @@
             <!--Hibernate search-->
             <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>
 
-            <property name="hibernate.search.default.indexmanager" value="elasticsearch"/>
+            <property name="hibernate.search.default.indexmanager" value="${env.HIBERNATE_INDEX_MANAGER}"/>
             <property name="hibernate.search.default.elasticsearch.host" value="${env.ES_HOST}"/>
             <property name="hibernate.search.default.elasticsearch.username" value="${env.ES_USER}"/>
             <property name="hibernate.search.default.elasticsearch.password" value="${env.ES_PASSWORD}"/>
             <property name="hibernate.search.default.elasticsearch.index_schema_management_strategy" value="${env.ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY}"/>
             <property name="hibernate.search.default.elasticsearch.required_index_status" value="${env.ES_REQUIRED_INDEX_STATUS}"/>
 
-            <!--<property name="hibernate.search.default.elasticsearch.aws.signing.enabled" value="${hibernate.es.aws.enabled}"/>-->
-            <!--<property name="hibernate.search.default.elasticsearch.aws.access_key" value="${hibernate.es.aws.access_key}"/>-->
-            <!--<property name="hibernate.search.default.elasticsearch.aws.secret_key" value="${hibernate.es.aws.secret_key}"/>-->
-            <!--<property name="hibernate.search.default.elasticsearch.aws.region" value="${hibernate.es.aws.region}"/>-->
+            <property name="hibernate.search.default.elasticsearch.aws.signing.enabled" value="${env.HIBERNATE_ES_AWS_ENABLED}"/>
+            <property name="hibernate.search.default.elasticsearch.aws.access_key" value="${env.HIBERNATE_ES_AWS_ACCESS_KEY}"/>
+            <property name="hibernate.search.default.elasticsearch.aws.secret_key" value="${env.HIBERNATE_ES_AWS_SECRET_KEY}"/>
+            <property name="hibernate.search.default.elasticsearch.aws.region" value="${env.HIBERNATE_ES_AWS_REGION}"/>
         </properties>
     </persistence-unit>
 </persistence>
