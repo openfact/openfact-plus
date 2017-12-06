@@ -1,6 +1,9 @@
 # Openfact Sync
 Openfact Sync allows you to centralize all your XML-UBL Documents on on site.
 
+# Openshift
+If you are using Openshift you can use [this tutorial](https://github.com/openfact/openfact-sync/blob/master/docs/openshift.md). Otherwise start on next step **Prerequisites**.
+
 # Prerequisites
 - Keycloak Server
 

@@ -23,37 +23,20 @@ OPENFACT_SECRET="${GOOGLE_OAUTH_CLIENT_SECRET}"
 
 # Elasticsearch configuration
 oc login -u system:admin
-echo "Now adding the SecurityContextConstraints to elasticsearch service account"
-echo '{
-  "apiVersion": "v1",
-  "kind": "SecurityContextConstraints",
-  "metadata": {
-    "name": "scc-elasticsearch"
-  },
-  "allowPrivilegedContainer": true,
-  "runAsUser": {
-    "type": "RunAsAny"
-  },
-  "seLinuxContext": {
-    "type": "RunAsAny"
-  },
-  "fsGroup": {
-    "type": "RunAsAny"
-  },
-  "supplementalGroups": {
-    "type": "RunAsAny"
-  },
-  "allowedCapabilities": [
-    "IPC_LOCK",
-    "SYS_RESOURCE"
-  ]
-}' | oc create -f -
-
-oc adm policy add-scc-to-user scc-elasticsearch system:serviceaccount:$(oc project -q):default
-oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default
+oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -n $(oc project -q)
 
 # General configuration
 oc login -u developer
 echo "Applying the OPENFACT template ${TEMPLATE}"
 oc process -f ${TEMPLATE} -p APISERVER_HOSTPORT=${APISERVER} -p NODE_IP=${NODE_IP} -p EXPOSER=${EXPOSER} -p GOOGLE_OAUTH_CLIENT_SECRET=${OPENFACT_SECRET} -p GOOGLE_OAUTH_CLIENT_ID=${OPENFACT_ID} | oc apply -f -
+
 echo "Please wait while the pods all startup!"
+echo
+echo "To watch this happening you can type:"
+echo "  oc get pod -l provider=fabric8 -w"
+echo
+echo "Or you can watch in the OpenShift console via:"
+echo "  minishift console"
+echo
+echo "Then you should be able the open the fabric8 console here:"
+echo "  http://`oc get route openfact-sync --template={{.spec.host}}`/"
