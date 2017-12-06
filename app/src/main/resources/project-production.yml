@@ -1,4 +1,12 @@
 swarm:
+  datasources:
+    data-sources:
+      OpenfactSyncDS:
+        jndi-name: "java:jboss/datasources/OpenfactSyncDS"
+        driver-name: "${env.DB_DRIVER_NAME:h2}"
+        connection-url: "${env.DB_CONNECTION_URL:jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}"
+        user-name: "${env.DB_USER_NAME:sa}"
+        password: "${env.DB_PASSWORD:sa}"
   ee:
     spec-descriptor-property-replacement: true
   ejb3:
@@ -10,14 +18,76 @@ swarm:
           database: "${env.DB_DRIVER_NAME:h2}"
           datasource-jndi-name: "java:jboss/datasources/OpenfactSyncDS"
           partition: timer
-  datasources:
-    data-sources:
-      OpenfactSyncDS:
-        jndi-name: "java:jboss/datasources/OpenfactSyncDS"
-        driver-name: "${env.DB_DRIVER_NAME:h2}"
-        connection-url: "${env.DB_CONNECTION_URL:jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}"
-        user-name: "${env.DB_USER_NAME:sa}"
-        password: "${env.DB_PASSWORD:sa}"
+  infinispan:
+    cache-containers:
+      jberet:
+        default-cache: JOB_EXECUTION
+        jgroups-transport:
+          lock-timeout: 60000
+        distributed-caches:
+          JOB_INSTANCE:
+            mode: ASYNC
+            l1-lifespan: 0
+            string-jdbc-store:
+              fetch-state: false
+              purge: false
+              data-source: OpenfactSyncDS
+              string-table:
+                prefix: "JBERET_ISPN"
+                data-column: "DATA_COLUMN"
+                id-column: "ID_COLUMN"
+                timestamp-column: "TIMESTAMP_COLUMN"
+          JOB_EXECUTION:
+            mode: ASYNC
+            l1-lifespan: 0
+            string-jdbc-store:
+              fetch-state: false
+              purge: false
+              data-source: OpenfactSyncDS
+              string-table:
+                prefix: "JBERET_ISPN"
+                data-column: "DATA_COLUMN"
+                id-column: "ID_COLUMN"
+                timestamp-column: "TIMESTAMP_COLUMN"
+          STEP_EXECUTION:
+            mode: ASYNC
+            l1-lifespan: 0
+            string-jdbc-store:
+              fetch-state: false
+              purge: false
+              data-source: OpenfactSyncDS
+              string-table:
+                prefix: "JBERET_ISPN"
+                data-column: "DATA_COLUMN"
+                id-column: "ID_COLUMN"
+                timestamp-column: "TIMESTAMP_COLUMN"
+          PARTITION_EXECUTION:
+            mode: ASYNC
+            l1-lifespan: 0
+            string-jdbc-store:
+              fetch-state: false
+              purge: false
+              data-source: OpenfactSyncDS
+              string-table:
+                prefix: "JBERET_ISPN"
+                data-column: "DATA_COLUMN"
+                id-column: "ID_COLUMN"
+                timestamp-column: "TIMESTAMP_COLUMN"
+          seq:
+            mode: SYNC
+            l1-lifespan: 0
+            transaction-component:
+              mode: BATCH
+              locking: PESSIMISTIC
+            string-jdbc-store:
+              fetch-state: false
+              purge: false
+              data-source: OpenfactSyncDS
+              string-table:
+                prefix: "JBERET_ISPN"
+                data-column: "DATA_COLUMN"
+                id-column: "ID_COLUMN"
+                timestamp-column: "TIMESTAMP_COLUMN"
 openfact:
   fileStorage:
     provider: jpa

@@ -1,6 +1,4 @@
 swarm:
-  ee:
-    spec-descriptor-property-replacement: true
   datasources:
     data-sources:
       OpenfactSyncDS:
@@ -9,6 +7,8 @@ swarm:
         connection-url: "${env.DB_CONNECTION_URL:jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}"
         user-name: "${env.DB_USER_NAME:sa}"
         password: "${env.DB_PASSWORD:sa}"
+  ee:
+    spec-descriptor-property-replacement: true
 openfact:
   fileStorage:
     provider: jpa

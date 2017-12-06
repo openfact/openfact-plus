@@ -42,6 +42,11 @@
 
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jgroups</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
             <artifactId>jaxrs</artifactId>
         </dependency>
         <dependency>
@@ -340,6 +345,17 @@
             <groupId>org.jberet</groupId>
             <artifactId>jberet-support</artifactId>
             <version>${version.jberet-support}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-cachestore-jdbc</artifactId>
+            <version>8.2.4.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5-pre10</version>
         </dependency>
 
         <!--Google Guava-->
