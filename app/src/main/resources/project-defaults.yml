@@ -4,6 +4,7 @@ swarm:
   datasources:
     data-sources:
       OpenfactSyncDS:
+        jndi-name: "java:jboss/datasources/OpenfactSyncDS"
         driver-name: "${env.DB_DRIVER_NAME:h2}"
         connection-url: "${env.DB_CONNECTION_URL:jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}"
         user-name: "${env.DB_USER_NAME:sa}"

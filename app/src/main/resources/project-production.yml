@@ -1,6 +1,15 @@
 swarm:
   ee:
     spec-descriptor-property-replacement: true
+  ejb3:
+    timer-service:
+      thread-pool-name: default
+      default-data-store: clustered-store
+      database-data-stores:
+        clustered-store:
+          database: "${env.DB_DRIVER_NAME:h2}"
+          datasource-jndi-name: "java:jboss/datasources/OpenfactSyncDS"
+          partition: timer
   datasources:
     data-sources:
       OpenfactSyncDS:
