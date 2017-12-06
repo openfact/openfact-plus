@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: openfact-sync-db
+  labels:
+    service: openfact-sync-db
+spec:
+  ports:
+    - name: "postgres"
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+  selector:
+    service: openfact-sync-db
+  type: ClusterIP

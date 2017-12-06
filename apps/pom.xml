@@ -58,6 +58,7 @@
         <module>elasticsearch</module>
         <module>keycloak</module>
         <module>keycloak-db</module>
+        <module>openfact-sync-db</module>
         <module>packages</module>
     </modules>
 

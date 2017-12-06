@@ -14,11 +14,11 @@
     <name>Openfact :: Packages</name>
 
     <dependencies>
-        <dependency>
-            <groupId>org.openfact.apps</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.openfact.apps</groupId>-->
+            <!--<artifactId>elasticsearch</artifactId>-->
+            <!--<version>${project.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.openfact.apps</groupId>
             <artifactId>keycloak</artifactId>
@@ -27,6 +27,11 @@
         <dependency>
             <groupId>org.openfact.apps</groupId>
             <artifactId>keycloak-db</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openfact.apps</groupId>
+            <artifactId>openfact-sync-db</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
