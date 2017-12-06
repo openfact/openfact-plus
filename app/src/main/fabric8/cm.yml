@@ -1,19 +1,16 @@
 data:
-  db.url: 'jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
-  db.driver: 'h2'
-  hibernate.strategy: create-drop
-  hibernate.show_sql: true
-  hibernate.format_sql: true
-  hibernate.second_level_cache: true
-  es.url: http://elasticsearch:9200
-  es.index_strategy: drop-and-create
-  es.required_index_status: yellow
-  smtp.host: smtp.gmail.com
-  smtp.port: 465
-  smtp.from: carlosthe19916@gmail.com
-  smtp.ssl: true
-  smtp.starttls: true
-  smtp.auth: true
+  keycloak.json: |-
+      {
+        "realm": "${SSO_REALM}",
+        "auth-server-url": "${SSO_AUTH_SERVER_URL}",
+        "resource": "${SSO_CLIENT_ID}",
+        "ssl-required": "external",
+        "credentials": {
+          "secret": "${SSO_CREDENTIALS_SECRET}"
+        },
+        "bearer-only": true,
+        "enable-cors": true
+      }
   openfact-sync-config.yml: |-
       openfact:
         fileStorage:
@@ -35,16 +32,3 @@ data:
           vendor:
             gmail:
               applicationName: 'Openfact Sync'
-          smtp:
-            host: "${OPENFACT_SMTP_HOST}"
-            port: "${OPENFACT_SMTP_PORT}"
-            fromDisplayName: 'Openfact Sync Display Name'
-            from: "${OPENFACT_SMTP_FROM}"
-            replyToDisplayName: 'Openfact Sync Reply Display Name'
-            replyTo: reply@openfactsync.com
-            envelopeFrom: envelope@openfactsync.com
-            ssl: "${OPENFACT_SMTP_SSL}"
-            starttls: "${OPENFACT_SMTP_STARTTLS}"
-            auth: "${OPENFACT_SMTP_AUTH}"
-            user: "${OPENFACT_SMTP_USER}"
-            password: "${OPENFACT_SMTP_PASSWORD}"

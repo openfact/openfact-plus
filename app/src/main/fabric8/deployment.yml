@@ -13,90 +13,60 @@ spec:
             [
               {
                 "name": "envvar-substitution",
-                "image": "fabric8/envsubst-file:1.0.0",
+                "image": "fabric8/envsubst-file:1.0.2",
                 "imagePullPolicy": "IfNotPresent",
                 "args": [
-                  "openfact-sync-config.yml"
+                  "keycloak.json",
+                  "project-custom.yml"
                 ],
                 "env": [
                   {
-                    "name": "OPENFACT_SMTP_HOST",
+                    "name": "SSO_REALM",
                     "valueFrom": {
                       "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "smtp.host"
+                        "name": "openfact-sync-configuration",
+                        "key": "sso.realm"
                       }
                     }
                   },
                   {
-                    "name": "OPENFACT_SMTP_PORT",
+                    "name": "SSO_AUTH_SERVER_URL",
                     "valueFrom": {
                       "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "smtp.port"
+                        "name": "openfact-sync-configuration",
+                        "key": "sso.auth.server.url"
                       }
                     }
                   },
                   {
-                    "name": "OPENFACT_SMTP_FROM",
+                    "name": "SSO_CLIENT_ID",
                     "valueFrom": {
                       "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "smtp.from"
+                        "name": "openfact-sync-configuration",
+                        "key": "sso.client.id"
                       }
                     }
                   },
                   {
-                    "name": "OPENFACT_SMTP_SSL",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "smtp.ssl"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_SMTP_STARTTLS",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "smtp.starttls"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_SMTP_AUTH",
-                    "valueFrom": {
-                      "configMapKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "smtp.auth"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_SMTP_USER",
+                    "name": "SSO_CREDENTIALS_SECRET",
                     "valueFrom": {
                       "secretKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "smtp.user"
-                      }
-                    }
-                  },
-                  {
-                    "name": "OPENFACT_SMTP_PASSWORD",
-                    "valueFrom": {
-                      "secretKeyRef": {
-                        "name": "openfact-sync",
-                        "key": "smtp.password"
+                        "name": "keycloak",
+                        "key": "kc.clientid.secret"
                       }
                     }
                   }
                 ],
                 "volumeMounts": [
                   {
-                    "name": "openfact-sync-config",
-                    "mountPath": "/workdir/openfact-sync-config.yml",
-                    "subPath": "config/openfact-sync-config.yml"
+                    "name": "openfact-sync-keycloak-config",
+                    "mountPath": "/workdir/keycloak.json",
+                    "subPath": "config/keycloak.json"
+                  },
+                  {
+                    "name": "openfact-sync-stage-config",
+                    "mountPath": "/workdir/project-custom.yml",
+                    "subPath": "config/project-custom.yml"
                   },
                   {
                     "name": "openfact-sync-subst-config",
@@ -114,75 +84,26 @@ spec:
               fieldPath: metadata.namespace
         - name: JAVA_APP_DIR
           value: /deployments
-        - name: SSO_AUTH_SERVER_URL
-          value: ${SSO_AUTH_SERVER_URL}
         - name: JAVA_OPTIONS
-          value: -Dsso.realm=${SSO_REALM} -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dsso.clientId=${SSO_CLIENT_ID} -Dsso.credentials.secret=${SSO_CREDENTIALS_SECRET} -Dswarm.project.stage=production
+          value: -Dswarm.project.stage.file=file:///deployments/config/project-custom.yml
         - name: DB_DRIVER_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: ${project.artifactId}
-              key: db.driver
+          value: postgresql
         - name: DB_CONNECTION_URL
-          valueFrom:
-            configMapKeyRef:
-              name: ${project.artifactId}
-              key: db.url
+          value: "jdbc:postgresql://openfact-sync-db:5432/openfactsync"
         - name: DB_USER_NAME
-          valueFrom:
-            secretKeyRef:
-              name: ${project.artifactId}
-              key: db.user
+          value: openfactsync
         - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: ${project.artifactId}
-              key: db.password
+          value: openfactsync
         - name: HIBERNATE_STRATEGY
-          valueFrom:
-            configMapKeyRef:
-              name: ${project.artifactId}
-              key: hibernate.strategy
+          value: update
         - name: HIBERNATE_SHOW_SQL
-          valueFrom:
-            configMapKeyRef:
-              name: ${project.artifactId}
-              key: hibernate.show_sql
+          value: false
         - name: HIBERNATE_FORMAT_SQL
-          valueFrom:
-            configMapKeyRef:
-              name: ${project.artifactId}
-              key: hibernate.format_sql
+          value: false
         - name: HIBERNATE_SECOND_LEVEL_CACHE
-          valueFrom:
-            configMapKeyRef:
-              name: ${project.artifactId}
-              key: hibernate.second_level_cache
-        - name: ES_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: ${project.artifactId}
-              key: es.url
-        - name: ES_USER
-          valueFrom:
-            secretKeyRef:
-              name: ${project.artifactId}
-              key: es.user
-        - name: ES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: ${project.artifactId}
-              key: es.password
-        - name: ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY
-          valueFrom:
-            configMapKeyRef:
-              name: ${project.artifactId}
-              key: es.index_strategy
-        - name: ES_REQUIRED_INDEX_STATUS
-          valueFrom:
-            configMapKeyRef:
-              name: ${project.artifactId}
-              key: es.required_index_status
+          value: true
+        - name: HIBERNATE_INDEX_MANAGER
+          value: directory-based
         name: ${project.artifactId}
         image: ${project.artifactId}:latest
         imagePullPolicy: IfNotPresent
@@ -205,16 +126,22 @@ spec:
           privileged: false
         volumeMounts:
         - name: openfact-sync-subst-config
-          mountPath: /deployments/stages
+          mountPath: /deployments/config
       volumes:
       - name: openfact-sync-subst-config
         emptyDir: {}
-      - name: openfact-sync-config
+      - name: openfact-sync-keycloak-config
+        configMap:
+          name: openfact-sync
+          items:
+          - key: keycloak.json
+            path: config/keycloak.json
+      - name: openfact-sync-stage-config
         configMap:
           name: openfact-sync
           items:
           - key: openfact-sync-config.yml
-            path: config/openfact-sync-config.yml
+            path: config/project-custom.yml
   triggers:
   - type: ConfigChange
   - imageChangeParams:

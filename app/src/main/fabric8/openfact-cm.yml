@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openfact-sync-configuration
+data:
+  sso.realm: openfact
+  sso.client.id: openfact-online-platform
+  sso.auth.server.url: ${KEYCLOAK_SERVER_URL}

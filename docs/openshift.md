@@ -32,8 +32,17 @@ To enable email sends, you need to configure a SMTP Server like Gmail from Googl
 
 
 ## Run the install script
+Make sure you are on the project folder.
 
 * now run the [install.sh](https://raw.githubusercontent.com/openfact/openfact-sync/master/scripts/install.sh) script on the command line:
+
+```
+$ ./scripts/install.sh
+```
+
+or
+
+* Run the [install.sh](https://raw.githubusercontent.com/openfact/openfact-sync/master/scripts/install.sh) script on the command line:
 
 ```
 bash <(curl -s https://raw.githubusercontent.com/openfact/openfact-sync/master/scripts/install.sh)

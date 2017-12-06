@@ -30,6 +30,12 @@ oc login -u developer
 echo "Applying the OPENFACT template ${TEMPLATE}"
 oc process -f ${TEMPLATE} -p APISERVER_HOSTPORT=${APISERVER} -p NODE_IP=${NODE_IP} -p EXPOSER=${EXPOSER} -p GOOGLE_OAUTH_CLIENT_SECRET=${OPENFACT_SECRET} -p GOOGLE_OAUTH_CLIENT_ID=${OPENFACT_ID} | oc apply -f -
 
+# Deploy openfact-sync
+mvn clean compile
+mvn fabric8:deploy \
+    -Popenshift \
+    -DskipTests=true
+
 echo "Please wait while the pods all startup!"
 echo
 echo "To watch this happening you can type:"
