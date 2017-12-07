@@ -24,13 +24,17 @@ public class ClarksnutStartup extends HttpServlet {
         logger.info("Getting keycloak.json");
         InputStream is = context.getResourceAsStream("/WEB-INF/keycloak.json");
 
-        logger.info("Parsing keycloak.json");
-        KeycloakDeployment deployment = KeycloakDeploymentBuilder.build(is);
-        logger.info("keycloak.json parsed");
+        if (is != null) {
+            logger.info("Parsing keycloak.json");
+            KeycloakDeployment deployment = KeycloakDeploymentBuilder.build(is);
+            logger.info("keycloak.json parsed");
 
-        KeycloakDeploymentConfig instance = KeycloakDeploymentConfig.getInstance();
-        instance.setDeployment(deployment);
-        logger.info("keycloak.json saved on " + KeycloakDeploymentConfig.class.getName());
+            KeycloakDeploymentConfig instance = KeycloakDeploymentConfig.getInstance();
+            instance.setDeployment(deployment);
+            logger.info("keycloak.json saved on " + KeycloakDeploymentConfig.class.getName());
+        } else {
+            logger.error("Could not find keycloak.json on classpath");
+        }
     }
 
 }
