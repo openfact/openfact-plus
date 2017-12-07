@@ -26,25 +26,6 @@ After start your keycloak server, you need to create a realm and configure Googl
 git clone https://github.com/clarksnut/clarksnut.git
 ```
 
-## Configure database:
-
-The database connection can be configured using environment variables:
-```
-export DB_DRIVER_NAME=[h2|mysql|postgresql]
-export DB_CONNECTION_URL=[database_url]
-export DB_USER_NAME=[database_username]
-export DB_PASSWORD=[database_password]
-```
-
-Default values:
-```
-DB_DRIVER_NAME=h2
-DB_CONNECTION_URL=jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-DB_USER_NAME=sa
-DB_PASSWORD=sa
-```
-
-
 ## Configure database creation strategy (Optional):
 
 Database strategy can be configured using environment variables:
@@ -110,19 +91,17 @@ HIBERNATE_ES_AWS_ENABLED=false
 After configure the basic environment variables, then execute:
 
 ```
+mvn wildfly-swarm:run -pl app -DskipTests
+```
+
+Or if you want to customize keycloak.json:
+```
 mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.keycloak.json.path=my_keycloak.json
 ```
 
 Wait until the server starts, and then go to:
 
 <http://localhost:8080>
-
-# Start project on Openshift
-After configure the basic environment variables, then execute:
-
-```
-mvn fabric8:deploy -Popenshift
-```
 
 # Configure Clarksnut
 Clarksnut has its own configuration and you can override using .yml file:

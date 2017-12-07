@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clarksnut-configuration
+data:
+  sso.realm: clarksnut
+  sso.client.id: clarksnut-online-platform
+  sso.auth.server.url: ${KEYCLOAK_SERVER_URL}

@@ -1,0 +1,12 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: clarksnut-platform
+  labels:
+    fabric8.io/kind: package
+    provider: fabric8.io
+    version: ${project.version}
+data:
+  metadata-url: http://central.maven.org/maven2/org/sistcoop/platform/packages/clarksnut-platform/maven-metadata.xml
+  package-url-prefix: http://central.maven.org/maven2/org/sistcoop/platform/packages/clarksnut-platform/%[1]s/clarksnut-platform-%[1]s-
+

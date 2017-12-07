@@ -1,0 +1,12 @@
+{
+  "themes": [{
+    "name" : "base",
+    "types": [ "model" ]
+  }, {
+    "name" : "clarksnut",
+    "types": [ "model" ]
+  }, {
+    "name" : "sunat",
+    "types": [ "model", "invoice", "creditnote", "debitnote", "perception", "retention", "voideddocuments", "summarydocuments" ]
+  }]
+}
