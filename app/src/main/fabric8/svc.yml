@@ -5,7 +5,7 @@ metadata:
   labels:
     expose: true
   annotations:
-    service.alpha.openshift.io/dependencies: '[{"name":"openfact-sync-db","namespace":"","kind":"Service"}]'
+    service.alpha.openshift.io/dependencies: '[{"name":"clarksnut-db","namespace":"","kind":"Service"}]'
 spec:
   ports:
     - name: "http"

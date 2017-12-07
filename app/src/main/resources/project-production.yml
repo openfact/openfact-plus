@@ -1,12 +1,4 @@
 swarm:
-  datasources:
-    data-sources:
-      OpenfactSyncDS:
-        jndi-name: "java:jboss/datasources/OpenfactSyncDS"
-        driver-name: "${env.DB_DRIVER_NAME:h2}"
-        connection-url: "${env.DB_CONNECTION_URL:jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}"
-        user-name: "${env.DB_USER_NAME:sa}"
-        password: "${env.DB_PASSWORD:sa}"
   ee:
     spec-descriptor-property-replacement: true
   ejb3:
@@ -16,7 +8,7 @@ swarm:
       database-data-stores:
         clustered-store:
           database: "${env.DB_DRIVER_NAME:h2}"
-          datasource-jndi-name: "java:jboss/datasources/OpenfactSyncDS"
+          datasource-jndi-name: "java:jboss/datasources/ClarksnutDS"
           partition: timer
   infinispan:
     cache-containers:
@@ -31,7 +23,7 @@ swarm:
             string-jdbc-store:
               fetch-state: false
               purge: false
-              data-source: OpenfactSyncDS
+              data-source: ClarksnutDS
               string-table:
                 prefix: "JBERET_ISPN"
                 data-column: "DATA_COLUMN"
@@ -43,7 +35,7 @@ swarm:
             string-jdbc-store:
               fetch-state: false
               purge: false
-              data-source: OpenfactSyncDS
+              data-source: ClarksnutDS
               string-table:
                 prefix: "JBERET_ISPN"
                 data-column: "DATA_COLUMN"
@@ -55,7 +47,7 @@ swarm:
             string-jdbc-store:
               fetch-state: false
               purge: false
-              data-source: OpenfactSyncDS
+              data-source: ClarksnutDS
               string-table:
                 prefix: "JBERET_ISPN"
                 data-column: "DATA_COLUMN"
@@ -67,7 +59,7 @@ swarm:
             string-jdbc-store:
               fetch-state: false
               purge: false
-              data-source: OpenfactSyncDS
+              data-source: ClarksnutDS
               string-table:
                 prefix: "JBERET_ISPN"
                 data-column: "DATA_COLUMN"
@@ -82,29 +74,17 @@ swarm:
             string-jdbc-store:
               fetch-state: false
               purge: false
-              data-source: OpenfactSyncDS
+              data-source: ClarksnutDS
               string-table:
                 prefix: "JBERET_ISPN"
                 data-column: "DATA_COLUMN"
                 id-column: "ID_COLUMN"
                 timestamp-column: "TIMESTAMP_COLUMN"
-openfact:
-  fileStorage:
-    provider: jpa
+clarksnut:
   report:
-    default: openfact
     cacheReports: true
     cacheTemplates: true
-    folder:
-      dir: "/reports"
   theme:
-    default: openfact
     staticMaxAge: 2592000
     cacheThemes: true
     cacheTemplates: true
-    folder:
-      dir: "/themes"
-  mail:
-    vendor:
-      gmail:
-        applicationName: "Openfact Sync"

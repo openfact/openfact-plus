@@ -1,6 +1,6 @@
 ## Installing on MiniShift
 
-The following are the instructions for installing openfact on minishift:
+The following are the instructions for installing clarksnut on minishift:
 
 
 * Make sure you have a recent (3.5 of openshift or 1.5 of origin later) distribution of the `oc` binary on your `$PATH`
@@ -27,7 +27,7 @@ We now have GitHub integration which for now requires a manual OAuth setup to ob
 
 Follow these steps using the output of:
 ```
-echo http://keycloak-openfact-sync-system.$(minishift ip).nip.io/auth/realms/openfact/broker/google/endpoint
+echo http://keycloak-clarksnut-system.$(minishift ip).nip.io/auth/realms/clarksnut/broker/google/endpoint
 ```
 
 https://console.cloud.google.com/apis/credentials/oauthclient
@@ -52,7 +52,7 @@ where the above `TODO` text is replaced by the actual client id and secret from 
 bash <(curl -s https://raw.githubusercontent.com/openfact/openfact-platform/master/install.sh)
 ```
 
-* if you want to install a specific version of the [openfact system template](http://central.maven.org/maven2/io/openfact/platform/packages/openfact-system/) then you can pass it on the command line as an argument. Or add the argument `local` to use a local build.
+* if you want to install a specific version of the [clarksnut system template](http://central.maven.org/maven2/io/openfact/platform/packages/openfact-system/) then you can pass it on the command line as an argument. Or add the argument `local` to use a local build.
 
 
 ### Accept the insecure URLs in your browser

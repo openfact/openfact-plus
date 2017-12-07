@@ -4,7 +4,7 @@ We now have Google integration which for now requires a manual OAuth setup to ob
 
 Follow these steps using the output of:
 ```
-echo http://keycloak-openfact-sync-system.$(minishift ip).nip.io/auth/realms/openfact/broker/google/endpoint
+echo http://keycloak-clarksnut-system.$(minishift ip).nip.io/auth/realms/clarksnut/broker/google/endpoint
 ```
 
 https://console.cloud.google.com/apis/credentials/oauthclient

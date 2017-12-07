@@ -3,10 +3,10 @@
 mvn clean package -DskipTests=true
 
 oc login -u developer -p developer
-oc new-project openfact-sync-system
-oc project openfact-sync-system
+oc new-project clarksnut-system
+oc project clarksnut-system
 
-mvn fabric8:deploy -DSSO_REALM=openfact \
+mvn fabric8:deploy -DSSO_REALM=clarksnut \
     -DKEYCLOAK_SERVER_URL=http://`oc get route keycloak --template={{.spec.host}}`/auth \
     -Popenshift \
     -DskipTests=true \

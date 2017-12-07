@@ -4,8 +4,8 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
-    <persistence-unit name="OpenfactSyncPU" transaction-type="JTA">
-        <jta-data-source>java:jboss/datasources/OpenfactSyncDS</jta-data-source>
+    <persistence-unit name="ClarksnutPU" transaction-type="JTA">
+        <jta-data-source>java:jboss/datasources/ClarksnutDS</jta-data-source>
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
@@ -20,7 +20,7 @@
 
             <!--Hibernate search-->
             <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>
-            <property name="hibernate.search.lucene.analysis_definition_provider" value="org.openfact.documents.es.OpenfactAnalyzerProvider"/>
+            <property name="hibernate.search.lucene.analysis_definition_provider" value="org.clarksnut.documents.es.ClarksnutAnalyzerProvider"/>
 
             <property name="hibernate.search.default.indexmanager" value="${env.HIBERNATE_INDEX_MANAGER:directory-based}"/>
             <property name="hibernate.search.default.elasticsearch.host" value="${env.ES_HOST:}"/>

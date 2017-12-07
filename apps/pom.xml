@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -10,12 +8,12 @@
         <version>9</version>
     </parent>
 
-    <groupId>org.openfact.apps</groupId>
+    <groupId>org.clarksnut.apps</groupId>
     <artifactId>apps</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Openfact :: Apps</name>
+    <name>Clarksnut :: Apps</name>
 
     <properties>
         <almighty-core.version>0.0.1</almighty-core.version>
@@ -58,7 +56,7 @@
         <module>elasticsearch</module>
         <module>keycloak</module>
         <module>keycloak-db</module>
-        <module>openfact-sync-db</module>
+        <module>clarksnut-db</module>
         <module>packages</module>
     </modules>
 

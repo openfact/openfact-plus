@@ -1,6 +1,6 @@
 ## Installing on Openshift
 
-The following are the instructions for installing **openfact-sync** on Openshift. In this example I'll use Minishift, in your case you can use your own Openshift Cluster:
+The following are the instructions for installing **clarksnut** on Openshift. In this example I'll use Minishift, in your case you can use your own Openshift Cluster:
 
 
 * Make sure you have a recent (3.5 of openshift or 1.5 of origin later) distribution of the `oc` binary on your `$PATH`
@@ -25,7 +25,7 @@ minishift start --memory=7000 --cpus=4 --disk-size=50g
 To configure Google Client follow the steps described in [Google Client Setup](https://github.com/openfact/openfact-sync/blob/master/docs/openshift_google_client.md).
 
 ## Setup Elasticsearch - Experimental (Optional)
-By Default **openfact-sync** use Lucene file store. Nevertheless, we encourage you to use **Elasticsearch** Cluster. To install elasticsearch on Openshift follow the steps described in [Elasticsearch Setup](https://github.com/openfact/openfact-sync/blob/master/docs/openshift_elasticsearch.md). 
+By Default **clarksnut** use Lucene file store. Nevertheless, we encourage you to use **Elasticsearch** Cluster. To install elasticsearch on Openshift follow the steps described in [Elasticsearch Setup](https://github.com/openfact/openfact-sync/blob/master/docs/openshift_elasticsearch.md). 
 
 ## Setup Smtp Server - Development environment only (Optional)
 To enable email sends, you need to configure a SMTP Server like Gmail from Google for instance. For development purposes you can configure a [SMTP server](https://github.com/openfact/openfact-sync/blob/master/docs/openshift_smtp_server.md).

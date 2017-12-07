@@ -1,7 +1,7 @@
 {
-  "realm": "openfact",
+  "realm": "clarksnut",
   "enabled": true,
-  "loginTheme": "openfact",
+  "loginTheme": "clarksnut",
   "sslRequired": "external",
   "accessTokenLifespan": 2592000,
   "accessTokenLifespanForImplicitFlow": 1296000,
@@ -16,7 +16,7 @@
   ],
   "clients": [
     {
-      "clientId": "openfact-online-platform",
+      "clientId": "clarksnut-online-platform",
       "enabled": true,
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
@@ -208,12 +208,12 @@
   ],
   "users": [
     {
-      "username": "service-account-openfact-online-platform",
+      "username": "service-account-clarksnut-online-platform",
       "enabled": true,
       "totp": false,
       "emailVerified": false,
-      "email": "service-account-openfact-online-platform@placeholder.org",
-      "serviceAccountClientId": "openfact-online-platform",
+      "email": "service-account-clarksnut-online-platform@placeholder.org",
+      "serviceAccountClientId": "clarksnut-online-platform",
       "credentials": [],
       "disableableCredentialTypes": [],
       "requiredActions": [],
@@ -229,7 +229,7 @@
         "broker": [
           "read-token"
         ],
-        "openfact-online-platform": [
+        "clarksnut-online-platform": [
           "uma_protection"
         ],
         "account": [
@@ -243,13 +243,13 @@
   "clientScopeMappings": {
     "realm-management": [
       {
-        "client": "openfact-online-platform",
+        "client": "clarksnut-online-platform",
         "roles": [
           "view-users"
         ]
       },
       {
-        "client": "openfact-online-platform",
+        "client": "clarksnut-online-platform",
         "roles": [
           "manage-authorization"
         ]
@@ -257,7 +257,7 @@
     ],
     "broker": [
       {
-        "client": "openfact-online-platform",
+        "client": "clarksnut-online-platform",
         "roles": [
           "read-token"
         ]

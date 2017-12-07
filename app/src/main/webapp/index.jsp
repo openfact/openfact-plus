@@ -1,13 +1,13 @@
 <html>
 <head>
-    <title>Welcome to Openfact Sync</title>
+    <title>Welcome to Clarksnut</title>
 
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="robots" content="noindex, nofollow">
 
     <link rel="shortcut icon" href="welcome-content/favicon.ico" type="image/x-icon">
-    <link rel="StyleSheet" href="welcome-content/openfact.css" type="text/css">
+    <link rel="StyleSheet" href="welcome-content/clarksnut.css" type="text/css">
     <style>
         label {
             display: inline-block;
@@ -36,9 +36,9 @@
 <div class="wrapper">
     <div class="content">
         <div class="logo">
-            <img src="welcome-content/openfact_sync_logo.png" alt="Sync" border="0">
+            <img src="welcome-content/clarksnut_logo.png" alt="Sync" border="0">
         </div>
-        <h1>Welcome to Openfact Sync</h1>
+        <h1>Welcome to Clarksnut</h1>
 
         <p><a href="http://www.sync.org/docs">Documentation</a> | <a href="admin/">Administration Console</a></p>
 

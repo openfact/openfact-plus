@@ -1,3 +1,6 @@
+<subsystem xmlns="urn:jboss:domain:ee:4.0">
+    <spec-descriptor-property-replacement>true</spec-descriptor-property-replacement>
+</subsystem>
 <subsystem xmlns="urn:jboss:domain:infinispan:4.0">
     <cache-container name="hibernate" module="org.hibernate.infinispan:${version.hibernate}">
         <local-cache name="entity">

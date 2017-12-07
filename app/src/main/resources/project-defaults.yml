@@ -1,25 +1,23 @@
 swarm:
   datasources:
     data-sources:
-      OpenfactSyncDS:
-        jndi-name: "java:jboss/datasources/OpenfactSyncDS"
-        driver-name: "${env.DB_DRIVER_NAME:h2}"
-        connection-url: "${env.DB_CONNECTION_URL:jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}"
-        user-name: "${env.DB_USER_NAME:sa}"
-        password: "${env.DB_PASSWORD:sa}"
-  ee:
-    spec-descriptor-property-replacement: true
-openfact:
+      ClarksnutDS:
+        jndi-name: java:jboss/datasources/ClarksnutDS
+        driver-name: h2
+        connection-url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        user-name: sa
+        password: sa
+clarksnut:
   fileStorage:
     provider: jpa
   report:
-    default: openfact
+    default: clarksnut
     cacheReports: false
     cacheTemplates: false
     folder:
       dir: "/reports"
   theme:
-    default: openfact
+    default: clarksnut
     staticMaxAge: 2592000
     cacheThemes: false
     cacheTemplates: false
@@ -28,4 +26,23 @@ openfact:
   mail:
     vendor:
       gmail:
-        applicationName: "Openfact Sync"
+        applicationName: "Clarksnut"
+    smtp:
+      host:
+      port:
+      auth: false
+      ssl: false
+      starttls: false
+      from:
+      fromDisplayName:
+      replyTo:
+      replyToDisplayName:
+      envelopeFrom:
+      user:
+      password:
+  truststore:
+    file:
+      file:
+      password:
+      hostname-verification-policy: ANY
+      disabled: true

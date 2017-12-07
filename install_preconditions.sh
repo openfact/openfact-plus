@@ -5,7 +5,7 @@ cd apps && mvn clean package && cd ..
 
 # Project configuration
 oc login -u developer
-oc new-project openfact-sync-system
+oc new-project clarksnut-system
 
 APISERVER=$(oc version | grep Server | sed -e 's/.*http:\/\///g' -e 's/.*https:\/\///g')
 NODE_IP=$(echo "${APISERVER}" | sed -e 's/:.*//g')
@@ -18,8 +18,8 @@ echo "Connecting to the API Server at: https://${APISERVER}"
 echo "Using Node IP ${NODE_IP} and Exposer strategy: ${EXPOSER}"
 echo "Using github client ID: ${GOOGLE_OAUTH_CLIENT_ID} and secret: ${GOOGLE_OAUTH_CLIENT_SECRET}"
 
-OPENFACT_ID="${GOOGLE_OAUTH_CLIENT_ID}"
-OPENFACT_SECRET="${GOOGLE_OAUTH_CLIENT_SECRET}"
+CLARKSNUT_ID="${GOOGLE_OAUTH_CLIENT_ID}"
+CLARKSNUT_SECRET="${GOOGLE_OAUTH_CLIENT_SECRET}"
 
 # Elasticsearch configuration
 oc login -u system:admin
@@ -54,6 +54,6 @@ oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default
 
 # General configuration
 oc login -u developer
-echo "Applying the OPENFACT template ${TEMPLATE}"
-oc process -f ${TEMPLATE} -p APISERVER_HOSTPORT=${APISERVER} -p NODE_IP=${NODE_IP} -p EXPOSER=${EXPOSER} -p GOOGLE_OAUTH_CLIENT_SECRET=${OPENFACT_SECRET} -p GOOGLE_OAUTH_CLIENT_ID=${OPENFACT_ID} | oc apply -f -
+echo "Applying the CLARKSNUT template ${TEMPLATE}"
+oc process -f ${TEMPLATE} -p APISERVER_HOSTPORT=${APISERVER} -p NODE_IP=${NODE_IP} -p EXPOSER=${EXPOSER} -p GOOGLE_OAUTH_CLIENT_SECRET=${CLARKSNUT_SECRET} -p GOOGLE_OAUTH_CLIENT_ID=${CLARKSNUT_ID} | oc apply -f -
 echo "Please wait while the pods all startup!"

@@ -207,7 +207,7 @@
 					<textElement textAlignment="Left">
 						<font size="14" isBold="true"/>
 					</textElement>
-					<text><![CDATA[OPENFACT]]></text>
+					<text><![CDATA[CLARKSNUT]]></text>
 				</staticText>
 				<staticText>
 					<reportElement style="text-white" x="108" y="35" width="86" height="20" uuid="03e6be48-92ea-4aad-87f9-91bcab6029ee"/>
@@ -270,7 +270,7 @@
 				<reportElement x="229" y="140" width="100" height="15" uuid="28b0c683-394e-428b-8a54-6223664f0804">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<text><![CDATA[www.openfact.com]]></text>
+				<text><![CDATA[www.clarksnut.com]]></text>
 			</staticText>
 			<line>
 				<reportElement style="line" x="21" y="35" width="518" height="1" uuid="e71429f4-1f32-43be-bf30-43efa24af3d8"/>
@@ -338,7 +338,7 @@ All AWS Services are sold by Amazon Web Services, Inc.]]></text>
 				</textElement>
 				<text><![CDATA[Service Provider:
 (Not to be used for payment remittance)
-Openfact, Inc.]]></text>
+Clarksnut, Inc.]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="444" y="220" width="100" height="30" uuid="818c4c1b-af75-477f-9c29-21e818837a9a"/>

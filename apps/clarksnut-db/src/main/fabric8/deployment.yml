@@ -1,0 +1,57 @@
+metadata:
+  name: clarksnut-db
+  labels:
+    service: clarksnut-db
+spec:
+  replicas: 1
+  selector:
+    service: clarksnut-db
+  template:
+    metadata:
+      labels:
+        service: clarksnut-db
+    spec:
+      containers:
+      - name: clarksnut-db
+        image: registry.centos.org/postgresql/postgresql:9.6
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: POSTGRESQL_DATABASE
+          value: clarksnut
+        - name: POSTGRESQL_PASSWORD
+          value: clarksnut
+        - name: POSTGRESQL_USER
+          value: clarksnut
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - exec pg_isready --host $POD_IP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - exec pg_isready --host $POD_IP
+          initialDelaySeconds: 20
+          timeoutSeconds: 3
+          periodSeconds: 5
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/lib/pgsql
+          name: clarksnut-db-postgresql-data
+          readOnly: false
+      volumes:
+      - name: clarksnut-db-postgresql-data
+        persistentVolumeClaim:
+          claimName: clarksnut-db-postgresql-data

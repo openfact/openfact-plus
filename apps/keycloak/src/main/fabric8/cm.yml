@@ -1,23 +1,23 @@
 metadata:
   annotations:
-    expose.config.openfact.io/apiserver-url-key: apiserver.url
-    expose.service-key.config.openfact.io/openfact: openfact.url
-    expose.service-key.config.openfact.io/keycloak: keycloak.url
-    expose.service-key.config.openfact.io/jenkins: jenkins.url
-    expose-full.service-key.config.openfact.io/sync: sync.api.url
+    expose.config.clarksnut.io/apiserver-url-key: apiserver.url
+    expose.service-key.config.clarksnut.io/clarksnut: clarksnut.url
+    expose.service-key.config.clarksnut.io/keycloak: keycloak.url
+    expose.service-key.config.clarksnut.io/jenkins: jenkins.url
+    expose-full.service-key.config.clarksnut.io/clarksnut: clarksnut.api.url
 data:
   db.url: keycloak-db
   db.port: "5432"
   apiserver.url: http://kubernetes
-  openfact.url: http://openfact
+  clarksnut.url: http://clarksnut
   jenkins.url: http://jenkins
   keycloak.url: http://keycloak
-  sync.api.url: http://openfact-sync
-  openfact-realm.json: |-
+  clarksnut.api.url: http://clarksnut
+  clarksnut-realm.json: |-
     {
-      "realm": "openfact",
+      "realm": "clarksnut",
       "enabled": true,
-      "loginTheme": "openfact",
+      "loginTheme": "clarksnut",
       "privateKey": "${KEYCLOAK_PRIVATEKEY}",
       "publicKey": "${KEYCLOAK_PUBLICKEY}",
       "sslRequired": "external",
@@ -32,7 +32,7 @@ data:
       "defaultRoles": [ "user" ],
       "clients": [
         {
-          "clientId": "openfact-online-platform",
+          "clientId": "clarksnut-online-platform",
           "enabled": true,
           "standardFlowEnabled": true,
           "implicitFlowEnabled": false,
@@ -218,12 +218,12 @@ data:
         }
       ],
       "users": [{
-         "username": "service-account-openfact-online-platform",
+         "username": "service-account-clarksnut-online-platform",
          "enabled": true,
          "totp": false,
          "emailVerified": false,
-         "email": "service-account-openfact-online-platform@placeholder.org",
-         "serviceAccountClientId": "openfact-online-platform",
+         "email": "service-account-clarksnut-online-platform@placeholder.org",
+         "serviceAccountClientId": "clarksnut-online-platform",
          "credentials": [],
          "disableableCredentialTypes": [],
          "requiredActions": [],
@@ -231,7 +231,7 @@ data:
          "clientRoles": {
             "realm-management": ["view-users", "manage-authorization"],
             "broker": ["read-token"],
-            "openfact-online-platform": ["uma_protection"],
+            "clarksnut-online-platform": ["uma_protection"],
             "account": ["manage-account", "view-profile"]
          },
          "groups": []
@@ -239,17 +239,17 @@ data:
       "clientScopeMappings": {
         "realm-management": [
             {
-                "client": "openfact-online-platform",
+                "client": "clarksnut-online-platform",
                 "roles": ["view-users"]
             },
             {
-                "client": "openfact-online-platform",
+                "client": "clarksnut-online-platform",
                 "roles": ["manage-authorization"]
             }
         ],
         "broker": [
             {
-                "client": "openfact-online-platform",
+                "client": "clarksnut-online-platform",
                 "roles": ["read-token"]
             }
         ]

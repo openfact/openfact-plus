@@ -1,5 +1,5 @@
-# Openfact Sync
-Openfact Sync allows you to centralize all your XML-UBL Documents on on site.
+# Clarksnut
+Clarksnut Sync allows you to centralize all your XML-UBL Documents on on site.
 
 # Openshift
 If you are using Openshift you can use [this tutorial](https://github.com/openfact/openfact-sync/blob/master/docs/openshift.md). Otherwise start on next step **Prerequisites**.
@@ -17,7 +17,7 @@ For more information check <https://hub.docker.com/r/jboss/keycloak/>
 
 Go to Keycloak page: <http://localhost:8081/auth> and login with admin/admin.
 
-After start your keycloak server, you need to create a realm and configure Google Identity Providers. You can use a realm base called openfact-realm.json that is located on the project root.
+After start your keycloak server, you need to create a realm and configure Google Identity Providers. You can use a realm base called clarksnut-realm.json that is located on the project root.
 
 In case you are using Openshift, you can follow the instructions here: [preconditions](https://github.com/openfact/openfact-sync/blob/master/PRECONDITIONS.md) 
 
@@ -127,31 +127,31 @@ After configure the basic environment variables, then execute:
 mvn fabric8:deploy -Popenshift
 ```
 
-# Configure Openfact
-Openfact has its own configuration and you can override using .yml file:
+# Configure Clarksnut
+Clarksnut has its own configuration and you can override using .yml file:
 
-openfact.yml:
+clarksnut.yml:
 
 ```
 swarm:
   datasources:
     data-sources:
-      OpenfactSyncDS:
+      ClarksnutDS:
         driver-name: [h2|mysql|postgresql]
         connection-url: [database_url]
         user-name: [database_username]
         password: [database_password]
-openfact:
+clarksnut:
   fileStorage:
     provider: [jpa|filesystem]
   report:
-    default: openfact
+    default: clarksnut
     cacheReports: false
     cacheTemplates: false
     folder:
       dir: "/reports"
   theme:
-    default: openfact
+    default: clarksnut
     staticMaxAge: 2592000
     cacheThemes: false
     cacheTemplates: false
@@ -160,7 +160,7 @@ openfact:
   mail:
     vendor:
       gmail:
-        applicationName: "Openfact Sync"
+        applicationName: "Clarksnut"
     smtp:
       host: [smtp_host]
       port: [smtp_port]
@@ -185,11 +185,11 @@ openfact:
 After that you can start the project with the command:
 
 ```
-mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.project.stage.file=openfact.yml"
+mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.project.stage.file=clarksnut.yml"
 ```
 
 i.e.
 
 ```
-mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.project.stage.file=file:///app/config/openfact.yml"
+mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.project.stage.file=file:///app/config/clarksnut.yml"
 ```

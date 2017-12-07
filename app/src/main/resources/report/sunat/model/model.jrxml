@@ -6,7 +6,7 @@
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
 	<style name="Detail" mode="Transparent" fontName="Times New Roman"/>
-	<parameter name="OPENFACT_LOGO" class="java.lang.String"/>
+	<parameter name="CLARKSNUT_LOGO" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -82,7 +82,7 @@
 			</staticText>
 			<image hAlign="Center">
 				<reportElement x="0" y="0" width="80" height="78" uuid="94883631-a913-43e2-b182-ab8d77d0181e"/>
-				<imageExpression><![CDATA[$P{OPENFACT_LOGO}]]></imageExpression>
+				<imageExpression><![CDATA[$P{CLARKSNUT_LOGO}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="90" y="51" width="80" height="15" forecolor="#002235" uuid="4c581245-a631-4d3a-a8fe-288befff147a"/>
@@ -209,7 +209,7 @@
 			<staticText>
 				<reportElement x="220" y="220" width="114" height="30" uuid="9d90d4a1-5beb-4dd1-b023-0c79a5eff43e"/>
 				<textElement textAlignment="Center"/>
-				<text><![CDATA[www.openfact.com]]></text>
+				<text><![CDATA[www.clarksnut.com]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="410" y="30" width="119" height="20" forecolor="#8B8D8F" uuid="11299e94-766b-4709-839c-0f97f8767e58"/>

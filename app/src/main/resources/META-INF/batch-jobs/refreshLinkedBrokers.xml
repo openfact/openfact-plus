@@ -23,7 +23,7 @@
                 <reader ref="jpaItemReader">
                     <properties>
                         <property name="namedQuery" value="getUserWithOfflineToken"></property>
-                        <property name="beanType" value="org.openfact.models.db.jpa.entity.UserEntity"></property>
+                        <property name="beanType" value="org.clarksnut.models.db.jpa.entity.UserEntity"></property>
                     </properties>
                 </reader>
                 <processor ref="refreshLinkedBrokersProcessor"/>

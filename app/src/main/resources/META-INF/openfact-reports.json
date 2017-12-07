@@ -3,7 +3,7 @@
     "name" : "base",
     "types": [ "model" ]
   }, {
-    "name" : "openfact",
+    "name" : "clarksnut",
     "types": [ "model" ]
   }, {
     "name" : "sunat",

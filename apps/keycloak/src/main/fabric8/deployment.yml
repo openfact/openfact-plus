@@ -1,6 +1,6 @@
 metadata:
   annotations:
-    configmap.openfact.io/update-on-change: "keycloak"
+    configmap.clarksnut.io/update-on-change: "keycloak"
     fabric8.io/target-platform: "kubernetes"
 spec:
   replicas: 1
@@ -18,7 +18,7 @@ spec:
             "image": "fabric8/envsubst-file:1.0.0",
             "imagePullPolicy": "IfNotPresent",
             "args": [
-              "openfact-realm.json"
+              "clarksnut-realm.json"
             ],
             "env": [{
               "name": "SYNC_URL",
@@ -48,11 +48,11 @@ spec:
                   }
             },
             {
-              "name": "OPENFACT_URL",
+              "name": "CLARKSNUT_URL",
               "valueFrom": {
                       "configMapKeyRef": {
                           "name": "keycloak",
-                          "key": "openfact.url"
+                          "key": "clarksnut.url"
                       }
                   }
             },
@@ -103,8 +103,8 @@ spec:
             "volumeMounts": [
             {
               "name": "keycloak-config",
-              "mountPath": "/workdir/openfact-realm.json",
-              "subPath": "config/openfact-realm.json"
+              "mountPath": "/workdir/clarksnut-realm.json",
+              "subPath": "config/clarksnut-realm.json"
             },
             {
               "name": "keycloak-subst-config",
@@ -134,7 +134,7 @@ spec:
         - -Djboss.node.name=$(INTERNAL_POD_IP)
         - -Dkeycloak.migration.action=import
         - -Dkeycloak.migration.provider=singleFile
-        - -Dkeycloak.migration.file=/opt/jboss/keycloak/standalone/configuration/import/openfact-realm.json
+        - -Dkeycloak.migration.file=/opt/jboss/keycloak/standalone/configuration/import/clarksnut-realm.json
         - -Dkeycloak.migration.strategy=IGNORE_EXISTING
         env:
         - name: POSTGRES_HOSTNAME
@@ -196,7 +196,7 @@ spec:
         - name: keycloak-subst-config
           mountPath: /opt/jboss/keycloak/standalone/configuration/import
         - name: keycloak-theme
-          mountPath: /opt/jboss/keycloak/themes/openfact
+          mountPath: /opt/jboss/keycloak/themes/clarksnut
       volumes:
       - name: keycloak-subst-config
         emptyDir: {}
@@ -204,9 +204,9 @@ spec:
         configMap:
           name: keycloak
           items:
-          - key: openfact-realm.json
-            path: config/openfact-realm.json
+          - key: clarksnut-realm.json
+            path: config/clarksnut-realm.json
       - name: keycloak-theme
         gitRepo:
-          repository: https://github.com/openfactio/openfact-keycloak-theme.git
+          repository: https://github.com/openfactio/clarksnut-keycloak-theme.git
           directory: login

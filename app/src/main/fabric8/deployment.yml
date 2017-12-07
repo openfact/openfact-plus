@@ -24,7 +24,7 @@ spec:
                     "name": "SSO_REALM",
                     "valueFrom": {
                       "configMapKeyRef": {
-                        "name": "openfact-sync-configuration",
+                        "name": "clarksnut-configuration",
                         "key": "sso.realm"
                       }
                     }
@@ -33,7 +33,7 @@ spec:
                     "name": "SSO_AUTH_SERVER_URL",
                     "valueFrom": {
                       "configMapKeyRef": {
-                        "name": "openfact-sync-configuration",
+                        "name": "clarksnut-configuration",
                         "key": "sso.auth.server.url"
                       }
                     }
@@ -42,7 +42,7 @@ spec:
                     "name": "SSO_CLIENT_ID",
                     "valueFrom": {
                       "configMapKeyRef": {
-                        "name": "openfact-sync-configuration",
+                        "name": "clarksnut-configuration",
                         "key": "sso.client.id"
                       }
                     }
@@ -59,17 +59,17 @@ spec:
                 ],
                 "volumeMounts": [
                   {
-                    "name": "openfact-sync-keycloak-config",
+                    "name": "clarksnut-keycloak-config",
                     "mountPath": "/workdir/keycloak.json",
                     "subPath": "config/keycloak.json"
                   },
                   {
-                    "name": "openfact-sync-stage-config",
+                    "name": "clarksnut-stage-config",
                     "mountPath": "/workdir/project-custom.yml",
                     "subPath": "config/project-custom.yml"
                   },
                   {
-                    "name": "openfact-sync-subst-config",
+                    "name": "clarksnut-subst-config",
                     "mountPath": "/processed"
                   }
                 ]
@@ -89,11 +89,11 @@ spec:
         - name: DB_DRIVER_NAME
           value: postgresql
         - name: DB_CONNECTION_URL
-          value: "jdbc:postgresql://openfact-sync-db:5432/openfactsync"
+          value: "jdbc:postgresql://clarksnut-db:5432/clarksnut"
         - name: DB_USER_NAME
-          value: openfactsync
+          value: clarksnut
         - name: DB_PASSWORD
-          value: openfactsync
+          value: clarksnut
         - name: HIBERNATE_STRATEGY
           value: update
         - name: HIBERNATE_SHOW_SQL
@@ -125,22 +125,22 @@ spec:
         securityContext:
           privileged: false
         volumeMounts:
-        - name: openfact-sync-subst-config
+        - name: clarksnut-subst-config
           mountPath: /deployments/config
       volumes:
-      - name: openfact-sync-subst-config
+      - name: clarksnut-subst-config
         emptyDir: {}
-      - name: openfact-sync-keycloak-config
+      - name: clarksnut-keycloak-config
         configMap:
-          name: openfact-sync
+          name: clarksnut
           items:
           - key: keycloak.json
             path: config/keycloak.json
-      - name: openfact-sync-stage-config
+      - name: clarksnut-stage-config
         configMap:
-          name: openfact-sync
+          name: clarksnut
           items:
-          - key: openfact-sync-config.yml
+          - key: clarksnut-config.yml
             path: config/project-custom.yml
   triggers:
   - type: ConfigChange
