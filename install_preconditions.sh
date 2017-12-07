@@ -16,7 +16,7 @@ echo "Using google client ID: ${GOOGLE_OAUTH_CLIENT_ID} and secret: ${GOOGLE_OAU
 
 echo "Connecting to the API Server at: https://${APISERVER}"
 echo "Using Node IP ${NODE_IP} and Exposer strategy: ${EXPOSER}"
-echo "Using github client ID: ${GOOGLE_OAUTH_CLIENT_ID} and secret: ${GOOGLE_OAUTH_CLIENT_SECRET}"
+echo "Using google client ID: ${GOOGLE_OAUTH_CLIENT_ID} and secret: ${GOOGLE_OAUTH_CLIENT_SECRET}"
 
 CLARKSNUT_ID="${GOOGLE_OAUTH_CLIENT_ID}"
 CLARKSNUT_SECRET="${GOOGLE_OAUTH_CLIENT_SECRET}"

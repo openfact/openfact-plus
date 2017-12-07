@@ -33,6 +33,7 @@ oc process -f ${TEMPLATE} -p APISERVER_HOSTPORT=${APISERVER} -p NODE_IP=${NODE_I
 # Deploy clarksnut
 mvn clean compile
 mvn fabric8:deploy \
+    -DKEYCLOAK_SERVER_URL=http://`oc get route keycloak --template={{.spec.host}}`/auth \
     -Popenshift \
     -DskipTests=true
 

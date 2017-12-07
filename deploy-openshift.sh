@@ -6,7 +6,7 @@ oc login -u developer -p developer
 oc new-project clarksnut-system
 oc project clarksnut-system
 
-mvn fabric8:deploy -DSSO_REALM=clarksnut \
+mvn fabric8:deploy \
     -DKEYCLOAK_SERVER_URL=http://`oc get route keycloak --template={{.spec.host}}`/auth \
     -Popenshift \
     -DskipTests=true \
