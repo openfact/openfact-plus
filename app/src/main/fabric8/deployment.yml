@@ -55,6 +55,32 @@ spec:
                         "key": "kc.clientid.secret"
                       }
                     }
+                  },
+                  {
+                    "name": "DB_DRIVER",
+                    "value": "postgresql"
+                  },
+                  {
+                    "name": "DB_URL",
+                    "value": "jdbc:postgresql://clarksnut-db/clarksnut"
+                  },
+                  {
+                    "name": "DB_USERNAME",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "clarksnut",
+                        "key": "db.user"
+                      }
+                    }
+                  },
+                  {
+                    "name": "DB_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "clarksnut",
+                        "key": "db.password"
+                      }
+                    }
                   }
                 ],
                 "volumeMounts": [
@@ -85,15 +111,7 @@ spec:
         - name: JAVA_APP_DIR
           value: /deployments
         - name: JAVA_OPTIONS
-          value: -Dswarm.project.stage.file=file:///deployments/config/project-custom.yml
-        - name: DB_DRIVER_NAME
-          value: postgresql
-        - name: DB_CONNECTION_URL
-          value: "jdbc:postgresql://clarksnut-db:5432/clarksnut"
-        - name: DB_USER_NAME
-          value: clarksnut
-        - name: DB_PASSWORD
-          value: clarksnut
+          value: -Dswarm.project.stage.file=file:///deployments/config/project-custom.yml -Dswarm.keycloak.json.path=/deployments/config/keycloak.json
         - name: HIBERNATE_STRATEGY
           value: update
         - name: HIBERNATE_SHOW_SQL

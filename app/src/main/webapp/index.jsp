@@ -40,11 +40,11 @@
         </div>
         <h1>Welcome to Clarksnut</h1>
 
-        <p><a href="http://www.sync.org/docs">Documentation</a> | <a href="admin/">Administration Console</a></p>
+        <p><a href="http://www.clakstnut.org/docs">Documentation</a> | <a href="#">Administration Console</a></p>
 
-        <p><a href="http://www.clakstnut.org">Sync Project</a> |
-            <a href="https://lists.jboss.org/mailman/listinfo/clarksnut-user">Mailing List</a> |
-            <a href="https://issues.jboss.org/browse/KEYCLOAK">Report an issue</a></p>
+        <p><a href="http://www.clakstnut.org">Clarksnut Project</a> |
+            <a href="#">Mailing List</a> |
+            <a href="#">Report an issue</a></p>
         <p class="logos"><a href="http://www.jboss.org"><img src="welcome-content/jboss_community.png"
                                                              alt="JBoss and JBoss Community" width="254" height="31"
                                                              border="0"></a></p>

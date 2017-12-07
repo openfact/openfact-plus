@@ -12,6 +12,15 @@ data:
         "enable-cors": true
       }
   clarksnut-config.yml: |-
+      swarm:
+        datasources:
+          data-sources:
+            ClarksnutDS:
+              jndi-name: java:jboss/datasources/ClarksnutDS
+              driver-name: ${DB_DRIVER}
+              connection-url: ${DB_URL}
+              user-name: ${DB_USERNAME}
+              password: ${DB_PASSWORD}
       clarksnut:
         fileStorage:
           provider: jpa
