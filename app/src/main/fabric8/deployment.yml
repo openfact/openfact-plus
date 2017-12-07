@@ -17,7 +17,7 @@ spec:
                 "imagePullPolicy": "IfNotPresent",
                 "args": [
                   "keycloak.json",
-                  "project-custom.yml"
+                  "clarksnut-stages.yml"
                 ],
                 "env": [
                   {
@@ -91,8 +91,8 @@ spec:
                   },
                   {
                     "name": "clarksnut-stage-config",
-                    "mountPath": "/workdir/project-custom.yml",
-                    "subPath": "config/project-custom.yml"
+                    "mountPath": "/workdir/clarksnut-stages.yml",
+                    "subPath": "config/clarksnut-stages.yml"
                   },
                   {
                     "name": "clarksnut-subst-config",
@@ -111,7 +111,7 @@ spec:
         - name: JAVA_APP_DIR
           value: /deployments
         - name: JAVA_OPTIONS
-          value: -Dswarm.project.stage.file=file:///deployments/config/project-custom.yml -Dswarm.keycloak.json.path=/deployments/config/keycloak.json -Dswarm.project.stage=custom
+          value: -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.keycloak.json.path=/deployments/config/keycloak.json -Dswarm.project.stage=custom
         - name: HIBERNATE_STRATEGY
           value: update
         - name: HIBERNATE_SHOW_SQL
@@ -161,7 +161,7 @@ spec:
           name: clarksnut
           items:
           - key: clarksnut-config.yml
-            path: config/project-custom.yml
+            path: config/clarksnut-stages.yml
   triggers:
   - type: ConfigChange
   - imageChangeParams:
