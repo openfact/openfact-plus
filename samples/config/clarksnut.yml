@@ -12,37 +12,18 @@ clarksnut:
     provider: jpa
   report:
     default: clarksnut
-    cacheReports: false
-    cacheTemplates: false
+    cacheReports: true
+    cacheTemplates: true
     folder:
       dir: "/reports"
   theme:
     default: clarksnut
     staticMaxAge: 2592000
-    cacheThemes: false
-    cacheTemplates: false
+    cacheThemes: true
+    cacheTemplates: true
     folder:
       dir: "/themes"
   mail:
     vendor:
       gmail:
         applicationName: "Clarksnut"
-    smtp:
-      host:
-      port:
-      auth: false
-      ssl: false
-      starttls: false
-      from:
-      fromDisplayName:
-      replyTo:
-      replyToDisplayName:
-      envelopeFrom:
-      user:
-      password:
-  truststore:
-    file:
-      file:
-      password:
-      hostname-verification-policy: ANY
-      disabled: true

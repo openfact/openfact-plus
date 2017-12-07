@@ -1,30 +1,44 @@
 # Clarksnut
 Clarksnut allows you to centralize all your XML-UBL Documents on one site.
 
-# Openshift
-If you are using Openshift you can use [this tutorial for Openshift](https://github.com/clarksnut/clarksnut/blob/master/docs/openshift.md). Otherwise follow the steps of this page.
+# Quick Start
+Clone the repository:
+```
+git clone https://github.com/clarksnut/clarksnut.git
+```
 
-# Prerequisites
-- Keycloak Server
+Inside project root folder execute:
+```
+mvn wildfly-swarm:run -pl app -DskipTests
+```
 
-In development environments you can use docker to start a new Keycloak server:
+Wait until the server starts, and then go to: <http://localhost:8080>
 
+# Production
+For production purposes:
+```
+export SWARM_PROJECT_STAGE=production
+```
+
+# Securing Clarksnut using Keycloak
+In development environments you can use [docker to start a new Keycloak Server](https://hub.docker.com/r/jboss/keycloak/):
 ```
 docker run -p 8081:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin jboss/keycloak
 ```
 
-For more information check <https://hub.docker.com/r/jboss/keycloak/>
+* Go to: <http://localhost:8081/auth> and login with admin/admin.
+* Create a realm and configure Google Identity Providers. You can use a realm base called **clarksnut-realm.json** that is located on the project root.
+* From Keycloak, download keycloak.json and save it on a folder.
 
-Go to Keycloak page: <http://localhost:8081/auth> and login with admin/admin.
 
-After start your keycloak server, you need to create a realm and configure Google Identity Providers. You can use a realm base called **clarksnut-realm.json** that is located on the project root.
-
-# Project Configuration
-
-## Clone the repository:
+For start the application using Keycloak, you can point keycloak.json file:
 ```
-git clone https://github.com/clarksnut/clarksnut.git
+mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.keycloak.json.path=/my_folder/keycloak.json
 ```
+
+Wait until the server starts, and then go to: <http://localhost:8080>
+
+# Advanced Configuration
 
 ## Configure database creation strategy (Optional):
 
@@ -55,7 +69,7 @@ Default values:
 HIBERNATE_INDEX_MANAGER=directory-based
 ```
 
-### Elasticsearch (Production)
+### Elasticsearch (Optional - Production)
 This configuration should be considered in production environments.
 
 In case elasticsearch was selected as index manager, then you need to configure additional environment variables:
@@ -72,7 +86,7 @@ ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY=update
 ES_REQUIRED_INDEX_STATUS=green
 ```
 
-### Elasticsearch AWS (Production)
+### Elasticsearch AWS (Optional - Production)
 In case your elasticsearch cluster is provided by AWS you need to follow previous step and additionally:
 
 ```
@@ -87,24 +101,8 @@ Default values:
 HIBERNATE_ES_AWS_ENABLED=false
 ```      
 
-# Start project
-After configure the basic environment variables, then execute:
-
-```
-mvn wildfly-swarm:run -pl app -DskipTests
-```
-
-Or if you want to customize keycloak.json:
-```
-mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.keycloak.json.path=my_keycloak.json
-```
-
-Wait until the server starts, and then go to:
-
-<http://localhost:8080>
-
 # Configure Clarksnut
-Clarksnut has its own configuration and you can override using .yml file:
+Clarksnut has its own configuration and you can override it using a yaml file:
 
 clarksnut.yml:
 
@@ -113,6 +111,7 @@ swarm:
   datasources:
     data-sources:
       ClarksnutDS:
+        jndi-name: java:jboss/datasources/ClarksnutDS
         driver-name: [h2|mysql|postgresql]
         connection-url: [database_url]
         user-name: [database_username]
@@ -161,11 +160,14 @@ clarksnut:
 After that you can start the project with the command:
 
 ```
-mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.project.stage.file=clarksnut.yml"
+mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.project.stage.file=file:///../../..../clarksnut.yml
 ```
 
-i.e.
+Using keycloak.json.
 
 ```
-mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.project.stage.file=file:///app/config/clarksnut.yml"
+mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.project.stage.file=file:///app/config/clarksnut.yml -Dswarm.keycloak.json.path=/my_folder/keycloak.json
 ```
+
+# Deploy to Openshift
+If you are using Openshift you can use [this tutorial for Openshift](https://github.com/clarksnut/clarksnut/blob/master/docs/openshift.md).

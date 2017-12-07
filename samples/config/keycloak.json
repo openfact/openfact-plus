@@ -1,0 +1,11 @@
+{
+  "realm": "clarksnut",
+  "auth-server-url": "http://localhost:8081/auth",
+  "resource": "clarksnut-online-platform",
+  "ssl-required": "external",
+  "credentials": {
+    "secret": "b7873f80-6ad7-44a5-97cb-bd210789eb41"
+  },
+  "bearer-only": true,
+  "enable-cors": true
+}
