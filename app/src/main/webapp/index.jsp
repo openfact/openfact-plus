@@ -42,8 +42,8 @@
 
         <p><a href="http://www.sync.org/docs">Documentation</a> | <a href="admin/">Administration Console</a></p>
 
-        <p><a href="http://www.sync.org">Sync Project</a> |
-            <a href="https://lists.jboss.org/mailman/listinfo/sync-user">Mailing List</a> |
+        <p><a href="http://www.clakstnut.org">Sync Project</a> |
+            <a href="https://lists.jboss.org/mailman/listinfo/claksnut-user">Mailing List</a> |
             <a href="https://issues.jboss.org/browse/KEYCLOAK">Report an issue</a></p>
         <p class="logos"><a href="http://www.jboss.org"><img src="welcome-content/jboss_community.png"
                                                              alt="JBoss and JBoss Community" width="254" height="31"

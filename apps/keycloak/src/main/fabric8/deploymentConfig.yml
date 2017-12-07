@@ -49,11 +49,11 @@ spec:
               "clarksnut-realm.json"
             ],
             "env": [{
-              "name": "SYNC_URL",
+              "name": "CLARKSNUT_URL",
               "valueFrom": {
                       "configMapKeyRef": {
                           "name": "keycloak",
-                          "key": "sync.api.url"
+                          "key": "clarksnut.api.url"
                       }
                   }
             },
