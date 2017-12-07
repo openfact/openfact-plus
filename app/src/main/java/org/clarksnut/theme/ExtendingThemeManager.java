@@ -1,9 +1,9 @@
 package org.clarksnut.theme;
 
-import org.jboss.logging.Logger;
 import org.clarksnut.common.Version;
 import org.clarksnut.config.ThemeConfig;
 import org.clarksnut.theme.ThemeProviderType.Type;
+import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;

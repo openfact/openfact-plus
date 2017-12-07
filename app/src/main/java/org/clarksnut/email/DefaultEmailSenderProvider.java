@@ -1,13 +1,13 @@
 package org.clarksnut.email;
 
 import com.sun.mail.smtp.SMTPMessage;
-import org.clarksnut.truststore.Truststore;
-import org.jboss.logging.Logger;
 import org.clarksnut.config.SmtpConfig;
 import org.clarksnut.email.exceptions.EmailException;
 import org.clarksnut.truststore.HostnameVerificationPolicy;
 import org.clarksnut.truststore.JSSETruststoreConfigurator;
+import org.clarksnut.truststore.Truststore;
 import org.clarksnut.truststore.TruststoreProvider;
+import org.jboss.logging.Logger;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -24,7 +24,10 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.Set;
 
 @Stateless
 public class DefaultEmailSenderProvider implements EmailSenderProvider {

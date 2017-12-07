@@ -1,11 +1,11 @@
 package org.clarksnut.models.db.jpa.entity;
 
-import org.clarksnut.models.db.UpdatableEntity;
-import org.hibernate.annotations.Type;
-import org.hibernate.envers.Audited;
 import org.clarksnut.models.db.CreatableEntity;
 import org.clarksnut.models.db.CreatedAtListener;
+import org.clarksnut.models.db.UpdatableEntity;
 import org.clarksnut.models.db.UpdatedAtListener;
+import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Audited
 @Entity
-@Table(name = "user", uniqueConstraints = {
+@Table(name = "clarksnut_user", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "identity_id")
 }, indexes = {
@@ -74,7 +74,7 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "url")
     private String url;
 
-    @Column(name = "emailTheme")
+    @Column(name = "email_theme")
     private String emailTheme;
 
     @Column(name = "language")
@@ -96,7 +96,7 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     private boolean registrationCompleted;
 
     @Size(max = 2048)
-    @Column(name = "OFFLINE_TOKEN", length = 2048)
+    @Column(name = "offline_token", length = 2048)
     private String offlineToken;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)

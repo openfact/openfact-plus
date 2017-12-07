@@ -1,12 +1,12 @@
 package org.clarksnut.documents.jpa.entity;
 
-import org.hibernate.annotations.Type;
-import org.hibernate.search.annotations.*;
 import org.clarksnut.documents.DocumentProviderType;
 import org.clarksnut.models.db.CreatableEntity;
 import org.clarksnut.models.db.CreatedAtListener;
 import org.clarksnut.models.db.UpdatableEntity;
 import org.clarksnut.models.db.UpdatedAtListener;
+import org.hibernate.annotations.Type;
+import org.hibernate.search.annotations.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;

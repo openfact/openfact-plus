@@ -1,8 +1,5 @@
 package org.clarksnut.models.db.jpa.entity;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -14,9 +11,8 @@ public class UserContextInformationEntity implements Serializable {
     @Column(name = "id", length = 36)
     private String id;
 
-    @Type(type = "org.clarksnut.models.db.type.json.JsonNodeType")
     @Column(name = "value", length = 4096)
-    private JsonNode value;
+    private String value;
 
     @OneToOne
     @MapsId
@@ -30,11 +26,11 @@ public class UserContextInformationEntity implements Serializable {
         this.id = id;
     }
 
-    public JsonNode getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(JsonNode contextInformation) {
+    public void setValue(String contextInformation) {
         this.value = contextInformation;
     }
 

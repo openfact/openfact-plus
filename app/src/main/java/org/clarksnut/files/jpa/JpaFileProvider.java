@@ -1,8 +1,8 @@
 package org.clarksnut.files.jpa;
 
+import org.clarksnut.files.FileModel;
 import org.clarksnut.files.FileProvider;
 import org.clarksnut.files.exceptions.FileStorageException;
-import org.clarksnut.files.FileModel;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

@@ -1,12 +1,12 @@
 package org.clarksnut.services.resources;
 
-import org.clarksnut.models.SpaceProvider;
-import org.clarksnut.utils.ModelToRepresentation;
 import org.clarksnut.models.SpaceModel;
+import org.clarksnut.models.SpaceProvider;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.SpaceRepresentation;
+import org.clarksnut.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

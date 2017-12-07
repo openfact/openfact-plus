@@ -13,14 +13,13 @@ import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceUtil;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.FileProvider;
+import org.clarksnut.files.FlyWeightFileModel;
 import org.clarksnut.files.FlyWeightXmlFileModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.report.*;
-import org.jboss.logging.Logger;
-import org.clarksnut.files.FlyWeightFileModel;
-import org.clarksnut.report.*;
 import org.clarksnut.report.exceptions.ReportException;
+import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

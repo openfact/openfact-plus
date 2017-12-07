@@ -1,10 +1,6 @@
 package org.clarksnut.services.resources;
 
 import jodd.io.ZipBuilder;
-import org.jboss.logging.Logger;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.keycloak.representations.AccessToken;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentProvider;
 import org.clarksnut.documents.DocumentProviderType;
@@ -29,6 +25,10 @@ import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.services.resources.utils.PATCH;
 import org.clarksnut.services.util.SSOContext;
 import org.clarksnut.utils.ModelToRepresentation;
+import org.jboss.logging.Logger;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.keycloak.representations.AccessToken;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

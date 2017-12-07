@@ -1,7 +1,7 @@
 package org.clarksnut.files.jpa;
 
-import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.files.FileModel;
+import org.clarksnut.files.exceptions.FileFetchException;
 
 import javax.persistence.EntityManager;
 

@@ -1,7 +1,7 @@
 package org.clarksnut.theme;
 
-import org.keycloak.util.JsonSerialization;
 import org.clarksnut.theme.ThemeProviderType.Type;
+import org.keycloak.util.JsonSerialization;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;

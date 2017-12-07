@@ -4,12 +4,12 @@ import com.helger.ubl21.UBL21Reader;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.TaxTotalType;
 import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
-import org.clarksnut.documents.jpa.entity.DocumentEntity;
-import org.jboss.logging.Logger;
 import org.clarksnut.documents.DocumentReader;
 import org.clarksnut.documents.GenericDocument;
+import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.reader.SupportedType;
 import org.clarksnut.files.XmlUBLFileModel;
+import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
 import java.math.BigDecimal;

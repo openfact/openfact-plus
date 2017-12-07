@@ -1,12 +1,12 @@
 package org.clarksnut.datasource.peru;
 
 import org.clarksnut.datasource.DatasourceProvider;
+import org.clarksnut.datasource.DatasourceType;
+import org.clarksnut.datasource.peru.beans.VoidedDocumentsBean;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
-import org.clarksnut.datasource.DatasourceType;
-import org.clarksnut.datasource.peru.beans.VoidedDocumentsBean;
 import sunat.names.specification.ubl.peru.schema.xsd.voideddocuments_1.VoidedDocumentsType;
 
 import javax.ejb.Stateless;

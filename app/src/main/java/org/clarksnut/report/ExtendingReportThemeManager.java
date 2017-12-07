@@ -1,8 +1,8 @@
 package org.clarksnut.report;
 
-import org.jboss.logging.Logger;
 import org.clarksnut.common.Version;
 import org.clarksnut.config.ReportThemeConfig;
+import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;

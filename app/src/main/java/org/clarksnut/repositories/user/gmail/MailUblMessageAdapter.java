@@ -6,8 +6,8 @@ import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
 import com.google.api.services.gmail.model.MessagePartBody;
 import org.clarksnut.repositories.user.MailReadException;
-import org.clarksnut.repositories.user.MailUblMessageModel;
 import org.clarksnut.repositories.user.MailRepositoryModel;
+import org.clarksnut.repositories.user.MailUblMessageModel;
 
 import java.io.IOException;
 import java.util.List;

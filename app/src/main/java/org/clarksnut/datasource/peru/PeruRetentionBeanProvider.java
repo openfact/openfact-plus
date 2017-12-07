@@ -1,13 +1,13 @@
 package org.clarksnut.datasource.peru;
 
 import org.clarksnut.datasource.DatasourceProvider;
-import org.clarksnut.files.exceptions.FileFetchException;
-import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.datasource.peru.beans.RetentionBean;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.reader.pe.common.jaxb.retention.RetentionType;
 import org.clarksnut.files.XmlFileModel;
+import org.clarksnut.files.exceptions.FileFetchException;
+import org.clarksnut.models.utils.ClarksnutModelUtils;
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;

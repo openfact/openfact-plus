@@ -1,14 +1,14 @@
 package org.clarksnut.documents.reader.pe.retention;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType;
-import org.clarksnut.documents.jpa.entity.DocumentEntity;
-import org.jboss.logging.Logger;
 import org.clarksnut.documents.DocumentReader;
 import org.clarksnut.documents.GenericDocument;
+import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.reader.SupportedType;
 import org.clarksnut.documents.reader.pe.common.jaxb.retention.RetentionType;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
+import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;

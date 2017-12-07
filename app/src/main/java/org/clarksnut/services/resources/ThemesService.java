@@ -5,8 +5,8 @@ import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentProvider;
 import org.clarksnut.report.ReportTemplateProvider;
 import org.clarksnut.report.ReportTheme;
-import org.jboss.logging.Logger;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
+import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

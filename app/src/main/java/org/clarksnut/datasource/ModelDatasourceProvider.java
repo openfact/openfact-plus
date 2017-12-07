@@ -1,8 +1,8 @@
 package org.clarksnut.datasource;
 
-import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
+import org.clarksnut.files.exceptions.FileFetchException;
 
 import javax.ejb.Stateless;
 

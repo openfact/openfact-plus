@@ -1,6 +1,5 @@
 package org.clarksnut.email.freemarker;
 
-import org.jboss.logging.Logger;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.email.EmailFileModel;
 import org.clarksnut.email.EmailSenderProvider;
@@ -16,6 +15,7 @@ import org.clarksnut.theme.ThemeProviderType.Type;
 import org.clarksnut.theme.beans.MessageFormatterMethod;
 import org.clarksnut.theme.exceptions.FreeMarkerException;
 import org.clarksnut.theme.freemarker.FreeMarkerUtil;
+import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

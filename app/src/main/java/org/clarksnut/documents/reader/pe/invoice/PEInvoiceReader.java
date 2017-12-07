@@ -5,10 +5,10 @@ import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import org.clarksnut.documents.DocumentReader;
 import org.clarksnut.documents.GenericDocument;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
-import org.clarksnut.models.utils.ClarksnutModelUtils;
-import org.jboss.logging.Logger;
 import org.clarksnut.documents.reader.SupportedType;
 import org.clarksnut.files.XmlUBLFileModel;
+import org.clarksnut.models.utils.ClarksnutModelUtils;
+import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;

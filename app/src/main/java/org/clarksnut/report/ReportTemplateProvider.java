@@ -1,7 +1,7 @@
 package org.clarksnut.report;
 
-import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.documents.DocumentModel;
+import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.report.exceptions.ReportException;
 
 public interface ReportTemplateProvider {

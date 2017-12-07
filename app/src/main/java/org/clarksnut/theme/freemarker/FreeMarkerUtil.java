@@ -4,8 +4,8 @@ import freemarker.cache.URLTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.clarksnut.config.ThemeConfig;
-import org.clarksnut.theme.exceptions.FreeMarkerException;
 import org.clarksnut.theme.Theme;
+import org.clarksnut.theme.exceptions.FreeMarkerException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;

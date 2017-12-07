@@ -1,3 +1,5 @@
+project:
+  stage: custom
 swarm:
   ee:
     spec-descriptor-property-replacement: true

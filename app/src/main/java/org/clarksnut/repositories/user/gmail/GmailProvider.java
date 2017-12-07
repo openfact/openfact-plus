@@ -20,7 +20,6 @@ import org.clarksnut.oauth2.OAuth2Utils;
 import org.clarksnut.repositories.user.*;
 import org.clarksnut.repositories.user.utils.CredentialHandler;
 import org.jboss.logging.Logger;
-import org.clarksnut.repositories.user.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;

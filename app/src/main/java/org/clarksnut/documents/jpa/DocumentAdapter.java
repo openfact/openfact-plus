@@ -1,8 +1,8 @@
 package org.clarksnut.documents.jpa;
 
-import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentProviderType;
+import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.models.db.JpaModel;
 
 import javax.persistence.EntityManager;

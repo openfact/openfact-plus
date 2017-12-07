@@ -1,12 +1,12 @@
 package org.clarksnut.services.resources;
 
-import org.clarksnut.utils.ModelToRepresentation;
-import org.jboss.logging.Logger;
-import org.keycloak.representations.AccessToken;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.representations.idm.UserRepresentation;
 import org.clarksnut.services.util.SSOContext;
+import org.clarksnut.utils.ModelToRepresentation;
+import org.jboss.logging.Logger;
+import org.keycloak.representations.AccessToken;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

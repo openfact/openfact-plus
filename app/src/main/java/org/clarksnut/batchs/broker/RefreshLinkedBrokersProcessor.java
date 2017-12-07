@@ -1,11 +1,11 @@
 package org.clarksnut.batchs.broker;
 
-import org.clarksnut.models.db.jpa.entity.UserEntity;
-import org.clarksnut.models.utils.ClarksnutModelUtils;
-import org.jboss.logging.Logger;
 import org.clarksnut.managers.BrokerManager;
 import org.clarksnut.models.BrokerType;
+import org.clarksnut.models.db.jpa.entity.UserEntity;
 import org.clarksnut.models.db.jpa.entity.UserLinkedBrokerEntity;
+import org.clarksnut.models.utils.ClarksnutModelUtils;
+import org.jboss.logging.Logger;
 
 import javax.batch.api.chunk.ItemProcessor;
 import javax.inject.Inject;

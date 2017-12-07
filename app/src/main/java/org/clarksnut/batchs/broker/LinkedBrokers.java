@@ -1,7 +1,7 @@
 package org.clarksnut.batchs.broker;
 
-import org.jberet.cdi.StepScoped;
 import org.clarksnut.models.UserLinkedBrokerModel;
+import org.jberet.cdi.StepScoped;
 
 import javax.inject.Named;
 import java.time.LocalDateTime;

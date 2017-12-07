@@ -7,6 +7,7 @@ import org.clarksnut.models.UserModel;
 import org.clarksnut.models.db.JpaModel;
 import org.clarksnut.models.db.jpa.entity.UserContextInformationEntity;
 import org.clarksnut.models.db.jpa.entity.UserEntity;
+import org.clarksnut.models.utils.JacksonUtil;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
@@ -184,7 +185,7 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public JsonNode getContextInformation() {
         if (user.getContextInformation() != null) {
-            return user.getContextInformation().getValue();
+            return JacksonUtil.toJsonNode(user.getContextInformation().getValue());
         }
         return null;
     }
@@ -194,11 +195,11 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
         UserContextInformationEntity contextInformationEntity = user.getContextInformation();
         if (contextInformationEntity == null) {
             contextInformationEntity = new UserContextInformationEntity();
-            contextInformationEntity.setValue(json);
+            contextInformationEntity.setValue(json.textValue());
             contextInformationEntity.setUser(user);
             em.persist(contextInformationEntity);
         } else {
-            contextInformationEntity.setValue(json);
+            contextInformationEntity.setValue(json.textValue());
             em.merge(contextInformationEntity);
             em.flush();
         }

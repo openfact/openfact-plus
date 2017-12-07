@@ -1,8 +1,8 @@
 package org.clarksnut.models.db.connections;
 
+import org.clarksnut.models.exceptions.ModelDuplicateException;
 import org.clarksnut.models.exceptions.ModelException;
 import org.hibernate.exception.ConstraintViolationException;
-import org.clarksnut.models.exceptions.ModelDuplicateException;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;

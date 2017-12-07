@@ -5,7 +5,6 @@ import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.repositories.user.*;
 import org.jboss.logging.Logger;
-import org.clarksnut.repositories.user.*;
 
 import javax.batch.api.chunk.ItemReader;
 import javax.inject.Inject;

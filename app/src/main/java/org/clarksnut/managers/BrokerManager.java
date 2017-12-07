@@ -8,12 +8,12 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import org.clarksnut.services.resources.KeycloakDeploymentConfig;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.keycloak.adapters.KeycloakDeployment;
 import org.clarksnut.models.BrokerType;
 import org.clarksnut.oauth2.OAuth2Utils;
 import org.clarksnut.representations.idm.TokenRepresentation;
+import org.clarksnut.services.resources.KeycloakDeploymentConfig;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.keycloak.adapters.KeycloakDeployment;
 
 import javax.ejb.Stateless;
 import java.io.IOException;

@@ -1,7 +1,7 @@
 package org.clarksnut.repositories.user;
 
-import org.jboss.logging.Logger;
 import org.clarksnut.models.BrokerType;
+import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Any;

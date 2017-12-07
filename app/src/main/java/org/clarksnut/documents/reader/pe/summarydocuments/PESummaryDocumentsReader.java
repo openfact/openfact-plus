@@ -4,10 +4,10 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.Addr
 import org.clarksnut.documents.DocumentReader;
 import org.clarksnut.documents.GenericDocument;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
-import org.clarksnut.models.utils.ClarksnutModelUtils;
-import org.jboss.logging.Logger;
 import org.clarksnut.documents.reader.SupportedType;
 import org.clarksnut.files.XmlUBLFileModel;
+import org.clarksnut.models.utils.ClarksnutModelUtils;
+import org.jboss.logging.Logger;
 import sunat.names.specification.ubl.peru.schema.xsd.summarydocuments_1.SummaryDocumentsType;
 
 import javax.ejb.Stateless;

@@ -12,6 +12,8 @@ data:
         "enable-cors": true
       }
   clarksnut-config.yml: |-
+      project:
+        stage: custom
       swarm:
         ee:
           spec-descriptor-property-replacement: true

@@ -62,7 +62,7 @@ spec:
                   },
                   {
                     "name": "DB_URL",
-                    "value": "jdbc:postgresql://clarksnut-db/clarksnut"
+                    "value": "jdbc:postgresql://clarksnut-db:5432/clarksnut"
                   },
                   {
                     "name": "DB_USERNAME",
@@ -111,7 +111,7 @@ spec:
         - name: JAVA_APP_DIR
           value: /deployments
         - name: JAVA_OPTIONS
-          value: -Dswarm.project.stage.file=file:///deployments/config/project-custom.yml -Dswarm.keycloak.json.path=/deployments/config/keycloak.json
+          value: -Dswarm.project.stage.file=file:///deployments/config/project-custom.yml -Dswarm.keycloak.json.path=/deployments/config/keycloak.json -Dswarm.project.stage=custom
         - name: HIBERNATE_STRATEGY
           value: update
         - name: HIBERNATE_SHOW_SQL

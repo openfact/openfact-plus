@@ -1,12 +1,11 @@
 package org.clarksnut.utils;
 
-import org.clarksnut.models.ModelType;
-import org.clarksnut.representations.idm.*;
-import org.clarksnut.services.resources.DocumentsService;
 import org.clarksnut.documents.DocumentModel;
+import org.clarksnut.models.ModelType;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.representations.idm.*;
+import org.clarksnut.services.resources.DocumentsService;
 import org.clarksnut.services.resources.FilesService;
 import org.clarksnut.services.resources.SpacesService;
 import org.clarksnut.services.resources.UsersService;

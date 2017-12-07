@@ -1,10 +1,10 @@
 package org.clarksnut.services.resources;
 
+import org.clarksnut.files.FileModel;
 import org.clarksnut.files.FileProvider;
 import org.clarksnut.files.exceptions.FileFetchException;
-import org.jboss.logging.Logger;
-import org.clarksnut.files.FileModel;
 import org.clarksnut.services.ErrorResponse;
+import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

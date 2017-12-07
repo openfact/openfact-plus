@@ -8,12 +8,12 @@ import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import org.clarksnut.models.exceptions.ModelException;
+import org.clarksnut.representations.idm.TokenRepresentation;
 import org.clarksnut.services.resources.KeycloakDeploymentConfig;
 import org.jboss.logging.Logger;
 import org.keycloak.jose.jws.JWSInputException;
 import org.keycloak.representations.RefreshToken;
 import org.keycloak.util.TokenUtil;
-import org.clarksnut.representations.idm.TokenRepresentation;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

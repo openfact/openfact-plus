@@ -1,7 +1,7 @@
 package org.clarksnut.truststore;
 
-import org.jboss.logging.Logger;
 import org.clarksnut.config.FileTruststoreConfig;
+import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;

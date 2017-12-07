@@ -1,17 +1,17 @@
 package org.clarksnut.managers;
 
 import org.apache.commons.io.IOUtils;
+import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentProvider;
+import org.clarksnut.documents.DocumentProviderType;
+import org.clarksnut.documents.exceptions.PreexistedDocumentException;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
+import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.files.*;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.files.exceptions.FileStorageException;
 import org.clarksnut.models.exceptions.ModelException;
 import org.jboss.logging.Logger;
-import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.documents.DocumentProviderType;
-import org.clarksnut.documents.exceptions.PreexistedDocumentException;
-import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

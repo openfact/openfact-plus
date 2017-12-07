@@ -1,10 +1,10 @@
 package org.clarksnut.models.db.jpa.entity;
 
-import org.clarksnut.models.db.UpdatableEntity;
-import org.hibernate.envers.Audited;
 import org.clarksnut.models.db.CreatableEntity;
 import org.clarksnut.models.db.CreatedAtListener;
+import org.clarksnut.models.db.UpdatableEntity;
 import org.clarksnut.models.db.UpdatedAtListener;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

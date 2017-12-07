@@ -1,7 +1,7 @@
 package org.clarksnut.documents;
 
-import org.clarksnut.documents.exceptions.UnreadableDocumentException;
 import org.clarksnut.documents.exceptions.PreexistedDocumentException;
+import org.clarksnut.documents.exceptions.UnreadableDocumentException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.files.XmlUBLFileModel;
 
