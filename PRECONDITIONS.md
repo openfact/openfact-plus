@@ -46,13 +46,13 @@ where the above `TODO` text is replaced by the actual client id and secret from 
 
 ### Run the install script
 
-* now run the [install.sh](https://github.com/openfact/openfact-platform/blob/master/install.sh) script on the command line:
+* now run the [install.sh](https://github.com/clarksnut/clarksnut/blob/master/install.sh) script on the command line:
 
 ```
-bash <(curl -s https://raw.githubusercontent.com/openfact/openfact-platform/master/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/clarksnut/clarksnut/master/install.sh)
 ```
 
-* if you want to install a specific version of the [clarksnut system template](http://central.maven.org/maven2/io/openfact/platform/packages/openfact-system/) then you can pass it on the command line as an argument. Or add the argument `local` to use a local build.
+* if you want to install a specific version of the [clarksnut system template](http://central.maven.org/maven2/io/clarksnut/platform/packages/clarksnut-system/) then you can pass it on the command line as an argument. Or add the argument `local` to use a local build.
 
 
 ### Accept the insecure URLs in your browser

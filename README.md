@@ -2,7 +2,7 @@
 Clarksnut Sync allows you to centralize all your XML-UBL Documents on on site.
 
 # Openshift
-If you are using Openshift you can use [this tutorial](https://github.com/openfact/openfact-sync/blob/master/docs/openshift.md). Otherwise start on next step **Prerequisites**.
+If you are using Openshift you can use [this tutorial](https://github.com/clarksnut/clarksnut/blob/master/docs/openshift.md). Otherwise start on next step **Prerequisites**.
 
 # Prerequisites
 - Keycloak Server
@@ -19,14 +19,14 @@ Go to Keycloak page: <http://localhost:8081/auth> and login with admin/admin.
 
 After start your keycloak server, you need to create a realm and configure Google Identity Providers. You can use a realm base called clarksnut-realm.json that is located on the project root.
 
-In case you are using Openshift, you can follow the instructions here: [preconditions](https://github.com/openfact/openfact-sync/blob/master/PRECONDITIONS.md) 
+In case you are using Openshift, you can follow the instructions here: [preconditions](https://github.com/clarksnut/clarksnut/blob/master/PRECONDITIONS.md) 
 
 
 # Project Configuration
 
 ## Clone the repository:
 ```
-git clone https://github.com/openfact/openfact-sync.git
+git clone https://github.com/clarksnut/clarksnut.git
 ```
 
 ## Configure database:

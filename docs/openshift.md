@@ -22,19 +22,19 @@ minishift start --memory=7000 --cpus=4 --disk-size=50g
 ```
 
 ## Setup Google Client
-To configure Google Client follow the steps described in [Google Client Setup](https://github.com/openfact/openfact-sync/blob/master/docs/openshift_google_client.md).
+To configure Google Client follow the steps described in [Google Client Setup](https://github.com/clarksnut/clarksnut/blob/master/docs/openshift_google_client.md).
 
 ## Setup Elasticsearch - Experimental (Optional)
-By Default **clarksnut** use Lucene file store. Nevertheless, we encourage you to use **Elasticsearch** Cluster. To install elasticsearch on Openshift follow the steps described in [Elasticsearch Setup](https://github.com/openfact/openfact-sync/blob/master/docs/openshift_elasticsearch.md). 
+By Default **clarksnut** use Lucene file store. Nevertheless, we encourage you to use **Elasticsearch** Cluster. To install elasticsearch on Openshift follow the steps described in [Elasticsearch Setup](https://github.com/clarksnut/clarksnut/blob/master/docs/openshift_elasticsearch.md). 
 
 ## Setup Smtp Server - Development environment only (Optional)
-To enable email sends, you need to configure a SMTP Server like Gmail from Google for instance. For development purposes you can configure a [SMTP server](https://github.com/openfact/openfact-sync/blob/master/docs/openshift_smtp_server.md).
+To enable email sends, you need to configure a SMTP Server like Gmail from Google for instance. For development purposes you can configure a [SMTP server](https://github.com/clarksnut/clarksnut/blob/master/docs/openshift_smtp_server.md).
 
 
 ## Run the install script
 Make sure you are on the project folder.
 
-* now run the [install.sh](https://raw.githubusercontent.com/openfact/openfact-sync/master/scripts/install.sh) script on the command line:
+* now run the [install.sh](https://raw.githubusercontent.com/clarksnut/clarksnut/master/scripts/install.sh) script on the command line:
 
 ```
 $ ./scripts/install.sh
@@ -42,13 +42,13 @@ $ ./scripts/install.sh
 
 or
 
-* Run the [install.sh](https://raw.githubusercontent.com/openfact/openfact-sync/master/scripts/install.sh) script on the command line:
+* Run the [install.sh](https://raw.githubusercontent.com/clarksnut/clarksnut/master/scripts/install.sh) script on the command line:
 
 ```
-bash <(curl -s https://raw.githubusercontent.com/openfact/openfact-sync/master/scripts/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/clarksnut/clarksnut/master/scripts/install.sh)
 ```
 
-* if you want to install a specific version of the [openfact sync template](http://central.maven.org/maven2/io/openfact/platform/packages/openfact-system/) then you can pass it on the command line as an argument. Or add the argument `local` to use a local build.
+* if you want to install a specific version of the [clarksnut template](http://central.maven.org/maven2/io/clarksnut/platform/packages/clarksnut-system/) then you can pass it on the command line as an argument. Or add the argument `local` to use a local build.
 
 
 ## Accept the insecure URLs in your browser

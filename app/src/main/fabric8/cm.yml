@@ -11,18 +11,18 @@ data:
         "bearer-only": true,
         "enable-cors": true
       }
-  openfact-sync-config.yml: |-
-      openfact:
+  clarksnut-config.yml: |-
+      clarksnut:
         fileStorage:
           provider: jpa
         report:
-          default: openfact
+          default: clarksnut
           cacheReports: true
           cacheTemplates: true
           folder:
             dir: /reports
         theme:
-          default: openfact
+          default: clarksnut
           staticMaxAge: 2592000
           cacheThemes: true
           cacheTemplates: true
@@ -31,4 +31,4 @@ data:
         mail:
           vendor:
             gmail:
-              applicationName: 'Openfact Sync'
+              applicationName: 'Clarksnut'
