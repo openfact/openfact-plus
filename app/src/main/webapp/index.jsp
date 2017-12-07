@@ -45,9 +45,9 @@
         <p><a href="http://www.clakstnut.org">Clarksnut Project</a> |
             <a href="#">Mailing List</a> |
             <a href="#">Report an issue</a></p>
-        <p class="logos"><a href="http://www.jboss.org"><img src="welcome-content/jboss_community.png"
-                                                             alt="JBoss and JBoss Community" width="254" height="31"
-                                                             border="0"></a></p>
+        <%--<p class="logos"><a href="http://www.jboss.org"><img src="welcome-content/jboss_community.png"--%>
+                                                             <%--alt="JBoss and JBoss Community" width="254" height="31"--%>
+                                                             <%--border="0"></a></p>--%>
     </div>
 </div>
 
