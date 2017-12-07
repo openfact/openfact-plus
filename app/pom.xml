@@ -677,6 +677,14 @@
 
         <profile>
             <id>openshift</id>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly.swarm</groupId>
+                    <artifactId>topology-openshift</artifactId>
+                </dependency>
+            </dependencies>
+
             <build>
                 <plugins>
                     <plugin>

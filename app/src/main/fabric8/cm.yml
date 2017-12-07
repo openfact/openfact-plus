@@ -13,6 +13,8 @@ data:
       }
   clarksnut-config.yml: |-
       swarm:
+        ee:
+          spec-descriptor-property-replacement: true
         datasources:
           data-sources:
             ClarksnutDS:

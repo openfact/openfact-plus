@@ -122,6 +122,8 @@ spec:
           value: true
         - name: HIBERNATE_INDEX_MANAGER
           value: directory-based
+        - name: SWARM_PROJECT_STAGE
+          value: production
         name: ${project.artifactId}
         image: ${project.artifactId}:latest
         imagePullPolicy: IfNotPresent
