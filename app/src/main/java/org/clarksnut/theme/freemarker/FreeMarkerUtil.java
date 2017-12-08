@@ -3,9 +3,9 @@ package org.clarksnut.theme.freemarker;
 import freemarker.cache.URLTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import org.clarksnut.config.ThemeConfig;
 import org.clarksnut.theme.Theme;
 import org.clarksnut.theme.exceptions.FreeMarkerException;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -14,19 +14,21 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
 public class FreeMarkerUtil {
 
     @Inject
-    private ThemeConfig config;
+    @ConfigurationValue("clarksnut.theme.cacheTemplates")
+    private Optional<Boolean> clarksnutThemeCacheTemplates;
 
     private ConcurrentHashMap<String, Template> cache;
 
     @PostConstruct
     private void init() {
-        if (config.getCacheTemplates(true)) {
+        if (clarksnutThemeCacheTemplates.orElse(true)) {
             cache = new ConcurrentHashMap<>();
         }
     }

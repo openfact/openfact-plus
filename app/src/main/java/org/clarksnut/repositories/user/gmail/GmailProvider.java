@@ -14,12 +14,12 @@ import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.common.collect.Lists;
 import net.sf.cglib.proxy.Enhancer;
-import org.clarksnut.config.GmailClientConfig;
 import org.clarksnut.models.BrokerType;
 import org.clarksnut.oauth2.OAuth2Utils;
 import org.clarksnut.repositories.user.*;
 import org.clarksnut.repositories.user.utils.CredentialHandler;
 import org.jboss.logging.Logger;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Stateless
 @MailVendorType(BrokerType.GOOGLE)
@@ -36,21 +37,18 @@ public class GmailProvider implements MailProvider {
     private static final Logger logger = Logger.getLogger(GmailProvider.class);
     private static final int batchSize = 1000;
 
-    private final GmailClientConfig config;
+    @Inject
+    @ConfigurationValue("clarksnut.mail.vendor.gmail.applicationName")
+    private Optional<String> clarksnutGmailApplicationName;
 
     private HttpTransport HTTP_TRANSPORT;
     private JsonFactory JSON_FACTORY;
 
     private String applicationName;
 
-    @Inject
-    public GmailProvider(GmailClientConfig config) {
-        this.config = config;
-    }
-
     @PostConstruct
     private void init() {
-        applicationName = config.getApplicationName("clarksnut");
+        applicationName = clarksnutGmailApplicationName.orElse("clarksnut");
         try {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             JSON_FACTORY = JacksonFactory.getDefaultInstance();

@@ -1,7 +1,7 @@
 package org.clarksnut.truststore;
 
-import org.clarksnut.config.FileTruststoreConfig;
 import org.jboss.logging.Logger;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
+import java.util.Optional;
 
 @Startup
 @Singleton
@@ -23,48 +24,56 @@ public class FileTruststoreProvider implements TruststoreProvider {
     private static final Logger logger = Logger.getLogger(FileTruststoreProvider.class);
 
     @Inject
-    private FileTruststoreConfig config;
+    @ConfigurationValue("clarksnut.truststore.file.file")
+    private Optional<String> clarksnutTruststoreFile;
+
+    @Inject
+    @ConfigurationValue("clarksnut.truststore.file.password")
+    private Optional<String> clarksnutTruststorePassword;
+
+    @Inject
+    @ConfigurationValue("clarksnut.truststore.file.hostname-verification-policy")
+    private Optional<String> clarksnutTruststoreHostnameVerificationPolicy;
+
+    @Inject
+    @ConfigurationValue("clarksnut.truststore.file.disabled")
+    private Optional<Boolean> clarksnutTruststoreDisable;
 
     private HostnameVerificationPolicy policy;
     private KeyStore truststore;
 
     @PostConstruct
     private void init() {
-        String storepath = config.getFile();
-        String pass = config.getPassword();
-        String policy = config.getHostnameVerificationPolicy();
-        Boolean disabled = config.getDisabled();
-
         // if "truststore" . "file" is not configured then it is disabled
-        if (storepath == null && pass == null && policy == null && disabled == null) {
+        if (!clarksnutTruststoreFile.isPresent()
+                && !clarksnutTruststorePassword.isPresent()
+                && !clarksnutTruststoreHostnameVerificationPolicy.isPresent()
+                && !clarksnutTruststoreDisable.isPresent()) {
             return;
         }
 
         // if explicitly disabled
-        if (disabled != null && disabled) {
+        if (clarksnutTruststoreDisable.orElse(true)) {
             return;
         }
 
         HostnameVerificationPolicy verificationPolicy;
         KeyStore truststore;
 
-        if (storepath == null) {
-            throw new RuntimeException("Attribute 'file' missing in 'truststore':'file' configuration");
-        }
-        if (pass == null) {
-            throw new RuntimeException("Attribute 'password' missing in 'truststore':'file' configuration");
-        }
+        clarksnutTruststoreFile.orElseThrow(() -> new RuntimeException("Attribute 'file' missing in 'truststore':'file' configuration"));
+
+        clarksnutTruststorePassword.orElseThrow(()-> new RuntimeException("Attribute 'password' missing in 'truststore':'file' configuration"));
 
         try {
-            truststore = loadStore(storepath, pass.toCharArray());
+            truststore = loadStore(clarksnutTruststoreFile.get(), clarksnutTruststorePassword.get().toCharArray());
         } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize TruststoreProviderFactory: " + new File(storepath).getAbsolutePath(), e);
+            throw new RuntimeException("Failed to initialize TruststoreProviderFactory: " + new File(clarksnutTruststoreFile.get()).getAbsolutePath(), e);
         }
         if (policy == null) {
             verificationPolicy = HostnameVerificationPolicy.WILDCARD;
         } else {
             try {
-                verificationPolicy = HostnameVerificationPolicy.valueOf(policy);
+                verificationPolicy = HostnameVerificationPolicy.valueOf(clarksnutTruststoreHostnameVerificationPolicy.get());
             } catch (Exception e) {
                 throw new RuntimeException("Invalid value for 'hostname-verification-policy': " + policy + " (must be one of: ANY, WILDCARD, STRICT)");
             }
@@ -72,7 +81,7 @@ public class FileTruststoreProvider implements TruststoreProvider {
 
         this.truststore = truststore;
         this.policy = verificationPolicy;
-        logger.debug("File trustore provider initialized: " + new File(storepath).getAbsolutePath());
+        logger.debug("File trustore provider initialized: " + new File(clarksnutTruststoreFile.get()).getAbsolutePath());
     }
 
     private KeyStore loadStore(String path, char[] password) throws Exception {

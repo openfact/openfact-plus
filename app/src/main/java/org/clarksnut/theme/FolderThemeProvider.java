@@ -1,7 +1,7 @@
 package org.clarksnut.theme;
 
-import org.clarksnut.config.ThemeConfig;
 import org.clarksnut.theme.ThemeProviderType.Type;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Stateless
@@ -18,16 +19,16 @@ import java.util.Set;
 public class FolderThemeProvider implements ThemeProvider {
 
     @Inject
-    private ThemeConfig config;
+    @ConfigurationValue("clarksnut.theme.folder.dir")
+    private Optional<String> clarksnutThemeFolderDir;
 
     private File themesDir;
 
     @PostConstruct
     public void init() {
-        String d = config.getFolderDir();
         File rootDir = null;
-        if (d != null) {
-            rootDir = new File(d);
+        if (clarksnutThemeFolderDir.isPresent()) {
+            rootDir = new File(clarksnutThemeFolderDir.get());
         }
         themesDir = rootDir;
     }

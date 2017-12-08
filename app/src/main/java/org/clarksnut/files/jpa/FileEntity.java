@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "file")
+@Table(name = "cl_file")
 public class FileEntity {
 
     @Id

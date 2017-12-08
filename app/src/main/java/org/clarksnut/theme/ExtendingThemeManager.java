@@ -1,9 +1,9 @@
 package org.clarksnut.theme;
 
 import org.clarksnut.common.Version;
-import org.clarksnut.config.ThemeConfig;
 import org.clarksnut.theme.ThemeProviderType.Type;
 import org.jboss.logging.Logger;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
@@ -13,10 +13,7 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
@@ -26,7 +23,12 @@ public class ExtendingThemeManager implements ThemeProvider {
     private static final Logger log = Logger.getLogger(ExtendingThemeManager.class);
 
     @Inject
-    private ThemeConfig config;
+    @ConfigurationValue("clarksnut.theme.default")
+    private Optional<String> clarksnutDefaultTheme;
+
+    @Inject
+    @ConfigurationValue("clarksnut.theme.cacheThemes")
+    private Optional<Boolean> clarksnutCacheThemes;
 
     @Inject
     @Any
@@ -39,8 +41,8 @@ public class ExtendingThemeManager implements ThemeProvider {
 
     @PostConstruct
     public void init() {
-        defaultTheme = config.getDefaultTheme(Version.NAME.toLowerCase());
-        if (config.getCacheThemes(true)) {
+        defaultTheme = clarksnutDefaultTheme.orElse(Version.NAME.toLowerCase());
+        if (clarksnutCacheThemes.orElse(true)) {
             themeCache = new ConcurrentHashMap<>();
         }
         loadProviders();

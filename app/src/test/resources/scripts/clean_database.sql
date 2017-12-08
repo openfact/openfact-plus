@@ -1,6 +1,6 @@
 -- DELETE FROM user_linked_broker_attributes;
-DELETE FROM user_linked_broker;
-DELETE FROM collaborator;
-DELETE FROM space;
-DELETE FROM user;
+DELETE FROM cl_user_linked_broker;
+DELETE FROM cl_collaborator;
+DELETE FROM cl_space;
+DELETE FROM cl_user;
 COMMIT;

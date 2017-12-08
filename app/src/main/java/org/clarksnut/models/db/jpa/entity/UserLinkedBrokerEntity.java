@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Audited
 @Entity
-@Table(name = "user_linked_broker", uniqueConstraints = {
+@Table(name = "cl_user_linked_broker", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"email"}),
         @UniqueConstraint(columnNames = {"user_id", "type"})
 })

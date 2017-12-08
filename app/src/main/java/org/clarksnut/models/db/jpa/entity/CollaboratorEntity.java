@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Audited
 @Entity
-@Table(name = "collaborator")
+@Table(name = "cl_collaborator")
 @IdClass(CollaboratorEntity.Key.class)
 @NamedQueries({
         @NamedQuery(name = "getCollaboratorsBySpaceId", query = "select c from CollaboratorEntity c inner join c.space s where s.id = :spaceId")

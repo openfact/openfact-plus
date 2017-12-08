@@ -1,6 +1,6 @@
 package org.clarksnut.report;
 
-import org.clarksnut.config.ReportThemeConfig;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Stateless
@@ -17,16 +18,16 @@ import java.util.Set;
 public class FolderReportThemeProvider implements ReportThemeProvider {
 
     @Inject
-    private ReportThemeConfig config;
+    @ConfigurationValue("clarksnut.report.folder.dir")
+    private Optional<String> clarksnutReportFolderDir;
 
     private File themesDir;
 
     @PostConstruct
     public void init() {
-        String d = config.getFolderDir();
         File rootDir = null;
-        if (d != null) {
-            rootDir = new File(d);
+        if (clarksnutReportFolderDir.isPresent()) {
+            rootDir = new File(clarksnutReportFolderDir.get());
         }
         themesDir = rootDir;
     }

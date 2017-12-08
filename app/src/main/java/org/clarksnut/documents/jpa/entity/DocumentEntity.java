@@ -18,7 +18,7 @@ import java.util.Set;
 
 @Entity
 @Indexed
-@Table(name = "document", uniqueConstraints = {
+@Table(name = "cl_document", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"type", "assigned_id", "supplier_assigned_id"})
 })
 @NamedQueries({

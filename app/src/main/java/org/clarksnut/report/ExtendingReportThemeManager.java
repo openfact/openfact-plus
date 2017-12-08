@@ -1,8 +1,8 @@
 package org.clarksnut.report;
 
 import org.clarksnut.common.Version;
-import org.clarksnut.config.ReportThemeConfig;
 import org.jboss.logging.Logger;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
@@ -12,10 +12,7 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
@@ -25,7 +22,12 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
     private static final Logger log = Logger.getLogger(ExtendingReportThemeManager.class);
 
     @Inject
-    private ReportThemeConfig config;
+    @ConfigurationValue("clarksnut.report.default")
+    private Optional<String> clarksnutReportDefaultTheme;
+
+    @Inject
+    @ConfigurationValue("clarksnut.report.cacheReports")
+    private Optional<Boolean> clarksnutCacheReports;
 
     @Inject
     @Any
@@ -38,8 +40,8 @@ public class ExtendingReportThemeManager implements ReportThemeProvider {
 
     @PostConstruct
     public void init() {
-        defaultTheme = config.getDefaultTheme(Version.NAME.toLowerCase());
-        if (config.getCacheReports(true)) {
+        defaultTheme = clarksnutReportDefaultTheme.orElse(Version.NAME.toLowerCase());
+        if (clarksnutCacheReports.orElse(true)) {
             themeCache = new ConcurrentHashMap<>();
         }
         loadProviders();

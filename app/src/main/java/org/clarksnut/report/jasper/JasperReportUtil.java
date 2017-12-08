@@ -2,8 +2,8 @@ package org.clarksnut.report.jasper;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.util.JRLoader;
-import org.clarksnut.config.ReportThemeConfig;
 import org.clarksnut.report.ReportTheme;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -13,23 +13,21 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.PropertyResourceBundle;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
 public class JasperReportUtil {
 
     @Inject
-    private ReportThemeConfig config;
+    @ConfigurationValue("clarksnut.report.cacheTemplates")
+    private Optional<Boolean> clarksnutReportCacheTemplates;
 
     private ConcurrentHashMap<String, JasperReport> cache;
 
     @PostConstruct
     private void init() {
-        if (config.getCacheTemplates(true)) {
+        if (clarksnutReportCacheTemplates.orElse(true)) {
             cache = new ConcurrentHashMap<>();
         }
     }

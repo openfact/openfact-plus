@@ -1,13 +1,13 @@
 package org.clarksnut.email;
 
 import com.sun.mail.smtp.SMTPMessage;
-import org.clarksnut.config.SmtpConfig;
 import org.clarksnut.email.exceptions.EmailException;
 import org.clarksnut.truststore.HostnameVerificationPolicy;
 import org.clarksnut.truststore.JSSETruststoreConfigurator;
 import org.clarksnut.truststore.Truststore;
 import org.clarksnut.truststore.TruststoreProvider;
 import org.jboss.logging.Logger;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -24,10 +24,7 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 @Stateless
 public class DefaultEmailSenderProvider implements EmailSenderProvider {
@@ -35,7 +32,52 @@ public class DefaultEmailSenderProvider implements EmailSenderProvider {
     private static final Logger logger = Logger.getLogger(DefaultEmailSenderProvider.class);
 
     @Inject
-    private SmtpConfig config;
+    @ConfigurationValue("clarksnut.mail.smtp.host")
+    private Optional<String> clarksnutSmtpHost;
+
+    @Inject
+    @ConfigurationValue("clarksnut.mail.smtp.port")
+    private Optional<String> clarksnutSmtpPort;
+
+    @Inject
+    @ConfigurationValue("clarksnut.mail.smtp.from")
+    private Optional<String> clarksnutSmtpFrom;
+
+    @Inject
+    @ConfigurationValue("clarksnut.mail.smtp.fromDisplayName")
+    private Optional<String> clarksnutSmtpFromDisplayName;
+
+    @Inject
+    @ConfigurationValue("clarksnut.mail.smtp.replyTo")
+    private Optional<String> clarksnutSmtpReplyTo;
+
+    @Inject
+    @ConfigurationValue("clarksnut.mail.smtp.replyToDisplayName")
+    private Optional<String> clarksnutSmtpReplyToDisplayName;
+
+    @Inject
+    @ConfigurationValue("clarksnut.mail.smtp.envelopeFrom")
+    private Optional<String> clarksnutSmtpEnvelopeFrom;
+
+    @Inject
+    @ConfigurationValue("clarksnut.mail.smtp.ssl")
+    private Optional<Boolean> clarksnutSmtpSsl;
+
+    @Inject
+    @ConfigurationValue("clarksnut.mail.smtp.starttls")
+    private Optional<Boolean> clarksnutSmtpStarttls;
+
+    @Inject
+    @ConfigurationValue("clarksnut.mail.smtp.auth")
+    private Optional<Boolean> clarksnutSmtpAuth;
+
+    @Inject
+    @ConfigurationValue("clarksnut.mail.smtp.user")
+    private Optional<String> clarksnutSmtpUser;
+
+    @Inject
+    @ConfigurationValue("clarksnut.mail.smtp.password")
+    private Optional<String> clarksnutSmtpPassword;
 
     @Inject
     private JSSETruststoreConfigurator configurator;
@@ -51,20 +93,23 @@ public class DefaultEmailSenderProvider implements EmailSenderProvider {
 
     @Override
     public void send(Set<String> addresses, String subject, String textBody, String htmlBody, Set<EmailFileModel> attachments) throws EmailException {
+        if (!clarksnutSmtpFrom.isPresent() ||
+                !clarksnutSmtpFromDisplayName.isPresent() ||
+                !clarksnutSmtpReplyToDisplayName.isPresent()) {
+            logger.error("Could not send email because invalid configuration");
+            return;
+        }
+
         Transport transport = null;
         try {
             Properties props = new Properties();
-            if (config.getHost() != null) {
-                props.setProperty("mail.smtp.host", config.getHost());
-            }
+            clarksnutSmtpHost.ifPresent(s -> props.setProperty("mail.smtp.host", s));
 
-            boolean auth = Boolean.TRUE.equals(config.getAuth());
-            boolean ssl = Boolean.TRUE.equals(config.getSsl());
-            boolean starttls = Boolean.TRUE.equals(config.getStarttls());
+            boolean auth = Boolean.TRUE.equals(clarksnutSmtpAuth.orElse(false));
+            boolean ssl = Boolean.TRUE.equals(clarksnutSmtpSsl.orElse(false));
+            boolean starttls = Boolean.TRUE.equals(clarksnutSmtpStarttls.orElse(false));
 
-            if (config.getPort() != null) {
-                props.setProperty("mail.smtp.port", config.getPort());
-            }
+            clarksnutSmtpPort.ifPresent(s -> props.setProperty("mail.smtp.port", s));
 
             if (auth) {
                 props.setProperty("mail.smtp.auth", "true");
@@ -85,11 +130,9 @@ public class DefaultEmailSenderProvider implements EmailSenderProvider {
             props.setProperty("mail.smtp.timeout", "10000");
             props.setProperty("mail.smtp.connectiontimeout", "10000");
 
-            String from = config.getFrom();
-            String fromDisplayName = config.getFromDisplayName();
-            String replyTo = config.getReplayTo();
-            String replyToDisplayName = config.getReplayToDisplayName();
-            String envelopeFrom = config.getEnvelopeFrom();
+            String from = clarksnutSmtpFrom.get();
+            String fromDisplayName = clarksnutSmtpFromDisplayName.get();
+            String replyToDisplayName = clarksnutSmtpReplyToDisplayName.get();
 
             Session session = Session.getInstance(props);
 
@@ -123,12 +166,11 @@ public class DefaultEmailSenderProvider implements EmailSenderProvider {
             msg.setFrom(toInternetAddress(from, fromDisplayName));
 
             msg.setReplyTo(new Address[]{toInternetAddress(from, fromDisplayName)});
-            if (replyTo != null) {
-                msg.setReplyTo(new Address[]{toInternetAddress(replyTo, replyToDisplayName)});
+
+            if (clarksnutSmtpReplyTo.isPresent()) {
+                msg.setReplyTo(new Address[]{toInternetAddress(clarksnutSmtpReplyTo.get(), replyToDisplayName)});
             }
-            if (envelopeFrom != null) {
-                msg.setEnvelopeFrom(envelopeFrom);
-            }
+            clarksnutSmtpEnvelopeFrom.ifPresent(msg::setEnvelopeFrom);
 
             InternetAddress[] internetAddresses = addresses.stream().map(address -> {
                 try {
@@ -148,7 +190,7 @@ public class DefaultEmailSenderProvider implements EmailSenderProvider {
 
             transport = session.getTransport("smtp");
             if (auth) {
-                transport.connect(config.getUser(), config.getPassword());
+                transport.connect(clarksnutSmtpUser.get(), clarksnutSmtpPassword.get());
             } else {
                 transport.connect();
             }

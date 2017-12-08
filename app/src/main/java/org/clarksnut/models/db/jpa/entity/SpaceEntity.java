@@ -16,7 +16,7 @@ import java.util.Set;
 
 @Audited
 @Entity
-@Table(name = "space", uniqueConstraints = {
+@Table(name = "cl_space", uniqueConstraints = {
         @UniqueConstraint(columnNames = "assigned_id"),
         @UniqueConstraint(columnNames = "name")
 }, indexes = {

@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Audited
 @Entity
-@Table(name = "clarksnut_user", uniqueConstraints = {
+@Table(name = "cl_user", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "identity_id")
 }, indexes = {
