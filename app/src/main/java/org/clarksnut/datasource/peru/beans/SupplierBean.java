@@ -4,6 +4,7 @@ public class SupplierBean {
 
     private String supplierName;
     private String supplierAssignedId;
+    private String supplierDocumentType;
     private PostalAddressBean postalAddress;
 
     public String getSupplierName() {
@@ -28,5 +29,13 @@ public class SupplierBean {
 
     public void setPostalAddress(PostalAddressBean postalAddress) {
         this.postalAddress = postalAddress;
+    }
+
+    public String getSupplierDocumentType() {
+        return supplierDocumentType;
+    }
+
+    public void setSupplierDocumentType(String supplierDocumentType) {
+        this.supplierDocumentType = supplierDocumentType;
     }
 }

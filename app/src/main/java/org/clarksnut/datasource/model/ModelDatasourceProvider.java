@@ -1,5 +1,7 @@
-package org.clarksnut.datasource;
+package org.clarksnut.datasource.model;
 
+import org.clarksnut.datasource.DatasourceProvider;
+import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;

@@ -1,4 +1,4 @@
-package org.clarksnut.datasource;
+package org.clarksnut.datasource.model;
 
 import java.util.Date;
 

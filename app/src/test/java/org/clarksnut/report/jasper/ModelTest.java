@@ -3,7 +3,7 @@ package org.clarksnut.report.jasper;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.junit.Test;
-import org.clarksnut.datasource.ModelBean;
+import org.clarksnut.datasource.model.ModelBean;
 
 import javax.imageio.ImageIO;
 import java.io.*;

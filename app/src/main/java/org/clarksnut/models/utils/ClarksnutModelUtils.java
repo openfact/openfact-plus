@@ -40,6 +40,7 @@ public class ClarksnutModelUtils {
 
     public static Document toDocument(InputStream inputStream) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
         return builder.parse(new InputSource(inputStream));
     }

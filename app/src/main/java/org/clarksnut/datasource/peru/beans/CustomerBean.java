@@ -4,6 +4,7 @@ public class CustomerBean {
 
     private String customerName;
     private String customerAssignedId;
+    private String customerDocumentType;
     private PostalAddressBean postalAddress;
 
     public String getCustomerName() {
@@ -29,5 +30,13 @@ public class CustomerBean {
 
     public void setPostalAddress(PostalAddressBean postalAddress) {
         this.postalAddress = postalAddress;
+    }
+
+    public String getCustomerDocumentType() {
+        return customerDocumentType;
+    }
+
+    public void setCustomerDocumentType(String customerDocumentType) {
+        this.customerDocumentType = customerDocumentType;
     }
 }
