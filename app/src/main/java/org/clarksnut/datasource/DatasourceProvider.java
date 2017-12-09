@@ -8,6 +8,6 @@ public interface DatasourceProvider {
 
     boolean support(DocumentModel document, XmlFileModel file) throws FileFetchException;
 
-    Object getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException;
+    Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException;
 
 }

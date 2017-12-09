@@ -1,8 +1,8 @@
 package org.clarksnut.datasource.peru;
 
+import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
-import org.clarksnut.datasource.peru.beans.RetentionBean;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.reader.pe.common.jaxb.retention.RetentionType;
 import org.clarksnut.files.XmlFileModel;
@@ -22,13 +22,13 @@ public class PeruRetentionBeanProvider implements DatasourceProvider {
     }
 
     @Override
-    public Object getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
+    public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         RetentionType retentionType = read(file);
         if (retentionType == null) {
             return null;
         }
 
-        RetentionBean bean = new RetentionBean();
+        RetentionDatasource bean = new RetentionDatasource();
         return bean;
     }
 

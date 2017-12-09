@@ -1,9 +1,15 @@
-package org.clarksnut.datasource.peru.beans;
+package org.clarksnut.datasource.peru;
+
+import org.clarksnut.datasource.Datasource;
+import org.clarksnut.datasource.peru.beans.ClienteBean;
+import org.clarksnut.datasource.peru.beans.LineBean;
+import org.clarksnut.datasource.peru.beans.PostalAddressBean;
+import org.clarksnut.datasource.peru.beans.ProveedorBean;
 
 import java.util.Date;
 import java.util.List;
 
-public class InvoiceBean {
+public class InvoiceDatasource extends Datasource {
 
     private String idAsignado;
     private String tipoDocumento;

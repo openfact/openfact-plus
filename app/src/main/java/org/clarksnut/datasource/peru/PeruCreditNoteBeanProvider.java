@@ -1,9 +1,9 @@
 package org.clarksnut.datasource.peru;
 
 import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
+import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
-import org.clarksnut.datasource.peru.beans.CreditNoteBean;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
@@ -22,13 +22,13 @@ public class PeruCreditNoteBeanProvider implements DatasourceProvider {
     }
 
     @Override
-    public Object getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
+    public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         CreditNoteType creditNoteType = read(file);
         if (creditNoteType == null) {
             return null;
         }
 
-        CreditNoteBean bean = new CreditNoteBean();
+        CreditNoteDatasource bean = new CreditNoteDatasource();
         return bean;
     }
 

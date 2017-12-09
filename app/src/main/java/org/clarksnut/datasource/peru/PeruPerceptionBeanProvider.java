@@ -1,9 +1,9 @@
 package org.clarksnut.datasource.peru;
 
 
+import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
-import org.clarksnut.datasource.peru.beans.PerceptionBean;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.reader.pe.common.jaxb.perception.PerceptionType;
 import org.clarksnut.files.XmlFileModel;
@@ -23,13 +23,13 @@ public class PeruPerceptionBeanProvider implements DatasourceProvider {
     }
 
     @Override
-    public Object getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
+    public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         PerceptionType perceptionType = read(file);
         if (perceptionType == null) {
             return null;
         }
 
-        PerceptionBean bean = new PerceptionBean();
+        PerceptionDatasource bean = new PerceptionDatasource();
         return bean;
     }
 

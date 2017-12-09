@@ -31,7 +31,7 @@ public class PeruInvoiceDatasourceProviderTest {
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
         PeruInvoiceDatasourceProvider datasourceProvider = new PeruInvoiceDatasourceProvider();
-        InvoiceBean invoice = (InvoiceBean) datasourceProvider.getDatasource(this.document, this.file);
+        InvoiceDatasource invoice = (InvoiceDatasource) datasourceProvider.getDatasource(this.document, this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
@@ -105,7 +105,7 @@ public class PeruInvoiceDatasourceProviderTest {
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
         PeruInvoiceDatasourceProvider datasourceProvider = new PeruInvoiceDatasourceProvider();
-        InvoiceBean invoice = (InvoiceBean) datasourceProvider.getDatasource(this.document, this.file);
+        InvoiceDatasource invoice = (InvoiceDatasource) datasourceProvider.getDatasource(this.document, this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
@@ -179,7 +179,7 @@ public class PeruInvoiceDatasourceProviderTest {
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
         PeruInvoiceDatasourceProvider datasourceProvider = new PeruInvoiceDatasourceProvider();
-        InvoiceBean invoice = (InvoiceBean) datasourceProvider.getDatasource(this.document, this.file);
+        InvoiceDatasource invoice = (InvoiceDatasource) datasourceProvider.getDatasource(this.document, this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
@@ -253,7 +253,7 @@ public class PeruInvoiceDatasourceProviderTest {
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
         PeruInvoiceDatasourceProvider datasourceProvider = new PeruInvoiceDatasourceProvider();
-        InvoiceBean invoice = (InvoiceBean) datasourceProvider.getDatasource(this.document, this.file);
+        InvoiceDatasource invoice = (InvoiceDatasource) datasourceProvider.getDatasource(this.document, this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
@@ -327,7 +327,7 @@ public class PeruInvoiceDatasourceProviderTest {
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
         PeruInvoiceDatasourceProvider datasourceProvider = new PeruInvoiceDatasourceProvider();
-        InvoiceBean invoice = (InvoiceBean) datasourceProvider.getDatasource(this.document, this.file);
+        InvoiceDatasource invoice = (InvoiceDatasource) datasourceProvider.getDatasource(this.document, this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
@@ -401,7 +401,7 @@ public class PeruInvoiceDatasourceProviderTest {
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
         PeruInvoiceDatasourceProvider datasourceProvider = new PeruInvoiceDatasourceProvider();
-        InvoiceBean invoice = (InvoiceBean) datasourceProvider.getDatasource(this.document, this.file);
+        InvoiceDatasource invoice = (InvoiceDatasource) datasourceProvider.getDatasource(this.document, this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
@@ -475,7 +475,7 @@ public class PeruInvoiceDatasourceProviderTest {
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
         PeruInvoiceDatasourceProvider datasourceProvider = new PeruInvoiceDatasourceProvider();
-        InvoiceBean invoice = (InvoiceBean) datasourceProvider.getDatasource(this.document, this.file);
+        InvoiceDatasource invoice = (InvoiceDatasource) datasourceProvider.getDatasource(this.document, this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
@@ -549,7 +549,7 @@ public class PeruInvoiceDatasourceProviderTest {
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
         PeruInvoiceDatasourceProvider datasourceProvider = new PeruInvoiceDatasourceProvider();
-        InvoiceBean invoice = (InvoiceBean) datasourceProvider.getDatasource(this.document, this.file);
+        InvoiceDatasource invoice = (InvoiceDatasource) datasourceProvider.getDatasource(this.document, this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 

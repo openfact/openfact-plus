@@ -3,7 +3,7 @@ package org.clarksnut.report.jasper;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.junit.Test;
-import org.clarksnut.datasource.model.ModelBean;
+import org.clarksnut.datasource.model.ModelDatasource;
 
 import javax.imageio.ImageIO;
 import java.io.*;
@@ -51,9 +51,9 @@ public class ModelTest {
         return JasperCompileManager.compileReport(url.openStream());
     }
 
-    public List<ModelBean> getDatasource() {
-        List<ModelBean> models = new ArrayList<>();
-        ModelBean model1 = new ModelBean();
+    public List<ModelDatasource> getDatasource() {
+        List<ModelDatasource> models = new ArrayList<>();
+        ModelDatasource model1 = new ModelDatasource();
         model1.setId(UUID.randomUUID().toString());
         model1.setType("Invoice");
         model1.setAssignedId("BB12-3");
@@ -73,7 +73,7 @@ public class ModelTest {
         model1.setCustomerCountry("CO");
         model1.setLocation("www.clarksnut.com/documents/1");
 
-        ModelBean model2 = new ModelBean();
+        ModelDatasource model2 = new ModelDatasource();
         model2.setId(UUID.randomUUID().toString());
         model2.setType("Credit Note");
         model2.setAssignedId("CN12-3");

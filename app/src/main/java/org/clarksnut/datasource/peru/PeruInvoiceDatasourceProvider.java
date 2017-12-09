@@ -7,10 +7,10 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueTim
 import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.ExtensionContentType;
 import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.UBLExtensionType;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
+import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.datasource.peru.beans.BeanUtils;
-import org.clarksnut.datasource.peru.beans.InvoiceBean;
 import org.clarksnut.datasource.peru.beans.LineBean;
 import org.clarksnut.datasource.peru.types.ConceptosTributarios;
 import org.clarksnut.datasource.peru.types.TipoInvoice;
@@ -38,13 +38,13 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Object getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
+    public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         InvoiceType invoiceType = read(file);
         if (invoiceType == null) {
             return null;
         }
 
-        InvoiceBean bean = new InvoiceBean();
+        InvoiceDatasource bean = new InvoiceDatasource();
 
         bean.setIdAsignado(invoiceType.getID().getValue());
         TipoInvoice.getFromCode(invoiceType.getInvoiceTypeCode().getValue()).ifPresent(c -> bean.setTipoDocumento(c.getDenominacion()));

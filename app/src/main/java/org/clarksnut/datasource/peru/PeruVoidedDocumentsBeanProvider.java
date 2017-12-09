@@ -1,8 +1,8 @@
 package org.clarksnut.datasource.peru;
 
+import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
-import org.clarksnut.datasource.peru.beans.VoidedDocumentsBean;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
@@ -22,13 +22,13 @@ public class PeruVoidedDocumentsBeanProvider implements DatasourceProvider {
     }
 
     @Override
-    public Object getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
+    public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         VoidedDocumentsType voidedDocumentsType = read(file);
         if (file == null) {
             return null;
         }
 
-        VoidedDocumentsBean bean = new VoidedDocumentsBean();
+        VoidedDocumentsDatasource bean = new VoidedDocumentsDatasource();
         return bean;
     }
 

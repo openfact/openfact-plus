@@ -2,9 +2,9 @@ package org.clarksnut.datasource.peru;
 
 
 import oasis.names.specification.ubl.schema.xsd.debitnote_2.DebitNoteType;
+import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
-import org.clarksnut.datasource.peru.beans.DebitNoteBean;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
@@ -23,13 +23,13 @@ public class PeruDebitNoteBeanProvider implements DatasourceProvider {
     }
 
     @Override
-    public Object getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
+    public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         DebitNoteType debitNoteType = read(file);
         if (debitNoteType == null) {
             return null;
         }
 
-        DebitNoteBean bean = new DebitNoteBean();
+        DebitNoteDatasource bean = new DebitNoteDatasource();
         return bean;
     }
 

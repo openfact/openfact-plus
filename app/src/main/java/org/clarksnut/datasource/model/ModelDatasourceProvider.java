@@ -1,5 +1,6 @@
 package org.clarksnut.datasource.model;
 
+import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.documents.DocumentModel;
@@ -18,8 +19,8 @@ public class ModelDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Object getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
-        ModelBean bean = new ModelBean();
+    public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
+        ModelDatasource bean = new ModelDatasource();
         bean.setId(document.getId());
         bean.setType(document.getType());
         bean.setAssignedId(document.getAssignedId());
