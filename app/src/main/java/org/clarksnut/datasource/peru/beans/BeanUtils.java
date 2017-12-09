@@ -12,42 +12,42 @@ import java.util.List;
 
 public class BeanUtils {
 
-    public static SupplierBean toSupplier(SupplierPartyType supplierPartyType) {
-        SupplierBean bean = new SupplierBean();
+    public static ProveedorBean toSupplier(SupplierPartyType supplierPartyType) {
+        ProveedorBean bean = new ProveedorBean();
 
-        bean.setSupplierAssignedId(supplierPartyType.getCustomerAssignedAccountID().getValue());
-        bean.setSupplierName(supplierPartyType.getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        bean.setIdAssignado(supplierPartyType.getCustomerAssignedAccountID().getValue());
+        bean.setNombre(supplierPartyType.getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
         TipoDocumentoEntidad.getByCode(supplierPartyType.getAdditionalAccountID().get(0).getValue()).ifPresent(c -> {
-            bean.setSupplierDocumentType(c.getDenominacion());
+            bean.setTipoDocumento(c.getDenominacion());
         });
-        bean.setPostalAddress(toAddress(supplierPartyType.getParty().getPostalAddress()));
+        bean.setDireccion(toAddress(supplierPartyType.getParty().getPostalAddress()));
 
         return bean;
     }
 
-    public static CustomerBean toCustomer(CustomerPartyType customerPartyType) {
-        CustomerBean bean = new CustomerBean();
+    public static ClienteBean toCustomer(CustomerPartyType customerPartyType) {
+        ClienteBean bean = new ClienteBean();
 
         // Assigned ID is not always present
         CustomerAssignedAccountIDType customerAssignedAccountID = customerPartyType.getCustomerAssignedAccountID();
         if (customerAssignedAccountID != null) {
-            bean.setCustomerAssignedId(customerAssignedAccountID.getValue());
+            bean.setIdAssignado(customerAssignedAccountID.getValue());
         }
 
-        bean.setCustomerName(customerPartyType.getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        bean.setNombre(customerPartyType.getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
 
         // Document Type
         List<AdditionalAccountIDType> additionalAccountIDTypes = customerPartyType.getAdditionalAccountID();
         if (additionalAccountIDTypes != null && !additionalAccountIDTypes.isEmpty()) {
             TipoDocumentoEntidad.getByCode(additionalAccountIDTypes.get(0).getValue()).ifPresent(c -> {
-                bean.setCustomerDocumentType(c.getDenominacion());
+                bean.setTipoDocumento(c.getDenominacion());
             });
         }
 
         // Address is optional for customers
         AddressType addressType = customerPartyType.getParty().getPostalAddress();
         if (addressType != null) {
-            bean.setPostalAddress(toAddress(addressType));
+            bean.setDireccion(toAddress(addressType));
         }
 
         return bean;

@@ -1,25 +1,29 @@
 package org.clarksnut.datasource.peru.beans;
 
 import java.util.Date;
+import java.util.List;
 
 public class InvoiceBean {
 
-    private String invoiceType;
-    private String assignedId;
-    private Date issueDate;
-    private Date paymentDue;
-    private String currency;
+    private String idAsignado;
+    private String tipoDocumento;
+    private String moneda;
 
-    private SupplierBean supplier;
-    private CustomerBean customer;
+    private Date fechaEmision;
+    private Date fechaVencimiento;
 
-    private LineBean lines;
+    private ProveedorBean proveedor;
+    private ClienteBean cliente;
+
+    private PostalAddressBean direccionEnvio;
+
+    private String numeroGuiaRemisionRelacionada;
+    private String otroDocumentoRelacionadoId;
 
     private Float totalGravada;
     private Float totalGratuita;
     private Float totalExonerada;
     private Float totalInafecta;
-    private Float totalDescuentos;
 
     private Float totalVenta;
     private Float totalDescuentoGlobal;
@@ -29,52 +33,86 @@ public class InvoiceBean {
     private Float totalIsc;
     private Float totalOtrosTributos;
 
-    public String getAssignedId() {
-        return assignedId;
+    private List<LineBean> detalle;
+
+    public String getIdAsignado() {
+        return idAsignado;
     }
 
-    public void setAssignedId(String assignedId) {
-        this.assignedId = assignedId;
+    public void setIdAsignado(String idAsignado) {
+        this.idAsignado = idAsignado;
     }
 
-    public Date getIssueDate() {
-        return issueDate;
+    public String getTipoDocumento() {
+        return tipoDocumento;
     }
 
-    public void setIssueDate(Date issueDate) {
-        this.issueDate = issueDate;
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getMoneda() {
+        return moneda;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
     }
 
-    public SupplierBean getSupplier() {
-        return supplier;
+    public Date getFechaEmision() {
+        return fechaEmision;
     }
 
-    public void setSupplier(SupplierBean supplier) {
-        this.supplier = supplier;
+    public void setFechaEmision(Date fechaEmision) {
+        this.fechaEmision = fechaEmision;
     }
 
-    public CustomerBean getCustomer() {
-        return customer;
+    public Date getFechaVencimiento() {
+        return fechaVencimiento;
     }
 
-    public void setCustomer(CustomerBean customer) {
-        this.customer = customer;
+    public void setFechaVencimiento(Date fechaVencimiento) {
+        this.fechaVencimiento = fechaVencimiento;
     }
 
-    public LineBean getLines() {
-        return lines;
+    public ProveedorBean getProveedor() {
+        return proveedor;
     }
 
-    public void setLines(LineBean lines) {
-        this.lines = lines;
+    public void setProveedor(ProveedorBean proveedor) {
+        this.proveedor = proveedor;
+    }
+
+    public ClienteBean getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(ClienteBean cliente) {
+        this.cliente = cliente;
+    }
+
+    public PostalAddressBean getDireccionEnvio() {
+        return direccionEnvio;
+    }
+
+    public void setDireccionEnvio(PostalAddressBean direccionEnvio) {
+        this.direccionEnvio = direccionEnvio;
+    }
+
+    public String getNumeroGuiaRemisionRelacionada() {
+        return numeroGuiaRemisionRelacionada;
+    }
+
+    public void setNumeroGuiaRemisionRelacionada(String numeroGuiaRemisionRelacionada) {
+        this.numeroGuiaRemisionRelacionada = numeroGuiaRemisionRelacionada;
+    }
+
+    public String getOtroDocumentoRelacionadoId() {
+        return otroDocumentoRelacionadoId;
+    }
+
+    public void setOtroDocumentoRelacionadoId(String otroDocumentoRelacionadoId) {
+        this.otroDocumentoRelacionadoId = otroDocumentoRelacionadoId;
     }
 
     public Float getTotalGravada() {
@@ -109,6 +147,14 @@ public class InvoiceBean {
         this.totalInafecta = totalInafecta;
     }
 
+    public Float getTotalVenta() {
+        return totalVenta;
+    }
+
+    public void setTotalVenta(Float totalVenta) {
+        this.totalVenta = totalVenta;
+    }
+
     public Float getTotalDescuentoGlobal() {
         return totalDescuentoGlobal;
     }
@@ -133,30 +179,6 @@ public class InvoiceBean {
         this.totalIgv = totalIgv;
     }
 
-    public Float getTotalVenta() {
-        return totalVenta;
-    }
-
-    public void setTotalVenta(Float totalVenta) {
-        this.totalVenta = totalVenta;
-    }
-
-    public Float getTotalDescuentos() {
-        return totalDescuentos;
-    }
-
-    public void setTotalDescuentos(Float totalDescuentos) {
-        this.totalDescuentos = totalDescuentos;
-    }
-
-    public String getInvoiceType() {
-        return invoiceType;
-    }
-
-    public void setInvoiceType(String invoiceType) {
-        this.invoiceType = invoiceType;
-    }
-
     public Float getTotalIsc() {
         return totalIsc;
     }
@@ -173,11 +195,11 @@ public class InvoiceBean {
         this.totalOtrosTributos = totalOtrosTributos;
     }
 
-    public Date getPaymentDue() {
-        return paymentDue;
+    public List<LineBean> getDetalle() {
+        return detalle;
     }
 
-    public void setPaymentDue(Date paymentDue) {
-        this.paymentDue = paymentDue;
+    public void setDetalle(List<LineBean> detalle) {
+        this.detalle = detalle;
     }
 }

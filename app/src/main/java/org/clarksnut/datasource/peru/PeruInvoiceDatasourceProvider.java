@@ -1,8 +1,6 @@
 package org.clarksnut.datasource.peru;
 
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.MonetaryTotalType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PaymentMeansType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxTotalType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.*;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AllowanceTotalAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeTotalAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueTimeType;
@@ -13,8 +11,10 @@ import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.InvoiceBean;
+import org.clarksnut.datasource.peru.beans.LineBean;
 import org.clarksnut.datasource.peru.types.ConceptosTributarios;
 import org.clarksnut.datasource.peru.types.TipoInvoice;
+import org.clarksnut.datasource.peru.types.TipoPrecioVentaUnitario;
 import org.clarksnut.datasource.peru.types.TipoTributo;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
@@ -26,10 +26,7 @@ import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Stateless
 @DatasourceType(datasource = "PeruInvoiceDS")
@@ -49,16 +46,41 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
 
         InvoiceBean bean = new InvoiceBean();
 
-        //
-        bean.setAssignedId(invoiceType.getID().getValue());
-        bean.setInvoiceType(TipoInvoice.getFromCode(invoiceType.getInvoiceTypeCode().getValue()).get().getDenominacion());
-        bean.setCurrency(invoiceType.getDocumentCurrencyCode().getValue());
-        bean.setSupplier(BeanUtils.toSupplier(invoiceType.getAccountingSupplierParty()));
-        bean.setCustomer(BeanUtils.toCustomer(invoiceType.getAccountingCustomerParty()));
+        bean.setIdAsignado(invoiceType.getID().getValue());
+        TipoInvoice.getFromCode(invoiceType.getInvoiceTypeCode().getValue()).ifPresent(c -> bean.setTipoDocumento(c.getDenominacion()));
+        bean.setMoneda(invoiceType.getDocumentCurrencyCode().getValue());
+        bean.setProveedor(BeanUtils.toSupplier(invoiceType.getAccountingSupplierParty()));
+        bean.setCliente(BeanUtils.toCustomer(invoiceType.getAccountingCustomerParty()));
 
-        // Issue date
+        // Delivery location
+        DeliveryTermsType deliveryTermsType = invoiceType.getDeliveryTerms();
+        if (deliveryTermsType != null) {
+            LocationType locationType = deliveryTermsType.getDeliveryLocation();
+            if (locationType != null) {
+                bean.setDireccionEnvio(BeanUtils.toAddress(locationType.getAddress()));
+            }
+        }
+
+        // Tipo y numero de remision
+        List<DocumentReferenceType> documentReferenceTypes = invoiceType.getDespatchDocumentReference();
+        if (documentReferenceTypes != null && !documentReferenceTypes.isEmpty()) {
+            for (DocumentReferenceType documentReferenceType : documentReferenceTypes) {
+                bean.setNumeroGuiaRemisionRelacionada(documentReferenceType.getID().getValue());
+                break;
+            }
+        }
+
+        // Otro documento relacionado
+        List<DocumentReferenceType> documentReferenceTypes1 = invoiceType.getAdditionalDocumentReference();
+        if (documentReferenceTypes1 != null && !documentReferenceTypes1.isEmpty()) {
+            for (DocumentReferenceType documentReferenceType : documentReferenceTypes1) {
+                bean.setOtroDocumentoRelacionadoId(documentReferenceType.getID().getValue());
+                break;
+            }
+        }
+
+        // Fecha emision
         Date issueDate = invoiceType.getIssueDate().getValue().toGregorianCalendar().getTime();
-
         IssueTimeType issueTimeType = invoiceType.getIssueTime();
         if (issueTimeType != null) {
             Date issueTime = issueTimeType.getValue().toGregorianCalendar().getTime();
@@ -75,12 +97,12 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
 
             issueDate = issueDateCalendar.getTime();
         }
-        bean.setIssueDate(issueDate);
+        bean.setFechaEmision(issueDate);
 
-        // Payment due
+        // Fecha vencimiento
         List<PaymentMeansType> paymentMeans = invoiceType.getPaymentMeans();
         if (paymentMeans != null && !paymentMeans.isEmpty()) {
-            bean.setPaymentDue(paymentMeans.get(0).getPaymentDueDate().getValue().toGregorianCalendar().getTime());
+            bean.setFechaVencimiento(paymentMeans.get(0).getPaymentDueDate().getValue().toGregorianCalendar().getTime());
         }
 
         // Payable amount
@@ -96,7 +118,7 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
             bean.setTotalOtrosCargos(chargeTotalAmountType.getValue().floatValue());
         }
 
-        // Tax
+        // Taxs
         for (TaxTotalType taxTotalType : invoiceType.getTaxTotal()) {
             TipoTributo.getFromCode(taxTotalType.getTaxSubtotal().get(0).getTaxCategory().getTaxScheme().getID().getValue()).ifPresent(c -> {
                 switch (c) {
@@ -135,9 +157,6 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
                             case TOTAL_VALOR_VENTA_OPERACIONES_GRATUITAS:
                                 bean.setTotalGratuita(additionalMonetaryTotalType.getPayableAmount().getValue().floatValue());
                                 break;
-                            case TOTAL_DESCUENTOS:
-                                bean.setTotalDescuentos(additionalMonetaryTotalType.getPayableAmount().getValue().floatValue());
-                                break;
                         }
                     });
                 }
@@ -146,6 +165,9 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
                 // No problem
             }
         }
+
+        // Lines
+        bean.setDetalle(getLines(invoiceType.getInvoiceLine()));
 
         return bean;
     }
@@ -158,4 +180,72 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
         }
     }
 
+    private List<LineBean> getLines(List<InvoiceLineType> invoiceLineTypes) {
+        List<LineBean> result = new ArrayList<>();
+
+        for (InvoiceLineType invoiceLineType : invoiceLineTypes) {
+            LineBean lineBean = new LineBean();
+
+            lineBean.setCantidad(invoiceLineType.getInvoicedQuantity().getValue().floatValue());
+            lineBean.setUnidadMedida(invoiceLineType.getInvoicedQuantity().getUnitCode());
+            lineBean.setPrecioUnitario(invoiceLineType.getPrice().getPriceAmount().getValue().floatValue());
+            lineBean.setTotalValorVenta(invoiceLineType.getLineExtensionAmount().getValue().floatValue());
+
+            // Precio de venta unitario
+            List<PriceType> priceTypes = invoiceLineType.getPricingReference().getAlternativeConditionPrice();
+            if (priceTypes != null) {
+                for (PriceType priceType : priceTypes) {
+                    TipoPrecioVentaUnitario.getByCode(priceType.getPriceTypeCode().getValue()).ifPresent(c -> {
+                        switch (c) {
+                            case PRECIO_UNITARIO:
+                                lineBean.setPrecioVentaUnitario(priceType.getPriceAmount().getValue().floatValue());
+                                break;
+                            case VALOR_REFERENCIAL_UNITARIO_EN_OPERACIONES_NO_ONEROSAS:
+                                lineBean.setValorReferencialUnitarioEnOperacionesNoOnerosas(priceType.getPriceAmount().getValue().floatValue());
+                                break;
+                        }
+                    });
+                }
+            }
+
+            // Descuentos por item
+            List<AllowanceChargeType> allowanceChargeTypes = invoiceLineType.getAllowanceCharge();
+            if (allowanceChargeTypes != null && !allowanceChargeTypes.isEmpty()) {
+                lineBean.setTotalDescuento(allowanceChargeTypes.get(0).getAmount().getValue().floatValue());
+            }
+
+            // Descripcion y codigo de producto
+            ItemType itemType = invoiceLineType.getItem();
+            if (itemType != null) {
+                lineBean.setDescripcion(itemType.getDescription().get(0).getValue());
+
+                ItemIdentificationType itemIdentificationType = itemType.getSellersItemIdentification();
+                if (itemIdentificationType != null) {
+                    lineBean.setCodidoProducto(itemIdentificationType.getID().getValue());
+                }
+
+            }
+
+            // Impuestos
+            List<TaxTotalType> taxTotalTypes = invoiceLineType.getTaxTotal();
+            if (taxTotalTypes != null) {
+                for (TaxTotalType taxTotalType : taxTotalTypes) {
+                    TipoTributo.getFromCode(taxTotalType.getTaxSubtotal().get(0).getTaxCategory().getTaxScheme().getID().getValue()).ifPresent(c -> {
+                        switch (c) {
+                            case IGV:
+                                lineBean.setTotalIgv(taxTotalType.getTaxAmount().getValue().floatValue());
+                                break;
+                            case ISC:
+                                lineBean.setTotalIsc(taxTotalType.getTaxAmount().getValue().floatValue());
+                                break;
+                        }
+                    });
+                }
+            }
+
+            result.add(lineBean);
+        }
+
+        return result;
+    }
 }
