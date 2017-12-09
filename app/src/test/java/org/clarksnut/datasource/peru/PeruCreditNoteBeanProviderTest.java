@@ -33,10 +33,10 @@ public class PeruCreditNoteBeanProviderTest {
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
-//        assertThat(creditNote).isNotNull();
-//        assertThat(creditNote.getTipoDocumento()).isEqualTo("BOLETA");
-//        assertThat(creditNote.getIdAsignado()).isEqualTo("BB11-1");
-//        assertThat(creditNote.getMoneda()).isEqualTo("PEN");
+        assertThat(creditNote).isNotNull();
+        assertThat(creditNote.getTipoNotaCredito()).isEqualTo("ANULACION DE LA OPERACION");
+        assertThat(creditNote.getIdAsignado()).isEqualTo("FF11-3");
+        assertThat(creditNote.getMoneda()).isEqualTo("PEN");
 //
 //
 //        Calendar calendar = Calendar.getInstance();
