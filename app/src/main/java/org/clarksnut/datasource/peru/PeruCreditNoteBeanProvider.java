@@ -24,11 +24,6 @@ import java.util.*;
 public class PeruCreditNoteBeanProvider implements DatasourceProvider {
 
     @Override
-    public boolean support(DocumentModel document, XmlFileModel file) throws FileFetchException {
-        return read(file) != null;
-    }
-
-    @Override
     public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         CreditNoteType creditNoteType = read(file);
         if (creditNoteType == null) {

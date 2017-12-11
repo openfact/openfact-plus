@@ -14,11 +14,6 @@ import javax.ejb.Stateless;
 public class ModelDatasourceProvider implements DatasourceProvider {
 
     @Override
-    public boolean support(DocumentModel document, XmlFileModel file) throws FileFetchException {
-        return true;
-    }
-
-    @Override
     public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         ModelDatasource bean = new ModelDatasource();
         bean.setId(document.getId());

@@ -6,9 +6,6 @@ import org.clarksnut.files.exceptions.FileFetchException;
 
 public interface DatasourceProvider {
 
-    @Deprecated
-    boolean support(DocumentModel document, XmlFileModel file) throws FileFetchException;
-
     Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException;
 
 }

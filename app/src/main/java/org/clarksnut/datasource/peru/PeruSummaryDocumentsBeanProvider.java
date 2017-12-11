@@ -25,11 +25,6 @@ import java.util.List;
 public class PeruSummaryDocumentsBeanProvider implements DatasourceProvider {
 
     @Override
-    public boolean support(DocumentModel document, XmlFileModel file) throws FileFetchException {
-        return read(file) != null;
-    }
-
-    @Override
     public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         SummaryDocumentsType summaryDocumentsType = read(file);
         if (summaryDocumentsType == null) {

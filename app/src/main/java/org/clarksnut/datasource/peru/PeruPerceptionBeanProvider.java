@@ -27,11 +27,6 @@ import java.util.List;
 public class PeruPerceptionBeanProvider implements DatasourceProvider {
 
     @Override
-    public boolean support(DocumentModel document, XmlFileModel file) throws FileFetchException {
-        return read(file) != null;
-    }
-
-    @Override
     public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         PerceptionType perceptionType = read(file);
         if (perceptionType == null) {

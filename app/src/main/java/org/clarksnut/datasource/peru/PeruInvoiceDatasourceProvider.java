@@ -24,11 +24,6 @@ import java.util.*;
 public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
 
     @Override
-    public boolean support(DocumentModel document, XmlFileModel file) throws FileFetchException {
-        return read(file) != null;
-    }
-
-    @Override
     public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         InvoiceType invoiceType = read(file);
         if (invoiceType == null) {

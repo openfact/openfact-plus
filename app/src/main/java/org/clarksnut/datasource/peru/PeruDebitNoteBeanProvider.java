@@ -27,11 +27,6 @@ import java.util.Optional;
 public class PeruDebitNoteBeanProvider implements DatasourceProvider {
 
     @Override
-    public boolean support(DocumentModel document, XmlFileModel file) throws FileFetchException {
-        return read(file) != null;
-    }
-
-    @Override
     public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         DebitNoteType debitNoteType = read(file);
         if (debitNoteType == null) {

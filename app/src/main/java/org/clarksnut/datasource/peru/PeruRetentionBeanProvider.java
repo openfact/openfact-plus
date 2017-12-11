@@ -26,11 +26,6 @@ import java.util.List;
 public class PeruRetentionBeanProvider implements DatasourceProvider {
 
     @Override
-    public boolean support(DocumentModel document, XmlFileModel file) throws FileFetchException {
-        return read(file) != null;
-    }
-
-    @Override
     public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
         RetentionType retentionType = read(file);
         if (retentionType == null) {
