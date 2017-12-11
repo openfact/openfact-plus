@@ -1,9 +1,8 @@
 package org.clarksnut.repositories.user.gmail;
 
-import org.clarksnut.repositories.user.gmail.GmailQueryParser;
-import org.junit.Test;
 import org.clarksnut.repositories.user.MailQuery;
 import org.clarksnut.repositories.user.MailQueryParser;
+import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

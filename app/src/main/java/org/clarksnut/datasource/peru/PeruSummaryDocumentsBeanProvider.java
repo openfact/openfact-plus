@@ -5,7 +5,9 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.Paym
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
-import org.clarksnut.datasource.peru.beans.*;
+import org.clarksnut.datasource.peru.beans.BeanUtils;
+import org.clarksnut.datasource.peru.beans.InformacionAdicionalBean;
+import org.clarksnut.datasource.peru.beans.SummaryLineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoPagoResumen;
 import org.clarksnut.documents.DocumentModel;

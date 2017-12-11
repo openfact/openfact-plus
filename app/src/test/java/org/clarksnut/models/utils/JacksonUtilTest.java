@@ -1,7 +1,6 @@
 package org.clarksnut.models.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.clarksnut.models.utils.JacksonUtil;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,7 +1,8 @@
 package org.clarksnut.datasource.peru;
 
 import org.clarksnut.datasource.Datasource;
-import org.clarksnut.datasource.peru.beans.*;
+import org.clarksnut.datasource.peru.beans.ProveedorBean;
+import org.clarksnut.datasource.peru.beans.VoidedLineBean;
 
 import java.util.Date;
 import java.util.List;

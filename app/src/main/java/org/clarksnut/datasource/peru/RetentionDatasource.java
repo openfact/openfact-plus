@@ -2,8 +2,8 @@ package org.clarksnut.datasource.peru;
 
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.peru.beans.ClienteBean;
-import org.clarksnut.datasource.peru.beans.RetentionLineBean;
 import org.clarksnut.datasource.peru.beans.ProveedorBean;
+import org.clarksnut.datasource.peru.beans.RetentionLineBean;
 
 import java.util.Date;
 import java.util.List;

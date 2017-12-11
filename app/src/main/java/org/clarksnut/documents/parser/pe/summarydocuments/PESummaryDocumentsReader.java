@@ -1,9 +1,8 @@
 package org.clarksnut.documents.parser.pe.summarydocuments;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
-import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.ParsedDocument;
-import org.clarksnut.documents.jpa.entity.DocumentEntity;
+import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
 import org.clarksnut.files.XmlUBLFileModel;

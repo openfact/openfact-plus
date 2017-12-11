@@ -1,6 +1,9 @@
 package org.clarksnut.datasource.peru;
 
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.*;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.BillingReferenceType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CreditNoteLineType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DocumentReferenceType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.MonetaryTotalType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AllowanceTotalAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeTotalAmountType;
 import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
@@ -9,7 +12,8 @@ import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.LineBean;
-import org.clarksnut.datasource.peru.types.*;
+import org.clarksnut.datasource.peru.types.TipoDocumento;
+import org.clarksnut.datasource.peru.types.TipoNotaCredito;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
@@ -17,7 +21,9 @@ import org.clarksnut.models.utils.ClarksnutModelUtils;
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Stateless
 @DatasourceType(datasource = "PeruCreditNoteDS")

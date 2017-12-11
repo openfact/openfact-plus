@@ -3,12 +3,10 @@ package org.clarksnut.files;
 import org.arquillian.ape.rdbms.Cleanup;
 import org.arquillian.ape.rdbms.CleanupStrategy;
 import org.arquillian.ape.rdbms.TestExecutionPhase;
-import org.clarksnut.files.FileModel;
-import org.clarksnut.files.FileProvider;
+import org.clarksnut.files.exceptions.FileStorageException;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.clarksnut.files.exceptions.FileStorageException;
 import org.wildfly.swarm.arquillian.DefaultDeployment;
 
 import javax.inject.Inject;

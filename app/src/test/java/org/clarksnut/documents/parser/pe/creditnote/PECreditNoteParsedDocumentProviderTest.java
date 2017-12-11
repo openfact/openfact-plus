@@ -3,7 +3,6 @@ package org.clarksnut.documents.parser.pe.creditnote;
 import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
 import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.SkeletonDocument;
-import org.clarksnut.documents.parser.basic.creditnote.BasicCreditNoteParsedDocumentProvider;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.junit.Test;

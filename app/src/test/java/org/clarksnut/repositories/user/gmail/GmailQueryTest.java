@@ -1,6 +1,5 @@
 package org.clarksnut.repositories.user.gmail;
 
-import org.clarksnut.repositories.user.gmail.GmailQuery;
 import org.junit.Test;
 
 import java.time.LocalDate;

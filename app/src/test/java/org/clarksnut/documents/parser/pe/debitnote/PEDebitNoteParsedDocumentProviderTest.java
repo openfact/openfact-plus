@@ -3,7 +3,6 @@ package org.clarksnut.documents.parser.pe.debitnote;
 import oasis.names.specification.ubl.schema.xsd.debitnote_2.DebitNoteType;
 import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.SkeletonDocument;
-import org.clarksnut.documents.parser.basic.debitnote.BasicDebitNoteParsedDocumentProvider;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.junit.Test;

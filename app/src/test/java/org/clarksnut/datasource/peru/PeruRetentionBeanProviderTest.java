@@ -1,6 +1,5 @@
 package org.clarksnut.datasource.peru;
 
-import org.clarksnut.datasource.peru.beans.PerceptionLineBean;
 import org.clarksnut.datasource.peru.beans.RetentionLineBean;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;

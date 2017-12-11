@@ -1,7 +1,7 @@
 package org.clarksnut.models;
 
-import org.arquillian.ape.rdbms.*;
-import org.clarksnut.models.*;
+import org.arquillian.ape.rdbms.CleanupUsingScript;
+import org.arquillian.ape.rdbms.TestExecutionPhase;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.wildfly.swarm.arquillian.DefaultDeployment;
 
 import javax.inject.Inject;
-
 import java.util.List;
 import java.util.UUID;
 

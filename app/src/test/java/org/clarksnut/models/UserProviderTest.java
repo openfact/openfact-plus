@@ -2,9 +2,6 @@ package org.clarksnut.models;
 
 import org.arquillian.ape.rdbms.CleanupUsingScript;
 import org.arquillian.ape.rdbms.TestExecutionPhase;
-import org.clarksnut.models.QueryModel;
-import org.clarksnut.models.UserModel;
-import org.clarksnut.models.UserProvider;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;

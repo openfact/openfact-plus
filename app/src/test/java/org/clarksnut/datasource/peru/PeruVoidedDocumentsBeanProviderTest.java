@@ -1,6 +1,5 @@
 package org.clarksnut.datasource.peru;
 
-import org.clarksnut.datasource.peru.beans.LineBean;
 import org.clarksnut.datasource.peru.beans.VoidedLineBean;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
@@ -15,7 +14,6 @@ import java.io.InputStream;
 import java.util.Calendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PeruVoidedDocumentsBeanProviderTest extends PeruBeanUtilsTest {

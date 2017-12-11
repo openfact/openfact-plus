@@ -2,11 +2,11 @@ package org.clarksnut.report.jasper;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.junit.Test;
 import org.clarksnut.datasource.model.ModelDatasource;
+import org.junit.Test;
 
 import javax.imageio.ImageIO;
-import java.io.*;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 

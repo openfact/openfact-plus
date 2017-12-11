@@ -14,7 +14,6 @@ import java.io.InputStream;
 import java.util.Calendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {

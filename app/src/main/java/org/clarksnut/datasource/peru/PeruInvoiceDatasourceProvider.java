@@ -17,7 +17,9 @@ import org.clarksnut.models.utils.ClarksnutModelUtils;
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Stateless
 @DatasourceType(datasource = "PeruInvoiceDS")

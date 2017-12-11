@@ -1,6 +1,6 @@
 package org.clarksnut.datasource.peru;
 
-import org.clarksnut.datasource.peru.beans.*;
+import org.clarksnut.datasource.peru.beans.LineBean;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;

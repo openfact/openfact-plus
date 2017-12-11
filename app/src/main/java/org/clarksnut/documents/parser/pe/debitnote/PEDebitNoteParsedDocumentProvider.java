@@ -2,8 +2,8 @@ package org.clarksnut.documents.parser.pe.debitnote;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
 import oasis.names.specification.ubl.schema.xsd.debitnote_2.DebitNoteType;
-import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.ParsedDocument;
+import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
 import org.clarksnut.documents.parser.pe.PEUtils;

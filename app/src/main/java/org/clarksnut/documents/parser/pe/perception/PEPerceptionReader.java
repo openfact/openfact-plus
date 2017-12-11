@@ -5,7 +5,6 @@ import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
-import org.clarksnut.documents.parser.pe.PEUtils;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.jboss.logging.Logger;
@@ -13,7 +12,6 @@ import org.openfact.perception.PerceptionType;
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
-import java.util.Optional;
 
 @Stateless
 @SupportedDocumentType(value = "Perception")
