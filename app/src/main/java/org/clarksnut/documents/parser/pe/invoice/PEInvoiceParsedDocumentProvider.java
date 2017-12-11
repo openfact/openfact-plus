@@ -4,9 +4,9 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.Addr
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.ParsedDocument;
-import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
+import org.clarksnut.documents.parser.pe.PEUtils;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.jboss.logging.Logger;
@@ -14,12 +14,13 @@ import org.jboss.logging.Logger;
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Stateless
 @SupportedDocumentType(value = "Invoice")
-public class PEInvoiceReader implements ParsedDocumentProvider {
+public class PEInvoiceParsedDocumentProvider implements ParsedDocumentProvider {
 
-    private static final Logger logger = Logger.getLogger(PEInvoiceReader.class);
+    private static final Logger logger = Logger.getLogger(PEInvoiceParsedDocumentProvider.class);
 
     @Override
     public String getSupportedDocumentType() {
@@ -41,6 +42,7 @@ public class PEInvoiceReader implements ParsedDocumentProvider {
         }
 
         SkeletonDocument skeleton = new SkeletonDocument();
+        skeleton.setType(getSupportedDocumentType());
         skeleton.setAssignedId(invoiceType.getID().getValue());
         skeleton.setSupplierAssignedId(invoiceType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
         skeleton.setSupplierName(invoiceType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
@@ -49,6 +51,7 @@ public class PEInvoiceReader implements ParsedDocumentProvider {
         skeleton.setCurrency(invoiceType.getLegalMonetaryTotal().getPayableAmount().getCurrencyID().value());
         skeleton.setAmount(invoiceType.getLegalMonetaryTotal().getPayableAmount().getValue().floatValue());
         skeleton.setIssueDate(invoiceType.getIssueDate().getValue().toGregorianCalendar().getTime());
+        skeleton.setIssueDate(PEUtils.toDate(invoiceType.getIssueDate(), Optional.ofNullable(invoiceType.getIssueTime())));
 
         // Tax
         skeleton.setTax(invoiceType.getTaxTotal().stream()

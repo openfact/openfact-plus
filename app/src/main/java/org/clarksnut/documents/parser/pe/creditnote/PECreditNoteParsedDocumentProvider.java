@@ -1,12 +1,12 @@
-package org.clarksnut.documents.parser.pe.debitnote;
+package org.clarksnut.documents.parser.pe.creditnote;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
-import oasis.names.specification.ubl.schema.xsd.debitnote_2.DebitNoteType;
+import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
 import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.ParsedDocument;
-import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
+import org.clarksnut.documents.parser.pe.PEUtils;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.jboss.logging.Logger;
@@ -14,16 +14,17 @@ import org.jboss.logging.Logger;
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Stateless
-@SupportedDocumentType(value = "DebitNote")
-public class PEDebitNoteReader implements ParsedDocumentProvider {
+@SupportedDocumentType(value = "CreditNote")
+public class PECreditNoteParsedDocumentProvider implements ParsedDocumentProvider {
 
-    private static final Logger logger = Logger.getLogger(PEDebitNoteReader.class);
+    private static final Logger logger = Logger.getLogger(PECreditNoteParsedDocumentProvider.class);
 
     @Override
     public String getSupportedDocumentType() {
-        return "DebitNote";
+        return "CreditNote";
     }
 
     @Override
@@ -33,37 +34,39 @@ public class PEDebitNoteReader implements ParsedDocumentProvider {
 
     @Override
     public ParsedDocument read(XmlUBLFileModel file) {
-        DebitNoteType debitNoteType;
+        CreditNoteType creditNoteType;
         try {
-            debitNoteType = ClarksnutModelUtils.unmarshall(file.getDocument(), DebitNoteType.class);
+            creditNoteType = ClarksnutModelUtils.unmarshall(file.getDocument(), CreditNoteType.class);
         } catch (JAXBException e) {
             return null;
         }
 
         SkeletonDocument skeleton = new SkeletonDocument();
-        skeleton.setAssignedId(debitNoteType.getID().getValue());
-        skeleton.setSupplierAssignedId(debitNoteType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
-        skeleton.setSupplierName(debitNoteType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
-        skeleton.setCustomerAssignedId(debitNoteType.getAccountingCustomerParty().getCustomerAssignedAccountID().getValue());
-        skeleton.setCustomerName(debitNoteType.getAccountingCustomerParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
-        skeleton.setCurrency(debitNoteType.getRequestedMonetaryTotal().getPayableAmount().getCurrencyID().value());
-        skeleton.setAmount(debitNoteType.getRequestedMonetaryTotal().getPayableAmount().getValue().floatValue());
-        skeleton.setIssueDate(debitNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
+        skeleton.setType(getSupportedDocumentType());
+        skeleton.setAssignedId(creditNoteType.getID().getValue());
+        skeleton.setSupplierAssignedId(creditNoteType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
+        skeleton.setSupplierName(creditNoteType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        skeleton.setCustomerAssignedId(creditNoteType.getAccountingCustomerParty().getCustomerAssignedAccountID().getValue());
+        skeleton.setCustomerName(creditNoteType.getAccountingCustomerParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        skeleton.setCurrency(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getCurrencyID().value());
+        skeleton.setAmount(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getValue().floatValue());
+        skeleton.setIssueDate(creditNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
+        skeleton.setIssueDate(PEUtils.toDate(creditNoteType.getIssueDate(), Optional.ofNullable(creditNoteType.getIssueTime())));
 
         // Tax
-        skeleton.setTax(debitNoteType.getTaxTotal().stream()
+        skeleton.setTax(creditNoteType.getTaxTotal().stream()
                 .map(f -> f.getTaxAmount().getValue())
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .floatValue()
         );
 
         // Postal address
-        AddressType postalAddressType = debitNoteType.getAccountingSupplierParty().getParty().getPostalAddress();
+        AddressType postalAddressType = creditNoteType.getAccountingSupplierParty().getParty().getPostalAddress();
         skeleton.setSupplierStreetAddress(postalAddressType.getStreetName().getValue());
         skeleton.setSupplierCity(postalAddressType.getCitySubdivisionName().getValue() + ", " + postalAddressType.getCityName().getValue() + ", " + postalAddressType.getCitySubdivisionName().getValue());
         skeleton.setSupplierCountry(postalAddressType.getCountry().getIdentificationCode().getValue());
 
-        AddressType customerPostalAddressType = debitNoteType.getAccountingCustomerParty().getParty().getPostalAddress();
+        AddressType customerPostalAddressType = creditNoteType.getAccountingCustomerParty().getParty().getPostalAddress();
         if (customerPostalAddressType != null) {
             skeleton.setCustomerStreetAddress(customerPostalAddressType.getStreetName().getValue());
             skeleton.setCustomerCity(customerPostalAddressType.getCitySubdivisionName().getValue() + ", " + customerPostalAddressType.getCityName().getValue() + ", " + customerPostalAddressType.getCitySubdivisionName().getValue());
@@ -78,7 +81,7 @@ public class PEDebitNoteReader implements ParsedDocumentProvider {
 
             @Override
             public Object getType() {
-                return debitNoteType;
+                return creditNoteType;
             }
         };
     }

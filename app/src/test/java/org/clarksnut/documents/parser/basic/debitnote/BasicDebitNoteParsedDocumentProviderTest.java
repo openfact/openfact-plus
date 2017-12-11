@@ -1,10 +1,8 @@
-package org.clarksnut.documents.parser.basic.invoice;
+package org.clarksnut.documents.parser.basic.debitnote;
 
-import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
-import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
+import oasis.names.specification.ubl.schema.xsd.debitnote_21.DebitNoteType;
 import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.SkeletonDocument;
-import org.clarksnut.documents.parser.basic.creditnote.BasicCreditNoteParsedDocumentProvider;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.junit.Test;
@@ -19,32 +17,32 @@ import java.util.Calendar;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BasicCreditNoteParsedDocumentProviderTest {
+public class BasicDebitNoteParsedDocumentProviderTest {
 
     @Mock
     private XmlUBLFileModel file;
 
     @Test
-    public void readFF11_3() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/creditnote/FF11-3.xml");
+    public void readFF11_5() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/peru/document/debitnote/FF11-5.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-        BasicCreditNoteParsedDocumentProvider provider = new BasicCreditNoteParsedDocumentProvider();
+        BasicDebitNoteParsedDocumentProvider provider = new BasicDebitNoteParsedDocumentProvider();
         ParsedDocument parsedDocument = provider.read(file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
 
         assertThat(parsedDocument).isNotNull();
-        assertThat(parsedDocument.getType() instanceof CreditNoteType).isEqualTo(true);
+        assertThat(parsedDocument.getType() instanceof DebitNoteType).isEqualTo(true);
         assertThat(parsedDocument.getType()).isNotNull();
 
 
         SkeletonDocument skeleton = parsedDocument.getSkeleton();
 
-        assertThat(skeleton.getType()).isEqualTo("CreditNote");
-        assertThat(skeleton.getAssignedId()).isEqualTo("FF11-3");
+        assertThat(skeleton.getType()).isEqualTo("DebitNote");
+        assertThat(skeleton.getAssignedId()).isEqualTo("FF11-5");
         assertThat(skeleton.getAmount()).isEqualTo(375.24F);
         assertThat(skeleton.getTax()).isEqualTo(57.24F);
         assertThat(skeleton.getCurrency()).isEqualTo("PEN");
@@ -54,9 +52,9 @@ public class BasicCreditNoteParsedDocumentProviderTest {
         calendar.set(Calendar.YEAR, 2017);
         calendar.set(Calendar.MONTH, Calendar.FEBRUARY);
         calendar.set(Calendar.DAY_OF_MONTH, 20);
-        calendar.set(Calendar.HOUR_OF_DAY, 21);
-        calendar.set(Calendar.MINUTE, 48);
-        calendar.set(Calendar.SECOND, 34);
+        calendar.set(Calendar.HOUR_OF_DAY, 22);
+        calendar.set(Calendar.MINUTE, 31);
+        calendar.set(Calendar.SECOND, 27);
         assertThat(skeleton.getIssueDate()).isEqualTo(calendar.getTime());
 
         assertThat(skeleton.getSupplierName()).isEqualTo("AHREN CONTRATISTAS GENERALES S.A.C");

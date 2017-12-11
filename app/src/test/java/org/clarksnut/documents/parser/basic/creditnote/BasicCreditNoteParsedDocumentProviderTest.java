@@ -1,6 +1,6 @@
-package org.clarksnut.documents.parser.basic.invoice;
+package org.clarksnut.documents.parser.basic.creditnote;
 
-import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
+import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
 import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.files.XmlUBLFileModel;
@@ -17,34 +17,34 @@ import java.util.Calendar;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BasicInvoiceParsedDocumentProviderTest {
+public class BasicCreditNoteParsedDocumentProviderTest {
 
     @Mock
     private XmlUBLFileModel file;
 
     @Test
-    public void readFF11_00000003() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/invoice/FF11-00000003.xml");
+    public void readFF11_3() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/peru/document/creditnote/FF11-3.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-        BasicInvoiceParsedDocumentProvider provider = new BasicInvoiceParsedDocumentProvider();
+        BasicCreditNoteParsedDocumentProvider provider = new BasicCreditNoteParsedDocumentProvider();
         ParsedDocument parsedDocument = provider.read(file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
 
         assertThat(parsedDocument).isNotNull();
-        assertThat(parsedDocument.getType() instanceof InvoiceType).isEqualTo(true);
+        assertThat(parsedDocument.getType() instanceof CreditNoteType).isEqualTo(true);
         assertThat(parsedDocument.getType()).isNotNull();
 
 
         SkeletonDocument skeleton = parsedDocument.getSkeleton();
 
-        assertThat(skeleton.getType()).isEqualTo("Invoice");
-        assertThat(skeleton.getAssignedId()).isEqualTo("FF11-00000003");
-        assertThat(skeleton.getAmount()).isEqualTo(138.65F);
-        assertThat(skeleton.getTax()).isEqualTo(21.15F);
+        assertThat(skeleton.getType()).isEqualTo("CreditNote");
+        assertThat(skeleton.getAssignedId()).isEqualTo("FF11-3");
+        assertThat(skeleton.getAmount()).isEqualTo(375.24F);
+        assertThat(skeleton.getTax()).isEqualTo(57.24F);
         assertThat(skeleton.getCurrency()).isEqualTo("PEN");
 
         Calendar calendar = Calendar.getInstance();
@@ -52,9 +52,9 @@ public class BasicInvoiceParsedDocumentProviderTest {
         calendar.set(Calendar.YEAR, 2017);
         calendar.set(Calendar.MONTH, Calendar.FEBRUARY);
         calendar.set(Calendar.DAY_OF_MONTH, 20);
-        calendar.set(Calendar.HOUR_OF_DAY, 20);
-        calendar.set(Calendar.MINUTE, 46);
-        calendar.set(Calendar.SECOND, 20);
+        calendar.set(Calendar.HOUR_OF_DAY, 21);
+        calendar.set(Calendar.MINUTE, 48);
+        calendar.set(Calendar.SECOND, 34);
         assertThat(skeleton.getIssueDate()).isEqualTo(calendar.getTime());
 
         assertThat(skeleton.getSupplierName()).isEqualTo("AHREN CONTRATISTAS GENERALES S.A.C");

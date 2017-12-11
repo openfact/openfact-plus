@@ -5,6 +5,7 @@ import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
+import org.clarksnut.documents.parser.pe.PEUtils;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.jboss.logging.Logger;
@@ -12,6 +13,7 @@ import org.openfact.perception.PerceptionType;
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
+import java.util.Optional;
 
 @Stateless
 @SupportedDocumentType(value = "Perception")
@@ -39,7 +41,7 @@ public class PEPerceptionReader implements ParsedDocumentProvider {
         }
 
         SkeletonDocument skeleton = new SkeletonDocument();
-
+        skeleton.setType(getSupportedDocumentType());
         skeleton.setAssignedId(perceptionType.getId().getValue());
         skeleton.setSupplierAssignedId(perceptionType.getAgentParty().getPartyIdentification().get(0).getIDValue());
         skeleton.setSupplierName(perceptionType.getAgentParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
