@@ -11,17 +11,18 @@ public class PerceptionDatasource extends Datasource {
     private String idAsignado;
     private Date fechaEmision;
 
-    private ProveedorBean emisor;
-    private ClienteBean cliente;
-
-    private String regimenPercepcion;
-    private Float tasaPercepcion;
-
+    private String regimen;
+    private Float tasa;
     private String observaciones;
 
-    private String moneda;
-    private Float totalPercibido;
-    private Float totalCobrado;
+    private Float importeTotalPercibido;
+    private String monedaImporteTotalPercibido;
+
+    private Float importeTotalCobrado;
+    private String monedaImporteTotalCobrado;
+
+    private ProveedorBean emisor;
+    private ClienteBean cliente;
 
     private List<PerceptionLineBean> detalle;
 
@@ -57,20 +58,20 @@ public class PerceptionDatasource extends Datasource {
         this.cliente = cliente;
     }
 
-    public String getRegimenPercepcion() {
-        return regimenPercepcion;
+    public String getRegimen() {
+        return regimen;
     }
 
-    public void setRegimenPercepcion(String regimenPercepcion) {
-        this.regimenPercepcion = regimenPercepcion;
+    public void setRegimen(String regimen) {
+        this.regimen = regimen;
     }
 
-    public Float getTasaPercepcion() {
-        return tasaPercepcion;
+    public Float getTasa() {
+        return tasa;
     }
 
-    public void setTasaPercepcion(Float tasaPercepcion) {
-        this.tasaPercepcion = tasaPercepcion;
+    public void setTasa(Float tasa) {
+        this.tasa = tasa;
     }
 
     public String getObservaciones() {
@@ -81,28 +82,28 @@ public class PerceptionDatasource extends Datasource {
         this.observaciones = observaciones;
     }
 
-    public Float getTotalPercibido() {
-        return totalPercibido;
+    public Float getImporteTotalPercibido() {
+        return importeTotalPercibido;
     }
 
-    public void setTotalPercibido(Float totalPercibido) {
-        this.totalPercibido = totalPercibido;
+    public void setImporteTotalPercibido(Float importeTotalPercibido) {
+        this.importeTotalPercibido = importeTotalPercibido;
     }
 
-    public Float getTotalCobrado() {
-        return totalCobrado;
+    public Float getImporteTotalCobrado() {
+        return importeTotalCobrado;
     }
 
-    public void setTotalCobrado(Float totalCobrado) {
-        this.totalCobrado = totalCobrado;
+    public void setImporteTotalCobrado(Float importeTotalCobrado) {
+        this.importeTotalCobrado = importeTotalCobrado;
     }
 
-    public String getMoneda() {
-        return moneda;
+    public String getMonedaImporteTotalPercibido() {
+        return monedaImporteTotalPercibido;
     }
 
-    public void setMoneda(String moneda) {
-        this.moneda = moneda;
+    public void setMonedaImporteTotalPercibido(String monedaImporteTotalPercibido) {
+        this.monedaImporteTotalPercibido = monedaImporteTotalPercibido;
     }
 
     public List<PerceptionLineBean> getDetalle() {
@@ -111,5 +112,13 @@ public class PerceptionDatasource extends Datasource {
 
     public void setDetalle(List<PerceptionLineBean> detalle) {
         this.detalle = detalle;
+    }
+
+    public String getMonedaImporteTotalCobrado() {
+        return monedaImporteTotalCobrado;
+    }
+
+    public void setMonedaImporteTotalCobrado(String monedaImporteTotalCobrado) {
+        this.monedaImporteTotalCobrado = monedaImporteTotalCobrado;
     }
 }

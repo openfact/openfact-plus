@@ -2,7 +2,7 @@ package org.clarksnut.datasource.peru.beans;
 
 import java.util.Date;
 
-public class PerceptionLineBean {
+public class RetentionLineBean {
 
     private String documentoRelacionado;
     private String tipoDocumentoRelacionado;
@@ -10,15 +10,15 @@ public class PerceptionLineBean {
     private Float importeTotalDocumentoRelacionado;
     private String monedaDocumentoRelacionado;
 
-    private Date fechaCobro;
-    private Float importeCobro;
-    private String monedaCobro;
+    private Date fechaPago;
+    private Float importePagoSinRetencion;
+    private String monedaPagoSinRetencion;
 
-    private Float importePercibido;
-    private String monedaImportePercibido;
-    private Date fechaPercepcion;
-    private Float importeTotalACobrar;
-    private String monedaImporteTotalACobrar;
+    private Float importeRetenido;
+    private String monedaImporteRetenido;
+    private Date fechaRetencion;
+    private Float importeTotalAPagar;
+    private String monedaImporteTotalAPagar;
 
     private String monedaReferencia;
     private String monedaObjetivo;
@@ -65,68 +65,68 @@ public class PerceptionLineBean {
         this.monedaDocumentoRelacionado = monedaDocumentoRelacionado;
     }
 
-    public Date getFechaCobro() {
-        return fechaCobro;
+    public Date getFechaPago() {
+        return fechaPago;
     }
 
-    public void setFechaCobro(Date fechaCobro) {
-        this.fechaCobro = fechaCobro;
+    public void setFechaPago(Date fechaPago) {
+        this.fechaPago = fechaPago;
     }
 
-    public Float getImporteCobro() {
-        return importeCobro;
+    public Float getImportePagoSinRetencion() {
+        return importePagoSinRetencion;
     }
 
-    public void setImporteCobro(Float importeCobro) {
-        this.importeCobro = importeCobro;
+    public void setImportePagoSinRetencion(Float importePagoSinRetencion) {
+        this.importePagoSinRetencion = importePagoSinRetencion;
     }
 
-    public String getMonedaCobro() {
-        return monedaCobro;
+    public String getMonedaPagoSinRetencion() {
+        return monedaPagoSinRetencion;
     }
 
-    public void setMonedaCobro(String monedaCobro) {
-        this.monedaCobro = monedaCobro;
+    public void setMonedaPagoSinRetencion(String monedaPagoSinRetencion) {
+        this.monedaPagoSinRetencion = monedaPagoSinRetencion;
     }
 
-    public Float getImportePercibido() {
-        return importePercibido;
+    public Float getImporteRetenido() {
+        return importeRetenido;
     }
 
-    public void setImportePercibido(Float importePercibido) {
-        this.importePercibido = importePercibido;
+    public void setImporteRetenido(Float importeRetenido) {
+        this.importeRetenido = importeRetenido;
     }
 
-    public String getMonedaImportePercibido() {
-        return monedaImportePercibido;
+    public String getMonedaImporteRetenido() {
+        return monedaImporteRetenido;
     }
 
-    public void setMonedaImportePercibido(String monedaImportePercibido) {
-        this.monedaImportePercibido = monedaImportePercibido;
+    public void setMonedaImporteRetenido(String monedaImporteRetenido) {
+        this.monedaImporteRetenido = monedaImporteRetenido;
     }
 
-    public Date getFechaPercepcion() {
-        return fechaPercepcion;
+    public Date getFechaRetencion() {
+        return fechaRetencion;
     }
 
-    public void setFechaPercepcion(Date fechaPercepcion) {
-        this.fechaPercepcion = fechaPercepcion;
+    public void setFechaRetencion(Date fechaRetencion) {
+        this.fechaRetencion = fechaRetencion;
     }
 
-    public Float getImporteTotalACobrar() {
-        return importeTotalACobrar;
+    public Float getImporteTotalAPagar() {
+        return importeTotalAPagar;
     }
 
-    public void setImporteTotalACobrar(Float importeTotalACobrar) {
-        this.importeTotalACobrar = importeTotalACobrar;
+    public void setImporteTotalAPagar(Float importeTotalAPagar) {
+        this.importeTotalAPagar = importeTotalAPagar;
     }
 
-    public String getMonedaImporteTotalACobrar() {
-        return monedaImporteTotalACobrar;
+    public String getMonedaImporteTotalAPagar() {
+        return monedaImporteTotalAPagar;
     }
 
-    public void setMonedaImporteTotalACobrar(String monedaImporteTotalACobrar) {
-        this.monedaImporteTotalACobrar = monedaImporteTotalACobrar;
+    public void setMonedaImporteTotalAPagar(String monedaImporteTotalAPagar) {
+        this.monedaImporteTotalAPagar = monedaImporteTotalAPagar;
     }
 
     public String getMonedaReferencia() {

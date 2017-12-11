@@ -45,18 +45,19 @@ public class PeruPerceptionBeanProvider implements DatasourceProvider {
         bean.setEmisor(BeanUtils.toSupplier(perceptionType.getAgentParty()));
         bean.setCliente(BeanUtils.toCustomer(perceptionType.getReceiverParty()));
         TipoRegimenPercepcion.getFromCode(perceptionType.getSunatPerceptionSystemCode().getValue()).ifPresent(c -> {
-            bean.setRegimenPercepcion(c.getDenominacion());
+            bean.setRegimen(c.getDenominacion());
         });
-        bean.setTasaPercepcion(perceptionType.getSunatPerceptionPercent().getValue().floatValue());
+        bean.setTasa(perceptionType.getSunatPerceptionPercent().getValue().floatValue());
 
         List<NoteType> noteTypes = perceptionType.getNote();
         if (noteTypes != null && !noteTypes.isEmpty()) {
             bean.setObservaciones(noteTypes.get(0).getValue());
         }
 
-        bean.setMoneda(perceptionType.getTotalInvoiceAmount().getCurrencyID());
-        bean.setTotalPercibido(perceptionType.getTotalInvoiceAmount().getValue().floatValue());
-        bean.setTotalCobrado(perceptionType.getSunatTotalCashed().getValue().floatValue());
+        bean.setImporteTotalPercibido(perceptionType.getTotalInvoiceAmount().getValue().floatValue());
+        bean.setMonedaImporteTotalPercibido(perceptionType.getTotalInvoiceAmount().getCurrencyID());
+        bean.setImporteTotalCobrado(perceptionType.getSunatTotalCashed().getValue().floatValue());
+        bean.setMonedaImporteTotalCobrado(perceptionType.getSunatTotalCashed().getCurrencyID());
 
         // Detalle
         List<SUNATPerceptionDocumentReferenceType> sunatPerceptionDocumentReferenceTypes = perceptionType.getSunatPerceptionDocumentReference();
@@ -81,8 +82,8 @@ public class PeruPerceptionBeanProvider implements DatasourceProvider {
             lineBean.setImportePercibido(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatPerceptionAmount().getValue().floatValue());
             lineBean.setMonedaImportePercibido(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatPerceptionAmount().getCurrencyID());
             lineBean.setFechaPercepcion(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatPerceptionDate().getValue().toGregorianCalendar().getTime());
-            lineBean.setMontoTotalACobrar(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatNetTotalCashed().getValue().floatValue());
-            lineBean.setMonedaACobrar(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatNetTotalCashed().getCurrencyID());
+            lineBean.setImporteTotalACobrar(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatNetTotalCashed().getValue().floatValue());
+            lineBean.setMonedaImporteTotalACobrar(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatNetTotalCashed().getCurrencyID());
 
             ExchangeRateType exchangeRateType = sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getExchangeRate();
             if (exchangeRateType != null) {
