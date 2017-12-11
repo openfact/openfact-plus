@@ -8,17 +8,19 @@ import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
+import org.clarksnut.documents.parser.basic.BasicUtils;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Stateless
 @SupportedDocumentType(value = "CreditNote")
-public class BasicCreditNoteReader implements ParsedDocumentProvider {
+public class BasicCreditNoteParsedDocumentProvider implements ParsedDocumentProvider {
 
-    private static final Logger logger = Logger.getLogger(BasicCreditNoteReader.class);
+    private static final Logger logger = Logger.getLogger(BasicCreditNoteParsedDocumentProvider.class);
 
     @Override
     public String getSupportedDocumentType() {
@@ -38,6 +40,7 @@ public class BasicCreditNoteReader implements ParsedDocumentProvider {
         }
 
         SkeletonDocument skeleton = new SkeletonDocument();
+        skeleton.setType(getSupportedDocumentType());
         skeleton.setAssignedId(creditNoteType.getIDValue());
         skeleton.setSupplierAssignedId(creditNoteType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
         skeleton.setSupplierName(creditNoteType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
@@ -45,7 +48,7 @@ public class BasicCreditNoteReader implements ParsedDocumentProvider {
         skeleton.setCustomerName(creditNoteType.getAccountingCustomerParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
         skeleton.setCurrency(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getCurrencyID());
         skeleton.setAmount(creditNoteType.getLegalMonetaryTotal().getPayableAmount().getValue().floatValue());
-        skeleton.setIssueDate(creditNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
+        skeleton.setIssueDate(BasicUtils.toDate(creditNoteType.getIssueDate(), Optional.ofNullable(creditNoteType.getIssueTime())));
 
         // Tax
         skeleton.setTax(creditNoteType.getTaxTotal().stream()

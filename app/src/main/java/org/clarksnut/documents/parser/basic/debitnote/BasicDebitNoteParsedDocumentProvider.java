@@ -8,17 +8,19 @@ import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
+import org.clarksnut.documents.parser.basic.BasicUtils;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Stateless
 @SupportedDocumentType(value = "DebitNote")
-public class BasicDebitNoteReader implements ParsedDocumentProvider {
+public class BasicDebitNoteParsedDocumentProvider implements ParsedDocumentProvider {
 
-    private static final Logger logger = Logger.getLogger(BasicDebitNoteReader.class);
+    private static final Logger logger = Logger.getLogger(BasicDebitNoteParsedDocumentProvider.class);
 
     @Override
     public String getSupportedDocumentType() {
@@ -38,6 +40,7 @@ public class BasicDebitNoteReader implements ParsedDocumentProvider {
         }
 
         SkeletonDocument skeleton = new SkeletonDocument();
+        skeleton.setType(getSupportedDocumentType());
         skeleton.setAssignedId(debitNoteType.getIDValue());
         skeleton.setSupplierAssignedId(debitNoteType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
         skeleton.setSupplierName(debitNoteType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
@@ -45,7 +48,7 @@ public class BasicDebitNoteReader implements ParsedDocumentProvider {
         skeleton.setCustomerName(debitNoteType.getAccountingCustomerParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
         skeleton.setCurrency(debitNoteType.getRequestedMonetaryTotal().getPayableAmount().getCurrencyID());
         skeleton.setAmount(debitNoteType.getRequestedMonetaryTotal().getPayableAmount().getValue().floatValue());
-        skeleton.setIssueDate(debitNoteType.getIssueDate().getValue().toGregorianCalendar().getTime());
+        skeleton.setIssueDate(BasicUtils.toDate(debitNoteType.getIssueDate(), Optional.ofNullable(debitNoteType.getIssueTime())));
 
         // Tax
         skeleton.setTax(debitNoteType.getTaxTotal().stream()

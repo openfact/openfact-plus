@@ -16,8 +16,8 @@ public class SkeletonDocument {
     private String supplierStreetAddress;
     private String supplierCity;
     private String supplierCountry;
-    private String customerName;
 
+    private String customerName;
     private String customerAssignedId;
     private String customerStreetAddress;
     private String customerCity;

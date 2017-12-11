@@ -8,17 +8,19 @@ import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
+import org.clarksnut.documents.parser.basic.BasicUtils;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Stateless
 @SupportedDocumentType(value = "Invoice")
-public class BasicInvoiceReader implements ParsedDocumentProvider {
+public class BasicInvoiceParsedDocumentProvider implements ParsedDocumentProvider {
 
-    private static final Logger logger = Logger.getLogger(BasicInvoiceReader.class);
+    private static final Logger logger = Logger.getLogger(BasicInvoiceParsedDocumentProvider.class);
 
     @Override
     public String getSupportedDocumentType() {
@@ -38,6 +40,7 @@ public class BasicInvoiceReader implements ParsedDocumentProvider {
         }
 
         SkeletonDocument skeleton = new SkeletonDocument();
+        skeleton.setType(getSupportedDocumentType());
         skeleton.setAssignedId(invoiceType.getIDValue());
         skeleton.setSupplierAssignedId(invoiceType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
         skeleton.setSupplierName(invoiceType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
@@ -45,7 +48,7 @@ public class BasicInvoiceReader implements ParsedDocumentProvider {
         skeleton.setCustomerName(invoiceType.getAccountingCustomerParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
         skeleton.setCurrency(invoiceType.getLegalMonetaryTotal().getPayableAmount().getCurrencyID());
         skeleton.setAmount(invoiceType.getLegalMonetaryTotal().getPayableAmount().getValue().floatValue());
-        skeleton.setIssueDate(invoiceType.getIssueDate().getValue().toGregorianCalendar().getTime());
+        skeleton.setIssueDate(BasicUtils.toDate(invoiceType.getIssueDate(), Optional.ofNullable(invoiceType.getIssueTime())));
 
         // Tax
         skeleton.setTax(invoiceType.getTaxTotal().stream()
