@@ -9,7 +9,7 @@ import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.LineBean;
-import org.clarksnut.datasource.peru.types.TipoInvoice;
+import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoNotaDebito;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
@@ -55,7 +55,7 @@ public class PeruDebitNoteBeanProvider implements DatasourceProvider {
         if (billingReferenceTypes != null && !billingReferenceTypes.isEmpty()) {
             DocumentReferenceType documentReferenceType = billingReferenceTypes.get(0).getInvoiceDocumentReference();
             bean.setDocumentoModifica(documentReferenceType.getID().getValue());
-            TipoInvoice.getFromCode(documentReferenceType.getDocumentTypeCode().getValue()).ifPresent(c -> {
+            TipoDocumento.getFromCode(documentReferenceType.getDocumentTypeCode().getValue()).ifPresent(c -> {
                 bean.setTipoDocumentoModifica(c.getDenominacion());
             });
         }

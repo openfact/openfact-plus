@@ -9,7 +9,7 @@ import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.LineBean;
-import org.clarksnut.datasource.peru.types.TipoInvoice;
+import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
@@ -38,7 +38,7 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
         InvoiceDatasource bean = new InvoiceDatasource();
 
         bean.setIdAsignado(invoiceType.getID().getValue());
-        TipoInvoice.getFromCode(invoiceType.getInvoiceTypeCode().getValue()).ifPresent(c -> bean.setTipoDocumento(c.getDenominacion()));
+        TipoDocumento.getFromCode(invoiceType.getInvoiceTypeCode().getValue()).ifPresent(c -> bean.setTipoDocumento(c.getDenominacion()));
         bean.setMoneda(invoiceType.getDocumentCurrencyCode().getValue());
         bean.setProveedor(BeanUtils.toSupplier(invoiceType.getAccountingSupplierParty()));
         bean.setCliente(BeanUtils.toCustomer(invoiceType.getAccountingCustomerParty()));

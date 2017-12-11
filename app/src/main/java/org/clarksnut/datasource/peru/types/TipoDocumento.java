@@ -3,10 +3,12 @@ package org.clarksnut.datasource.peru.types;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public enum TipoInvoice {
+public enum TipoDocumento {
 
     FACTURA("01", "FACTURA"),
-    BOLETA("03", "BOLETA");
+    BOLETA("03", "BOLETA"),
+    NOTA_CREDITO("07", "NOTA DE CREDITO"),
+    NOTA_DEBITO("08", "NOTA DE DEBITO");
 
     private final String codigo;
     private final String denominacion;
@@ -19,13 +21,13 @@ public enum TipoInvoice {
         return denominacion;
     }
 
-    TipoInvoice(String codigo, String denominacion) {
+    TipoDocumento(String codigo, String denominacion) {
         this.codigo = codigo;
         this.denominacion = denominacion;
     }
 
-    public static Optional<TipoInvoice> getFromCode(String codigo) {
-        return Stream.of(TipoInvoice.values())
+    public static Optional<TipoDocumento> getFromCode(String codigo) {
+        return Stream.of(TipoDocumento.values())
                 .filter(p -> p.getCodigo().equals(codigo))
                 .findFirst();
     }

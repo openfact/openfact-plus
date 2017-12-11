@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PeruVoidedDocumentsBeanProviderTest {
+public class PeruVoidedDocumentsBeanProviderTest extends PeruBeanUtilsTest {
 
     @Mock
     private DocumentModel document;
@@ -48,6 +48,11 @@ public class PeruVoidedDocumentsBeanProviderTest {
         calendar.set(Calendar.DAY_OF_MONTH, 23);
         assertThat(voidedDocuments.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(voidedDocuments.getFechaGeneracion()).isEqualTo(calendar.getTime());
+
+        assertSupplier(voidedDocuments.getProveedor(),
+                "20494637074",
+                "RUC",
+                "AHREN CONTRATISTAS GENERALES S.A.C");
 
         //Lines
         assertThat(voidedDocuments.getDetalle().size()).isEqualTo(5);

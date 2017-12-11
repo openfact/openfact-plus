@@ -5,7 +5,7 @@ import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.VoidedLineBean;
-import org.clarksnut.datasource.peru.types.TipoInvoice;
+import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
@@ -50,7 +50,7 @@ public class PeruVoidedDocumentsBeanProvider implements DatasourceProvider {
 
             lineBean.setDocumentoSerie(voidedDocumentsLineType.getDocumentSerialID().getValue());
             lineBean.setDocumentoNumero(voidedDocumentsLineType.getDocumentNumberID().getValue());
-            TipoInvoice.getFromCode(voidedDocumentsLineType.getDocumentTypeCode().getValue()).ifPresent(c -> {
+            TipoDocumento.getFromCode(voidedDocumentsLineType.getDocumentTypeCode().getValue()).ifPresent(c -> {
                 lineBean.setTipoDocumento(c.getDenominacion());
             });
             lineBean.setMotivoBaja(voidedDocumentsLineType.getVoidReasonDescription().getValue());

@@ -52,7 +52,7 @@ public class PeruCreditNoteBeanProvider implements DatasourceProvider {
         if (billingReferenceTypes != null && !billingReferenceTypes.isEmpty()) {
             DocumentReferenceType documentReferenceType = billingReferenceTypes.get(0).getInvoiceDocumentReference();
             bean.setDocumentoModifica(documentReferenceType.getID().getValue());
-            TipoInvoice.getFromCode(documentReferenceType.getDocumentTypeCode().getValue()).ifPresent(c -> {
+            TipoDocumento.getFromCode(documentReferenceType.getDocumentTypeCode().getValue()).ifPresent(c -> {
                 bean.setTipoDocumentoModifica(c.getDenominacion());
             });
         }

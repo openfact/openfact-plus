@@ -33,7 +33,11 @@ public class BeanUtils {
         TipoDocumentoEntidad.getByCode(supplierPartyType.getAdditionalAccountID().get(0).getValue()).ifPresent(c -> {
             bean.setTipoDocumento(c.getDenominacion());
         });
-        bean.setDireccion(toAddress(supplierPartyType.getParty().getPostalAddress()));
+
+        AddressType addressType = supplierPartyType.getParty().getPostalAddress();
+        if (addressType != null) {
+            bean.setDireccion(toAddress(addressType));
+        }
 
         return bean;
     }
