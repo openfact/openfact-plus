@@ -8,7 +8,8 @@ public enum TipoDocumento {
     FACTURA("01", "FACTURA"),
     BOLETA("03", "BOLETA"),
     NOTA_CREDITO("07", "NOTA DE CREDITO"),
-    NOTA_DEBITO("08", "NOTA DE DEBITO");
+    NOTA_DEBITO("08", "NOTA DE DEBITO"),
+    TICKET_DE_MAQUINA_REGISTRADORA("12", "TICKET DE MAQUINA REGISTRADORA");
 
     private final String codigo;
     private final String denominacion;

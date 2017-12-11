@@ -56,6 +56,7 @@ public class PeruSummaryDocumentsBeanProvider implements DatasourceProvider {
                 lineBean.setTipoDocumento(c.getDenominacion());
             });
             lineBean.setTotalVenta(summaryDocumentsLineType.getTotalAmount().getValue().floatValue());
+            lineBean.setMoneda(summaryDocumentsLineType.getTotalAmount().getCurrencyID().value());
 
             List<AllowanceChargeType> allowanceChargeTypes = summaryDocumentsLineType.getAllowanceCharge();
             if (allowanceChargeTypes != null && !allowanceChargeTypes.isEmpty()) {

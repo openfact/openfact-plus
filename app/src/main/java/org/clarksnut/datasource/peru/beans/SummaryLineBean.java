@@ -13,6 +13,8 @@ public class SummaryLineBean {
     private Float totalVenta;
     private Float totalOtrosCargos;
 
+    private String moneda;
+
     public String getTipoDocumento() {
         return tipoDocumento;
     }
@@ -75,5 +77,13 @@ public class SummaryLineBean {
 
     public void setTotalOtrosCargos(Float totalOtrosCargos) {
         this.totalOtrosCargos = totalOtrosCargos;
+    }
+
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
     }
 }

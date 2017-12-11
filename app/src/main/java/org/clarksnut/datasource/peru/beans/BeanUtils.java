@@ -42,6 +42,23 @@ public class BeanUtils {
         return bean;
     }
 
+    public static ProveedorBean toSupplier(oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyType partyType) {
+        ProveedorBean bean = new ProveedorBean();
+
+        bean.setIdAssignado(partyType.getPartyIdentification().get(0).getIDValue());
+        bean.setNombre(partyType.getPartyLegalEntity().get(0).getRegistrationName().getValue());
+        TipoDocumentoEntidad.getByCode(partyType.getPartyIdentification().get(0).getID().getSchemeID()).ifPresent(c -> {
+            bean.setTipoDocumento(c.getDenominacion());
+        });
+
+        oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType addressType = partyType.getPostalAddress();
+        if (addressType != null) {
+            bean.setDireccion(toAddress(addressType));
+        }
+
+        return bean;
+    }
+
     public static ClienteBean toCustomer(CustomerPartyType customerPartyType) {
         ClienteBean bean = new ClienteBean();
 
@@ -65,6 +82,52 @@ public class BeanUtils {
         AddressType addressType = customerPartyType.getParty().getPostalAddress();
         if (addressType != null) {
             bean.setDireccion(toAddress(addressType));
+        }
+
+        return bean;
+    }
+
+    public static ClienteBean toCustomer(oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyType customerPartyType) {
+        ClienteBean bean = new ClienteBean();
+
+        // Assigned ID is not always present
+        oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyIdentificationType customerAssignedAccountID = customerPartyType.getPartyIdentification().get(0);
+        if (customerAssignedAccountID != null) {
+            bean.setIdAssignado(customerAssignedAccountID.getIDValue());
+        }
+
+        bean.setNombre(customerPartyType.getPartyLegalEntity().get(0).getRegistrationName().getValue());
+
+        // Document Type
+        List<oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyIdentificationType> additionalAccountIDTypes = customerPartyType.getPartyIdentification();
+        if (additionalAccountIDTypes != null && !additionalAccountIDTypes.isEmpty()) {
+            TipoDocumentoEntidad.getByCode(additionalAccountIDTypes.get(0).getID().getSchemeID()).ifPresent(c -> {
+                bean.setTipoDocumento(c.getDenominacion());
+            });
+        }
+
+        // Address is optional for customers
+        oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType addressType = customerPartyType.getPostalAddress();
+        if (addressType != null) {
+            bean.setDireccion(toAddress(addressType));
+        }
+
+        return bean;
+    }
+
+    public static PostalAddressBean toAddress(oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType addressType) {
+        PostalAddressBean bean = new PostalAddressBean();
+
+        bean.setId(addressType.getID().getValue());
+        bean.setStreetName(addressType.getStreetName().getValue());
+        bean.setCitySubdivisionName(addressType.getCitySubdivisionName().getValue());
+        bean.setCityName(addressType.getCityName().getValue());
+        bean.setCountrySubentity(addressType.getCountrySubentity().getValue());
+
+        // Country might not being present
+        oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.CountryType countryType = addressType.getCountry();
+        if (countryType != null) {
+            bean.setCountryIdentificationCode(countryType.getIdentificationCode().getValue());
         }
 
         return bean;
@@ -212,5 +275,4 @@ public class BeanUtils {
             }
         }
     }
-
 }

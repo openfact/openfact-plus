@@ -1,17 +1,26 @@
 package org.clarksnut.datasource.peru;
 
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.ExchangeRateType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.NoteType;
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceType;
+import org.clarksnut.datasource.peru.beans.BeanUtils;
+import org.clarksnut.datasource.peru.beans.PerceptionLineBean;
+import org.clarksnut.datasource.peru.types.TipoDocumento;
+import org.clarksnut.datasource.peru.types.TipoRegimenPercepcion;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.reader.pe.common.jaxb.perception.PerceptionType;
+import org.clarksnut.documents.reader.pe.common.jaxb.perception.SUNATPerceptionDocumentReferenceType;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 @DatasourceType(datasource = "PeruPerceptionDS")
@@ -30,6 +39,64 @@ public class PeruPerceptionBeanProvider implements DatasourceProvider {
         }
 
         PerceptionDatasource bean = new PerceptionDatasource();
+
+        bean.setIdAsignado(perceptionType.getId().getValue());
+        bean.setFechaEmision(perceptionType.getIssueDate().getValue().toGregorianCalendar().getTime());
+        bean.setEmisor(BeanUtils.toSupplier(perceptionType.getAgentParty()));
+        bean.setCliente(BeanUtils.toCustomer(perceptionType.getReceiverParty()));
+        TipoRegimenPercepcion.getFromCode(perceptionType.getSunatPerceptionSystemCode().getValue()).ifPresent(c -> {
+            bean.setRegimenPercepcion(c.getDenominacion());
+        });
+        bean.setTasaPercepcion(perceptionType.getSunatPerceptionPercent().getValue().floatValue());
+
+        List<NoteType> noteTypes = perceptionType.getNote();
+        if (noteTypes != null && !noteTypes.isEmpty()) {
+            bean.setObservaciones(noteTypes.get(0).getValue());
+        }
+
+        bean.setMoneda(perceptionType.getTotalInvoiceAmount().getCurrencyID());
+        bean.setTotalPercibido(perceptionType.getTotalInvoiceAmount().getValue().floatValue());
+        bean.setTotalCobrado(perceptionType.getSunatTotalCashed().getValue().floatValue());
+
+        // Detalle
+        List<SUNATPerceptionDocumentReferenceType> sunatPerceptionDocumentReferenceTypes = perceptionType.getSunatPerceptionDocumentReference();
+
+        List<PerceptionLineBean> detalle = new ArrayList<>();
+
+        for (SUNATPerceptionDocumentReferenceType sunatPerceptionDocumentReferenceType : sunatPerceptionDocumentReferenceTypes) {
+            PerceptionLineBean lineBean = new PerceptionLineBean();
+
+            lineBean.setDocumentoRelacionado(sunatPerceptionDocumentReferenceType.getId().getValue());
+            TipoDocumento.getFromCode(sunatPerceptionDocumentReferenceType.getId().getSchemeID()).ifPresent(c -> {
+                lineBean.setTipoDocumentoRelacionado(c.getDenominacion());
+            });
+            lineBean.setFechaEmisionDocumentoRelacionado(sunatPerceptionDocumentReferenceType.getIssueDate().getValue().toGregorianCalendar().getTime());
+            lineBean.setImporteTotalDocumentoRelacionado(sunatPerceptionDocumentReferenceType.getTotalInvoiceAmount().getValue().floatValue());
+            lineBean.setMonedaDocumentoRelacionado(sunatPerceptionDocumentReferenceType.getTotalInvoiceAmount().getCurrencyID());
+
+            lineBean.setFechaCobro(sunatPerceptionDocumentReferenceType.getPayment().getPaidDate().getValue().toGregorianCalendar().getTime());
+            lineBean.setImporteCobro(sunatPerceptionDocumentReferenceType.getPayment().getPaidAmount().getValue().floatValue());
+            lineBean.setMonedaCobro(sunatPerceptionDocumentReferenceType.getPayment().getPaidAmount().getCurrencyID());
+
+            lineBean.setImportePercibido(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatPerceptionAmount().getValue().floatValue());
+            lineBean.setMonedaImportePercibido(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatPerceptionAmount().getCurrencyID());
+            lineBean.setFechaPercepcion(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatPerceptionDate().getValue().toGregorianCalendar().getTime());
+            lineBean.setMontoTotalACobrar(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatNetTotalCashed().getValue().floatValue());
+            lineBean.setMonedaACobrar(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatNetTotalCashed().getCurrencyID());
+
+            ExchangeRateType exchangeRateType = sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getExchangeRate();
+            if (exchangeRateType != null) {
+                lineBean.setMonedaReferencia(exchangeRateType.getSourceCurrencyCodeValue());
+                lineBean.setMonedaObjetivo(exchangeRateType.getTargetCurrencyCodeValue());
+                lineBean.setTipoCambio(exchangeRateType.getCalculationRateValue().floatValue());
+                lineBean.setFechaCambio(exchangeRateType.getDate().getValue().toGregorianCalendar().getTime());
+            }
+
+            detalle.add(lineBean);
+        }
+
+        bean.setDetalle(detalle);
+
         return bean;
     }
 

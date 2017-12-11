@@ -73,6 +73,7 @@ public class PeruSummaryDocumentsBeanProviderTest extends PeruBeanUtilsTest {
 
         assertThat(line.getTotalVenta()).isEqualTo(250F);
         assertThat(line.getTotalOtrosCargos()).isEqualTo(0F);
+        assertThat(line.getMoneda()).isEqualTo("PEN");
     }
 
 }
