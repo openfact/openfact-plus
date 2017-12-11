@@ -10,11 +10,11 @@ import org.clarksnut.datasource.peru.beans.RetentionLineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoRegimenRetencion;
 import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.documents.reader.pe.common.jaxb.retention.RetentionType;
-import org.clarksnut.documents.reader.pe.common.jaxb.retention.SUNATRetentionDocumentReferenceType;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
+import org.openfact.retention.RetentionType;
+import org.openfact.retention.SUNATRetentionDocumentReferenceType;
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;

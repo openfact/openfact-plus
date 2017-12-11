@@ -1,6 +1,5 @@
 package org.clarksnut.datasource.peru;
 
-
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.ExchangeRateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.NoteType;
 import org.clarksnut.datasource.Datasource;
@@ -11,11 +10,11 @@ import org.clarksnut.datasource.peru.beans.PerceptionLineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoRegimenPercepcion;
 import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.documents.reader.pe.common.jaxb.perception.PerceptionType;
-import org.clarksnut.documents.reader.pe.common.jaxb.perception.SUNATPerceptionDocumentReferenceType;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
+import org.openfact.perception.PerceptionType;
+import org.openfact.perception.SUNATPerceptionDocumentReferenceType;
 
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;

@@ -8,7 +8,10 @@ import org.clarksnut.documents.exceptions.PreexistedDocumentException;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
-import org.clarksnut.documents.reader.ReaderUtil;
+import org.clarksnut.documents.jpa.entity.DocumentUtil;
+import org.clarksnut.documents.parser.ParsedDocumentProvider;
+import org.clarksnut.documents.parser.ParsedDocument;
+import org.clarksnut.documents.parser.ParsedDocumentProviderFactory;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.hibernate.search.elasticsearch.ElasticsearchQueries;
 import org.hibernate.search.jpa.FullTextEntityManager;
@@ -39,17 +42,17 @@ public class ESDocumentProvider implements DocumentProvider {
     private EntityManager em;
 
     @Inject
-    private ReaderUtil readerUtil;
+    private ParsedDocumentProviderFactory readerUtil;
 
     @Override
     public DocumentModel addDocument(XmlUBLFileModel file, DocumentProviderType providerType) throws UnsupportedDocumentTypeException, UnreadableDocumentException, PreexistedDocumentException {
-        GenericDocument genericDocument = readDocument(file);
-        if (genericDocument == null) {
+        ParsedDocument parsedDocument = readDocument(file);
+        if (parsedDocument == null) {
             throw new UnreadableDocumentException(file.getDocumentType() + " Is supported but could not be read");
         }
-        final Object jaxb = genericDocument.getJaxb();
+        final Object jaxb = parsedDocument.getType();
 
-        DocumentEntity documentEntity = genericDocument.getEntity();
+        DocumentEntity documentEntity = DocumentUtil.toEntity(parsedDocument.getSkeleton());
         documentEntity.setId(UUID.randomUUID().toString());
         documentEntity.setType(file.getDocumentType());
         documentEntity.setProvider(providerType);
@@ -82,20 +85,20 @@ public class ESDocumentProvider implements DocumentProvider {
         return document;
     }
 
-    private GenericDocument readDocument(XmlUBLFileModel file) throws UnsupportedDocumentTypeException {
-        SortedSet<DocumentReader> readers = readerUtil.getReader(file.getDocumentType());
+    private ParsedDocument readDocument(XmlUBLFileModel file) throws UnsupportedDocumentTypeException {
+        SortedSet<ParsedDocumentProvider> readers = readerUtil.getParser(file.getDocumentType());
         if (readers.isEmpty()) {
             throw new UnsupportedDocumentTypeException("Unsupported type=" + file.getDocumentType());
         }
 
-        GenericDocument genericDocument = null;
-        for (DocumentReader reader : readers) {
-            genericDocument = reader.read(file);
-            if (genericDocument != null) {
+        ParsedDocument parsedDocument = null;
+        for (ParsedDocumentProvider reader : readers) {
+            parsedDocument = reader.read(file);
+            if (parsedDocument != null) {
                 break;
             }
         }
-        return genericDocument;
+        return parsedDocument;
     }
 
     private void checkPreExistingDocuments(DocumentEntity documentEntity, DocumentProviderType providerType) throws PreexistedDocumentException {
