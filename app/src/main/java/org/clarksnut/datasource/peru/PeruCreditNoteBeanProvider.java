@@ -94,7 +94,7 @@ public class PeruCreditNoteBeanProvider implements DatasourceProvider {
         // Informacion adicional
         bean.setInformacionAdicional(BeanUtils.toInformacionAdicional(creditNoteType.getUBLExtensions()));
 
-//        // Lines
+        // Lines
         bean.setDetalle(getLines(creditNoteType.getCreditNoteLine()));
 
         return bean;
