@@ -16,7 +16,7 @@ import java.util.Calendar;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PeruInvoiceDatasourceProviderTest {
+public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
 
     @Mock
     private DocumentModel document;
@@ -52,14 +52,14 @@ public class PeruInvoiceDatasourceProviderTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTotalIgv()).isEqualTo(270F);
-        assertThat(invoice.getTotalIsc()).isNull();
-        assertThat(invoice.getTotalOtrosTributos()).isNull();
+        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(270F);
+        assertThat(invoice.getTributos().getTotalIsc()).isNull();
+        assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getTotalGravada()).isEqualTo(1_500F);
-        assertThat(invoice.getTotalInafecta()).isNull();
-        assertThat(invoice.getTotalExonerada()).isNull();
-        assertThat(invoice.getTotalGratuita()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(1_500F);
+        assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isNull();
 
         assertSupplier(invoice.getProveedor(),
                 "20494637074",
@@ -126,14 +126,14 @@ public class PeruInvoiceDatasourceProviderTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTotalIgv()).isNull();
-        assertThat(invoice.getTotalIsc()).isNull();
-        assertThat(invoice.getTotalOtrosTributos()).isNull();
+        assertThat(invoice.getTributos().getTotalIgv()).isNull();
+        assertThat(invoice.getTributos().getTotalIsc()).isNull();
+        assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getTotalGravada()).isNull();
-        assertThat(invoice.getTotalInafecta()).isNull();
-        assertThat(invoice.getTotalExonerada()).isEqualTo(250F);
-        assertThat(invoice.getTotalGratuita()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isEqualTo(250F);
+        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isNull();
 
         assertSupplier(invoice.getProveedor(),
                 "20494637074",
@@ -200,14 +200,14 @@ public class PeruInvoiceDatasourceProviderTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTotalIgv()).isNull();
-        assertThat(invoice.getTotalIsc()).isNull();
-        assertThat(invoice.getTotalOtrosTributos()).isNull();
+        assertThat(invoice.getTributos().getTotalIgv()).isNull();
+        assertThat(invoice.getTributos().getTotalIsc()).isNull();
+        assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getTotalGravada()).isNull();
-        assertThat(invoice.getTotalInafecta()).isNull();
-        assertThat(invoice.getTotalExonerada()).isNull();
-        assertThat(invoice.getTotalGratuita()).isEqualTo(7_819F);
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isEqualTo(7_819F);
 
         assertSupplier(invoice.getProveedor(),
                 "20494637074",
@@ -274,14 +274,14 @@ public class PeruInvoiceDatasourceProviderTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTotalIgv()).isEqualTo(3_118.5F);
-        assertThat(invoice.getTotalIsc()).isNull();
-        assertThat(invoice.getTotalOtrosTributos()).isNull();
+        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(3_118.5F);
+        assertThat(invoice.getTributos().getTotalIsc()).isNull();
+        assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getTotalGravada()).isEqualTo(17_325F);
-        assertThat(invoice.getTotalInafecta()).isNull();
-        assertThat(invoice.getTotalExonerada()).isNull();
-        assertThat(invoice.getTotalGratuita()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(17_325F);
+        assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isNull();
 
         assertSupplier(invoice.getProveedor(),
                 "20494637074",
@@ -348,14 +348,14 @@ public class PeruInvoiceDatasourceProviderTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTotalIgv()).isEqualTo(21.15F);
-        assertThat(invoice.getTotalIsc()).isNull();
-        assertThat(invoice.getTotalOtrosTributos()).isNull();
+        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(21.15F);
+        assertThat(invoice.getTributos().getTotalIsc()).isNull();
+        assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getTotalGravada()).isEqualTo(117.5F);
-        assertThat(invoice.getTotalInafecta()).isEqualTo(0F);
-        assertThat(invoice.getTotalExonerada()).isEqualTo(0F);
-        assertThat(invoice.getTotalGratuita()).isEqualTo(0F);
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(117.5F);
+        assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isEqualTo(0F);
+        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isEqualTo(0F);
+        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isEqualTo(0F);
 
         assertSupplier(invoice.getProveedor(),
                 "20494637074",
@@ -422,14 +422,14 @@ public class PeruInvoiceDatasourceProviderTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTotalIgv()).isEqualTo(0F);
-        assertThat(invoice.getTotalIsc()).isNull();
-        assertThat(invoice.getTotalOtrosTributos()).isNull();
+        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(0F);
+        assertThat(invoice.getTributos().getTotalIsc()).isNull();
+        assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getTotalGravada()).isEqualTo(0F);
-        assertThat(invoice.getTotalInafecta()).isEqualTo(0F);
-        assertThat(invoice.getTotalExonerada()).isEqualTo(1_800F);
-        assertThat(invoice.getTotalGratuita()).isEqualTo(0F);
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(0F);
+        assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isEqualTo(0F);
+        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isEqualTo(1_800F);
+        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isEqualTo(0F);
 
         assertSupplier(invoice.getProveedor(),
                 "20494637074",
@@ -496,14 +496,14 @@ public class PeruInvoiceDatasourceProviderTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTotalIgv()).isNull();
-        assertThat(invoice.getTotalIsc()).isNull();
-        assertThat(invoice.getTotalOtrosTributos()).isNull();
+        assertThat(invoice.getTributos().getTotalIgv()).isNull();
+        assertThat(invoice.getTributos().getTotalIsc()).isNull();
+        assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getTotalGravada()).isNull();
-        assertThat(invoice.getTotalInafecta()).isNull();
-        assertThat(invoice.getTotalExonerada()).isNull();
-        assertThat(invoice.getTotalGratuita()).isEqualTo(7_819F);
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isEqualTo(7_819F);
 
         assertSupplier(invoice.getProveedor(),
                 "20494637074",
@@ -570,14 +570,14 @@ public class PeruInvoiceDatasourceProviderTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTotalIgv()).isEqualTo(40.5F);
-        assertThat(invoice.getTotalIsc()).isNull();
-        assertThat(invoice.getTotalOtrosTributos()).isNull();
+        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(40.5F);
+        assertThat(invoice.getTributos().getTotalIsc()).isNull();
+        assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getTotalGravada()).isEqualTo(225F);
-        assertThat(invoice.getTotalInafecta()).isNull();
-        assertThat(invoice.getTotalExonerada()).isNull();
-        assertThat(invoice.getTotalGratuita()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(225F);
+        assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isNull();
+        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isNull();
 
         assertSupplier(invoice.getProveedor(),
                 "20494637074",
@@ -616,58 +616,5 @@ public class PeruInvoiceDatasourceProviderTest {
         );
     }
 
-    private void assertSupplier(ProveedorBean supplier, String assignedId, String documentType, String supplierName) {
-        assertThat(supplier.getIdAssignado()).isEqualTo(assignedId);
-        assertThat(supplier.getTipoDocumento()).isEqualTo(documentType);
-        assertThat(supplier.getNombre()).isEqualTo(supplierName);
-    }
-
-    private void assertCustomer(ClienteBean customer, String assignedId, String documentType, String supplierName) {
-        assertThat(customer.getIdAssignado()).isEqualTo(assignedId);
-        assertThat(customer.getTipoDocumento()).isEqualTo(documentType);
-        assertThat(customer.getNombre()).isEqualTo(supplierName);
-    }
-
-    private void assertPostalAddress(PostalAddressBean postalAddress,
-                                     String id,
-                                     String streetName,
-                                     String citySubdivisionName,
-                                     String cityName,
-                                     String countrySubentity,
-                                     String countryIdentificationCode) {
-        assertThat(postalAddress.getId()).isEqualTo(id);
-        assertThat(postalAddress.getStreetName()).isEqualTo(streetName);
-        assertThat(postalAddress.getCitySubdivisionName()).isEqualTo(citySubdivisionName);
-        assertThat(postalAddress.getCityName()).isEqualTo(cityName);
-        assertThat(postalAddress.getCountrySubentity()).isEqualTo(countrySubentity);
-        assertThat(postalAddress.getCountryIdentificationCode()).isEqualTo(countryIdentificationCode);
-    }
-
-    private void assertLine(LineBean line,
-                            Float cantidad,
-                            String unidadMedida,
-                            String codigoProducto,
-                            String descripcion,
-                            Float precioUnitario,
-                            Float precioVentaUnitario,
-                            Float valorReferencialUnitarioEnOperacionesNoOnerosas,
-                            Float totalValorVenta,
-                            Float totalDescuento,
-                            Float totalIgv,
-                            Float totalIsc) {
-        assertThat(line.getCantidad()).isEqualTo(cantidad);
-        assertThat(line.getUnidadMedida()).isEqualTo(unidadMedida);
-        assertThat(line.getCodidoProducto()).isEqualTo(codigoProducto);
-        assertThat(line.getDescripcion()).isEqualTo(descripcion);
-
-        assertThat(line.getPrecioUnitario()).isEqualTo(precioUnitario);
-        assertThat(line.getPrecioVentaUnitario()).isEqualTo(precioVentaUnitario);
-        assertThat(line.getValorReferencialUnitarioEnOperacionesNoOnerosas()).isEqualTo(valorReferencialUnitarioEnOperacionesNoOnerosas);
-        assertThat(line.getTotalValorVenta()).isEqualTo(totalValorVenta);
-        assertThat(line.getTotalDescuento()).isEqualTo(totalDescuento);
-
-        assertThat(line.getTotalIgv()).isEqualTo(totalIgv);
-        assertThat(line.getTotalIsc()).isEqualTo(totalIsc);
-    }
 
 }

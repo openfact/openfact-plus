@@ -1,10 +1,7 @@
 package org.clarksnut.datasource.peru;
 
 import org.clarksnut.datasource.Datasource;
-import org.clarksnut.datasource.peru.beans.ClienteBean;
-import org.clarksnut.datasource.peru.beans.LineBean;
-import org.clarksnut.datasource.peru.beans.PostalAddressBean;
-import org.clarksnut.datasource.peru.beans.ProveedorBean;
+import org.clarksnut.datasource.peru.beans.*;
 
 import java.util.Date;
 import java.util.List;
@@ -26,18 +23,13 @@ public class InvoiceDatasource extends Datasource {
     private String numeroGuiaRemisionRelacionada;
     private String otroDocumentoRelacionadoId;
 
-    private Float totalGravada;
-    private Float totalGratuita;
-    private Float totalExonerada;
-    private Float totalInafecta;
+    private InformacionAdicionalBean informacionAdicional;
 
     private Float totalVenta;
     private Float totalDescuentoGlobal;
     private Float totalOtrosCargos;
 
-    private Float totalIgv;
-    private Float totalIsc;
-    private Float totalOtrosTributos;
+    private TributosBean tributos;
 
     private List<LineBean> detalle;
 
@@ -121,38 +113,6 @@ public class InvoiceDatasource extends Datasource {
         this.otroDocumentoRelacionadoId = otroDocumentoRelacionadoId;
     }
 
-    public Float getTotalGravada() {
-        return totalGravada;
-    }
-
-    public void setTotalGravada(Float totalGravada) {
-        this.totalGravada = totalGravada;
-    }
-
-    public Float getTotalGratuita() {
-        return totalGratuita;
-    }
-
-    public void setTotalGratuita(Float totalGratuita) {
-        this.totalGratuita = totalGratuita;
-    }
-
-    public Float getTotalExonerada() {
-        return totalExonerada;
-    }
-
-    public void setTotalExonerada(Float totalExonerada) {
-        this.totalExonerada = totalExonerada;
-    }
-
-    public Float getTotalInafecta() {
-        return totalInafecta;
-    }
-
-    public void setTotalInafecta(Float totalInafecta) {
-        this.totalInafecta = totalInafecta;
-    }
-
     public Float getTotalVenta() {
         return totalVenta;
     }
@@ -177,35 +137,27 @@ public class InvoiceDatasource extends Datasource {
         this.totalOtrosCargos = totalOtrosCargos;
     }
 
-    public Float getTotalIgv() {
-        return totalIgv;
-    }
-
-    public void setTotalIgv(Float totalIgv) {
-        this.totalIgv = totalIgv;
-    }
-
-    public Float getTotalIsc() {
-        return totalIsc;
-    }
-
-    public void setTotalIsc(Float totalIsc) {
-        this.totalIsc = totalIsc;
-    }
-
-    public Float getTotalOtrosTributos() {
-        return totalOtrosTributos;
-    }
-
-    public void setTotalOtrosTributos(Float totalOtrosTributos) {
-        this.totalOtrosTributos = totalOtrosTributos;
-    }
-
     public List<LineBean> getDetalle() {
         return detalle;
     }
 
     public void setDetalle(List<LineBean> detalle) {
         this.detalle = detalle;
+    }
+
+    public InformacionAdicionalBean getInformacionAdicional() {
+        return informacionAdicional;
+    }
+
+    public void setInformacionAdicional(InformacionAdicionalBean informacionAdicional) {
+        this.informacionAdicional = informacionAdicional;
+    }
+
+    public TributosBean getTributos() {
+        return tributos;
+    }
+
+    public void setTributos(TributosBean tributos) {
+        this.tributos = tributos;
     }
 }

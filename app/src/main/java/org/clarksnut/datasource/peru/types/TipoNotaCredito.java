@@ -32,7 +32,7 @@ public enum TipoNotaCredito {
         this.denominacion = denominacion;
     }
 
-    public static Optional<TipoNotaCredito> getByCode(String code) {
+    public static Optional<TipoNotaCredito> getFromCode(String code) {
         return Stream.of(TipoNotaCredito.values())
                 .filter(p -> p.getCodigo().equals(code))
                 .findFirst();
