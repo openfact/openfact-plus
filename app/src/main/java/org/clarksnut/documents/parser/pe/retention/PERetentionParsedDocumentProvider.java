@@ -5,6 +5,7 @@ import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
+import org.clarksnut.documents.parser.pe.PEUtils;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.jboss.logging.Logger;
@@ -15,9 +16,9 @@ import javax.xml.bind.JAXBException;
 
 @Stateless
 @SupportedDocumentType(value = "Retention")
-public class PERetentionReader implements ParsedDocumentProvider {
+public class PERetentionParsedDocumentProvider implements ParsedDocumentProvider {
 
-    private static final Logger logger = Logger.getLogger(PERetentionReader.class);
+    private static final Logger logger = Logger.getLogger(PERetentionParsedDocumentProvider.class);
 
     @Override
     public String getSupportedDocumentType() {
@@ -41,6 +42,7 @@ public class PERetentionReader implements ParsedDocumentProvider {
         SkeletonDocument skeleton = new SkeletonDocument();
 
         skeleton.setAssignedId(retentionType.getId().getValue());
+        skeleton.setType(getSupportedDocumentType());
         skeleton.setSupplierAssignedId(retentionType.getAgentParty().getPartyIdentification().get(0).getIDValue());
         skeleton.setSupplierName(retentionType.getAgentParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
         skeleton.setCustomerAssignedId(retentionType.getReceiverParty().getPartyIdentification().get(0).getIDValue());
@@ -51,15 +53,17 @@ public class PERetentionReader implements ParsedDocumentProvider {
 
         // Postal address
         AddressType supplierPostalAddressType = retentionType.getAgentParty().getPostalAddress();
-        skeleton.setSupplierStreetAddress(supplierPostalAddressType.getStreetName().getValue());
-        skeleton.setSupplierCity(supplierPostalAddressType.getCitySubdivisionName().getValue() + ", " + supplierPostalAddressType.getCityName().getValue() + ", " + supplierPostalAddressType.getCitySubdivisionName().getValue());
-        skeleton.setSupplierCountry(supplierPostalAddressType.getCountry().getIdentificationCode().getValue());
+        if (supplierPostalAddressType != null) {
+            skeleton.setSupplierStreetAddress(supplierPostalAddressType.getStreetName().getValue());
+            skeleton.setSupplierCountry(supplierPostalAddressType.getCountry().getIdentificationCode().getValue());
+            skeleton.setSupplierCity(PEUtils.toCityString(supplierPostalAddressType));
+        }
 
         AddressType customerPostalAddressType = retentionType.getReceiverParty().getPostalAddress();
         if (customerPostalAddressType != null) {
             skeleton.setCustomerStreetAddress(customerPostalAddressType.getStreetName().getValue());
-            skeleton.setCustomerCity(customerPostalAddressType.getCitySubdivisionName().getValue() + ", " + customerPostalAddressType.getCityName().getValue() + ", " + customerPostalAddressType.getCitySubdivisionName().getValue());
             skeleton.setCustomerCountry(customerPostalAddressType.getCountry().getIdentificationCode().getValue());
+            skeleton.setCustomerCity(PEUtils.toCityString(customerPostalAddressType));
         }
 
         return new ParsedDocument() {

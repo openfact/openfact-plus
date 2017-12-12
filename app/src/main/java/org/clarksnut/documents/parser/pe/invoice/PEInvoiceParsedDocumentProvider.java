@@ -62,15 +62,17 @@ public class PEInvoiceParsedDocumentProvider implements ParsedDocumentProvider {
 
         // Postal address
         AddressType supplierPostalAddressType = invoiceType.getAccountingSupplierParty().getParty().getPostalAddress();
-        skeleton.setSupplierStreetAddress(supplierPostalAddressType.getStreetName().getValue());
-        skeleton.setSupplierCity(supplierPostalAddressType.getCitySubdivisionName().getValue() + ", " + supplierPostalAddressType.getCityName().getValue() + ", " + supplierPostalAddressType.getCitySubdivisionName().getValue());
-        skeleton.setSupplierCountry(supplierPostalAddressType.getCountry().getIdentificationCode().getValue());
+        if (supplierPostalAddressType != null) {
+            skeleton.setSupplierStreetAddress(supplierPostalAddressType.getStreetName().getValue());
+            skeleton.setSupplierCountry(supplierPostalAddressType.getCountry().getIdentificationCode().getValue());
+            skeleton.setSupplierCity(PEUtils.toCityString(supplierPostalAddressType));
+        }
 
         AddressType customerPostalAddressType = invoiceType.getAccountingCustomerParty().getParty().getPostalAddress();
         if (customerPostalAddressType != null) {
             skeleton.setCustomerStreetAddress(customerPostalAddressType.getStreetName().getValue());
-            skeleton.setCustomerCity(customerPostalAddressType.getCitySubdivisionName().getValue() + ", " + customerPostalAddressType.getCityName().getValue() + ", " + customerPostalAddressType.getCitySubdivisionName().getValue());
             skeleton.setCustomerCountry(customerPostalAddressType.getCountry().getIdentificationCode().getValue());
+            skeleton.setCustomerCity(PEUtils.toCityString(customerPostalAddressType));
         }
 
         return new ParsedDocument() {

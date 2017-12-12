@@ -6,6 +6,7 @@ import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
+import org.clarksnut.documents.parser.basic.BasicUtils;
 import org.clarksnut.documents.parser.pe.PEUtils;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
@@ -62,15 +63,17 @@ public class PECreditNoteParsedDocumentProvider implements ParsedDocumentProvide
 
         // Postal address
         AddressType postalAddressType = creditNoteType.getAccountingSupplierParty().getParty().getPostalAddress();
-        skeleton.setSupplierStreetAddress(postalAddressType.getStreetName().getValue());
-        skeleton.setSupplierCity(postalAddressType.getCitySubdivisionName().getValue() + ", " + postalAddressType.getCityName().getValue() + ", " + postalAddressType.getCitySubdivisionName().getValue());
-        skeleton.setSupplierCountry(postalAddressType.getCountry().getIdentificationCode().getValue());
+        if (postalAddressType != null) {
+            skeleton.setSupplierStreetAddress(postalAddressType.getStreetName().getValue());
+            skeleton.setSupplierCountry(postalAddressType.getCountry().getIdentificationCode().getValue());
+            skeleton.setSupplierCity(PEUtils.toCityString(postalAddressType));
+        }
 
         AddressType customerPostalAddressType = creditNoteType.getAccountingCustomerParty().getParty().getPostalAddress();
         if (customerPostalAddressType != null) {
             skeleton.setCustomerStreetAddress(customerPostalAddressType.getStreetName().getValue());
-            skeleton.setCustomerCity(customerPostalAddressType.getCitySubdivisionName().getValue() + ", " + customerPostalAddressType.getCityName().getValue() + ", " + customerPostalAddressType.getCitySubdivisionName().getValue());
             skeleton.setCustomerCountry(customerPostalAddressType.getCountry().getIdentificationCode().getValue());
+            skeleton.setCustomerCity(PEUtils.toCityString(customerPostalAddressType));
         }
 
         return new ParsedDocument() {

@@ -1,11 +1,10 @@
 package org.clarksnut.documents.parser.basic;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.IssueDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.IssueTimeType;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 public class BasicUtils {
 
@@ -27,6 +26,22 @@ public class BasicUtils {
             date = issueDateCalendar.getTime();
         }
         return date;
+    }
+
+    public static String toCityString(AddressType addressType) {
+        List<String> city = new ArrayList<>();
+        if (addressType.getDistrictValue() != null) {
+            city.add(addressType.getDistrictValue());
+        } else if (addressType.getCitySubdivisionNameValue() != null) {
+            city.add(addressType.getCitySubdivisionNameValue());
+        }
+        if (addressType.getCityNameValue() != null) {
+            city.add(addressType.getCityNameValue());
+        }
+        if (addressType.getCountrySubentityValue() != null) {
+            city.add(addressType.getCountrySubentityValue());
+        }
+        return String.join(", ", city);
     }
 
 }

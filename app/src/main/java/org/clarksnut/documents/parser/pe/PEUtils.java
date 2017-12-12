@@ -1,11 +1,10 @@
 package org.clarksnut.documents.parser.pe;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueTimeType;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 public class PEUtils {
 
@@ -29,4 +28,35 @@ public class PEUtils {
         return date;
     }
 
+    public static String toCityString(AddressType addressType) {
+        List<String> city = new ArrayList<>();
+        if (addressType.getDistrict() != null) {
+            city.add(addressType.getDistrict().getValue());
+        } else if (addressType.getCitySubdivisionName() != null) {
+            city.add(addressType.getCitySubdivisionName().getValue());
+        }
+        if (addressType.getCityName() != null) {
+            city.add(addressType.getCityName().getValue());
+        }
+        if (addressType.getCountrySubentity() != null) {
+            city.add(addressType.getCountrySubentity().getValue());
+        }
+        return String.join(", ", city);
+    }
+
+    public static String toCityString(oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType addressType) {
+        List<String> city = new ArrayList<>();
+        if (addressType.getDistrict() != null) {
+            city.add(addressType.getDistrict().getValue());
+        } else if (addressType.getCitySubdivisionName() != null) {
+            city.add(addressType.getCitySubdivisionName().getValue());
+        }
+        if (addressType.getCityName() != null) {
+            city.add(addressType.getCityName().getValue());
+        }
+        if (addressType.getCountrySubentity() != null) {
+            city.add(addressType.getCountrySubentity().getValue());
+        }
+        return String.join(", ", city);
+    }
 }

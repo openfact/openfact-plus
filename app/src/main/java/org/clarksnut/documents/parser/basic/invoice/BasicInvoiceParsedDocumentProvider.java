@@ -14,6 +14,8 @@ import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Stateless
@@ -59,15 +61,17 @@ public class BasicInvoiceParsedDocumentProvider implements ParsedDocumentProvide
 
         // Postal Address
         AddressType supplierPostalAddressType = invoiceType.getAccountingSupplierParty().getParty().getPostalAddress();
-        skeleton.setSupplierStreetAddress(supplierPostalAddressType.getStreetNameValue());
-        skeleton.setSupplierCity(supplierPostalAddressType.getCitySubdivisionNameValue() + ", " + supplierPostalAddressType.getCityNameValue() + ", " + supplierPostalAddressType.getCitySubdivisionNameValue());
-        skeleton.setSupplierCountry(supplierPostalAddressType.getCountry().getIdentificationCodeValue());
+        if (supplierPostalAddressType != null) {
+            skeleton.setSupplierStreetAddress(supplierPostalAddressType.getStreetNameValue());
+            skeleton.setSupplierCountry(supplierPostalAddressType.getCountry().getIdentificationCodeValue());
+            skeleton.setSupplierCity(BasicUtils.toCityString(supplierPostalAddressType));
+        }
 
         AddressType customerPostalAddressType = invoiceType.getAccountingCustomerParty().getParty().getPostalAddress();
         if (customerPostalAddressType != null) {
             skeleton.setCustomerStreetAddress(customerPostalAddressType.getStreetNameValue());
-            skeleton.setCustomerCity(customerPostalAddressType.getCitySubdivisionNameValue() + ", " + customerPostalAddressType.getCityNameValue() + ", " + customerPostalAddressType.getCitySubdivisionNameValue());
             skeleton.setCustomerCountry(customerPostalAddressType.getCountry().getIdentificationCodeValue());
+            skeleton.setCustomerCity(BasicUtils.toCityString(customerPostalAddressType));
         }
 
         return new ParsedDocument() {

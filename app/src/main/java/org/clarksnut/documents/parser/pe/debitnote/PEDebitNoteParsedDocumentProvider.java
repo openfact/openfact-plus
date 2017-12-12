@@ -61,15 +61,17 @@ public class PEDebitNoteParsedDocumentProvider implements ParsedDocumentProvider
 
         // Postal address
         AddressType postalAddressType = debitNoteType.getAccountingSupplierParty().getParty().getPostalAddress();
-        skeleton.setSupplierStreetAddress(postalAddressType.getStreetName().getValue());
-        skeleton.setSupplierCity(postalAddressType.getCitySubdivisionName().getValue() + ", " + postalAddressType.getCityName().getValue() + ", " + postalAddressType.getCitySubdivisionName().getValue());
-        skeleton.setSupplierCountry(postalAddressType.getCountry().getIdentificationCode().getValue());
+        if (postalAddressType != null) {
+            skeleton.setSupplierStreetAddress(postalAddressType.getStreetName().getValue());
+            skeleton.setSupplierCountry(postalAddressType.getCountry().getIdentificationCode().getValue());
+            skeleton.setSupplierCity(PEUtils.toCityString(postalAddressType));
+        }
 
         AddressType customerPostalAddressType = debitNoteType.getAccountingCustomerParty().getParty().getPostalAddress();
         if (customerPostalAddressType != null) {
             skeleton.setCustomerStreetAddress(customerPostalAddressType.getStreetName().getValue());
-            skeleton.setCustomerCity(customerPostalAddressType.getCitySubdivisionName().getValue() + ", " + customerPostalAddressType.getCityName().getValue() + ", " + customerPostalAddressType.getCitySubdivisionName().getValue());
             skeleton.setCustomerCountry(customerPostalAddressType.getCountry().getIdentificationCode().getValue());
+            skeleton.setCustomerCity(PEUtils.toCityString(customerPostalAddressType));
         }
 
         return new ParsedDocument() {

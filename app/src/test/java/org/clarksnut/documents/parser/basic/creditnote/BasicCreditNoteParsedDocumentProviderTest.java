@@ -60,7 +60,7 @@ public class BasicCreditNoteParsedDocumentProviderTest {
         assertThat(skeleton.getSupplierName()).isEqualTo("AHREN CONTRATISTAS GENERALES S.A.C");
         assertThat(skeleton.getSupplierAssignedId()).isEqualTo("20494637074");
         assertThat(skeleton.getSupplierStreetAddress()).isEqualTo("Mza. A Lote. 3 A.v. Santa Teresa");
-        assertThat(skeleton.getSupplierCity()).isEqualTo("Huamanga, Ayacucho, Huamanga");
+        assertThat(skeleton.getSupplierCity()).isEqualTo("Huamanga, Ayacucho, Ayacucho");
         assertThat(skeleton.getSupplierCountry()).isEqualTo("PE");
 
         assertThat(skeleton.getCustomerName()).isEqualTo("CARLOS ESTEBAN FERIA VILA");

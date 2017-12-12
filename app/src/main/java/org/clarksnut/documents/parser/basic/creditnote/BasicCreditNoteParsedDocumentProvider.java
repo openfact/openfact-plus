@@ -59,15 +59,17 @@ public class BasicCreditNoteParsedDocumentProvider implements ParsedDocumentProv
 
         // Postal address
         AddressType supplierPostalAddressType = creditNoteType.getAccountingSupplierParty().getParty().getPostalAddress();
-        skeleton.setSupplierStreetAddress(supplierPostalAddressType.getStreetNameValue());
-        skeleton.setSupplierCity(supplierPostalAddressType.getCitySubdivisionNameValue() + ", " + supplierPostalAddressType.getCityNameValue() + ", " + supplierPostalAddressType.getCitySubdivisionNameValue());
-        skeleton.setSupplierCountry(supplierPostalAddressType.getCountry().getIdentificationCodeValue());
+        if (supplierPostalAddressType != null) {
+            skeleton.setSupplierStreetAddress(supplierPostalAddressType.getStreetNameValue());
+            skeleton.setSupplierCountry(supplierPostalAddressType.getCountry().getIdentificationCodeValue());
+            skeleton.setSupplierCity(BasicUtils.toCityString(supplierPostalAddressType));
+        }
 
         AddressType customerPostalAddressType = creditNoteType.getAccountingCustomerParty().getParty().getPostalAddress();
         if (customerPostalAddressType != null) {
             skeleton.setCustomerStreetAddress(customerPostalAddressType.getStreetNameValue());
-            skeleton.setCustomerCity(customerPostalAddressType.getCitySubdivisionNameValue() + ", " + customerPostalAddressType.getCityNameValue() + ", " + customerPostalAddressType.getCitySubdivisionNameValue());
             skeleton.setCustomerCountry(customerPostalAddressType.getCountry().getIdentificationCodeValue());
+            skeleton.setCustomerCity(BasicUtils.toCityString(customerPostalAddressType));
         }
 
         return new ParsedDocument() {

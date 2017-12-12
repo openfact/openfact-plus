@@ -1,6 +1,5 @@
-package org.clarksnut.documents.parser.basic.invoice;
+package org.clarksnut.documents.parser.pe.voideddocuments;
 
-import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
 import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.files.XmlUBLFileModel;
@@ -10,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import sunat.names.specification.ubl.peru.schema.xsd.voideddocuments_1.VoidedDocumentsType;
 
 import java.io.InputStream;
 import java.util.Calendar;
@@ -17,44 +17,41 @@ import java.util.Calendar;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BasicInvoiceParsedDocumentProviderTest {
+public class PEVoidedDocumentsParsedDocumentProviderTest {
 
     @Mock
     private XmlUBLFileModel file;
 
     @Test
-    public void readFF11_00000003() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/invoice/FF11-00000003.xml");
+    public void readRA_20170223_00004() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/peru/document/voideddocuments/RA-20170223-00004.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-        BasicInvoiceParsedDocumentProvider provider = new BasicInvoiceParsedDocumentProvider();
+        PEVoidedDocumentsParsedDocumentProvider provider = new PEVoidedDocumentsParsedDocumentProvider();
         ParsedDocument parsedDocument = provider.read(file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
 
         assertThat(parsedDocument).isNotNull();
-        assertThat(parsedDocument.getType() instanceof InvoiceType).isEqualTo(true);
+        assertThat(parsedDocument.getType() instanceof VoidedDocumentsType).isEqualTo(true);
         assertThat(parsedDocument.getType()).isNotNull();
 
 
         SkeletonDocument skeleton = parsedDocument.getSkeleton();
 
-        assertThat(skeleton.getType()).isEqualTo("Invoice");
-        assertThat(skeleton.getAssignedId()).isEqualTo("FF11-00000003");
-        assertThat(skeleton.getAmount()).isEqualTo(138.65F);
-        assertThat(skeleton.getTax()).isEqualTo(21.15F);
-        assertThat(skeleton.getCurrency()).isEqualTo("PEN");
+        assertThat(skeleton.getType()).isEqualTo("VoidedDocuments");
+        assertThat(skeleton.getAssignedId()).isEqualTo("RA-20170223-00004");
+        assertThat(skeleton.getAmount()).isNull();
+        assertThat(skeleton.getTax()).isNull();
+        assertThat(skeleton.getCurrency()).isNull();
 
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
         calendar.set(Calendar.YEAR, 2017);
         calendar.set(Calendar.MONTH, Calendar.FEBRUARY);
-        calendar.set(Calendar.DAY_OF_MONTH, 20);
-        calendar.set(Calendar.HOUR_OF_DAY, 20);
-        calendar.set(Calendar.MINUTE, 46);
-        calendar.set(Calendar.SECOND, 20);
+        calendar.set(Calendar.DAY_OF_MONTH, 23);
         assertThat(skeleton.getIssueDate()).isEqualTo(calendar.getTime());
 
         assertThat(skeleton.getSupplierName()).isEqualTo("AHREN CONTRATISTAS GENERALES S.A.C");
@@ -63,8 +60,8 @@ public class BasicInvoiceParsedDocumentProviderTest {
         assertThat(skeleton.getSupplierCity()).isEqualTo("Huamanga, Ayacucho, Ayacucho");
         assertThat(skeleton.getSupplierCountry()).isEqualTo("PE");
 
-        assertThat(skeleton.getCustomerName()).isEqualTo("CARLOS ESTEBAN FERIA VILA");
-        assertThat(skeleton.getCustomerAssignedId()).isEqualTo("10467793549");
+        assertThat(skeleton.getCustomerName()).isNull();
+        assertThat(skeleton.getCustomerAssignedId()).isNull();
         assertThat(skeleton.getCustomerStreetAddress()).isNull();
         assertThat(skeleton.getCustomerCity()).isNull();
         assertThat(skeleton.getCustomerCountry()).isNull();

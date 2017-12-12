@@ -5,6 +5,7 @@ import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
+import org.clarksnut.documents.parser.pe.PEUtils;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.jboss.logging.Logger;
@@ -15,9 +16,9 @@ import javax.xml.bind.JAXBException;
 
 @Stateless
 @SupportedDocumentType(value = "SummaryDocuments")
-public class PESummaryDocumentsReader implements ParsedDocumentProvider {
+public class PESummaryDocumentsParsedDocumentProvider implements ParsedDocumentProvider {
 
-    private static final Logger logger = Logger.getLogger(PESummaryDocumentsReader.class);
+    private static final Logger logger = Logger.getLogger(PESummaryDocumentsParsedDocumentProvider.class);
 
     @Override
     public String getSupportedDocumentType() {
@@ -39,16 +40,19 @@ public class PESummaryDocumentsReader implements ParsedDocumentProvider {
         }
 
         SkeletonDocument skeleton = new SkeletonDocument();
+        skeleton.setType(getSupportedDocumentType());
         skeleton.setAssignedId(summaryDocumentsType.getID().getValue());
         skeleton.setSupplierAssignedId(summaryDocumentsType.getAccountingSupplierParty().getCustomerAssignedAccountID().getValue());
         skeleton.setSupplierName(summaryDocumentsType.getAccountingSupplierParty().getParty().getPartyLegalEntity().get(0).getRegistrationName().getValue());
         skeleton.setIssueDate(summaryDocumentsType.getIssueDate().getValue().toGregorianCalendar().getTime());
 
         // Postal address
-        AddressType postalAddressType = summaryDocumentsType.getAccountingSupplierParty().getParty().getPostalAddress();
-        skeleton.setSupplierStreetAddress(postalAddressType.getStreetName().getValue());
-        skeleton.setSupplierCity(postalAddressType.getCitySubdivisionName().getValue() + ", " + postalAddressType.getCityName().getValue() + ", " + postalAddressType.getCitySubdivisionName().getValue());
-        skeleton.setSupplierCountry(postalAddressType.getCountry().getIdentificationCode().getValue());
+        AddressType addressType = summaryDocumentsType.getAccountingSupplierParty().getParty().getPostalAddress();
+        if (addressType != null) {
+            skeleton.setSupplierStreetAddress(addressType.getStreetName().getValue());
+            skeleton.setSupplierCountry(addressType.getCountry().getIdentificationCode().getValue());
+            skeleton.setSupplierCity(PEUtils.toCityString(addressType));
+        }
 
         return new ParsedDocument() {
             @Override
