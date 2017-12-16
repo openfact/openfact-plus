@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserLinkedBrokerModel;
 import org.clarksnut.models.UserModel;
-import org.clarksnut.models.db.JpaModel;
+import org.clarksnut.common.jpa.JpaModel;
+import org.clarksnut.models.db.jpa.entity.CollaboratorEntity;
+import org.clarksnut.models.db.jpa.entity.SpaceEntity;
 import org.clarksnut.models.db.jpa.entity.UserContextInformationEntity;
 import org.clarksnut.models.db.jpa.entity.UserEntity;
 import org.clarksnut.models.utils.JacksonUtil;
@@ -15,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class UserAdapter implements UserModel, JpaModel<UserEntity> {
 
@@ -179,6 +182,15 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     public Set<SpaceModel> getCollaboratedSpaces() {
         return user.getCollaboratedSpaces().stream()
                 .map(f -> new SpaceAdapter(em, f.getSpace()))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<SpaceModel> getAllPermitedSpaces() {
+        Set<SpaceEntity> ownedSpaces = user.getOwnedSpaces();
+        Set<CollaboratorEntity> collaboratedSpaces = user.getCollaboratedSpaces();
+        return Stream.concat(ownedSpaces.stream(), collaboratedSpaces.stream().map(CollaboratorEntity::getSpace))
+                .map(f -> new SpaceAdapter(em, f))
                 .collect(Collectors.toSet());
     }
 

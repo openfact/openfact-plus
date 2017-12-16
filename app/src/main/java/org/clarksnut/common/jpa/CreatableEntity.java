@@ -1,4 +1,4 @@
-package org.clarksnut.models.db;
+package org.clarksnut.common.jpa;
 
 import java.util.Date;
 

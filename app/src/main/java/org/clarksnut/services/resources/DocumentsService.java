@@ -4,7 +4,6 @@ import jodd.io.ZipBuilder;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentProvider;
 import org.clarksnut.documents.DocumentProviderType;
-import org.clarksnut.documents.exceptions.PreexistedDocumentException;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.files.FileModel;
@@ -116,8 +115,6 @@ public class DocumentsService {
                 throw new ErrorResponseException("Could not fetch file", Response.Status.INTERNAL_SERVER_ERROR);
             } catch (IOException e) {
                 throw new ErrorResponseException("Could not read file", Response.Status.INTERNAL_SERVER_ERROR);
-            } catch (PreexistedDocumentException e) {
-                throw new ErrorResponseException("There is a preexisted document, you cannot override it", Response.Status.CONFLICT);
             }
 
             // Return result
@@ -146,23 +143,23 @@ public class DocumentsService {
         return modelToRepresentation.toRepresentation(document, uriInfo).toSpaceRepresentation();
     }
 
-    @PATCH
-    @Path("{documentId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public DocumentRepresentation updateDocument(@PathParam("documentId") String documentId, DocumentRepresentation documentRepresentation) {
-        DocumentModel document = getDocumentById(documentId);
-
-        DocumentRepresentation.Data data = documentRepresentation.getData();
-        DocumentRepresentation.Attributes attributes = data.getAttributes();
-
-        if (attributes.getStarred() != null) {
-            document.setStarred(attributes.getStarred());
-        }
-        if (attributes.getTags() != null && !attributes.getTags().isEmpty()) {
-            document.setTags(attributes.getTags());
-        }
-        return modelToRepresentation.toRepresentation(document, uriInfo).toSpaceRepresentation();
-    }
+//    @PATCH
+//    @Path("{documentId}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public DocumentRepresentation updateDocument(@PathParam("documentId") String documentId, DocumentRepresentation documentRepresentation) {
+//        DocumentModel document = getDocumentById(documentId);
+//
+//        DocumentRepresentation.Data data = documentRepresentation.getData();
+//        DocumentRepresentation.Attributes attributes = data.getAttributes();
+//
+//        if (attributes.getStarred() != null) {
+//            document.setStarred(attributes.getStarred());
+//        }
+//        if (attributes.getTags() != null && !attributes.getTags().isEmpty()) {
+//            document.setTags(attributes.getTags());
+//        }
+//        return modelToRepresentation.toRepresentation(document, uriInfo).toSpaceRepresentation();
+//    }
 
     @DELETE
     @Path("{documentId}")
@@ -172,22 +169,22 @@ public class DocumentsService {
         documentManager.removeDocument(ublDocument);
     }
 
-    @PATCH
-    @Path("massive")
-    @Produces(MediaType.APPLICATION_JSON)
-    public void updateDocuments(GenericDataRepresentation<List<DocumentRepresentation.Data>> representation) {
-        representation.getData().forEach(documentRepresentation -> {
-            DocumentModel document = getDocumentById(documentRepresentation.getId());
-
-            DocumentRepresentation.Attributes attributes = documentRepresentation.getAttributes();
-            if (attributes.getStarred() != null) {
-                document.setStarred(attributes.getStarred());
-            }
-            if (attributes.getTags() != null && !attributes.getTags().isEmpty()) {
-                document.setTags(attributes.getTags());
-            }
-        });
-    }
+//    @PATCH
+//    @Path("massive")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public void updateDocuments(GenericDataRepresentation<List<DocumentRepresentation.Data>> representation) {
+//        representation.getData().forEach(documentRepresentation -> {
+//            DocumentModel document = getDocumentById(documentRepresentation.getId());
+//
+//            DocumentRepresentation.Attributes attributes = documentRepresentation.getAttributes();
+//            if (attributes.getStarred() != null) {
+//                document.setStarred(attributes.getStarred());
+//            }
+//            if (attributes.getTags() != null && !attributes.getTags().isEmpty()) {
+//                document.setTags(attributes.getTags());
+//            }
+//        });
+//    }
 
     @GET
     @Path("/massive/download")

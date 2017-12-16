@@ -6,7 +6,6 @@ import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.ParsedDocumentProvider;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.documents.parser.SupportedDocumentType;
-import org.clarksnut.documents.parser.basic.BasicUtils;
 import org.clarksnut.documents.parser.pe.PEUtils;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;

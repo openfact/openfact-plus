@@ -1,7 +1,6 @@
 package org.clarksnut.batchs.broker;
 
 import org.clarksnut.documents.DocumentProviderType;
-import org.clarksnut.documents.exceptions.PreexistedDocumentException;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.managers.DocumentManager;
@@ -50,8 +49,6 @@ public class PullMailMessagesWriter implements ItemWriter {
                 logger.debug("Unsupported document type");
             } catch (UnreadableDocumentException e) {
                 logger.warn("Unreadable document");
-            } catch (PreexistedDocumentException e) {
-                logger.warn("Preexisted document");
             }
         }
     }

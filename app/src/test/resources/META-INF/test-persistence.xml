@@ -20,7 +20,7 @@
 
             <!--Hibernate search-->
             <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>
-            <property name="hibernate.search.lucene.analysis_definition_provider" value="org.clarksnut.documents.es.ClarksnutAnalyzerProvider"/>
+            <property name="hibernate.search.lucene.analysis_definition_provider" value="org.clarksnut.documents.jpa.config.ClarksnutLuceneAnalyzerProvider"/>
 
             <property name="hibernate.search.default.indexmanager" value="directory-based"/>
         </properties>

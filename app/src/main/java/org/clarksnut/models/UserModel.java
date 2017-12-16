@@ -66,6 +66,8 @@ public interface UserModel {
 
     Set<SpaceModel> getCollaboratedSpaces();
 
+    Set<SpaceModel> getAllPermitedSpaces();
+
     JsonNode getContextInformation();
 
     Set<String> getFavoriteSpaces();

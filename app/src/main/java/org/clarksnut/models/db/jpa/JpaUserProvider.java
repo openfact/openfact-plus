@@ -4,7 +4,7 @@ import org.clarksnut.models.QueryModel;
 import org.clarksnut.models.UserBean;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
-import org.clarksnut.models.db.HibernateProvider;
+import org.clarksnut.common.jpa.HibernateProvider;
 import org.clarksnut.models.db.jpa.entity.UserEntity;
 import org.clarksnut.models.exceptions.ModelException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;

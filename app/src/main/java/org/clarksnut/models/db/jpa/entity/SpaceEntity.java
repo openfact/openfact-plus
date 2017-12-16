@@ -1,9 +1,9 @@
 package org.clarksnut.models.db.jpa.entity;
 
-import org.clarksnut.models.db.CreatableEntity;
-import org.clarksnut.models.db.CreatedAtListener;
-import org.clarksnut.models.db.UpdatableEntity;
-import org.clarksnut.models.db.UpdatedAtListener;
+import org.clarksnut.common.jpa.CreatableEntity;
+import org.clarksnut.common.jpa.CreatedAtListener;
+import org.clarksnut.common.jpa.UpdatableEntity;
+import org.clarksnut.common.jpa.UpdatedAtListener;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;

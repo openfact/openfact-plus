@@ -4,7 +4,6 @@ import org.apache.commons.io.IOUtils;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentProvider;
 import org.clarksnut.documents.DocumentProviderType;
-import org.clarksnut.documents.exceptions.PreexistedDocumentException;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.files.*;
@@ -39,8 +38,7 @@ public class DocumentManager {
             FileStorageException,
             FileFetchException,
             UnsupportedDocumentTypeException,
-            UnreadableDocumentException,
-            PreexistedDocumentException {
+            UnreadableDocumentException{
         FileModel fileModel = fileProvider.addFile(bytes, ".xml");
 
         try {
@@ -48,8 +46,10 @@ public class DocumentManager {
                     new FlyWeightXmlFileModel(
                             new FlyWeightFileModel(fileModel))
             );
-            return documentProvider.addDocument(flyWeightFile, providerType);
-        } catch (UnsupportedDocumentTypeException | UnreadableDocumentException | PreexistedDocumentException e) {
+            return documentProvider.addDocument(flyWeightFile, false, providerType);
+
+            // Guardar documento si no se pudo guardar, para despues ser leido
+        } catch (UnsupportedDocumentTypeException | UnreadableDocumentException e) {
             boolean result = fileProvider.removeFile(fileModel);
             logger.debug("Rollback file result=" + result);
             throw e;
@@ -67,8 +67,7 @@ public class DocumentManager {
             FileStorageException,
             UnsupportedDocumentTypeException,
             FileFetchException,
-            UnreadableDocumentException,
-            PreexistedDocumentException {
+            UnreadableDocumentException{
         return importDocument(IOUtils.toByteArray(inputStream), providerType);
     }
 

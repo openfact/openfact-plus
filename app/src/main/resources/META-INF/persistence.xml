@@ -20,9 +20,14 @@
 
             <!--Hibernate search-->
             <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>
-            <property name="hibernate.search.lucene.analysis_definition_provider" value="org.clarksnut.documents.es.ClarksnutAnalyzerProvider"/>
 
             <property name="hibernate.search.default.indexmanager" value="${env.HIBERNATE_INDEX_MANAGER:directory-based}"/>
+
+            <property name="hibernate.search.model_mapping" value="org.clarksnut.documents.jpa.config.DocumentSearchMappingFactory"/>
+            <property name="hibernate.search.lucene.analysis_definition_provider" value="org.clarksnut.documents.jpa.config.ClarksnutLuceneAnalyzerProvider"/>
+            <property name="hibernate.search.elasticsearch.analysis_definition_provider" value="org.clarksnut.documents.jpa.config.ClarksnutESAnalyzerProvider"/>
+
+            <!--Elasticsearch-->
             <property name="hibernate.search.default.elasticsearch.host" value="${env.ES_HOST:}"/>
             <property name="hibernate.search.default.elasticsearch.username" value="${env.ES_USER:}"/>
             <property name="hibernate.search.default.elasticsearch.password" value="${env.ES_PASSWORD:}"/>

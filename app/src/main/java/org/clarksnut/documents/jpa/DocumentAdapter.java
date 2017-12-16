@@ -1,15 +1,15 @@
 package org.clarksnut.documents.jpa;
 
+import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentProviderType;
+import org.clarksnut.documents.DocumentVersionModel;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
-import org.clarksnut.models.db.JpaModel;
 
 import javax.persistence.EntityManager;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> {
 
@@ -36,6 +36,11 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     @Override
     public String getId() {
         return document.getId();
+    }
+
+    @Override
+    public boolean hasChanged() {
+        return document.isChanged();
     }
 
     @Override
@@ -124,28 +129,6 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public Set<String> getTags() {
-        Set<String> tags = new HashSet<>();
-        tags.addAll(document.getTags());
-        return Collections.unmodifiableSet(tags);
-    }
-
-    @Override
-    public void setTags(Set<String> tags) {
-        document.setTags(tags);
-    }
-
-    @Override
-    public boolean isStarred() {
-        return document.isStarred();
-    }
-
-    @Override
-    public void setStarred(boolean starred) {
-        document.setStarred(starred);
-    }
-
-    @Override
     public Date getCreatedAt() {
         return document.getCreatedAt();
     }
@@ -158,6 +141,18 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     @Override
     public DocumentProviderType getProvider() {
         return document.getProvider();
+    }
+
+    @Override
+    public boolean isVerified() {
+        return document.isVerified();
+    }
+
+    @Override
+    public List<DocumentVersionModel> getVersions() {
+        return document.getVersions().stream()
+                .map(f -> new DocumentVersionAdapter(em, this, f))
+                .collect(Collectors.toList());
     }
 
 }

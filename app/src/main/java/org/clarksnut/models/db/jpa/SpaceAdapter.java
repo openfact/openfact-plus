@@ -2,7 +2,7 @@ package org.clarksnut.models.db.jpa;
 
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
-import org.clarksnut.models.db.JpaModel;
+import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.models.db.jpa.entity.CollaboratorEntity;
 import org.clarksnut.models.db.jpa.entity.SpaceEntity;
 import org.clarksnut.models.db.jpa.entity.UserEntity;

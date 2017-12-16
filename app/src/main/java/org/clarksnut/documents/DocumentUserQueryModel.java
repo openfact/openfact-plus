@@ -1,9 +1,11 @@
 package org.clarksnut.documents;
 
-public class DocumentQueryModel {
+import org.clarksnut.documents.query.Query;
 
-    private final String query;
-    private final boolean isJsonQuery;
+public class DocumentUserQueryModel {
+
+    private final Query query;
+    private final boolean isForUser;
 
     private final String orderBy;
     private final boolean asc;
@@ -11,9 +13,9 @@ public class DocumentQueryModel {
     private final Integer offset;
     private final Integer limit;
 
-    private DocumentQueryModel(Builder builder) {
+    private DocumentUserQueryModel(Builder builder) {
         this.query = builder.query;
-        this.isJsonQuery = builder.isJsonQuery;
+        this.isForUser = builder.isForUser;
 
         this.orderBy = builder.orderBy;
         this.asc = builder.asc;
@@ -26,12 +28,8 @@ public class DocumentQueryModel {
         return new Builder();
     }
 
-    public String getQuery() {
+    public Query getQuery() {
         return query;
-    }
-
-    public boolean isJsonQuery() {
-        return isJsonQuery;
     }
 
     public String getOrderBy() {
@@ -50,20 +48,28 @@ public class DocumentQueryModel {
         return limit;
     }
 
+    public boolean isForUser() {
+        return isForUser;
+    }
+
     public static class Builder {
 
-        private String query;
-        private boolean isJsonQuery;
+        private Query query;
+        private boolean isForUser;
 
-        private String orderBy;
         private boolean asc;
+        private String orderBy;
 
         private Integer offset;
         private Integer limit;
 
-        public Builder query(String query, boolean isJsonQuery) {
+        public Builder query(Query query) {
             this.query = query;
-            this.isJsonQuery = isJsonQuery;
+            return this;
+        }
+
+        public Builder isForUser(boolean isForUser) {
+            this.isForUser = isForUser;
             return this;
         }
 
@@ -83,8 +89,8 @@ public class DocumentQueryModel {
             return this;
         }
 
-        public DocumentQueryModel build() {
-            return new DocumentQueryModel(this);
+        public DocumentUserQueryModel build() {
+            return new DocumentUserQueryModel(this);
         }
 
     }

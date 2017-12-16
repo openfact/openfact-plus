@@ -121,7 +121,7 @@ public class ModelToRepresentation {
         DocumentRepresentation.DocumentLink links = new DocumentRepresentation.DocumentLink();
         URI self = uriInfo.getBaseUriBuilder()
                 .path(DocumentsService.class)
-                .path(DocumentsService.class, "getDocument")
+                .path(DocumentsService.class, "getDocumentUser")
                 .build(model.getId());
         URI fileLink = uriInfo.getBaseUriBuilder()
                 .path(FilesService.class)
@@ -169,8 +169,8 @@ public class ModelToRepresentation {
         attributes.setCustomerName(model.getCustomerName());
         attributes.setCustomerAssignedId(model.getCustomerAssignedId());
         attributes.setProvider(model.getProvider().toString());
-        attributes.setStarred(model.isStarred());
-        attributes.setTags(new HashSet<>(model.getTags()));
+//        attributes.setStarred(model.isStarred());
+//        attributes.setTags(new HashSet<>(model.getTags()));
         attributes.setCreatedAt(model.getCreatedAt());
         attributes.setUpdatedAt(model.getUpdatedAt());
 
