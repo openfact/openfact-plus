@@ -38,16 +38,20 @@ public abstract class AbstractProviderTest {
         return ShrinkWrap.create(WARArchive.class)
                 .addPackages(true, DocumentModel.class.getPackage())
 
-                .addClasses(UserModel.class, UserLinkedBrokerModel.class)
-                .addClasses(SpaceModel.class)
+                // Common
+                .addClasses(CreatableEntity.class, CreatedAtListener.class, UpdatableEntity.class, UpdatedAtListener.class, JpaModel.class)
 
+                // Files
                 .addClasses(FileModel.class, XmlFileModel.class, XmlUBLFileModel.class)
                 .addPackage(FileFetchException.class.getPackage())
 
-                .addClasses(CreatableEntity.class, CreatedAtListener.class, UpdatableEntity.class, UpdatedAtListener.class, JpaModel.class)
+                // Models
+                .addClasses(UserModel.class, UserLinkedBrokerModel.class)
+                .addClasses(SpaceModel.class)
 
                 .addClasses(ClarksnutModelUtils.class)
 
+                // Resources
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsResource("test-project-defaults.yml", "project-defaults.yml")
@@ -59,6 +63,7 @@ public abstract class AbstractProviderTest {
                 .addAsResource("peru/document/creditnote/FF11-3.xml", "peru/document/creditnote/FF11-3.xml")
                 .addAsResource("peru/document/debitnote/FF11-5.xml", "peru/document/debitnote/FF11-5.xml")
 
+                // Dependencies
                 .addAsLibraries(libs())
                 .addAllDependencies();
     }
