@@ -16,11 +16,6 @@ public interface DocumentUserProvider {
     /**
      * @return list of documents
      */
-    List<DocumentUserModel> getDocumentsUser(UserModel user, DocumentUserQueryModel query, SpaceModel... space);
-
-    /**
-     * @return count results
-     */
-    int getDocumentsUserSize(UserModel user, DocumentUserQueryModel query);
+    SearchResultModel<DocumentUserModel> getDocumentsUser(UserModel user, DocumentUserQueryModel query, SpaceModel... space);
 
 }

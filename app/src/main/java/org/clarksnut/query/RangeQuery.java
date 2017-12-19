@@ -1,6 +1,6 @@
-package org.clarksnut.documents.query;
+package org.clarksnut.query;
 
-public class RangeQuery implements Query {
+public class RangeQuery implements SimpleQuery {
 
     private final String name;
 

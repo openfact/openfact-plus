@@ -7,6 +7,11 @@ import java.util.Set;
 
 public interface DocumentUserModel {
 
+    String STARRED = "starred";
+    String VIEWED = "viewed";
+    String CHECKED = "checked";
+    String TAGS = "tags";
+
     boolean isStarred();
 
     void setStarred(boolean starred);
@@ -28,6 +33,6 @@ public interface DocumentUserModel {
     Date getUpdatedAt();
 
     UserModel getUser();
-    
+
     DocumentModel getDocument();
 }

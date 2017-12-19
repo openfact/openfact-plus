@@ -1,28 +1,30 @@
 package org.clarksnut.documents.jpa;
 
 import org.apache.lucene.search.Query;
-import org.clarksnut.documents.DocumentModel;
+import org.apache.lucene.search.Sort;
 import org.clarksnut.documents.DocumentUserModel;
 import org.clarksnut.documents.DocumentUserProvider;
 import org.clarksnut.documents.DocumentUserQueryModel;
+import org.clarksnut.documents.SearchResultModel;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.DocumentUserEntity;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.hibernate.search.query.dsl.sort.SortFieldContext;
 import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,40 +36,8 @@ public class LuceneDocumentUserProvider implements DocumentUserProvider {
     @PersistenceContext
     private EntityManager em;
 
-    private BoolQueryBuilder getUserQuery(UserModel user, SpaceModel... space) {
-        Set<SpaceModel> allPermitedSpaces = user.getAllPermitedSpaces();
-        if (space != null && space.length > 0) {
-            allPermitedSpaces.retainAll(Arrays.asList(space));
-        }
-        if (!allPermitedSpaces.isEmpty()) {
-            List<String> allSpacesIds = allPermitedSpaces.stream().map(SpaceModel::getAssignedId).collect(Collectors.toList());
-
-            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-            boolQueryBuilder.should(QueryBuilders.termsQuery(DocumentModel.SUPPLIER_ASSIGNED_ID, allSpacesIds));
-            boolQueryBuilder.should(QueryBuilders.termsQuery(DocumentModel.CUSTOMER_ASSIGNED_ID, allSpacesIds));
-            boolQueryBuilder.minimumShouldMatch(1);
-
-            return boolQueryBuilder;
-        }
-        return null;
-    }
-
-    private BoolQueryBuilder getESQuery(org.clarksnut.documents.query.Query query, UserModel user, SpaceModel... space) {
-        BoolQueryBuilder userBoolQuery = getUserQuery(user, space);
-        if (userBoolQuery == null) {
-            return null;
-        }
-
-        org.elasticsearch.index.query.QueryBuilder queryBuilder = QueryUtil.toESQueryBuilder(query);
-        if (queryBuilder instanceof BoolQueryBuilder) {
-            return ((BoolQueryBuilder) queryBuilder)
-                    .filter(userBoolQuery);
-        } else {
-            return QueryBuilders.boolQuery()
-                    .must(userBoolQuery)
-                    .filter(queryBuilder);
-        }
-    }
+    @Inject
+    private LuceneDocumentUserQueryParser queryParser;
 
     private boolean isUserAllowedToSeeDocument(UserModel user, DocumentEntity documentEntity) {
         List<String> documentPermittedSpaceIds = Arrays.asList(
@@ -125,49 +95,76 @@ public class LuceneDocumentUserProvider implements DocumentUserProvider {
     }
 
     @Override
-    public List<DocumentUserModel> getDocumentsUser(UserModel user, DocumentUserQueryModel query, SpaceModel... space) {
-        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+    public SearchResultModel<DocumentUserModel> getDocumentsUser(UserModel user, DocumentUserQueryModel query, SpaceModel... space) {
+        FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
+
+        final boolean isDocumentSearchOnly = query.getUserDocumentFilters().isEmpty();
 
         QueryBuilder queryBuilder;
-        if (query.isForUser()) {
-            queryBuilder = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(DocumentUserEntity.class).get();
+        if (isDocumentSearchOnly) {
+            queryBuilder = fullTextEm.getSearchFactory().buildQueryBuilder().forEntity(DocumentEntity.class).get();
         } else {
-            queryBuilder = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(DocumentEntity.class).get();
+            queryBuilder = fullTextEm.getSearchFactory().buildQueryBuilder().forEntity(DocumentUserEntity.class).get();
         }
 
-        BoolQueryBuilder userQueryBuilder = getUserQuery(user, space);
+        Query luceneQuery = queryParser.getQuery(user, query, queryBuilder, space);
 
-        Query luceneQuery = queryBuilder.keyword()
-                .onField("history").boostedTo(3)
-                .matching("storm")
-                .createQuery();
+        // No results
+        if (luceneQuery == null) {
+            // User do not have any space assigned
+            return new EmptySearchResultAdapter<>();
+        }
 
-        javax.persistence.Query fullTextQuery = fullTextEntityManager.createFullTextQuery(luceneQuery);
+        // Sort
+        Sort sort = null;
+        if (query.getOrderBy() != null) {
+            SortFieldContext sortFieldContext = queryBuilder.sort().byField(SearchDocumentUserFields.toDocumentSearchField(query.getOrderBy()));
+            if (query.isAsc()) {
+                sort = sortFieldContext.asc().createSort();
+            } else {
+                sort = sortFieldContext.desc().createSort();
+            }
+        }
 
-        //noinspection Duplicates
-        if (query.isForUser()) {
-            List<DocumentUserEntity> resultList = fullTextQuery.getResultList();
-            return resultList.stream()
-                    .map(f -> new DocumentUserAdapter(em, user, f))
+        FullTextQuery fullTextQuery = fullTextEm.createFullTextQuery(luceneQuery);
+
+        if (sort != null) {
+            fullTextQuery.setSort(sort);
+        }
+
+        // Pagination
+        if (query.getOffset() != null && query.getOffset() != -1) {
+            fullTextQuery.setFirstResult(query.getOffset());
+        }
+        if (query.getLimit() != null && query.getLimit() != -1) {
+            fullTextQuery.setMaxResults(query.getLimit());
+        }
+
+        // Result
+        List<DocumentUserModel> items;
+        if (isDocumentSearchOnly) {
+            List<DocumentEntity> resultList = fullTextQuery.getResultList();
+            items = resultList.stream()
+                    .map(documentEntity -> (DocumentUserModel) new DocumentUserAdapter(em, user, new DocumentUserEntity()))
                     .collect(Collectors.toList());
         } else {
-            List<DocumentEntity> resultList = fullTextQuery.getResultList();
-            return resultList.stream().map(documentEntity -> {
-                DocumentUserModel documentUser = getDocumentUser(user, documentEntity.getId());
-                if (documentUser == null) {
-                    DocumentUserEntity documentUserEntity = new DocumentUserEntity();
-                    documentUserEntity.setId(UUID.randomUUID().toString());
-                    documentUserEntity.setDocument(documentEntity);
-                    em.persist(documentUserEntity);
-                    return new DocumentUserAdapter(em, user, documentUserEntity);
-                }
-                return documentUser;
-            }).collect(Collectors.toList());
+            List<DocumentUserEntity> resultList = fullTextQuery.getResultList();
+            items = resultList.stream()
+                    .map(f -> new DocumentUserAdapter(em, user, f))
+                    .collect(Collectors.toList());
         }
+
+        return new SearchResultModel<DocumentUserModel>() {
+            @Override
+            public List<DocumentUserModel> getItems() {
+                return items;
+            }
+
+            @Override
+            public int getTotalResults() {
+                return fullTextQuery.getResultSize();
+            }
+        };
     }
 
-    @Override
-    public int getDocumentsUserSize(UserModel user, DocumentUserQueryModel query) {
-        return 0;
-    }
 }

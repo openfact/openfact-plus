@@ -1,6 +1,6 @@
-package org.clarksnut.documents.query;
+package org.clarksnut.query;
 
-public class MatchAllQuery implements Query {
+public class MatchAllQuery implements SimpleQuery {
 
     @Override
     public String getQueryName() {

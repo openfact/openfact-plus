@@ -1,11 +1,15 @@
 package org.clarksnut.documents;
 
-import org.clarksnut.documents.query.Query;
+import org.clarksnut.query.SimpleQuery;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class DocumentUserQueryModel {
 
-    private final Query query;
-    private final boolean isForUser;
+    private final String filterText;
+    private final Set<SimpleQuery> documentFilters;
+    private final Set<SimpleQuery> userDocumentFilters;
 
     private final String orderBy;
     private final boolean asc;
@@ -14,8 +18,9 @@ public class DocumentUserQueryModel {
     private final Integer limit;
 
     private DocumentUserQueryModel(Builder builder) {
-        this.query = builder.query;
-        this.isForUser = builder.isForUser;
+        this.filterText = builder.filterText;
+        this.documentFilters = builder.documentFilters;
+        this.userDocumentFilters = builder.userDocumentFilters;
 
         this.orderBy = builder.orderBy;
         this.asc = builder.asc;
@@ -28,8 +33,16 @@ public class DocumentUserQueryModel {
         return new Builder();
     }
 
-    public Query getQuery() {
-        return query;
+    public String getFilterText() {
+        return filterText;
+    }
+
+    public Set<SimpleQuery> getDocumentFilters() {
+        return documentFilters;
+    }
+
+    public Set<SimpleQuery> getUserDocumentFilters() {
+        return userDocumentFilters;
     }
 
     public String getOrderBy() {
@@ -48,14 +61,11 @@ public class DocumentUserQueryModel {
         return limit;
     }
 
-    public boolean isForUser() {
-        return isForUser;
-    }
-
     public static class Builder {
 
-        private Query query;
-        private boolean isForUser;
+        private String filterText;
+        private Set<SimpleQuery> documentFilters = new HashSet<>();
+        private Set<SimpleQuery> userDocumentFilters = new HashSet<>();
 
         private boolean asc;
         private String orderBy;
@@ -63,13 +73,18 @@ public class DocumentUserQueryModel {
         private Integer offset;
         private Integer limit;
 
-        public Builder query(Query query) {
-            this.query = query;
+        public Builder filterText(String filterText) {
+            this.filterText = filterText;
             return this;
         }
 
-        public Builder isForUser(boolean isForUser) {
-            this.isForUser = isForUser;
+        public Builder addDocumentFilter(SimpleQuery query) {
+            this.documentFilters.add(query);
+            return this;
+        }
+
+        public Builder addUserDocumentFilter(SimpleQuery query) {
+            this.userDocumentFilters.add(query);
             return this;
         }
 

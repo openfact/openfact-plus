@@ -1,6 +1,6 @@
-package org.clarksnut.documents.query;
+package org.clarksnut.query;
 
-public class TermQuery implements Query {
+public class TermQuery implements SimpleQuery {
 
     private final String name;
     private final Object value;

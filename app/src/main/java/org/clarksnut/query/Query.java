@@ -1,4 +1,4 @@
-package org.clarksnut.documents.query;
+package org.clarksnut.query;
 
 public interface Query {
 

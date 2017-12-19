@@ -1,9 +1,9 @@
-package org.clarksnut.documents.query;
+package org.clarksnut.query;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoolQuery implements Query {
+public class BoolQuery implements ComposedQuery {
 
     private final List<Query> must = new ArrayList<>();
     private final List<Query> mustNot = new ArrayList<>();

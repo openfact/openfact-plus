@@ -2,10 +2,7 @@ package org.clarksnut.documents.jpa.config;
 
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.DocumentUserEntity;
-import org.hibernate.search.annotations.Analyze;
-import org.hibernate.search.annotations.Factory;
-import org.hibernate.search.annotations.Resolution;
-import org.hibernate.search.annotations.Store;
+import org.hibernate.search.annotations.*;
 import org.hibernate.search.cfg.IndexedMapping;
 import org.hibernate.search.cfg.SearchMapping;
 
@@ -22,49 +19,56 @@ public class DocumentSearchMappingFactory {
         SearchMapping mapping = new SearchMapping();
 
         documentEntityMapping(mapping, isElasticsearch);
-        documentUserEntityMapping(mapping, isElasticsearch);
+//        documentUserEntityMapping(mapping, isElasticsearch);
 
         return mapping;
     }
 
-    protected void documentEntityMapping(SearchMapping mapping, boolean isElasticsearch) {
+    private void documentEntityMapping(SearchMapping mapping, boolean isElasticsearch) {
         IndexedMapping indexedMapping = mapping.entity(DocumentEntity.class).indexed();
 
         indexedMapping
-                .property("id", ElementType.METHOD).documentId()
-                .property("type", ElementType.METHOD).field().analyzer("staticTextAnalyzer")
-                .property("currency", ElementType.METHOD).field().analyzer("staticTextAnalyzer")
-                .property("supplierName", ElementType.METHOD).field().analyzer("nameTextAnalyzer")
-                .property("supplierAssignedId", ElementType.METHOD).field()
-                .property("customerName", ElementType.METHOD).field().analyzer("nameTextAnalyzer")
-                .property("customerAssignedId", ElementType.METHOD).field()
-                .property("provider", ElementType.METHOD).field().analyzer("staticTextAnalyzer")
-                .property("verified", ElementType.METHOD).field()
-                .property("changed", ElementType.METHOD).field();
+                .property("id", ElementType.FIELD).documentId().name("id")
+                .property("changed", ElementType.FIELD).field().name("changed")
 
-        if (isElasticsearch) {
-            indexedMapping
-                    .property("assignedId", ElementType.METHOD).field().analyze(Analyze.NO)
-                    .property("issueDate", ElementType.METHOD).field().analyze(Analyze.NO)
-                    .property("amount", ElementType.METHOD).field().analyze(Analyze.NO);
-        } else {
-            indexedMapping
-                    .property("assignedId", ElementType.METHOD).field().analyze(Analyze.NO).sortableField()
-                    .property("issueDate", ElementType.METHOD).field().analyze(Analyze.NO).store(Store.YES).dateBridge(Resolution.MILLISECOND)
-                    .property("amount", ElementType.METHOD).field().analyze(Analyze.NO).sortableField();
-        }
+                /*
+                 * Basic attributes */
+                .property("type", ElementType.FIELD).field().name("type").analyzer("staticTextAnalyzer")
+                .property("currency", ElementType.FIELD).field().name("currency").analyzer("staticTextAnalyzer")
+                .property("provider", ElementType.FIELD).field().name("provider").analyzer("staticTextAnalyzer")
+                .property("verified", ElementType.FIELD).field().name("verified")
+
+                /*
+                 * Supplier */
+                .property("supplierName", ElementType.FIELD).field().name("supplierName").analyzer("nameTextAnalyzer")
+                .property("supplierAssignedId", ElementType.FIELD).field().name("supplierAssignedId")
+
+                /*
+                 * Customer */
+                .property("customerName", ElementType.FIELD).field().name("customerName").analyzer("nameTextAnalyzer")
+                .property("customerAssignedId", ElementType.FIELD).field().name("customerAssignedId")
+
+                /*
+                 * Additional information */
+                .property("assignedId", ElementType.FIELD).field().name("assignedId").analyze(Analyze.NO).sortableField()
+                .property("amount", ElementType.FIELD).field().name("amount").analyze(Analyze.NO).sortableField()
+                .property("issueDate", ElementType.FIELD).field().name("issueDate").analyze(Analyze.NO).dateBridge(Resolution.MILLISECOND)
+
+                /*
+                * Relationships */
+                .property("documentUsers", ElementType.FIELD).containedIn();
     }
 
-    protected void documentUserEntityMapping(SearchMapping mapping, boolean isElasticsearch) {
+    private void documentUserEntityMapping(SearchMapping mapping, boolean isElasticsearch) {
         mapping
                 .entity(DocumentUserEntity.class).indexed()
-                .property("id", ElementType.METHOD).documentId()
-                .property("starred", ElementType.METHOD).field()
-                .property("viewed", ElementType.METHOD).field()
-                .property("checked", ElementType.METHOD).field()
-                .property("userId", ElementType.METHOD).field()
-                .property("tags", ElementType.METHOD).indexEmbedded()
-                .property("document", ElementType.METHOD).indexEmbedded().includeEmbeddedObjectId(true);
+                .property("id", ElementType.FIELD).documentId()
+                .property("starred", ElementType.FIELD).field()
+                .property("viewed", ElementType.FIELD).field()
+                .property("checked", ElementType.FIELD).field()
+                .property("userId", ElementType.FIELD).field()
+                .property("tags", ElementType.FIELD).indexEmbedded()
+                .property("document", ElementType.FIELD).indexEmbedded().includeEmbeddedObjectId(true);
     }
 
 }

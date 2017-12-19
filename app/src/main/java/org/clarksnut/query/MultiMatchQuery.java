@@ -1,6 +1,6 @@
-package org.clarksnut.documents.query;
+package org.clarksnut.query;
 
-public class MultiMatchQuery implements Query {
+public class MultiMatchQuery implements SimpleQuery {
 
     private final Object text;
     private final String[] fieldNames;

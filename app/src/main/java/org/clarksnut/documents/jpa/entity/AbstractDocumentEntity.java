@@ -13,124 +13,95 @@ public abstract class AbstractDocumentEntity {
 
     @NotNull(message = "type should not be null")
     @Column(name = "type")
-    protected String type;
-
-    @NotNull(message = "assignedId should not be null")
-    @Column(name = "assigned_id")
-    protected String assignedId;
-
-    @NotNull(message = "fileId should not be null")
-    @Column(name = "file_id")
-    protected String fileId;
-
-    @Digits(integer = 10, fraction = 4, message = "amount has incorrect number of integer/fraction")
-    @Type(type = "org.hibernate.type.FloatType")
-    @Column(name = "amount")
-    protected Float amount;
-
-    @Digits(integer = 10, fraction = 4, message = "tax has incorrect number of integer/fraction")
-    @Type(type = "org.hibernate.type.FloatType")
-    @Column(name = "tax")
-    protected Float tax;
+    private String type;
 
     @Column(name = "currency")
-    protected String currency;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "issue_date")
-    protected Date issueDate;
-
-    @Column(name = "supplier_name")
-    protected String supplierName;
-
-    @NotNull(message = "supplierAssignedId should not be null")
-    @Column(name = "supplier_assigned_id")
-    protected String supplierAssignedId;
-
-    @Column(name = "supplier_street_address")
-    protected String supplierStreetAddress;
-
-    @Column(name = "supplier_city")
-    protected String supplierCity;
-
-    @Column(name = "supplier_country")
-    protected String supplierCountry;
-
-    @Column(name = "customer_name")
-    protected String customerName;
-
-    @Column(name = "customer_assigned_id")
-    protected String customerAssignedId;
-
-    @Column(name = "customer_street_address")
-    protected String customerStreetAddress;
-
-    @Column(name = "customer_city")
-    protected String customerCity;
-
-    @Column(name = "customer_country")
-    protected String customerCountry;
+    private String currency;
 
     @NotNull(message = "provider should not be null")
     @Enumerated(EnumType.STRING)
     @Column(name = "provider")
-    protected DocumentProviderType provider;
+    private DocumentProviderType provider;
 
     @NotNull(message = "verified should not be null")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     @Column(name = "verified")
-    protected boolean verified;
+    private boolean verified;
+
+    @Column(name = "supplier_name")
+    private String supplierName;
+
+    @NotNull(message = "supplierAssignedId should not be null")
+    @Column(name = "supplier_assigned_id")
+    private String supplierAssignedId;
+
+    @Column(name = "supplier_street_address")
+    private String supplierStreetAddress;
+
+    @Column(name = "supplier_city")
+    private String supplierCity;
+
+    @Column(name = "supplier_country")
+    private String supplierCountry;
+
+    @Column(name = "customer_name")
+    private String customerName;
+
+    @Column(name = "customer_assigned_id")
+    private String customerAssignedId;
+
+    @Column(name = "customer_street_address")
+    private String customerStreetAddress;
+
+    @Column(name = "customer_city")
+    private String customerCity;
+
+    @Column(name = "customer_country")
+    private String customerCountry;
+
+    @NotNull(message = "assignedId should not be null")
+    @Column(name = "assigned_id")
+    private String assignedId;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "issue_date")
+    private Date issueDate;
+
+    @Digits(integer = 10, fraction = 4, message = "amount has incorrect number of integer/fraction")
+    @Type(type = "org.hibernate.type.FloatType")
+    @Column(name = "amount")
+    private Float amount;
+
+    @Digits(integer = 10, fraction = 4, message = "tax has incorrect number of integer/fraction")
+    @Type(type = "org.hibernate.type.FloatType")
+    @Column(name = "tax")
+    private Float tax;
+
+    @NotNull(message = "fileId should not be null")
+    @Column(name = "file_id")
+    private String fileId;
 
     @NotNull(message = "createdAt should not be null")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    protected Date createdAt;
+    private Date createdAt;
 
     @NotNull(message = "updatedAt should not be null")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
-    protected Date updatedAt;
+    private Date updatedAt;
 
     public abstract String getId();
 
+    /**
+     * Basic attributes
+     */
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getAssignedId() {
-        return assignedId;
-    }
-
-    public void setAssignedId(String assignedId) {
-        this.assignedId = assignedId;
-    }
-
-    public String getFileId() {
-        return fileId;
-    }
-
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
-    }
-
-    public Float getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Float amount) {
-        this.amount = amount;
-    }
-
-    public Float getTax() {
-        return tax;
-    }
-
-    public void setTax(Float tax) {
-        this.tax = tax;
     }
 
     public String getCurrency() {
@@ -141,14 +112,25 @@ public abstract class AbstractDocumentEntity {
         this.currency = currency;
     }
 
-    public Date getIssueDate() {
-        return issueDate;
+    public DocumentProviderType getProvider() {
+        return provider;
     }
 
-    public void setIssueDate(Date issueDate) {
-        this.issueDate = issueDate;
+    public void setProvider(DocumentProviderType provider) {
+        this.provider = provider;
     }
 
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    /**
+     * Supplier
+     */
     public String getSupplierName() {
         return supplierName;
     }
@@ -189,6 +171,9 @@ public abstract class AbstractDocumentEntity {
         this.supplierCountry = supplierCountry;
     }
 
+    /**
+     * Customer
+     */
     public String getCustomerName() {
         return customerName;
     }
@@ -229,20 +214,49 @@ public abstract class AbstractDocumentEntity {
         this.customerCountry = customerCountry;
     }
 
-    public DocumentProviderType getProvider() {
-        return provider;
+    /**
+     * */
+    public String getAssignedId() {
+        return assignedId;
     }
 
-    public void setProvider(DocumentProviderType provider) {
-        this.provider = provider;
+    public void setAssignedId(String assignedId) {
+        this.assignedId = assignedId;
     }
 
-    public boolean isVerified() {
-        return verified;
+    public Date getIssueDate() {
+        return issueDate;
     }
 
-    public void setVerified(boolean verified) {
-        this.verified = verified;
+    public void setIssueDate(Date issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public Float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Float amount) {
+        this.amount = amount;
+    }
+
+    public Float getTax() {
+        return tax;
+    }
+
+    public void setTax(Float tax) {
+        this.tax = tax;
+    }
+
+    /**
+     * Additional information
+     */
+    public String getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
     }
 
     public Date getCreatedAt() {

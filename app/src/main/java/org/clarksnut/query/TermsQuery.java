@@ -1,8 +1,8 @@
-package org.clarksnut.documents.query;
+package org.clarksnut.query;
 
 import java.util.Collection;
 
-public class TermsQuery implements Query {
+public class TermsQuery implements SimpleQuery {
 
     private final String name;
     private final Collection<?> values;

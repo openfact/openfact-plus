@@ -9,8 +9,10 @@ import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserLinkedBrokerModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
+import org.clarksnut.query.Query;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
@@ -51,9 +53,12 @@ public abstract class AbstractProviderTest {
 
                 .addClasses(ClarksnutModelUtils.class)
 
+                // Queries
+                .addPackage(Query.class.getPackage())
+
                 // Resources
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
                 .addAsResource("test-project-defaults.yml", "project-defaults.yml")
                 .addAsResource("standalone.xml", "standalone.xml")
                 .addAsWebInfResource("jboss-deployment-structure.xml", "jboss-deployment-structure.xml")
