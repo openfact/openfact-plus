@@ -4,16 +4,19 @@ import org.clarksnut.files.FileModel;
 import org.clarksnut.files.FileProvider;
 import org.clarksnut.files.exceptions.FileStorageException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.enterprise.inject.Alternative;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 @Stateless
 @Alternative
@@ -22,14 +25,13 @@ public class FSFileProvider implements FileProvider {
 
     private String FILESYSTEM_CLUSTER_PATH;
 
+    @Inject
+    @ConfigurationValue("clarksnut.fileStorage.filesystem.folder")
+    private Optional<String> clarksnutFileSystemFolder;
+
     @PostConstruct
     private void init() {
-        String fileSystemPath = System.getenv("FILESYSTEM_CLUSTER_PATH");
-        if (fileSystemPath != null && !fileSystemPath.trim().isEmpty()) {
-            FILESYSTEM_CLUSTER_PATH = fileSystemPath;
-        } else {
-            FILESYSTEM_CLUSTER_PATH = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-        }
+        FILESYSTEM_CLUSTER_PATH = clarksnutFileSystemFolder.orElseGet(() -> getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
     }
 
     @Override

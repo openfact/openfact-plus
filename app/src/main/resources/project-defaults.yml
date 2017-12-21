@@ -12,6 +12,8 @@ swarm:
 clarksnut:
   fileStorage:
     provider: jpa
+    filesystem:
+      folder: "/xmlFiles"
   report:
     default: clarksnut
     cacheReports: false
