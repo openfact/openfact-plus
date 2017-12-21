@@ -27,26 +27,26 @@ public class FilesService {
     @Context
     private UriInfo uriInfo;
 
-    @Inject
-    private FileProvider fileProvider;
-
-    @GET
-    @Path("{fileId}")
-    public Response getFile(@PathParam("fileId") String fileId) {
-        FileModel file = fileProvider.getFile(fileId);
-
-        Response.ResponseBuilder response;
-        try {
-            response = Response.ok(file.getFile());
-        } catch (FileFetchException e) {
-            logger.error("Could not fetch file from storage");
-            return ErrorResponse.error("Could not read file", Response.Status.SERVICE_UNAVAILABLE);
-        }
-
-        response.type("application/xml");
-        response.header("Content-Disposition", "attachment; filename=\"" + file.getFilename() + ".xml\"");
-
-        return response.build();
-    }
+//    @Inject
+//    private FileProvider fileProvider;
+//
+//    @GET
+//    @Path("{fileId}")
+//    public Response getFile(@PathParam("fileId") String fileId) {
+//        FileModel file = fileProvider.getFile(fileId);
+//
+//        Response.ResponseBuilder response;
+//        try {
+//            response = Response.ok(file.getFile());
+//        } catch (FileFetchException e) {
+//            logger.error("Could not fetch file from storage");
+//            return ErrorResponse.error("Could not read file", Response.Status.SERVICE_UNAVAILABLE);
+//        }
+//
+//        response.type("application/xml");
+//        response.header("Content-Disposition", "attachment; filename=\"" + file.getFilename() + ".xml\"");
+//
+//        return response.build();
+//    }
 
 }

@@ -2,6 +2,7 @@ package org.clarksnut.files.jpa;
 
 import org.clarksnut.files.FileModel;
 import org.clarksnut.files.FileProvider;
+import org.clarksnut.files.FileStorageProviderType;
 import org.clarksnut.files.exceptions.FileStorageException;
 
 import javax.ejb.Stateless;
@@ -10,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import java.util.UUID;
 
 @Stateless
+@FileStorageProviderType(storage = "jpa")
 public class JpaFileProvider implements FileProvider {
 
     @PersistenceContext

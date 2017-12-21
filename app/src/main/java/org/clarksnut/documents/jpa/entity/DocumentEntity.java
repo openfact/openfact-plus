@@ -111,9 +111,16 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "tax")
     private Float tax;
 
+    /**
+     * File
+     */
     @NotNull(message = "fileId should not be null")
     @Column(name = "file_id")
     private String fileId;
+
+    @NotNull(message = "fileProvider should not be null")
+    @Column(name = "file_provider")
+    private String fileProvider;
 
     @NotNull(message = "createdAt should not be null")
     @Temporal(TemporalType.TIMESTAMP)
@@ -325,6 +332,14 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Override
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getFileProvider() {
+        return fileProvider;
+    }
+
+    public void setFileProvider(String fileProvider) {
+        this.fileProvider = fileProvider;
     }
 }
 

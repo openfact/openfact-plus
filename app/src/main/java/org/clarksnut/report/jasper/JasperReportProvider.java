@@ -12,10 +12,7 @@ import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceUtil;
 import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.files.FileProvider;
-import org.clarksnut.files.FlyWeightFileModel;
-import org.clarksnut.files.FlyWeightXmlFileModel;
-import org.clarksnut.files.XmlFileModel;
+import org.clarksnut.files.*;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.report.*;
 import org.clarksnut.report.exceptions.ReportException;
@@ -33,7 +30,7 @@ public class JasperReportProvider implements ReportTemplateProvider {
     private static final Logger logger = Logger.getLogger(JasperReportProvider.class);
 
     @Inject
-    private FileProvider fileProvider;
+    private FileStorageProviderUtil fileStorageProviderUtil;
 
     @Inject
     private JasperReportUtil jasperReportUtil;
@@ -61,6 +58,7 @@ public class JasperReportProvider implements ReportTemplateProvider {
             String themeType = document.getType().toLowerCase();
             ReportTheme theme = themeProvider.getTheme(themeName, themeType);
 
+            FileProvider fileProvider = fileStorageProviderUtil.getDatasourceProvider(document.getFileProvider());
             XmlFileModel file = new FlyWeightXmlFileModel(new FlyWeightFileModel(fileProvider.getFile(document.getFileId())));
             DatasourceProvider datasourceProvider = datasourceUtil.getDatasourceProvider(theme.getDatasource());
             Object bean = datasourceProvider.getDatasource(document, file);

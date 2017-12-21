@@ -6,6 +6,7 @@ import org.clarksnut.email.EmailSenderProvider;
 import org.clarksnut.email.EmailTemplateProvider;
 import org.clarksnut.email.exceptions.EmailException;
 import org.clarksnut.files.FileProvider;
+import org.clarksnut.files.FileStorageProviderUtil;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.theme.Theme;
@@ -39,7 +40,7 @@ public class FreeMarkerEmailTemplateProvider implements EmailTemplateProvider {
     private EmailSenderProvider emailSender;
 
     @Inject
-    private FileProvider fileProvider;
+    private FileStorageProviderUtil fileStorageProviderUtil;
 
     @Override
     public void send(UserModel user, Set<String> recipients, Set<DocumentModel> documents) throws EmailException {
@@ -52,8 +53,10 @@ public class FreeMarkerEmailTemplateProvider implements EmailTemplateProvider {
         attributes.put("userMessage", message);
 
         Set<EmailFileModel> xmlFiles = documents.stream()
-                .map(DocumentModel::getFileId)
-                .map(fileId -> fileProvider.getFile(fileId))
+                .map(document -> {
+                    FileProvider fileProvider = fileStorageProviderUtil.getDatasourceProvider(document.getFileProvider());
+                    return fileProvider.getFile(document.getFileId());
+                })
                 .map(fileModel -> {
                     try {
                         return new EmailFileModel(fileModel.getFile(), fileModel.getFilename(), "application/xml");

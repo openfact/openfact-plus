@@ -8,6 +8,7 @@ import org.clarksnut.documents.exceptions.UnreadableDocumentException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.files.FileModel;
 import org.clarksnut.files.FileProvider;
+import org.clarksnut.files.FileStorageProviderUtil;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.files.exceptions.FileStorageException;
 import org.clarksnut.managers.DocumentManager;
@@ -34,6 +35,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -52,7 +54,7 @@ public class DocumentsService {
     private UserProvider userProvider;
 
     @Inject
-    private FileProvider fileProvider;
+    private FileStorageProviderUtil fileStorageProviderUtil;
 
     @Inject
     private DocumentProvider documentProvider;
@@ -192,7 +194,10 @@ public class DocumentsService {
     public Response downloadDocuments(@QueryParam("documents") List<String> documentsId) {
         Set<FileModel> files = documentsId.stream()
                 .map(this::getDocumentById)
-                .map(document -> fileProvider.getFile(document.getFileId()))
+                .map(document -> {
+                    FileProvider fileProvider = fileStorageProviderUtil.getDatasourceProvider(document.getFileProvider());
+                    return fileProvider.getFile(document.getFileId());
+                })
                 .collect(Collectors.toSet());
 
         ZipBuilder zipInMemory = ZipBuilder.createZipInMemory();
@@ -264,6 +269,7 @@ public class DocumentsService {
     public Response getXml(@PathParam("documentId") String documentId) {
         DocumentModel document = getDocumentById(documentId);
 
+        FileProvider fileProvider = fileStorageProviderUtil.getDatasourceProvider(document.getFileProvider());
         FileModel file = fileProvider.getFile(document.getFileId());
 
         byte[] reportBytes;

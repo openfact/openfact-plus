@@ -39,7 +39,7 @@ public class JpaDocumentProvider implements DocumentProvider {
     private ParsedDocumentProviderFactory readerUtil;
 
     @Override
-    public DocumentModel addDocument(XmlUBLFileModel file, boolean isVerified, DocumentProviderType providerType) throws UnsupportedDocumentTypeException, UnreadableDocumentException {
+    public DocumentModel addDocument(XmlUBLFileModel file, String fileProvider, boolean isVerified, DocumentProviderType providerType) throws UnsupportedDocumentTypeException, UnreadableDocumentException {
         ParsedDocument parsedDocument = readDocument(file);
         if (parsedDocument == null) {
             throw new UnreadableDocumentException(file.getDocumentType() + " Is supported but could not be read");
@@ -56,6 +56,7 @@ public class JpaDocumentProvider implements DocumentProvider {
             documentEntity.setType(file.getDocumentType());
             documentEntity.setProvider(providerType);
             documentEntity.setFileId(file.getId());
+            documentEntity.setFileProvider(fileProvider);
             documentEntity.setVerified(isVerified);
 
             em.persist(documentEntity);

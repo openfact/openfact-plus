@@ -23,6 +23,10 @@ public class DocumentManager {
     private static final Logger logger = Logger.getLogger(DocumentManager.class);
 
     @Inject
+    @FileProviderName
+    private String fileProviderName;
+
+    @Inject
     private FileProvider fileProvider;
 
     @Inject
@@ -38,7 +42,7 @@ public class DocumentManager {
             FileStorageException,
             FileFetchException,
             UnsupportedDocumentTypeException,
-            UnreadableDocumentException{
+            UnreadableDocumentException {
         FileModel fileModel = fileProvider.addFile(bytes, ".xml");
 
         try {
@@ -46,7 +50,7 @@ public class DocumentManager {
                     new FlyWeightXmlFileModel(
                             new FlyWeightFileModel(fileModel))
             );
-            return documentProvider.addDocument(flyWeightFile, false, providerType);
+            return documentProvider.addDocument(flyWeightFile, fileProviderName, false, providerType);
 
             // Guardar documento si no se pudo guardar, para despues ser leido
         } catch (UnsupportedDocumentTypeException | UnreadableDocumentException e) {
@@ -67,7 +71,7 @@ public class DocumentManager {
             FileStorageException,
             UnsupportedDocumentTypeException,
             FileFetchException,
-            UnreadableDocumentException{
+            UnreadableDocumentException {
         return importDocument(IOUtils.toByteArray(inputStream), providerType);
     }
 
