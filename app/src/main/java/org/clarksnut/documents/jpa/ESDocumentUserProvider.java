@@ -1,14 +1,15 @@
 package org.clarksnut.documents.jpa;
 
 import org.apache.lucene.search.Sort;
-import org.clarksnut.documents.DocumentUserModel;
-import org.clarksnut.documents.DocumentUserProvider;
-import org.clarksnut.documents.DocumentUserQueryModel;
-import org.clarksnut.documents.SearchResultModel;
+import org.clarksnut.documents.*;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.DocumentUserEntity;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
+import org.clarksnut.query.SimpleQuery;
+import org.clarksnut.query.es.ESQueryParser;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.hibernate.search.elasticsearch.ElasticsearchQueries;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
@@ -25,8 +26,9 @@ import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Decorator
@@ -42,9 +44,6 @@ public class ESDocumentUserProvider implements DocumentUserProvider {
     @PersistenceContext
     private EntityManager em;
 
-    @Inject
-    private ESDocumentUserQueryParser queryParser;
-
     private boolean isESEnabled;
 
     @PostConstruct
@@ -55,6 +54,44 @@ public class ESDocumentUserProvider implements DocumentUserProvider {
         } else {
             isESEnabled = false;
         }
+    }
+
+    public String getQuery(UserModel user, DocumentUserQueryModel query, SpaceModel... space) {
+        if (query.getDocumentFilters().isEmpty() && query.getUserDocumentFilters().isEmpty()) {
+            throw new IllegalStateException("Invalid query, at least one query should be requested");
+        }
+
+        // Space query
+        Set<String> userPermittedSpaceIds = getUserPermittedSpaces(user, space);
+        if (userPermittedSpaceIds.isEmpty()) {
+            return null;
+        }
+
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        for (SimpleQuery q : query.getDocumentFilters()) {
+            if (query.getDocumentFilters().isEmpty() || query.getUserDocumentFilters().isEmpty()) {
+                boolQueryBuilder.filter(ESQueryParser.toQueryBuilder(q, new DocumentFieldMapper()));
+            } else {
+                boolQueryBuilder.filter(ESQueryParser.toQueryBuilder(q, new DocumentFieldMapper("document")));
+            }
+        }
+        for (SimpleQuery q : query.getUserDocumentFilters()) {
+            boolQueryBuilder.filter(ESQueryParser.toQueryBuilder(q, new DocumentFieldMapper()));
+        }
+
+        DocumentFieldMapper fieldMapper = new DocumentFieldMapper();
+        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(DocumentModel.SUPPLIER_ASSIGNED_ID), userPermittedSpaceIds));
+        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(DocumentModel.CUSTOMER_ASSIGNED_ID), userPermittedSpaceIds));
+        boolQueryBuilder.minimumShouldMatch(1);
+        return boolQueryBuilder.toString();
+    }
+
+    private Set<String> getUserPermittedSpaces(UserModel user, SpaceModel... space) {
+        Set<String> allPermittedSpaceIds = user.getAllPermitedSpaces().stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet());
+        if (space != null && space.length > 0) {
+            allPermittedSpaceIds.retainAll(Arrays.stream(space).map(SpaceModel::getAssignedId).collect(Collectors.toList()));
+        }
+        return allPermittedSpaceIds;
     }
 
     @Override
@@ -70,7 +107,7 @@ public class ESDocumentUserProvider implements DocumentUserProvider {
 
         final boolean isDocumentSearchOnly = query.getUserDocumentFilters().isEmpty();
 
-        String esQuery = queryParser.getQuery(user, query, space);
+        String esQuery = getQuery(user, query, space);
 
         // No results
         if (esQuery == null) {
@@ -98,7 +135,7 @@ public class ESDocumentUserProvider implements DocumentUserProvider {
                 queryBuilder = fullTextEm.getSearchFactory().buildQueryBuilder().forEntity(DocumentUserEntity.class).get();
             }
 
-            SortFieldContext sortFieldContext = queryBuilder.sort().byField(SearchDocumentUserFields.toDocumentSearchField(query.getOrderBy()));
+            SortFieldContext sortFieldContext = queryBuilder.sort().byField(new DocumentFieldMapper().apply(query.getOrderBy()));
             if (query.isAsc()) {
                 sort = sortFieldContext.asc().createSort();
             } else {
