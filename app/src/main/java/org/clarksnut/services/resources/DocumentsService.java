@@ -12,6 +12,8 @@ import org.clarksnut.files.FileStorageProviderUtil;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.files.exceptions.FileStorageException;
 import org.clarksnut.managers.DocumentManager;
+import org.clarksnut.managers.exceptions.DocumentNotImportedButSavedForFutureException;
+import org.clarksnut.managers.exceptions.DocumentNotImportedException;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.report.ExportFormat;
@@ -109,8 +111,8 @@ public class DocumentsService {
             DocumentModel documentModel = null;
             try {
                 documentModel = documentManager.importDocument(inputStream, DocumentProviderType.USER);
-            } catch (UnsupportedDocumentTypeException | UnreadableDocumentException e) {
-                throw new ErrorResponseException("Unsupported type", Response.Status.BAD_REQUEST);
+            } catch (DocumentNotImportedException | DocumentNotImportedButSavedForFutureException e) {
+                throw new ErrorResponseException("Could not import the file", Response.Status.BAD_REQUEST);
             } catch (FileStorageException e) {
                 throw new ErrorResponseException("Could not save file", Response.Status.INTERNAL_SERVER_ERROR);
             } catch (FileFetchException e) {

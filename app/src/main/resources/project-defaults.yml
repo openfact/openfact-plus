@@ -10,6 +10,8 @@ swarm:
         user-name: sa
         password: sa
 clarksnut:
+  document:
+    additionalTypes: "Perception, Retention, VoidedDocuments, SummaryDocuments"
   fileStorage:
     provider: jpa
     filesystem:

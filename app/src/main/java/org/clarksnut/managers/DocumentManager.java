@@ -1,14 +1,15 @@
 package org.clarksnut.managers;
 
 import org.apache.commons.io.IOUtils;
-import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.documents.DocumentProvider;
-import org.clarksnut.documents.DocumentProviderType;
+import org.clarksnut.documents.*;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
+import org.clarksnut.documents.exceptions.UnrecognizableDocumentTypeException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.files.*;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.files.exceptions.FileStorageException;
+import org.clarksnut.managers.exceptions.DocumentNotImportedButSavedForFutureException;
+import org.clarksnut.managers.exceptions.DocumentNotImportedException;
 import org.clarksnut.models.exceptions.ModelException;
 import org.jboss.logging.Logger;
 
@@ -32,6 +33,9 @@ public class DocumentManager {
     @Inject
     private DocumentProvider documentProvider;
 
+    @Inject
+    private UnsavedDocumentProvider unsavedDocumentProvider;
+
     /**
      * @param bytes
      * @throws UnreadableDocumentException in case InputStream passed could not be processed
@@ -41,22 +45,25 @@ public class DocumentManager {
     public DocumentModel importDocument(byte[] bytes, DocumentProviderType providerType) throws
             FileStorageException,
             FileFetchException,
-            UnsupportedDocumentTypeException,
-            UnreadableDocumentException {
+            DocumentNotImportedException,
+            DocumentNotImportedButSavedForFutureException {
         FileModel fileModel = fileProvider.addFile(bytes, ".xml");
 
-        try {
-            FlyWeightXmlUBLFileModel flyWeightFile = new FlyWeightXmlUBLFileModel(
-                    new FlyWeightXmlFileModel(
-                            new FlyWeightFileModel(fileModel))
-            );
-            return documentProvider.addDocument(flyWeightFile, fileProviderName, false, providerType);
+        XmlUBLFileModel xmlUBLFile = new FlyWeightXmlUBLFileModel(
+                new FlyWeightXmlFileModel(
+                        new FlyWeightFileModel(fileModel))
+        );
 
-            // Guardar documento si no se pudo guardar, para despues ser leido
-        } catch (UnsupportedDocumentTypeException | UnreadableDocumentException e) {
-            boolean result = fileProvider.removeFile(fileModel);
-            logger.debug("Rollback file result=" + result);
-            throw e;
+        try {
+            return documentProvider.addDocument(xmlUBLFile, fileProviderName, false, providerType);
+        } catch (UnsupportedDocumentTypeException e) {
+            unsavedDocumentProvider.addDocument(xmlUBLFile, fileProviderName, UnsavedReasonType.UNSUPPORTED);
+            throw new DocumentNotImportedButSavedForFutureException("Document is a valid UBL but does not have a reader", e);
+        } catch (UnreadableDocumentException e) {
+            unsavedDocumentProvider.addDocument(xmlUBLFile, fileProviderName, UnsavedReasonType.UNREADABLE);
+            throw new DocumentNotImportedButSavedForFutureException("Document is a valid UBL but readers could not read it", e);
+        } catch (UnrecognizableDocumentTypeException e) {
+            throw new DocumentNotImportedException("Document not imported", e);
         }
     }
 
@@ -69,9 +76,9 @@ public class DocumentManager {
     public DocumentModel importDocument(InputStream inputStream, DocumentProviderType providerType)
             throws IOException,
             FileStorageException,
-            UnsupportedDocumentTypeException,
             FileFetchException,
-            UnreadableDocumentException {
+            DocumentNotImportedException,
+            DocumentNotImportedButSavedForFutureException {
         return importDocument(IOUtils.toByteArray(inputStream), providerType);
     }
 

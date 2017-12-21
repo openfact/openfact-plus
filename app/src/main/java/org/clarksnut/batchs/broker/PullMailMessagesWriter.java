@@ -4,6 +4,8 @@ import org.clarksnut.documents.DocumentProviderType;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.managers.DocumentManager;
+import org.clarksnut.managers.exceptions.DocumentNotImportedButSavedForFutureException;
+import org.clarksnut.managers.exceptions.DocumentNotImportedException;
 import org.clarksnut.repositories.user.MailUblMessageModel;
 import org.jboss.logging.Logger;
 
@@ -45,10 +47,8 @@ public class PullMailMessagesWriter implements ItemWriter {
             MailUblMessageModel message = (MailUblMessageModel) items.get(readPosition++);
             try {
                 documentManager.importDocument(message.getXml(), DocumentProviderType.MAIL);
-            } catch (UnsupportedDocumentTypeException e) {
-                logger.debug("Unsupported document type");
-            } catch (UnreadableDocumentException e) {
-                logger.warn("Unreadable document");
+            } catch (DocumentNotImportedException | DocumentNotImportedButSavedForFutureException e) {
+                logger.warn("Document not imported");
             }
         }
     }

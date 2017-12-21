@@ -5,7 +5,9 @@ import org.clarksnut.documents.DocumentModel.DocumentCreationEvent;
 import org.clarksnut.documents.DocumentModel.DocumentRemovedEvent;
 import org.clarksnut.documents.DocumentProvider;
 import org.clarksnut.documents.DocumentProviderType;
+import org.clarksnut.documents.DocumentType;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
+import org.clarksnut.documents.exceptions.UnrecognizableDocumentTypeException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.DocumentUtil;
@@ -16,6 +18,7 @@ import org.clarksnut.documents.parser.ParsedDocumentProviderFactory;
 import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.jboss.logging.Logger;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
@@ -23,9 +26,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.UUID;
+import java.util.*;
 
 @Stateless
 public class JpaDocumentProvider implements DocumentProvider {
@@ -38,8 +39,14 @@ public class JpaDocumentProvider implements DocumentProvider {
     @Inject
     private ParsedDocumentProviderFactory readerUtil;
 
+    @Inject
+    @ConfigurationValue("clarksnut.document.additionalTypes")
+    private Optional<String[]> clarksnutAdditionalDocumentTypes;
+
     @Override
-    public DocumentModel addDocument(XmlUBLFileModel file, String fileProvider, boolean isVerified, DocumentProviderType providerType) throws UnsupportedDocumentTypeException, UnreadableDocumentException {
+    public DocumentModel addDocument(XmlUBLFileModel file, String fileProvider, boolean isVerified, DocumentProviderType providerType)
+            throws UnsupportedDocumentTypeException, UnreadableDocumentException, UnrecognizableDocumentTypeException {
+
         ParsedDocument parsedDocument = readDocument(file);
         if (parsedDocument == null) {
             throw new UnreadableDocumentException(file.getDocumentType() + " Is supported but could not be read");
@@ -99,10 +106,20 @@ public class JpaDocumentProvider implements DocumentProvider {
         return document;
     }
 
-    private ParsedDocument readDocument(XmlUBLFileModel file) throws UnsupportedDocumentTypeException {
+    private ParsedDocument readDocument(XmlUBLFileModel file) throws UnsupportedDocumentTypeException, UnrecognizableDocumentTypeException {
         SortedSet<ParsedDocumentProvider> readers = readerUtil.getParser(file.getDocumentType());
         if (readers.isEmpty()) {
-            throw new UnsupportedDocumentTypeException("Unsupported type=" + file.getDocumentType());
+            Optional<DocumentType> optional = DocumentType.getByType(file.getDocumentType());
+            if (optional.isPresent()) {
+                throw new UnsupportedDocumentTypeException("Unsupported type=" + file.getDocumentType());
+            }
+
+            Optional<String> additionalOptional = Arrays.stream(clarksnutAdditionalDocumentTypes.orElse(new String[0])).filter(p -> p.equals(file.getDocumentType())).findFirst();
+            if (additionalOptional.isPresent()) {
+                throw new UnsupportedDocumentTypeException("Unsupported type=" + file.getDocumentType());
+            } else {
+                throw new UnrecognizableDocumentTypeException("Unrecognizable type=" + file.getDocumentType());
+            }
         }
 
         ParsedDocument parsedDocument = null;
@@ -112,6 +129,7 @@ public class JpaDocumentProvider implements DocumentProvider {
                 break;
             }
         }
+
         return parsedDocument;
     }
 
