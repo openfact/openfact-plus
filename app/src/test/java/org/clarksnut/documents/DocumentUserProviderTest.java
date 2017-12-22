@@ -4,6 +4,7 @@ import org.arquillian.ape.rdbms.Cleanup;
 import org.arquillian.ape.rdbms.CleanupStrategy;
 import org.arquillian.ape.rdbms.TestExecutionPhase;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
+import org.clarksnut.documents.exceptions.UnrecognizableDocumentTypeException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.SpaceModel;
@@ -34,7 +35,7 @@ public class DocumentUserProviderTest extends AbstractProviderTest {
     private List<String> documentIds;
 
     @Before
-    public void before() throws UnsupportedDocumentTypeException, UnreadableDocumentException, IOException, SAXException, ParserConfigurationException, SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
+    public void before() throws UnsupportedDocumentTypeException, UnreadableDocumentException, IOException, SAXException, ParserConfigurationException, SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException, UnrecognizableDocumentTypeException {
         Map<String, String> xmls = new HashMap<>();
         xmls.put("Invoice", "/peru/document/invoice/FF11-00000003.xml");
         xmls.put("CreditNote", "/peru/document/creditnote/FF11-3.xml");
@@ -51,7 +52,7 @@ public class DocumentUserProviderTest extends AbstractProviderTest {
             Mockito.when(file.getId()).thenReturn(UUID.randomUUID().toString());
             Mockito.when(file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-            DocumentModel document = documentProvider.addDocument(file, true, DocumentProviderType.USER);
+            DocumentModel document = documentProvider.addDocument(file, "jpa",true, DocumentProviderType.USER);
 
             documentIds.add(document.getId());
         }

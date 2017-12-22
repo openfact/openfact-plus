@@ -79,6 +79,7 @@ public class JpaDocumentProvider implements DocumentProvider {
         versionEntity.setType(file.getDocumentType());
         versionEntity.setProvider(providerType);
         versionEntity.setFileId(file.getId());
+        versionEntity.setFileProvider(fileProvider);
         versionEntity.setVerified(isVerified);
         versionEntity.setCurrentVersion(previousDocument == null);
         versionEntity.setDocument(DocumentAdapter.toEntity(document, em));

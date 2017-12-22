@@ -30,7 +30,7 @@ public class DocumentProviderTest extends AbstractProviderTest {
         Mockito.when(file.getId()).thenReturn(fileId);
         Mockito.when(file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-        DocumentModel document = documentProvider.addDocument(file, true, DocumentProviderType.USER);
+        DocumentModel document = documentProvider.addDocument(file, "jpa", true, DocumentProviderType.USER);
 
         Mockito.verify(file, Mockito.atLeastOnce()).getDocumentType();
         Mockito.verify(file, Mockito.atLeastOnce()).getId();
@@ -44,7 +44,7 @@ public class DocumentProviderTest extends AbstractProviderTest {
         assertThat(document.getProvider()).as("check provider is %s", DocumentProviderType.USER).isEqualTo(DocumentProviderType.USER);
 
         // Second version
-        document = documentProvider.addDocument(file, true, DocumentProviderType.USER);
+        document = documentProvider.addDocument(file, "jpa", true, DocumentProviderType.USER);
 
         assertThat(document).as("check second version document").isNotNull();
 

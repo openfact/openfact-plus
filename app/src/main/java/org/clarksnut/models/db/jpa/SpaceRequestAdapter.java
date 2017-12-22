@@ -1,10 +1,7 @@
 package org.clarksnut.models.db.jpa;
 
 import org.clarksnut.common.jpa.JpaModel;
-import org.clarksnut.models.RequestStatusType;
-import org.clarksnut.models.RequestType;
-import org.clarksnut.models.SpaceModel;
-import org.clarksnut.models.SpaceRequestModel;
+import org.clarksnut.models.*;
 import org.clarksnut.models.db.jpa.entity.SpaceRequestEntity;
 
 import javax.persistence.EntityManager;
@@ -76,6 +73,11 @@ public class SpaceRequestAdapter implements SpaceRequestModel, JpaModel<SpaceReq
     @Override
     public Date getUpdatedAt() {
         return request.getUpdatedAt();
+    }
+
+    @Override
+    public UserModel getUser() {
+        return new UserAdapter(em, request.getUser());
     }
 
     @Override

@@ -23,5 +23,7 @@ public interface SpaceRequestModel {
 
     Date getUpdatedAt();
 
+    UserModel getUser();
+
     SpaceModel getSpace();
 }

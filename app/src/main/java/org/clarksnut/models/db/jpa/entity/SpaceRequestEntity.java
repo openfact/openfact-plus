@@ -4,32 +4,20 @@ import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
-import org.clarksnut.documents.DocumentProviderType;
 import org.clarksnut.models.RequestStatusType;
 import org.clarksnut.models.RequestType;
-import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-@Audited
 @Entity
-@Table(name = "cl_space_request", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "assigned_id"),
-        @UniqueConstraint(columnNames = "name")
-}, indexes = {
-        @Index(columnList = "assigned_id", unique = true),
-        @Index(columnList = "name", unique = true)
-})
+@Table(name = "cl_space_request")
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getSpaceByAssignedId", query = "select s from SpaceEntity s where s.assignedId = :assignedId"),
-        @NamedQuery(name = "getSpacesByUserId", query = "select s from SpaceEntity s inner join s.owner o where o.id = :userId")
+        @NamedQuery(name = "getSpaceRequestBySpaceId", query = "select r from SpaceRequestEntity r inner join r.space s where s.id = :spaceId")
 })
 public class SpaceRequestEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
@@ -42,6 +30,11 @@ public class SpaceRequestEntity implements CreatableEntity, UpdatableEntity, Ser
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "space", foreignKey = @ForeignKey)
     private SpaceEntity space;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user", foreignKey = @ForeignKey)
+    private UserEntity user;
 
     @NotNull
     @Size(max = 255)
@@ -148,5 +141,13 @@ public class SpaceRequestEntity implements CreatableEntity, UpdatableEntity, Ser
     @Override
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }
