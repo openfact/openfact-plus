@@ -24,6 +24,7 @@
         <version.hibernate-validator>5.2.4.Final</version.hibernate-validator>
         <version.hibernate-search>5.8.2.Final</version.hibernate-search>
         <version.jberet-support>1.3.0.Beta6</version.jberet-support>
+        <version.jasperreports>6.4.3</version.jasperreports>
 
         <version.h2>1.4.187</version.h2>
         <version.postgresql>42.1.4</version.postgresql>
@@ -399,7 +400,7 @@
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>6.4.3</version>
+            <version>${version.jasperreports}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.barcode4j</groupId>
@@ -652,6 +653,12 @@
                     <sourceScanner>org.codehaus.plexus.compiler.util.scan.StaleSourceScanner</sourceScanner>
                 </configuration>
                 <dependencies>
+                    <dependency>
+                        <groupId>net.sf.jasperreports</groupId>
+                        <artifactId>jasperreports</artifactId>
+                        <version>${version.jasperreports}</version>
+                        <scope>runtime</scope>
+                    </dependency>
                     <dependency>
                         <groupId>com.lowagie</groupId>
                         <artifactId>itext</artifactId>
