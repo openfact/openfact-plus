@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 
+@Stateless
 public class FileStorageProviderFactory {
 
     @Inject
