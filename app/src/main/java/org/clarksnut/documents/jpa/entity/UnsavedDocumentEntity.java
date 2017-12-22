@@ -21,7 +21,7 @@ import java.util.*;
         @NamedQuery(name = "getAllUnsupportedDocuments", query = "select d from DocumentEntity d")
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
-public class UnsupportedDocumentEntity implements CreatableEntity, UpdatableEntity, Serializable {
+public class UnsavedDocumentEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL

@@ -28,12 +28,12 @@ public class SpaceRequestEntity implements CreatableEntity, UpdatableEntity, Ser
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "space", foreignKey = @ForeignKey)
+    @JoinColumn(name = "space_id", foreignKey = @ForeignKey)
     private SpaceEntity space;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user", foreignKey = @ForeignKey)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey)
     private UserEntity user;
 
     @NotNull

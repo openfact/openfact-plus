@@ -16,12 +16,12 @@ public class CollaboratorEntity implements Serializable {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SPACE_ID")
+    @JoinColumn(name = "space_id")
     private SpaceEntity space;
 
 //    @NotNull

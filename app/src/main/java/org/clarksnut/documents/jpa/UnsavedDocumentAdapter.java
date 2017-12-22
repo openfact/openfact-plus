@@ -3,29 +3,29 @@ package org.clarksnut.documents.jpa;
 import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.documents.UnsavedDocumentModel;
 import org.clarksnut.documents.UnsavedReasonType;
-import org.clarksnut.documents.jpa.entity.UnsupportedDocumentEntity;
+import org.clarksnut.documents.jpa.entity.UnsavedDocumentEntity;
 
 import javax.persistence.EntityManager;
 
-public class UnsavedDocumentAdapter implements UnsavedDocumentModel, JpaModel<UnsupportedDocumentEntity> {
+public class UnsavedDocumentAdapter implements UnsavedDocumentModel, JpaModel<UnsavedDocumentEntity> {
 
     private final EntityManager em;
-    private final UnsupportedDocumentEntity document;
+    private final UnsavedDocumentEntity document;
 
-    public UnsavedDocumentAdapter(EntityManager em, UnsupportedDocumentEntity document) {
+    public UnsavedDocumentAdapter(EntityManager em, UnsavedDocumentEntity document) {
         this.em = em;
         this.document = document;
     }
 
-    public static UnsupportedDocumentEntity toEntity(UnsavedDocumentModel model, EntityManager em) {
+    public static UnsavedDocumentEntity toEntity(UnsavedDocumentModel model, EntityManager em) {
         if (model instanceof UnsavedDocumentAdapter) {
             return ((UnsavedDocumentAdapter) model).getEntity();
         }
-        return em.getReference(UnsupportedDocumentEntity.class, model.getId());
+        return em.getReference(UnsavedDocumentEntity.class, model.getId());
     }
 
     @Override
-    public UnsupportedDocumentEntity getEntity() {
+    public UnsavedDocumentEntity getEntity() {
         return document;
     }
 

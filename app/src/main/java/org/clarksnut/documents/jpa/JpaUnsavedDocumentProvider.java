@@ -3,7 +3,7 @@ package org.clarksnut.documents.jpa;
 import org.clarksnut.documents.UnsavedDocumentModel;
 import org.clarksnut.documents.UnsavedDocumentProvider;
 import org.clarksnut.documents.UnsavedReasonType;
-import org.clarksnut.documents.jpa.entity.UnsupportedDocumentEntity;
+import org.clarksnut.documents.jpa.entity.UnsavedDocumentEntity;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.jboss.logging.Logger;
 
@@ -22,7 +22,7 @@ public class JpaUnsavedDocumentProvider implements UnsavedDocumentProvider {
 
     @Override
     public UnsavedDocumentModel addDocument(XmlUBLFileModel file, String fileProvider, UnsavedReasonType reason) {
-        UnsupportedDocumentEntity entity = new UnsupportedDocumentEntity();
+        UnsavedDocumentEntity entity = new UnsavedDocumentEntity();
 
         entity.setId(UUID.randomUUID().toString());
         entity.setType(file.getDocumentType());
@@ -37,14 +37,14 @@ public class JpaUnsavedDocumentProvider implements UnsavedDocumentProvider {
 
     @Override
     public UnsavedDocumentModel getDocument(String documentId) {
-        UnsupportedDocumentEntity entity = em.find(UnsupportedDocumentEntity.class, documentId);
+        UnsavedDocumentEntity entity = em.find(UnsavedDocumentEntity.class, documentId);
         if (entity == null) return null;
         return new UnsavedDocumentAdapter(em, entity);
     }
 
     @Override
     public boolean removeDocument(UnsavedDocumentModel document) {
-        UnsupportedDocumentEntity entity = em.find(UnsupportedDocumentEntity.class, document.getId());
+        UnsavedDocumentEntity entity = em.find(UnsavedDocumentEntity.class, document.getId());
         if (entity == null) return false;
         em.remove(entity);
 
