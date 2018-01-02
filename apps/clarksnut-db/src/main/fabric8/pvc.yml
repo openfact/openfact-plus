@@ -1,8 +1,0 @@
-metadata:
-  name: clarksnut-db-postgresql-data
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi

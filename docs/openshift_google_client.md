@@ -9,7 +9,7 @@ echo http://keycloak-clarksnut-system.$(minishift ip).nip.io/auth/realms/clarksn
 
 https://console.cloud.google.com/apis/credentials/oauthclient
 
-![Register OAuth App](../images/register-oauth.png)
+![Register OAuth App](images/register-oauth.png)
 
 
 Once you have found your client ID and secret for the new fabric8 app on your github settings then type the following:

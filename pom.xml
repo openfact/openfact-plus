@@ -1,31 +1,59 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>io.openshift</groupId>
         <artifactId>booster-parent</artifactId>
-        <version>4</version>
+        <version>10</version>
     </parent>
 
     <groupId>org.clarksnut</groupId>
-    <artifactId>clarksnut-app</artifactId>
-    <version>1.0-beta-6-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <artifactId>clarksnut</artifactId>
+    <version>1.0-beta-7-SNAPSHOT</version>
 
-    <name>parent</name>
-    <description>Clarksnut collector</description>
+    <packaging>war</packaging>
+
+    <name>Clarksnut</name>
+    <description>Clarksnut UBL collector</description>
 
     <properties>
+        <!--General-->
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <version.arquillian.cube>1.9.2</version.arquillian.cube>
+        <version.resteasy>3.0.19.Final</version.resteasy>
+        <version.override.jackson>2.7.7</version.override.jackson>
+        <version.wildfly.swarm>2017.11.0</version.wildfly.swarm>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 
-        <version.wildfly.swarm>2017.11.0</version.wildfly.swarm>
-
+        <!--Fabric8-->
         <fabric8.version>3.0.8</fabric8.version>
         <fabric8.maven.plugin.version>3.5.33</fabric8.maven.plugin.version>
 
+        <!--Keycloak-->
+        <version.keycloak>2.5.5.Final</version.keycloak>
+
+        <!--Hibernate-->
+        <version.hibernate>5.2.12.Final</version.hibernate>
+        <version.hibernate-validator>5.2.4.Final</version.hibernate-validator>
+        <version.hibernate-search>5.8.2.Final</version.hibernate-search>
+
+        <!--Jdbc drivers-->
+        <version.h2>1.4.187</version.h2>
+        <version.postgresql>42.1.4</version.postgresql>
+        <version.mysql>5.1.38</version.mysql>
+
+        <!--Others-->
+        <version.jberet-support>1.3.0.Beta6</version.jberet-support>
+        <version.jasperreports>6.4.3</version.jasperreports>
+
+        <!--Plugins-->
         <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>2.20</maven-failsafe-plugin.version>
+        <version.liquibase-maven-plugin>3.5.3</version.liquibase-maven-plugin>
     </properties>
 
     <url>http://clarksnut.org</url>
@@ -41,9 +69,9 @@
     <developers>
         <developer>
             <id>carlosthe19916</id>
-            <name>Carlos Esteban Feria Vila</name>
+            <name>Carlos Feria</name>
             <email>carlosthe19916@gmail.com</email>
-            <organization>SistCoop</organization>
+            <organization>Clarksnut</organization>
             <roles>
                 <role>project-owner</role>
             </roles>
@@ -68,99 +96,25 @@
         </repository>
     </distributionManagement>
 
-   <repositories>
-       <!--<repository>-->
-           <!--<id>sonatype.snapshots</id>-->
-           <!--<name>Apache Development Snapshot Repository</name>-->
-           <!--<url>https://oss.sonatype.org/content/repositories/snapshots/</url>-->
-           <!--<releases>-->
-               <!--<enabled>false</enabled>-->
-           <!--</releases>-->
-           <!--<snapshots>-->
-               <!--<enabled>true</enabled>-->
-           <!--</snapshots>-->
-       <!--</repository>-->
-
-       <!--Wildfly-Swarm Glassfish-->
-       <repository>
-           <id>jboss-public-repository-group</id>
-           <name>JBoss Public Repository Group</name>
-           <url>https://repository.jboss.org/nexus/content/groups/public/</url>
-           <releases>
-               <enabled>true</enabled>
-               <updatePolicy>never</updatePolicy>
-           </releases>
-           <snapshots>
-               <enabled>false</enabled>
-               <updatePolicy>daily</updatePolicy>
-           </snapshots>
-       </repository>
-
-       <!--Jasper reports-->
-       <repository>
-           <id>jasper</id>
-           <url>http://jaspersoft.artifactoryonline.com/jaspersoft/jaspersoft-repo/</url>
-           <releases>
-               <enabled>true</enabled>
-           </releases>
-           <snapshots>
-               <enabled>false</enabled>
-           </snapshots>
-       </repository>
-   </repositories>
-
-    <modules>
-        <module>app</module>
-    </modules>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>io.fabric8</groupId>
-                    <artifactId>fabric8-maven-plugin</artifactId>
-                    <version>${fabric8.maven.plugin.version}</version>
-                    <configuration>
-                        <resources>
-                            <labels>
-                                <all>
-                                    <space>clarksnut-platform</space>
-                                </all>
-                            </labels>
-                        </resources>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven-failsafe-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <repositories>
+        <!--Jasper reports-->
+        <repository>
+            <id>jasper</id>
+            <url>http://jaspersoft.artifactoryonline.com/jaspersoft/jaspersoft-repo/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.wildfly.swarm</groupId>
-                <artifactId>bom-all</artifactId>
+                <artifactId>bom</artifactId>
                 <version>${version.wildfly.swarm}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -174,13 +128,838 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- This -->
             <dependency>
-                <groupId>org.clarksnut</groupId>
-                <artifactId>clarksnut-app</artifactId>
-                <version>${project.version}</version>
-                <type>war</type>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-authz-client</artifactId>
+                <version>${version.keycloak}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.arquillian.cube</groupId>
+                <artifactId>arquillian-cube-bom</artifactId>
+                <version>${version.arquillian.cube}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>monitor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>microprofile</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jaxrs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jaxrs-multipart</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>resteasy-jaxrs</artifactId>
+                    <groupId>org.jboss.resteasy</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>keycloak</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>cdi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>ejb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>datasources</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>logstash</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>bean-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>hibernate-search</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>infinispan</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>batch-jberet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>camel-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.core</groupId>
+            <artifactId>wildfly-controller-client</artifactId>
+            <version>2.2.1.Final</version>
+        </dependency>
+
+        <!--Resteasy-->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>${version.resteasy}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxb-provider</artifactId>
+            <version>${version.resteasy}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson2-provider</artifactId>
+            <version>${version.resteasy}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--Arquillian-->
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>arquillian</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <version>1.1.12.Final</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.arquillian.cube</groupId>
+            <artifactId>arquillian-cube-openshift</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.undertow</groupId>
+                    <artifactId>undertow-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!--Arquillian extensions-->
+        <dependency>
+            <groupId>org.arquillian.ape</groupId>
+            <artifactId>arquillian-ape-sql-container-dbunit</artifactId>
+            <version>2.0.0-alpha.4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--Hibernate-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${version.hibernate}</version>
+            <scope>provided</scope>
+            <!--Necessary after import hibernate-infinispan-->
+            <exclusions>
+                <exclusion>
+                    <groupId>dom4j</groupId>
+                    <artifactId>dom4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${version.hibernate-validator}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-orm</artifactId>
+            <version>${version.hibernate-search}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-elasticsearch</artifactId>
+            <version>${version.hibernate-search}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-elasticsearch-aws</artifactId>
+            <version>5.8.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-serialization-avro</artifactId>
+            <version>5.8.2.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-engine</artifactId>
+            <version>${version.hibernate-search}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-infinispan</artifactId>
+            <version>${version.hibernate}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-envers</artifactId>
+            <version>${version.hibernate}</version>
+        </dependency>
+
+        <!-- Infinispan integration: hb search-->
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-directory-provider</artifactId>
+            <version>9.0.1.Final</version>
+        </dependency>
+
+        <!--Keycloak-->
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-admin-client</artifactId>
+            <version>${version.keycloak}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-adapter-core</artifactId>
+            <version>${version.keycloak}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-adapter-spi</artifactId>
+            <version>${version.keycloak}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-authz-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--Elasticsearch-->
+        <dependency>
+            <groupId>org.sistcoop</groupId>
+            <artifactId>elasticsearch-shaded</artifactId>
+            <version>1.0.5</version>
+        </dependency>
+
+        <!--Ubl21-->
+        <dependency>
+            <groupId>com.helger</groupId>
+            <artifactId>ph-ubl21</artifactId>
+            <version>5.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.sistcoop</groupId>
+            <artifactId>sunat</artifactId>
+            <version>1.0.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-core</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+
+        <!--Apache utils-->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
+        </dependency>
+
+        <!--Liquibase-->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>3.5.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!--Gmail-->
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>1.22.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-gmail</artifactId>
+            <version>v1-rev69-1.22.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.oauth-client</groupId>
+            <artifactId>google-oauth-client-jetty</artifactId>
+            <version>1.22.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.http-client</groupId>
+            <artifactId>google-http-client-jackson2</artifactId>
+            <version>1.22.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.oauth-client</groupId>
+            <artifactId>google-oauth-client</artifactId>
+            <version>1.22.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.oauth-client</groupId>
+            <artifactId>google-oauth-client-servlet</artifactId>
+            <version>1.22.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.10</version>
+        </dependency>
+
+        <!--Jberet extensions-->
+        <dependency>
+            <groupId>org.jberet</groupId>
+            <artifactId>jberet-core</artifactId>
+            <version>${version.jberet-support}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jberet</groupId>
+            <artifactId>jberet-support</artifactId>
+            <version>${version.jberet-support}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-cachestore-jdbc</artifactId>
+            <version>8.2.4.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5-pre10</version>
+        </dependency>
+
+        <!--Google Guava-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
+        </dependency>
+
+        <!-- Proxy utils -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.2.5</version>
+        </dependency>
+
+        <!-- Jasper reports -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>${version.jasperreports}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.barcode4j</groupId>
+            <artifactId>barcode4j</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-bridge</artifactId>
+            <version>1.9.1</version>
+        </dependency>
+
+        <!--Zip builder-->
+        <dependency>
+            <groupId>org.jodd</groupId>
+            <artifactId>jodd-core</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+
+        <!-- Others -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.23</version>
+        </dependency>
+
+        <!--Test-->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.8.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.13.0</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Jdbc drivers -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${version.h2}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${version.postgresql}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${version.mysql}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/fabric8</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <classpathDependencyExcludes>
+                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-openshift
+                        </classpathDependencyExclude>
+                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-kubernetes
+                        </classpathDependencyExclude>
+                    </classpathDependencyExcludes>
+                    <environmentVariables>
+                        <!--Datasource-->
+                        <DB_DRIVER_NAME>h2</DB_DRIVER_NAME>
+                        <DB_CONNECTION_URL>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</DB_CONNECTION_URL>
+                        <DB_USER_NAME>sa</DB_USER_NAME>
+                        <DB_PASSWORD>sa</DB_PASSWORD>
+
+                        <!--Hibernate-->
+                        <CN_HIBERNATE_STRATEGY>create-drop</CN_HIBERNATE_STRATEGY>
+                        <CN_HIBERNATE_SHOW_SQL>true</CN_HIBERNATE_SHOW_SQL>
+                        <CN_HIBERNATE_FORMAT_SQL>true</CN_HIBERNATE_FORMAT_SQL>
+                        <CN_HIBERNATE_SECOND_LEVEL_CACHE>false</CN_HIBERNATE_SECOND_LEVEL_CACHE>
+
+                        <!--Elasticsearch-->
+                        <CN_ELASTICSEARCH_HOST>http://localhost:9200</CN_ELASTICSEARCH_HOST>
+                        <CN_ELASTICSEARCH_USER>elastic</CN_ELASTICSEARCH_USER>
+                        <CN_ELASTICSEARCH_PASSWORD>changeme</CN_ELASTICSEARCH_PASSWORD>
+                        <CN_ELASTICSEARCH_INDEX_SCHEMA_MANAGEMENT_STRATEGY>drop-and-create
+                        </CN_ELASTICSEARCH_INDEX_SCHEMA_MANAGEMENT_STRATEGY>
+                        <CN_ELASTICSEARCH_REQUIRED_INDEX_STATUS>yellow</CN_ELASTICSEARCH_REQUIRED_INDEX_STATUS>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/webapp</directory>
+                            <filtering>true</filtering>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.wildfly.swarm</groupId>
+                <artifactId>wildfly-swarm-plugin</artifactId>
+                <version>${version.wildfly.swarm}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.hibernate</groupId>
+                                    <artifactId>hibernate-orm-modules</artifactId>
+                                    <version>${version.hibernate}</version>
+                                    <classifier>wildfly-11-dist</classifier>
+                                    <type>zip</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}/modules</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.hibernate</groupId>
+                                    <artifactId>hibernate-search-modules</artifactId>
+                                    <version>${version.hibernate-search}</version>
+                                    <classifier>wildfly-11-dist</classifier>
+                                    <type>zip</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}/modules</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.hibernate.orm.tooling</groupId>
+                <artifactId>hibernate-enhance-maven-plugin</artifactId>
+                <version>${version.hibernate}</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <enableDirtyTracking>true</enableDirtyTracking>
+                        </configuration>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.alexnederlof</groupId>
+                <artifactId>jasperreports-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>jasper</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <compiler>net.sf.jasperreports.engine.design.JRJdtCompiler</compiler>
+                    <sourceDirectory>src/main/resources/report</sourceDirectory>
+                    <outputDirectory>${project.build.outputDirectory}/report</outputDirectory>
+                    <outputFileExt>.jasper</outputFileExt>
+                    <xmlValidation>true</xmlValidation>
+                    <verbose>false</verbose>
+                    <numberOfThreads>4</numberOfThreads>
+                    <failOnMissingSourceDirectory>true</failOnMissingSourceDirectory>
+                    <sourceScanner>org.codehaus.plexus.compiler.util.scan.StaleSourceScanner</sourceScanner>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.jasperreports</groupId>
+                        <artifactId>jasperreports</artifactId>
+                        <version>${version.jasperreports}</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.lowagie</groupId>
+                        <artifactId>itext</artifactId>
+                        <version>2.1.7</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.olap4j</groupId>
+                        <artifactId>olap4j</artifactId>
+                        <version>1.2.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>community</id>
+            <activation>
+                <property>
+                    <name>!product</name>
+                </property>
+            </activation>
+            <properties>
+                <product.name>Clarksnut</product.name>
+                <product.name-html>
+                    \u003Cdivclass="of-logo-text"\u003E\u003Cspan\Clarksnut\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E
+                </product.name-html>
+                <product.version>${project.version}</product.version>
+                <product.default-profile>community</product.default-profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>product</id>
+            <activation>
+                <property>
+                    <name>product</name>
+                </property>
+            </activation>
+            <properties>
+                <product.name>ClarksnutEE</product.name>
+                <product.name-html>
+                    \u003Cstrong\u003EClarksnut\u003C\u002Fstrong\u003E\u003Csup\u003E\u00AE\u003C\u002Fsup\u003E EE
+                </product.name-html>
+                <product.version>${project.version}</product.version>
+                <product.default-profile>product</product.default-profile>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>openshift</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly.swarm</groupId>
+                    <artifactId>jgroups</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.wildfly.swarm</groupId>
+                    <artifactId>topology-openshift</artifactId>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>fabric8-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>resource</goal>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <generator>
+                                <includes>
+                                    <include>wildfly-swarm</include>
+                                </includes>
+                                <excludes>
+                                    <exclude>webapp</exclude>
+                                </excludes>
+                            </generator>
+                            <enricher>
+                                <config>
+                                    <wildfly-swarm-health-check>
+                                        <path>/</path>
+                                    </wildfly-swarm-health-check>
+                                </config>
+                            </enricher>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-property</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>SSO_AUTH_SERVER_URL</property>
+                                            <message>The property `SSO_AUTH_SERVER_URL` is missing!</message>
+                                        </requireProperty>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <activation/>
+        </profile>
+
+        <profile>
+            <id>openshift-it</id>
+            <build>
+                <plugins>
+                    <!--
+                      - 1.
+                      -
+                      - For running the test, we need the Jackson dependencies in a higher version than what is brought in by Swarm.
+                      - Unfortunately, Failsafe can't be configured do add specific artifacts to the test classpath, just files,
+                      - so we need to download the dependencies manually. This is what this plugin execution does.
+                      -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prepare-jackson-dependencies-for-integration-test</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <stripVersion>true</stripVersion>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>com.fasterxml.jackson.core</groupId>
+                                            <artifactId>jackson-core</artifactId>
+                                            <version>${version.override.jackson}</version>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.fasterxml.jackson.core</groupId>
+                                            <artifactId>jackson-annotations</artifactId>
+                                            <version>${version.override.jackson}</version>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.fasterxml.jackson.core</groupId>
+                                            <artifactId>jackson-databind</artifactId>
+                                            <version>${version.override.jackson}</version>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <!--
+                              - 2.
+                              -
+                              - These artifacts are added to the test classpath automatically because they are project dependencies.
+                              - However, they are of too old versions, so we remove them here and add correct versions later.
+                              -->
+                            <classpathDependencyExcludes>
+                                <classpathDependencyExclude>com.fasterxml.jackson.core:jackson-core
+                                </classpathDependencyExclude>
+                                <classpathDependencyExclude>com.fasterxml.jackson.core:jackson-annotations
+                                </classpathDependencyExclude>
+                                <classpathDependencyExclude>com.fasterxml.jackson.core:jackson-databind
+                                </classpathDependencyExclude>
+                            </classpathDependencyExcludes>
+                            <!--
+                              - 3.
+                              -
+                              - And here, we add the correct versions of the artifacts to test classpath. Unfortunately,
+                              - this is only possible by file paths, not by artifact coordinates.
+                              -->
+                            <additionalClasspathElements>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jackson-core.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>
+                                    ${project.build.directory}/dependency/jackson-annotations.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jackson-databind.jar
+                                </additionalClasspathElement>
+                            </additionalClasspathElements>
+                            <systemPropertyVariables>
+                                <app.name>${project.artifactId}</app.name>
+                            </systemPropertyVariables>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-property</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>SSO_AUTH_SERVER_URL</property>
+                                            <message>The property `SSO_AUTH_SERVER_URL` is missing!</message>
+                                        </requireProperty>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <activation/>
+        </profile>
+
+    </profiles>
+
 </project>

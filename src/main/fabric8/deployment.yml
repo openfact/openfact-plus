@@ -1,0 +1,167 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  name: ${project.artifactId}
+spec:
+  replicas: 1
+  strategy:
+    rollingParams:
+      timeoutSeconds: 10800
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        pod.beta.kubernetes.io/init-containers: |-
+            [
+              {
+                "name": "envvar-substitution",
+                "image": "fabric8/envsubst-file:1.0.2",
+                "imagePullPolicy": "IfNotPresent",
+                "args": [
+                  "keycloak.json",
+                  "clarksnut-stages.yml"
+                ],
+                "env": [
+                  {
+                    "name": "SSO_REALM",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "clarksnut-configuration",
+                        "key": "sso.realm"
+                      }
+                    }
+                  },
+                  {
+                    "name": "SSO_AUTH_SERVER_URL",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "clarksnut-configuration",
+                        "key": "sso.auth.server.url"
+                      }
+                    }
+                  },
+                  {
+                    "name": "SSO_CLIENT_ID",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "name": "clarksnut-configuration",
+                        "key": "sso.client.id"
+                      }
+                    }
+                  },
+                  {
+                    "name": "SSO_CREDENTIALS_SECRET",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "keycloak",
+                        "key": "kc.clientid.secret"
+                      }
+                    }
+                  },
+                  {
+                    "name": "DB_DRIVER",
+                    "value": "postgresql"
+                  },
+                  {
+                    "name": "DB_URL",
+                    "value": "jdbc:postgresql://clarksnut-db:5432/clarksnut"
+                  },
+                  {
+                    "name": "DB_USERNAME",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "clarksnut",
+                        "key": "db.user"
+                      }
+                    }
+                  },
+                  {
+                    "name": "DB_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "clarksnut",
+                        "key": "db.password"
+                      }
+                    }
+                  }
+                ],
+                "volumeMounts": [
+                  {
+                    "name": "clarksnut-keycloak-config",
+                    "mountPath": "/workdir/keycloak.json",
+                    "subPath": "config/keycloak.json"
+                  },
+                  {
+                    "name": "clarksnut-stage-config",
+                    "mountPath": "/workdir/clarksnut-stages.yml",
+                    "subPath": "config/clarksnut-stages.yml"
+                  },
+                  {
+                    "name": "clarksnut-subst-config",
+                    "mountPath": "/processed"
+                  }
+                ]
+              }
+            ]
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: JAVA_APP_DIR
+          value: /deployments
+        - name: SSO_AUTH_SERVER_URL
+          value: ${SSO_AUTH_SERVER_URL}
+        - name: JAVA_OPTIONS
+          value: -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.keycloak.json.path=/deployments/config/keycloak.json -Dswarm.project.stage=custom
+        - name: CN_HIBERNATE_STRATEGY
+          value: update
+        - name: CN_HIBERNATE_SHOW_SQL
+          value: false
+        - name: CN_HIBERNATE_FORMAT_SQL
+          value: false
+        - name: CN_HIBERNATE_SECOND_LEVEL_CACHE
+          value: true
+        - name: CN_HIBERNATE_INDEX_MANAGER
+          value: directory-based
+        - name: SWARM_PROJECT_STAGE
+          value: production
+        name: ${project.artifactId}
+        image: ${project.artifactId}:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        securityContext:
+          privileged: false
+        volumeMounts:
+        - name: clarksnut-subst-config
+          mountPath: /deployments/config
+      volumes:
+      - name: clarksnut-subst-config
+        emptyDir: {}
+      - name: clarksnut-keycloak-config
+        configMap:
+          name: clarksnut
+          items:
+          - key: keycloak.json
+            path: config/keycloak.json
+      - name: clarksnut-stage-config
+        configMap:
+          name: clarksnut
+          items:
+          - key: clarksnut-config.yml
+            path: config/clarksnut-stages.yml
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - ${project.artifactId}
+      from:
+        kind: ImageStreamTag
+        name: ${project.artifactId}:latest
+    type: ImageChange
