@@ -3,7 +3,7 @@ version: '2'
 services:
 
   keycloak:
-    image: jboss/keycloak
+    image: jboss/keycloak:2.5.5.Final
     environment:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin
@@ -12,8 +12,10 @@ services:
     networks:
       - sso
 
+  # username: elastic
+  # password: changeme
   elasticsearch:
-      image: docker.elastic.co/elasticsearch/elasticsearch:5.5.1
+      image: docker.elastic.co/elasticsearch/elasticsearch:5.6.5
       container_name: elasticsearch
       environment:
         - cluster.name=docker-cluster
