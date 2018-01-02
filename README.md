@@ -44,18 +44,18 @@ Wait until the server starts, and then go to: <http://localhost:8080>
 
 Database strategy can be configured using environment variables:
 ```
-export HIBERNATE_STRATEGY=[validate|update|create|create-drop]
-export HIBERNATE_SHOW_SQL=[true|false]
-export HIBERNATE_FORMAT_SQL=[true|false]
-export HIBERNATE_SECOND_LEVEL_CACHE=[true|false]
+export CN_HIBERNATE_STRATEGY=[validate|update|create|create-drop]
+export CN_HIBERNATE_SHOW_SQL=[true|false]
+export CN_HIBERNATE_FORMAT_SQL=[true|false]
+export CN_HIBERNATE_SECOND_LEVEL_CACHE=[true|false]
 ```
 
 Default values:
 ```
-HIBERNATE_STRATEGY=update
-HIBERNATE_SHOW_SQL=false
-HIBERNATE_FORMAT_SQL=false
-HIBERNATE_SECOND_LEVEL_CACHE=true
+CN_HIBERNATE_STRATEGY=update
+CN_HIBERNATE_SHOW_SQL=false
+CN_HIBERNATE_FORMAT_SQL=false
+CN_HIBERNATE_SECOND_LEVEL_CACHE=true
 ```
 
 ## Configure database search strategy (Optional):
@@ -74,11 +74,11 @@ This configuration should be considered in production environments.
 
 In case elasticsearch was selected as index manager, then you need to configure additional environment variables:
 ```
-export ES_HOST=[my_elasticsearch_host]
-export ES_USER=[my_elasticsearch_username]
-export ES_PASSWORD=[my_elasticsearch_password]
-export ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY=[none|validate|update|create|drop-and-create|drop-and-create-and-drop]
-export ES_REQUIRED_INDEX_STATUS=[green|yellow]
+export CN_ELASTICSEARCH_HOST=[my_elasticsearch_host]
+export CN_ELASTICSEARCH_USER=[my_elasticsearch_username]
+export CN_ELASTICSEARCH_PASSWORD=[my_elasticsearch_password]
+export CN_ELASTICSEARCH_INDEX_SCHEMA_MANAGEMENT_STRATEGY=[none|validate|update|create|drop-and-create|drop-and-create-and-drop]
+export CN_ELASTICSEARCH_REQUIRED_INDEX_STATUS=[green|yellow]
 ```
 Default values:
 ```
@@ -90,15 +90,15 @@ ES_REQUIRED_INDEX_STATUS=green
 In case your elasticsearch cluster is provided by AWS you need to follow previous step and additionally:
 
 ```
-export HIBERNATE_ES_AWS_ENABLED=[true|false]
-export HIBERNATE_ES_AWS_ACCESS_KEY=[my_aws_access_key]
-export HIBERNATE_ES_AWS_SECRET_KEY=[my_aws_secret_key]
-export HIBERNATE_ES_AWS_REGION=[my_aws_region]
+export CN_ELASTICSEARCH_AWS_ENABLED=[true|false]
+export CN_ELASTICSEARCH_AWS_ACCESS_KEY=[my_aws_access_key]
+export CN_ELASTICSEARCH_AWS_SECRET_KEY=[my_aws_secret_key]
+export CN_ELASTICSEARCH_AWS_REGION=[my_aws_region]
 ```
 
 Default values:
 ```
-HIBERNATE_ES_AWS_ENABLED=false
+CN_ELASTICSEARCH_AWS_ENABLED=false
 ```      
 
 # Configure Clarksnut

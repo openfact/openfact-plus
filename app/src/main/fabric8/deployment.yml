@@ -112,15 +112,15 @@ spec:
           value: /deployments
         - name: JAVA_OPTIONS
           value: -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.keycloak.json.path=/deployments/config/keycloak.json -Dswarm.project.stage=custom
-        - name: HIBERNATE_STRATEGY
+        - name: CN_HIBERNATE_STRATEGY
           value: update
-        - name: HIBERNATE_SHOW_SQL
+        - name: CN_HIBERNATE_SHOW_SQL
           value: false
-        - name: HIBERNATE_FORMAT_SQL
+        - name: CN_HIBERNATE_FORMAT_SQL
           value: false
-        - name: HIBERNATE_SECOND_LEVEL_CACHE
+        - name: CN_HIBERNATE_SECOND_LEVEL_CACHE
           value: true
-        - name: HIBERNATE_INDEX_MANAGER
+        - name: CN_HIBERNATE_INDEX_MANAGER
           value: directory-based
         - name: SWARM_PROJECT_STAGE
           value: production

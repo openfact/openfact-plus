@@ -546,16 +546,16 @@
                         <DB_USER_NAME>sa</DB_USER_NAME>
                         <DB_PASSWORD>sa</DB_PASSWORD>
 
-                        <HIBERNATE_STRATEGY>create-drop</HIBERNATE_STRATEGY>
-                        <HIBERNATE_SHOW_SQL>true</HIBERNATE_SHOW_SQL>
-                        <HIBERNATE_FORMAT_SQL>true</HIBERNATE_FORMAT_SQL>
-                        <HIBERNATE_SECOND_LEVEL_CACHE>false</HIBERNATE_SECOND_LEVEL_CACHE>
+                        <CN_HIBERNATE_STRATEGY>create-drop</CN_HIBERNATE_STRATEGY>
+                        <CN_HIBERNATE_SHOW_SQL>true</CN_HIBERNATE_SHOW_SQL>
+                        <CN_HIBERNATE_FORMAT_SQL>true</CN_HIBERNATE_FORMAT_SQL>
+                        <CN_HIBERNATE_SECOND_LEVEL_CACHE>false</CN_HIBERNATE_SECOND_LEVEL_CACHE>
 
-                        <ES_HOST></ES_HOST>
-                        <ES_USER></ES_USER>
-                        <ES_PASSWORD></ES_PASSWORD>
-                        <ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY>drop-and-create</ES_INDEX_SCHEMA_MANAGEMENT_STRATEGY>
-                        <ES_REQUIRED_INDEX_STATUS>yellow</ES_REQUIRED_INDEX_STATUS>
+                        <CN_ELASTICSEARCH_HOST></CN_ELASTICSEARCH_HOST>
+                        <CN_ELASTICSEARCH_USER></CN_ELASTICSEARCH_USER>
+                        <CN_ELASTICSEARCH_PASSWORD></CN_ELASTICSEARCH_PASSWORD>
+                        <CN_ELASTICSEARCH_INDEX_SCHEMA_MANAGEMENT_STRATEGY>drop-and-create</CN_ELASTICSEARCH_INDEX_SCHEMA_MANAGEMENT_STRATEGY>
+                        <CN_ELASTICSEARCH_REQUIRED_INDEX_STATUS>yellow</CN_ELASTICSEARCH_REQUIRED_INDEX_STATUS>
                     </environmentVariables>
                 </configuration>
             </plugin>
