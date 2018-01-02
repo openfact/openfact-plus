@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+mvn install -DskipTests=false -Dmaven.javadoc.skip=false -B -V
