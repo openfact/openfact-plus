@@ -8,6 +8,8 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @RunWith(Arquillian.class)
 //@DefaultDeployment(type = DefaultDeployment.Type.WAR)
 public class SpaceProviderTest {
@@ -106,7 +108,7 @@ public class SpaceProviderTest {
 
     @Test
     public void test() {
-
+        assertThat(true).isEqualTo(true);
     }
 
 }

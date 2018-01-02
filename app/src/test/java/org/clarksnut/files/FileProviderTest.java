@@ -96,7 +96,7 @@ public class FileProviderTest {
 
     @Test
     public void test() {
-
+        assertThat(true).isEqualTo(true);
     }
 
 }
