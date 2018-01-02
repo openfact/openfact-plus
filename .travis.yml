@@ -3,5 +3,4 @@ language: java
 jdk:
   - oraclejdk8
 
-script:
-  - ./travis-run-tests.sh
+script: mvn clean verify
