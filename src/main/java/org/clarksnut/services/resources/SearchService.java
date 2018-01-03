@@ -1,13 +1,14 @@
 package org.clarksnut.services.resources;
 
 import org.clarksnut.documents.DocumentProvider;
-import org.clarksnut.models.*;
+import org.clarksnut.models.QueryModel;
+import org.clarksnut.models.SpaceProvider;
+import org.clarksnut.models.UserModel;
+import org.clarksnut.models.UserProvider;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.SpaceRepresentation;
 import org.clarksnut.representations.idm.UserRepresentation;
 import org.clarksnut.utils.ModelToRepresentation;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -15,7 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

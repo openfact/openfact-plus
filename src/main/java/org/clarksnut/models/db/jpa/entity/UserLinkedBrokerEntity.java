@@ -2,13 +2,11 @@ package org.clarksnut.models.db.jpa.entity;
 
 import org.clarksnut.models.BrokerType;
 import org.hibernate.annotations.Type;
-import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Audited
 @Entity
 @Table(name = "cl_user_linked_broker", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"email"}),

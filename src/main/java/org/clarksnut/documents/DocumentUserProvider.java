@@ -3,8 +3,6 @@ package org.clarksnut.documents;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
 
-import java.util.List;
-
 public interface DocumentUserProvider {
 
     /**

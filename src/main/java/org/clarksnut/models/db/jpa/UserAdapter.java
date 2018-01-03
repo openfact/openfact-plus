@@ -1,10 +1,10 @@
 package org.clarksnut.models.db.jpa;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserLinkedBrokerModel;
 import org.clarksnut.models.UserModel;
-import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.models.db.jpa.entity.CollaboratorEntity;
 import org.clarksnut.models.db.jpa.entity.SpaceEntity;
 import org.clarksnut.models.db.jpa.entity.UserContextInformationEntity;

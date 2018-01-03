@@ -1,11 +1,8 @@
 package org.clarksnut.models.db.jpa.entity;
 
-import org.hibernate.envers.Audited;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Audited
 @Entity
 @Table(name = "cl_collaborator")
 @IdClass(CollaboratorEntity.Key.class)

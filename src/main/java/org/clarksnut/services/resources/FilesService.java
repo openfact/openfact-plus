@@ -1,20 +1,12 @@
 package org.clarksnut.services.resources;
 
-import org.clarksnut.files.FileModel;
-import org.clarksnut.files.FileProvider;
-import org.clarksnut.files.exceptions.FileFetchException;
-import org.clarksnut.services.ErrorResponse;
 import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Stateless

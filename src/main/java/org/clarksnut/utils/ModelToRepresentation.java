@@ -13,7 +13,6 @@ import org.clarksnut.services.resources.UsersService;
 import javax.ejb.Stateless;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @Stateless

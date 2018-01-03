@@ -4,16 +4,12 @@ import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
-import org.clarksnut.documents.DocumentProviderType;
 import org.clarksnut.documents.UnsavedReasonType;
-import org.hibernate.annotations.Type;
-import org.hibernate.search.annotations.ContainedIn;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "cl_unsaved_document")

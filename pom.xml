@@ -52,7 +52,10 @@
         <!--Plugins-->
         <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>2.20</maven-failsafe-plugin.version>
-        <version.liquibase-maven-plugin>3.5.3</version.liquibase-maven-plugin>
+
+        <!--Liquibase-->
+        <version.liquibase>3.5.3</version.liquibase>
+        <version.liquibase.hibernate5>3.6</version.liquibase.hibernate5>
     </properties>
 
     <url>http://clarksnut.org</url>
@@ -328,10 +331,16 @@
             <version>${version.hibernate}</version>
         </dependency>
 
+        <!--Liquibase-->
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-envers</artifactId>
-            <version>${version.hibernate}</version>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${version.liquibase}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-cdi</artifactId>
+            <version>${version.liquibase}</version>
         </dependency>
 
         <!-- Infinispan integration: hb search-->
@@ -757,6 +766,77 @@
     </build>
 
     <profiles>
+
+        <profile>
+            <id>liquibase</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.liquibase</groupId>
+                        <artifactId>liquibase-maven-plugin</artifactId>
+                        <version>${version.liquibase}</version>
+                        <configuration>
+                            <changeLogFile>${project.build.directory}/changelog-master.xml</changeLogFile>
+
+                            <url>jdbc:h2:mem:clarksnut;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</url>
+                            <driver>org.h2.Driver</driver>
+                            <username>sa</username>
+                            <password>sa</password>
+
+                            <diffChangeLogFile>${project.build.directory}/changelog-diff.xml</diffChangeLogFile>
+                            <dropFirst>true</dropFirst>
+                            <referenceUrl>hibernate:spring:org.clarksnut?dialect=org.hibernate.dialect.H2Dialect</referenceUrl>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>diff</goal>
+                                </goals>
+                                <configuration>
+                                    <systemProperties>
+                                        <user.name>carlosthe19916</user.name>
+                                    </systemProperties>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.liquibase.ext</groupId>
+                                <artifactId>liquibase-hibernate5</artifactId>
+                                <version>${version.liquibase.hibernate5}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.springframework</groupId>
+                                <artifactId>spring-beans</artifactId>
+                                <version>5.0.2.RELEASE</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.springframework.data</groupId>
+                                <artifactId>spring-data-jpa</artifactId>
+                                <version>2.0.2.RELEASE</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>javax.el</groupId>
+                                <artifactId>javax.el-api</artifactId>
+                                <version>3.0.0</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.h2database</groupId>
+                                <artifactId>h2</artifactId>
+                                <version>${version.h2}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.hibernate</groupId>
+                                <artifactId>hibernate-validator</artifactId>
+                                <version>${version.hibernate-validator}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <profile>
             <id>community</id>
             <activation>

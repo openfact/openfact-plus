@@ -2,7 +2,9 @@ package org.clarksnut.documents.jpa.config;
 
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.DocumentUserEntity;
-import org.hibernate.search.annotations.*;
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Factory;
+import org.hibernate.search.annotations.Resolution;
 import org.hibernate.search.cfg.IndexedMapping;
 import org.hibernate.search.cfg.SearchMapping;
 

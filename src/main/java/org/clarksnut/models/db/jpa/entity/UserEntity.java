@@ -5,7 +5,6 @@ import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
 import org.hibernate.annotations.Type;
-import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,7 +14,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Audited
 @Entity
 @Table(name = "cl_user", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),

@@ -6,7 +6,6 @@ import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
 import org.clarksnut.documents.DocumentProviderType;
 import org.hibernate.annotations.Type;
-import org.hibernate.search.annotations.ContainedIn;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;

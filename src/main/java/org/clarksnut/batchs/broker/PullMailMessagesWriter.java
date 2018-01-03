@@ -1,8 +1,6 @@
 package org.clarksnut.batchs.broker;
 
 import org.clarksnut.documents.DocumentProviderType;
-import org.clarksnut.documents.exceptions.UnreadableDocumentException;
-import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.managers.DocumentManager;
 import org.clarksnut.managers.exceptions.DocumentNotImportedButSavedForFutureException;
 import org.clarksnut.managers.exceptions.DocumentNotImportedException;

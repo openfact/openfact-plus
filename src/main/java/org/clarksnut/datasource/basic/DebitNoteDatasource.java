@@ -7,7 +7,6 @@ import org.clarksnut.datasource.basic.beans.SupplierBean;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class DebitNoteDatasource extends Datasource {
 
