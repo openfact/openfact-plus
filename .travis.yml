@@ -2,6 +2,6 @@ language: java
 
 env:
   global:
-    - MAVEN_OPTS="-Xms2048m -Xmx2048m"
+    - MAVEN_OPTS="-Xms4096m -Xmx4096m"
 
 script: mvn clean test
