@@ -46,7 +46,7 @@
         <version.mysql>5.1.38</version.mysql>
 
         <!--Others-->
-        <version.jberet-support>1.3.0.Beta6</version.jberet-support>
+        <version.jberet-support>1.3.0.Beta7</version.jberet-support>
         <version.jasperreports>6.4.3</version.jasperreports>
 
         <!--Plugins-->
@@ -627,7 +627,6 @@
                         <DB_PASSWORD>sa</DB_PASSWORD>
 
                         <!--Hibernate-->
-                        <CN_HIBERNATE_STRATEGY>create-drop</CN_HIBERNATE_STRATEGY>
                         <CN_HIBERNATE_SHOW_SQL>true</CN_HIBERNATE_SHOW_SQL>
                         <CN_HIBERNATE_FORMAT_SQL>true</CN_HIBERNATE_FORMAT_SQL>
                         <CN_HIBERNATE_SECOND_LEVEL_CACHE>false</CN_HIBERNATE_SECOND_LEVEL_CACHE>

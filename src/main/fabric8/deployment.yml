@@ -115,19 +115,158 @@ spec:
         - name: SSO_AUTH_SERVER_URL
           value: ${SSO_AUTH_SERVER_URL}
         - name: JAVA_OPTIONS
-          value: -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.keycloak.json.path=/deployments/config/keycloak.json -Dswarm.project.stage=custom
-        - name: CN_HIBERNATE_STRATEGY
-          value: update
+          value: -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.project.stage=production -Dswarm.keycloak.json.path=/deployments/config/keycloak.json
+        - name: CN_DATABASE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: db.user
+        - name: CN_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: db.password
+        - name: CN_DATABASE_DRIVER
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: db.driver
+        - name: CN_DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: db.url
         - name: CN_HIBERNATE_SHOW_SQL
-          value: false
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.hibernate.show_sql
         - name: CN_HIBERNATE_FORMAT_SQL
-          value: false
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.hibernate.format_sql
         - name: CN_HIBERNATE_SECOND_LEVEL_CACHE
-          value: true
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.hibernate.second_level_cache
         - name: CN_HIBERNATE_INDEX_MANAGER
-          value: directory-based
-        - name: SWARM_PROJECT_STAGE
-          value: production
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.hibernate.index_manager
+        - name: CN_ELASTICSEARCH_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.host
+        - name: CN_ELASTICSEARCH_USER
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.user
+        - name: CN_ELASTICSEARCH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.password
+        - name: CN_ELASTICSEARCH_INDEX_SCHEMA_MANAGEMENT_STRATEGY
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.index_schema_management_strategy
+        - name: CN_ELASTICSEARCH_REQUIRED_INDEX_STATUS
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.required_index_status
+        - name: CN_ELASTICSEARCH_AWS_ENABLED
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.aws.enabled
+        - name: CN_ELASTICSEARCH_AWS_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.aws.access_key
+        - name: CN_ELASTICSEARCH_AWS_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.aws.secret_key
+        - name: CN_ELASTICSEARCH_AWS_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.aws.region
+        - name: CN_SMTP_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.smtp.host
+        - name: CN_SMTP_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.smtp.port
+        - name: CN_SMTP_FROM
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.smtp.from
+        - name: CN_SMTP_FROM_DISPLAY_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.smtp.from_display_name
+        - name: CN_SMTP_REPLY_TO
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.smtp.reply_to
+        - name: CN_SMTP_REPLY_TO_DISPLAY_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.smtp.reply_to_display_name
+        - name: CN_SMTP_ENVELOPE_FROM
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.smtp.envelope_from
+        - name: CN_SMTP_SSL
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.smtp.ssl
+        - name: CN_SMTP_STARTTLS
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.smtp.starttls
+        - name: CN_SMTP_AUTH
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.smtp.auth
+        - name: CN_SMTP_USER
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: cn.smtp.user
+        - name: CN_SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: cn.smtp.password
+        - name: CN_GMAIL_APPLICATION_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.gmail.application_name
+
         name: ${project.artifactId}
         image: ${project.artifactId}:latest
         imagePullPolicy: IfNotPresent
@@ -143,18 +282,18 @@ spec:
       volumes:
       - name: clarksnut-subst-config
         emptyDir: {}
-      - name: clarksnut-keycloak-config
-        configMap:
-          name: clarksnut
-          items:
-          - key: keycloak.json
-            path: config/keycloak.json
       - name: clarksnut-stage-config
         configMap:
           name: clarksnut
           items:
           - key: clarksnut-config.yml
             path: config/clarksnut-stages.yml
+      - name: clarksnut-keycloak-config
+        configMap:
+          name: clarksnut
+          items:
+          - key: keycloak.json
+            path: config/keycloak.json
   triggers:
   - type: ConfigChange
   - imageChangeParams:

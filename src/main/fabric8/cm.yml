@@ -1,0 +1,175 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clarksnut
+  annotations:
+    expose.service-key.config.fabric8.io/keycloak: keycloak.url
+    expose-no-path.service-key.config.fabric8.io/auth: auth.url
+type: Opaque
+data:
+  db.driver: cG9zdGdyZXM=
+  db.url: bXlzZWNyZXRwYXNzd29yZA==
+  cn.hibernate.show_sql: false
+  cn.hibernate.format_sql: false
+  cn.hibernate.second_level_cache: true
+  cn.hibernate.index_manager: elasticsearch
+  cn.elasticsearch.host: host
+  cn.elasticsearch.index_schema_management_strategy: a
+  cn.elasticsearch.required_index_status: green
+  cn.elasticsearch.aws.enabled: false
+  cn.elasticsearch.aws.region: virginia
+  cn.smtp.host: s
+  cn.smtp.port: s
+  cn.smtp.from: s
+  cn.smtp.from_display_name: s
+  cn.smtp.reply_to: s
+  cn.smtp.reply_to_display_name: s
+  cn.smtp.envelope_from: s
+  cn.smtp.ssl: s
+  cn.smtp.starttls: s
+  cn.smtp.auth: s
+
+  keycloak.url: http://keycloak
+
+  clarksnut-config.yml: |-
+      project:
+        stage: production
+      swarm:
+        datasources:
+          data-sources:
+            ClarksnutDS:
+              jndi-name: java:jboss/datasources/ClarksnutDS
+              driver-name: ${CN_DATABASE_DRIVER}
+              user-name: ${CN_DATABASE_USERNAME}
+              password: ${CN_DATABASE_PASSWORD}
+              connection-url: ${CN_DATABASE_URL}
+        ee:
+          spec-descriptor-property-replacement: true
+        ejb3:
+          timer-service:
+            thread-pool-name: default
+            default-data-store: clustered-store
+            database-data-stores:
+              clustered-store:
+                database: "${CN_DATABASE_DRIVER}"
+                datasource-jndi-name: "java:jboss/datasources/ClarksnutDS"
+                partition: timer
+        infinispan:
+          cache-containers:
+            jberet:
+              default-cache: JOB_EXECUTION
+              jgroups-transport:
+                lock-timeout: 60000
+              distributed-caches:
+                JOB_INSTANCE:
+                  mode: ASYNC
+                  l1-lifespan: 0
+                  string-jdbc-store:
+                    fetch-state: false
+                    purge: false
+                    data-source: ClarksnutDS
+                    string-table:
+                      prefix: "JBERET_ISPN"
+                      data-column: "DATA_COLUMN"
+                      id-column: "ID_COLUMN"
+                      timestamp-column: "TIMESTAMP_COLUMN"
+                JOB_EXECUTION:
+                  mode: ASYNC
+                  l1-lifespan: 0
+                  string-jdbc-store:
+                    fetch-state: false
+                    purge: false
+                    data-source: ClarksnutDS
+                    string-table:
+                      prefix: "JBERET_ISPN"
+                      data-column: "DATA_COLUMN"
+                      id-column: "ID_COLUMN"
+                      timestamp-column: "TIMESTAMP_COLUMN"
+                STEP_EXECUTION:
+                  mode: ASYNC
+                  l1-lifespan: 0
+                  string-jdbc-store:
+                    fetch-state: false
+                    purge: false
+                    data-source: ClarksnutDS
+                    string-table:
+                      prefix: "JBERET_ISPN"
+                      data-column: "DATA_COLUMN"
+                      id-column: "ID_COLUMN"
+                      timestamp-column: "TIMESTAMP_COLUMN"
+                PARTITION_EXECUTION:
+                  mode: ASYNC
+                  l1-lifespan: 0
+                  string-jdbc-store:
+                    fetch-state: false
+                    purge: false
+                    data-source: ClarksnutDS
+                    string-table:
+                      prefix: "JBERET_ISPN"
+                      data-column: "DATA_COLUMN"
+                      id-column: "ID_COLUMN"
+                      timestamp-column: "TIMESTAMP_COLUMN"
+                seq:
+                  mode: SYNC
+                  l1-lifespan: 0
+                  transaction-component:
+                    mode: BATCH
+                    locking: PESSIMISTIC
+                  string-jdbc-store:
+                    fetch-state: false
+                    purge: false
+                    data-source: ClarksnutDS
+                    string-table:
+                      prefix: "JBERET_ISPN"
+                      data-column: "DATA_COLUMN"
+                      id-column: "ID_COLUMN"
+                      timestamp-column: "TIMESTAMP_COLUMN"
+      clarksnut:
+        document:
+          additionalTypes: "Perception, Retention, VoidedDocuments, SummaryDocuments"
+        fileStorage:
+          provider: jpa
+          filesystem:
+            folder: "/xmlFiles"
+        report:
+          default: clarksnut
+          cacheReports: true
+          cacheTemplates: true
+          folder:
+            dir: /reports
+        theme:
+          default: clarksnut
+          staticMaxAge: 2592000
+          cacheThemes: true
+          cacheTemplates: true
+          folder:
+            dir: /themes
+        mail:
+          smtp:
+            host: ${CN_SMTP_HOST}
+            port: ${CN_SMTP_PORT}
+            from: ${CN_SMTP_FROM}
+            fromDisplayName: ${CN_SMTP_FROM_DISPLAY_NAME}
+            replyTo: ${CN_SMTP_REPLY_TO}
+            replyToDisplayName: ${CN_SMTP_REPLY_TO_DISPLAY_NAME}
+            envelopeFrom: ${CN_SMTP_ENVELOPE_FROM}
+            ssl: ${CN_SMTP_SSL}
+            starttls: ${CN_SMTP_STARTTLS}
+            auth: ${CN_SMTP_AUTH}
+            user: ${CN_SMTP_USER}
+            password: ${CN_SMTP_PASSWORD}
+          vendor:
+            gmail:
+              applicationName: ${CN_GMAIL_APPLICATION_NAME}
+  keycloak.json: |-
+      {
+        "realm": "${CN_KEYCLOAK_REALM}",
+        "auth-server-url": "${CN_KEYCLOAK_URL}",
+        "resource": "clarksnut",
+        "ssl-required": "external",
+        "credentials": {
+          "secret": "${CN_KEYCLOAK_SECRET}"
+        },
+        "bearer-only": true,
+        "enable-cors": true
+      }

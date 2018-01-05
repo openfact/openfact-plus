@@ -44,7 +44,6 @@ Wait until the server starts, and then go to: <http://localhost:8080>
 
 Database strategy can be configured using environment variables:
 ```
-export CN_HIBERNATE_STRATEGY=[validate|update|create|create-drop]
 export CN_HIBERNATE_SHOW_SQL=[true|false]
 export CN_HIBERNATE_FORMAT_SQL=[true|false]
 export CN_HIBERNATE_SECOND_LEVEL_CACHE=[true|false]
