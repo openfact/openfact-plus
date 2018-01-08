@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.openshift</groupId>
         <artifactId>booster-parent</artifactId>
-        <version>10</version>
+        <version>4</version>
     </parent>
 
     <groupId>org.clarksnut</groupId>
@@ -609,9 +609,26 @@
             </plugins>
         </pluginManagement>
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-plugin.version}</version>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <classpathDependencyExcludes>
                         <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-openshift
