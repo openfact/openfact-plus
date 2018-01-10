@@ -19,9 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PeruCreditNoteBeanProviderTest extends PeruBeanUtilsTest {
 
     @Mock
-    private DocumentModel document;
-
-    @Mock
     private XmlFileModel file;
 
     @Test
@@ -30,8 +27,8 @@ public class PeruCreditNoteBeanProviderTest extends PeruBeanUtilsTest {
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-        PeruCreditNoteBeanProvider datasourceProvider = new PeruCreditNoteBeanProvider();
-        CreditNoteDatasource creditNote = (CreditNoteDatasource) datasourceProvider.getDatasource(this.document, this.file);
+        PeruCreditNoteDatasourceProvider datasourceProvider = new PeruCreditNoteDatasourceProvider();
+        PeruCreditNoteDatasource creditNote = (PeruCreditNoteDatasource) datasourceProvider.getDatasource(this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
@@ -110,8 +107,8 @@ public class PeruCreditNoteBeanProviderTest extends PeruBeanUtilsTest {
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-        PeruCreditNoteBeanProvider datasourceProvider = new PeruCreditNoteBeanProvider();
-        CreditNoteDatasource creditNote = (CreditNoteDatasource) datasourceProvider.getDatasource(this.document, this.file);
+        PeruCreditNoteDatasourceProvider datasourceProvider = new PeruCreditNoteDatasourceProvider();
+        PeruCreditNoteDatasource creditNote = (PeruCreditNoteDatasource) datasourceProvider.getDatasource(this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
@@ -190,8 +187,8 @@ public class PeruCreditNoteBeanProviderTest extends PeruBeanUtilsTest {
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-        PeruCreditNoteBeanProvider datasourceProvider = new PeruCreditNoteBeanProvider();
-        CreditNoteDatasource creditNote = (CreditNoteDatasource) datasourceProvider.getDatasource(this.document, this.file);
+        PeruCreditNoteDatasourceProvider datasourceProvider = new PeruCreditNoteDatasourceProvider();
+        PeruCreditNoteDatasource creditNote = (PeruCreditNoteDatasource) datasourceProvider.getDatasource(this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 

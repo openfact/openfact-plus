@@ -19,9 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PeruSummaryDocumentsBeanProviderTest extends PeruBeanUtilsTest {
 
     @Mock
-    private DocumentModel document;
-
-    @Mock
     private XmlFileModel file;
 
     @Test
@@ -30,8 +27,8 @@ public class PeruSummaryDocumentsBeanProviderTest extends PeruBeanUtilsTest {
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-        PeruSummaryDocumentsBeanProvider datasourceProvider = new PeruSummaryDocumentsBeanProvider();
-        SummaryDocumentsDatasource summaryDocuments = (SummaryDocumentsDatasource) datasourceProvider.getDatasource(this.document, this.file);
+        PeruSummaryDocumentsDatasourceProvider datasourceProvider = new PeruSummaryDocumentsDatasourceProvider();
+        PeruSummaryDocumentsDatasource summaryDocuments = (PeruSummaryDocumentsDatasource) datasourceProvider.getDatasource(this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 

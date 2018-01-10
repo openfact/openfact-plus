@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class DatasourceUtils {
+public class BasicDatasourceUtils {
 
     public static SupplierBean toSupplier(SupplierPartyType supplierPartyType) {
         SupplierBean bean = new SupplierBean();

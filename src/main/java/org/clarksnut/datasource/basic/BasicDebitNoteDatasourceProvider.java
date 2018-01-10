@@ -5,13 +5,10 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.*;
 import oasis.names.specification.ubl.schema.xsd.debitnote_21.DebitNoteType;
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
-import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.datasource.basic.beans.LineBean;
-import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 
-import javax.ejb.Stateless;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,23 +16,31 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Stateless
-@DatasourceType(datasource = "BasicDebitNoteDS")
 public class BasicDebitNoteDatasourceProvider implements DatasourceProvider {
 
     @Override
-    public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
+    public String getName() {
+        return "BasicDebitNoteDS";
+    }
+
+    @Override
+    public boolean isInternal() {
+        return true;
+    }
+
+    @Override
+    public Datasource getDatasource(XmlFileModel file) throws FileFetchException {
         DebitNoteType debitNoteType = UBL21Reader.debitNote().read(file.getDocument());
         if (debitNoteType == null) {
             return null;
         }
 
-        DebitNoteDatasource bean = new DebitNoteDatasource();
+        BasicDebitNoteDatasource bean = new BasicDebitNoteDatasource();
 
         bean.setAssignedId(debitNoteType.getIDValue());
         bean.setCurrency(debitNoteType.getDocumentCurrencyCodeValue());
-        bean.setSupplier(DatasourceUtils.toSupplier(debitNoteType.getAccountingSupplierParty()));
-        bean.setCustomer(DatasourceUtils.toCustomer(debitNoteType.getAccountingCustomerParty()));
+        bean.setSupplier(BasicDatasourceUtils.toSupplier(debitNoteType.getAccountingSupplierParty()));
+        bean.setCustomer(BasicDatasourceUtils.toCustomer(debitNoteType.getAccountingCustomerParty()));
 
         // Invoice reference
         String invoiceReference = debitNoteType.getDiscrepancyResponse().stream()
@@ -45,7 +50,7 @@ public class BasicDebitNoteDatasourceProvider implements DatasourceProvider {
         bean.setInvoiceReference(invoiceReference);
 
         // Issue date
-        bean.setIssueDate(DatasourceUtils.toDate(debitNoteType.getIssueDate(), Optional.ofNullable(debitNoteType.getIssueTime())));
+        bean.setIssueDate(BasicDatasourceUtils.toDate(debitNoteType.getIssueDate(), Optional.ofNullable(debitNoteType.getIssueTime())));
 
         // Payable amount
         MonetaryTotalType legalMonetaryTotalType = debitNoteType.getRequestedMonetaryTotal();
@@ -82,7 +87,7 @@ public class BasicDebitNoteDatasourceProvider implements DatasourceProvider {
             LineBean lineBean = new LineBean();
 
             // Description and product code
-            DatasourceUtils.addDescriptionAndProductCode(lineBean, Optional.ofNullable(debitNoteLineType.getItem()));
+            BasicDatasourceUtils.addDescriptionAndProductCode(lineBean, Optional.ofNullable(debitNoteLineType.getItem()));
 
             // Quantity and unit code
             if (debitNoteLineType.getDebitedQuantityValue() != null) {

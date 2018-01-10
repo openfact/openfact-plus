@@ -10,7 +10,7 @@ import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import org.clarksnut.datasource.DatasourceProvider;
-import org.clarksnut.datasource.DatasourceUtil;
+import org.clarksnut.datasource.DatasourceFactory;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.*;
 import org.clarksnut.files.exceptions.FileFetchException;
@@ -39,9 +39,6 @@ public class JasperReportProvider implements ReportTemplateProvider {
     @ReportProviderType(type = ReportProviderType.Type.EXTENDING)
     private ReportThemeProvider themeProvider;
 
-    @Inject
-    private DatasourceUtil datasourceUtil;
-
     @Override
     public ReportTheme getTheme(String name, String type) {
         try {
@@ -60,8 +57,8 @@ public class JasperReportProvider implements ReportTemplateProvider {
 
             FileProvider fileProvider = fileStorageProviderUtil.getDatasourceProvider(document.getFileProvider());
             XmlFileModel file = new FlyWeightXmlFileModel(new FlyWeightFileModel(fileProvider.getFile(document.getFileId())));
-            DatasourceProvider datasourceProvider = datasourceUtil.getDatasourceProvider(theme.getDatasource());
-            Object bean = datasourceProvider.getDatasource(document, file);
+            DatasourceProvider datasourceProvider = DatasourceFactory.getInstance().getDatasourceProvider(theme.getDatasource());
+            Object bean = datasourceProvider.getDatasource(file);
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(Collections.singletonList(bean));
 
             JasperPrint jasperPrint = jasperReportUtil.processReport(theme, theme.getName(), config.getAttributes(), dataSource, config.getLocale());

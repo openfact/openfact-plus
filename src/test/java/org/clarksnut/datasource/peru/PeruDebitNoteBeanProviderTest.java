@@ -19,9 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
 
     @Mock
-    private DocumentModel document;
-
-    @Mock
     private XmlFileModel file;
     
     @Test
@@ -30,8 +27,8 @@ public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-        PeruDebitNoteBeanProvider datasourceProvider = new PeruDebitNoteBeanProvider();
-        DebitNoteDatasource debitNote = (DebitNoteDatasource) datasourceProvider.getDatasource(this.document, this.file);
+        PeruDebitNoteDatasourceProvider datasourceProvider = new PeruDebitNoteDatasourceProvider();
+        PeruDebitNoteDatasource debitNote = (PeruDebitNoteDatasource) datasourceProvider.getDatasource(this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
@@ -110,8 +107,8 @@ public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-        PeruDebitNoteBeanProvider datasourceProvider = new PeruDebitNoteBeanProvider();
-        DebitNoteDatasource debitNote = (DebitNoteDatasource) datasourceProvider.getDatasource(this.document, this.file);
+        PeruDebitNoteDatasourceProvider datasourceProvider = new PeruDebitNoteDatasourceProvider();
+        PeruDebitNoteDatasource debitNote = (PeruDebitNoteDatasource) datasourceProvider.getDatasource(this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 
@@ -190,8 +187,8 @@ public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-        PeruDebitNoteBeanProvider datasourceProvider = new PeruDebitNoteBeanProvider();
-        DebitNoteDatasource debitNote = (DebitNoteDatasource) datasourceProvider.getDatasource(this.document, this.file);
+        PeruDebitNoteDatasourceProvider datasourceProvider = new PeruDebitNoteDatasourceProvider();
+        PeruDebitNoteDatasource debitNote = (PeruDebitNoteDatasource) datasourceProvider.getDatasource(this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 

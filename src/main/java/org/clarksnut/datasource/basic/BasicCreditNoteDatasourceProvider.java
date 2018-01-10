@@ -5,13 +5,10 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.*;
 import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
-import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.datasource.basic.beans.LineBean;
-import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 
-import javax.ejb.Stateless;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,23 +16,31 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Stateless
-@DatasourceType(datasource = "BasicCreditNoteDS")
 public class BasicCreditNoteDatasourceProvider implements DatasourceProvider {
 
     @Override
-    public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
+    public String getName() {
+        return "BasicCreditNoteDS";
+    }
+
+    @Override
+    public boolean isInternal() {
+        return true;
+    }
+
+    @Override
+    public Datasource getDatasource(XmlFileModel file) throws FileFetchException {
         CreditNoteType creditNoteType = UBL21Reader.creditNote().read(file.getDocument());
         if (creditNoteType == null) {
             return null;
         }
 
-        CreditNoteDatasource bean = new CreditNoteDatasource();
+        BasicCreditNoteDatasource bean = new BasicCreditNoteDatasource();
 
         bean.setAssignedId(creditNoteType.getIDValue());
         bean.setCurrency(creditNoteType.getDocumentCurrencyCodeValue());
-        bean.setSupplier(DatasourceUtils.toSupplier(creditNoteType.getAccountingSupplierParty()));
-        bean.setCustomer(DatasourceUtils.toCustomer(creditNoteType.getAccountingCustomerParty()));
+        bean.setSupplier(BasicDatasourceUtils.toSupplier(creditNoteType.getAccountingSupplierParty()));
+        bean.setCustomer(BasicDatasourceUtils.toCustomer(creditNoteType.getAccountingCustomerParty()));
 
         // Invoice reference
         String invoiceReference = creditNoteType.getDiscrepancyResponse().stream()
@@ -45,12 +50,12 @@ public class BasicCreditNoteDatasourceProvider implements DatasourceProvider {
         bean.setInvoiceReference(invoiceReference);
 
         // Issue date
-        bean.setIssueDate(DatasourceUtils.toDate(creditNoteType.getIssueDate(), Optional.ofNullable(creditNoteType.getIssueTime())));
+        bean.setIssueDate(BasicDatasourceUtils.toDate(creditNoteType.getIssueDate(), Optional.ofNullable(creditNoteType.getIssueTime())));
 
         // Payable amount
         MonetaryTotalType legalMonetaryTotalType = creditNoteType.getLegalMonetaryTotal();
         if (legalMonetaryTotalType != null) {
-            bean.setMonetaryTotal(DatasourceUtils.toMonetaryTotal(legalMonetaryTotalType));
+            bean.setMonetaryTotal(BasicDatasourceUtils.toMonetaryTotal(legalMonetaryTotalType));
         }
 
         // Total tax
@@ -74,7 +79,7 @@ public class BasicCreditNoteDatasourceProvider implements DatasourceProvider {
             LineBean lineBean = new LineBean();
 
             // Description and product code
-            DatasourceUtils.addDescriptionAndProductCode(lineBean, Optional.ofNullable(creditNoteLineType.getItem()));
+            BasicDatasourceUtils.addDescriptionAndProductCode(lineBean, Optional.ofNullable(creditNoteLineType.getItem()));
 
             // Quantity and unit code
             if (creditNoteLineType.getCreditedQuantityValue() != null) {

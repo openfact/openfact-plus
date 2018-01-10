@@ -7,7 +7,7 @@ import org.clarksnut.datasource.peru.beans.VoidedLineBean;
 import java.util.Date;
 import java.util.List;
 
-public class VoidedDocumentsDatasource extends Datasource {
+public class PeruVoidedDocumentsDatasource extends Datasource {
 
     private String idAsignado;
 

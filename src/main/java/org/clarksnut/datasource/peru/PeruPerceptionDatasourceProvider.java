@@ -4,35 +4,40 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.Exc
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.NoteType;
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
-import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.PerceptionLineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoRegimenPercepcion;
-import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.openfact.perception.PerceptionType;
 import org.openfact.perception.SUNATPerceptionDocumentReferenceType;
 
-import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Stateless
-@DatasourceType(datasource = "PeruPerceptionDS")
-public class PeruPerceptionBeanProvider implements DatasourceProvider {
+public class PeruPerceptionDatasourceProvider implements DatasourceProvider {
 
     @Override
-    public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
+    public String getName() {
+        return "PeruPerceptionDS";
+    }
+
+    @Override
+    public boolean isInternal() {
+        return false;
+    }
+
+    @Override
+    public Datasource getDatasource(XmlFileModel file) throws FileFetchException {
         PerceptionType perceptionType = read(file);
         if (perceptionType == null) {
             return null;
         }
 
-        PerceptionDatasource bean = new PerceptionDatasource();
+        PeruPerceptionDatasource bean = new PeruPerceptionDatasource();
 
         bean.setIdAsignado(perceptionType.getId().getValue());
         bean.setFechaEmision(perceptionType.getIssueDate().getValue().toGregorianCalendar().getTime());

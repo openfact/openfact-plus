@@ -6,7 +6,7 @@ import org.clarksnut.datasource.basic.beans.*;
 import java.util.Date;
 import java.util.List;
 
-public class InvoiceDatasource extends Datasource {
+public class BasicInvoiceDatasource extends Datasource {
 
     private Date issueDate;
     private String currency;

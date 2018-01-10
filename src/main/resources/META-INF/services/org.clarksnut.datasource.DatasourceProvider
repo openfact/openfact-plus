@@ -1,0 +1,10 @@
+org.clarksnut.datasource.basic.BasicInvoiceDatasourceProvider
+org.clarksnut.datasource.basic.BasicCreditNoteDatasourceProvider
+org.clarksnut.datasource.basic.BasicDebitNoteDatasourceProvider
+org.clarksnut.datasource.peru.PeruInvoiceDatasourceProvider
+org.clarksnut.datasource.peru.PeruCreditNoteDatasourceProvider
+org.clarksnut.datasource.peru.PeruDebitNoteDatasourceProvider
+org.clarksnut.datasource.peru.PeruVoidedDocumentsDatasourceProvider
+org.clarksnut.datasource.peru.PeruSummaryDocumentsDatasourceProvider
+org.clarksnut.datasource.peru.PeruPerceptionDatasourceProvider
+org.clarksnut.datasource.peru.PeruRetentionDatasourceProvider

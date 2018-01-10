@@ -19,9 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PeruRetentionBeanProviderTest extends PeruBeanUtilsTest {
 
     @Mock
-    private DocumentModel document;
-
-    @Mock
     private XmlFileModel file;
 
     @Test
@@ -30,8 +27,8 @@ public class PeruRetentionBeanProviderTest extends PeruBeanUtilsTest {
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-        PeruRetentionBeanProvider datasourceProvider = new PeruRetentionBeanProvider();
-        RetentionDatasource perception = (RetentionDatasource) datasourceProvider.getDatasource(this.document, this.file);
+        PeruRetentionDatasourceProvider datasourceProvider = new PeruRetentionDatasourceProvider();
+        PeruRetentionDatasource perception = (PeruRetentionDatasource) datasourceProvider.getDatasource(this.file);
 
         Mockito.verify(this.file, Mockito.atLeastOnce()).getDocument();
 

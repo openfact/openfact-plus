@@ -6,6 +6,10 @@ import org.clarksnut.files.exceptions.FileFetchException;
 
 public interface DatasourceProvider {
 
-    Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException;
+    String getName();
+
+    boolean isInternal();
+
+    Datasource getDatasource(XmlFileModel file) throws FileFetchException;
 
 }

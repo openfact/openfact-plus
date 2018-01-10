@@ -1,55 +1,60 @@
 package org.clarksnut.datasource.peru;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.BillingReferenceType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CreditNoteLineType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DebitNoteLineType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DocumentReferenceType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.MonetaryTotalType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AllowanceTotalAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeTotalAmountType;
-import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
+import oasis.names.specification.ubl.schema.xsd.debitnote_2.DebitNoteType;
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
-import org.clarksnut.datasource.DatasourceType;
 import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.LineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
-import org.clarksnut.datasource.peru.types.TipoNotaCredito;
-import org.clarksnut.documents.DocumentModel;
+import org.clarksnut.datasource.peru.types.TipoNotaDebito;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 
-import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Stateless
-@DatasourceType(datasource = "PeruCreditNoteDS")
-public class PeruCreditNoteBeanProvider implements DatasourceProvider {
+public class PeruDebitNoteDatasourceProvider implements DatasourceProvider {
 
     @Override
-    public Datasource getDatasource(DocumentModel document, XmlFileModel file) throws FileFetchException {
-        CreditNoteType creditNoteType = read(file);
-        if (creditNoteType == null) {
+    public String getName() {
+        return "PeruDebitNoteDS";
+    }
+
+    @Override
+    public boolean isInternal() {
+        return false;
+    }
+
+    @Override
+    public Datasource getDatasource(XmlFileModel file) throws FileFetchException {
+        DebitNoteType debitNoteType = read(file);
+        if (debitNoteType == null) {
             return null;
         }
 
-        CreditNoteDatasource bean = new CreditNoteDatasource();
-
-        bean.setIdAsignado(creditNoteType.getID().getValue());
-        TipoNotaCredito.getFromCode(creditNoteType.getDiscrepancyResponse().get(0).getResponseCode().getValue()).ifPresent(c -> bean.setTipoNotaCredito(c.getDenominacion()));
-        bean.setMotivoSustento(creditNoteType.getDiscrepancyResponse().get(0).getDescription().get(0).getValue());
-        bean.setMoneda(creditNoteType.getDocumentCurrencyCode().getValue());
-        bean.setProveedor(BeanUtils.toSupplier(creditNoteType.getAccountingSupplierParty()));
-        bean.setCliente(BeanUtils.toCustomer(creditNoteType.getAccountingCustomerParty()));
+        PeruDebitNoteDatasource bean = new PeruDebitNoteDatasource();
+       
+        bean.setIdAsignado(debitNoteType.getID().getValue());
+        TipoNotaDebito.getFromCode(debitNoteType.getDiscrepancyResponse().get(0).getResponseCode().getValue()).ifPresent(c -> bean.setTipoNotaDebito(c.getDenominacion()));
+        bean.setMotivoSustento(debitNoteType.getDiscrepancyResponse().get(0).getDescription().get(0).getValue());
+        bean.setMoneda(debitNoteType.getDocumentCurrencyCode().getValue());
+        bean.setProveedor(BeanUtils.toSupplier(debitNoteType.getAccountingSupplierParty()));
+        bean.setCliente(BeanUtils.toCustomer(debitNoteType.getAccountingCustomerParty()));
 
         // Fecha emision
-        bean.setFechaEmision(BeanUtils.toDate(creditNoteType.getIssueDate(), Optional.ofNullable(creditNoteType.getIssueTime())));
+        bean.setFechaEmision(BeanUtils.toDate(debitNoteType.getIssueDate(), Optional.ofNullable(debitNoteType.getIssueTime())));
 
         // Documento que modifica
-        List<BillingReferenceType> billingReferenceTypes = creditNoteType.getBillingReference();
+        List<BillingReferenceType> billingReferenceTypes = debitNoteType.getBillingReference();
         if (billingReferenceTypes != null && !billingReferenceTypes.isEmpty()) {
             DocumentReferenceType documentReferenceType = billingReferenceTypes.get(0).getInvoiceDocumentReference();
             bean.setDocumentoModifica(documentReferenceType.getID().getValue());
@@ -59,7 +64,7 @@ public class PeruCreditNoteBeanProvider implements DatasourceProvider {
         }
 
         // Tipo y numero de remision
-        List<DocumentReferenceType> documentReferenceTypes = creditNoteType.getDespatchDocumentReference();
+        List<DocumentReferenceType> documentReferenceTypes = debitNoteType.getDespatchDocumentReference();
         if (documentReferenceTypes != null && !documentReferenceTypes.isEmpty()) {
             for (DocumentReferenceType documentReferenceType : documentReferenceTypes) {
                 bean.setNumeroGuiaRemisionRelacionada(documentReferenceType.getID().getValue());
@@ -68,7 +73,7 @@ public class PeruCreditNoteBeanProvider implements DatasourceProvider {
         }
 
         // Otro documento relacionado
-        List<DocumentReferenceType> documentReferenceTypes1 = creditNoteType.getAdditionalDocumentReference();
+        List<DocumentReferenceType> documentReferenceTypes1 = debitNoteType.getAdditionalDocumentReference();
         if (documentReferenceTypes1 != null && !documentReferenceTypes1.isEmpty()) {
             for (DocumentReferenceType documentReferenceType : documentReferenceTypes1) {
                 bean.setOtroDocumentoRelacionadoId(documentReferenceType.getID().getValue());
@@ -77,7 +82,7 @@ public class PeruCreditNoteBeanProvider implements DatasourceProvider {
         }
 
         // Payable amount
-        MonetaryTotalType legalMonetaryTotalType = creditNoteType.getLegalMonetaryTotal();
+        MonetaryTotalType legalMonetaryTotalType = debitNoteType.getRequestedMonetaryTotal();
         AllowanceTotalAmountType allowanceTotalAmountType = legalMonetaryTotalType.getAllowanceTotalAmount();
         ChargeTotalAmountType chargeTotalAmountType = legalMonetaryTotalType.getChargeTotalAmount();
 
@@ -90,44 +95,44 @@ public class PeruCreditNoteBeanProvider implements DatasourceProvider {
         }
 
         // Taxs
-        bean.setTributos(BeanUtils.toTributos(creditNoteType.getTaxTotal()));
+        bean.setTributos(BeanUtils.toTributos(debitNoteType.getTaxTotal()));
 
         // Informacion adicional
-        bean.setInformacionAdicional(BeanUtils.toInformacionAdicional(creditNoteType.getUBLExtensions()));
+        bean.setInformacionAdicional(BeanUtils.toInformacionAdicional(debitNoteType.getUBLExtensions()));
 
         // Lines
-        bean.setDetalle(getLines(creditNoteType.getCreditNoteLine()));
+        bean.setDetalle(getLines(debitNoteType.getDebitNoteLine()));
 
         return bean;
     }
 
-    private CreditNoteType read(XmlFileModel file) throws FileFetchException {
+    private DebitNoteType read(XmlFileModel file) throws FileFetchException {
         try {
-            return ClarksnutModelUtils.unmarshall(file.getDocument(), CreditNoteType.class);
+            return ClarksnutModelUtils.unmarshall(file.getDocument(), DebitNoteType.class);
         } catch (JAXBException e) {
             return null;
         }
     }
 
-    private List<LineBean> getLines(List<CreditNoteLineType> creditNoteLineTypes) {
+    private List<LineBean> getLines(List<DebitNoteLineType> debitNoteLineTypes) {
         List<LineBean> result = new ArrayList<>();
 
-        for (CreditNoteLineType creditNoteLineType : creditNoteLineTypes) {
+        for (DebitNoteLineType debitNoteLineType : debitNoteLineTypes) {
             LineBean lineBean = new LineBean();
 
-            lineBean.setCantidad(creditNoteLineType.getCreditedQuantity().getValue().floatValue());
-            lineBean.setUnidadMedida(creditNoteLineType.getCreditedQuantity().getUnitCode());
-            lineBean.setPrecioUnitario(creditNoteLineType.getPrice().getPriceAmount().getValue().floatValue());
-            lineBean.setTotalValorVenta(creditNoteLineType.getLineExtensionAmount().getValue().floatValue());
+            lineBean.setCantidad(debitNoteLineType.getDebitedQuantity().getValue().floatValue());
+            lineBean.setUnidadMedida(debitNoteLineType.getDebitedQuantity().getUnitCode());
+            lineBean.setPrecioUnitario(debitNoteLineType.getPrice().getPriceAmount().getValue().floatValue());
+            lineBean.setTotalValorVenta(debitNoteLineType.getLineExtensionAmount().getValue().floatValue());
 
             // Precio de venta unitario
-            BeanUtils.agregarPrecioUnitario(lineBean, Optional.ofNullable(creditNoteLineType.getPricingReference().getAlternativeConditionPrice()));
+            BeanUtils.agregarPrecioUnitario(lineBean, Optional.ofNullable(debitNoteLineType.getPricingReference().getAlternativeConditionPrice()));
 
             // Descripcion y codigo de producto
-            BeanUtils.agregarDescripcionYCodigo(lineBean, Optional.ofNullable(creditNoteLineType.getItem()));
+            BeanUtils.agregarDescripcionYCodigo(lineBean, Optional.ofNullable(debitNoteLineType.getItem()));
 
             // Impuestos
-            BeanUtils.agregarImpuestosEnLine(lineBean, Optional.ofNullable(creditNoteLineType.getTaxTotal()));
+            BeanUtils.agregarImpuestosEnLine(lineBean, Optional.ofNullable(debitNoteLineType.getTaxTotal()));
 
             result.add(lineBean);
         }

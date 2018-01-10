@@ -6,7 +6,7 @@ import org.clarksnut.datasource.peru.beans.*;
 import java.util.Date;
 import java.util.List;
 
-public class DebitNoteDatasource extends Datasource {
+public class PeruDebitNoteDatasource extends Datasource {
 
     private String idAsignado;
     private String moneda;
