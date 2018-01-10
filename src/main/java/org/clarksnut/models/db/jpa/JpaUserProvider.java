@@ -1,6 +1,5 @@
 package org.clarksnut.models.db.jpa;
 
-import org.clarksnut.common.jpa.HibernateProvider;
 import org.clarksnut.models.QueryModel;
 import org.clarksnut.models.UserBean;
 import org.clarksnut.models.UserModel;
@@ -17,21 +16,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Stateless
-public class JpaUserProvider extends HibernateProvider implements UserProvider {
+public class JpaUserProvider implements UserProvider {
 
     private final static String[] SEARCH_FIELDS = {"username", "fullName"};
 
-    private EntityManager em;
-
     @Inject
-    public JpaUserProvider(EntityManager em) {
-        this.em = em;
-    }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
+    private EntityManager em;
 
     @Override
     public UserModel addUser(String identityID, String providerType, String username) {

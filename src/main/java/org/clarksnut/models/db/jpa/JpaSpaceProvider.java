@@ -1,6 +1,5 @@
 package org.clarksnut.models.db.jpa;
 
-import org.clarksnut.common.jpa.HibernateProvider;
 import org.clarksnut.models.QueryModel;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.SpaceProvider;
@@ -17,21 +16,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Stateless
-public class JpaSpaceProvider extends HibernateProvider implements SpaceProvider {
+public class JpaSpaceProvider implements SpaceProvider {
 
     private final static String[] SEARCH_FIELDS = {"assignedId", "name"};
 
-    private EntityManager em;
-
     @Inject
-    public JpaSpaceProvider(EntityManager em) {
-        this.em = em;
-    }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
+    private EntityManager em;
 
     @Override
     public SpaceModel addSpace(String assignedId, String name, UserModel owner) {
