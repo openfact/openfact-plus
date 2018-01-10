@@ -1,13 +1,12 @@
 package org.clarksnut.documents.jpa.entity;
 
-import org.clarksnut.documents.parser.SkeletonDocument;
+import org.clarksnut.mapper.document.DocumentMapped.DocumentBean;
 
 public class DocumentUtil {
 
-    public static DocumentEntity toDocumentEntity(SkeletonDocument skeleton) {
+    public static DocumentEntity toDocumentEntity(DocumentBean skeleton) {
         DocumentEntity entity = new DocumentEntity();
 
-        entity.setType(skeleton.getType());
         entity.setAssignedId(skeleton.getAssignedId());
         entity.setAmount(skeleton.getAmount());
         entity.setTax(skeleton.getTax());
@@ -29,10 +28,9 @@ public class DocumentUtil {
         return entity;
     }
 
-    public static DocumentVersionEntity toDocumentVersionEntity(SkeletonDocument skeleton) {
+    public static DocumentVersionEntity toDocumentVersionEntity(DocumentBean skeleton) {
         DocumentVersionEntity entity = new DocumentVersionEntity();
 
-        entity.setType(skeleton.getType());
         entity.setAssignedId(skeleton.getAssignedId());
         entity.setAmount(skeleton.getAmount());
         entity.setTax(skeleton.getTax());

@@ -1,0 +1,10 @@
+org.clarksnut.mapper.document.basic.invoice.BasicInvoiceParsedDocumentProvider
+org.clarksnut.mapper.document.basic.creditnote.BasicCreditNoteMapperProvider
+org.clarksnut.mapper.document.basic.debitnote.BasicDebitNoteMapperProvider
+org.clarksnut.mapper.document.pe.invoice.PEInvoiceParsedDocumentProvider
+org.clarksnut.mapper.document.pe.creditnote.PECreditNoteParsedDocumentProvider
+org.clarksnut.mapper.document.pe.debitnote.PEDebitNoteParsedDocumentProvider
+org.clarksnut.mapper.document.pe.perception.PEPerceptionParsedDocumentProvider
+org.clarksnut.mapper.document.pe.retention.PERetentionParsedDocumentProvider
+org.clarksnut.mapper.document.pe.summarydocuments.PESummaryDocumentsParsedDocumentProvider
+org.clarksnut.mapper.document.pe.voideddocuments.PEVoidedDocumentsParsedDocumentProvider

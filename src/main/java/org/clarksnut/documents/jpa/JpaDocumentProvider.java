@@ -5,18 +5,16 @@ import org.clarksnut.documents.DocumentModel.DocumentCreationEvent;
 import org.clarksnut.documents.DocumentModel.DocumentRemovedEvent;
 import org.clarksnut.documents.DocumentProvider;
 import org.clarksnut.documents.DocumentProviderType;
-import org.clarksnut.documents.DocumentType;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
 import org.clarksnut.documents.exceptions.UnrecognizableDocumentTypeException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.DocumentUtil;
 import org.clarksnut.documents.jpa.entity.DocumentVersionEntity;
-import org.clarksnut.documents.parser.ParsedDocument;
-import org.clarksnut.documents.parser.ParsedDocumentProvider;
-import org.clarksnut.documents.parser.ParsedDocumentProviderFactory;
-import org.clarksnut.documents.parser.SkeletonDocument;
 import org.clarksnut.files.XmlUBLFileModel;
+import org.clarksnut.mapper.document.DocumentMapped;
+import org.clarksnut.mapper.document.DocumentMapperProvider;
+import org.clarksnut.mapper.document.DocumentMapperProviderFactory;
 import org.jboss.logging.Logger;
 import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
@@ -26,7 +24,9 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Stateless
 public class JpaDocumentProvider implements DocumentProvider {
@@ -37,22 +37,29 @@ public class JpaDocumentProvider implements DocumentProvider {
     private EntityManager em;
 
     @Inject
-    private ParsedDocumentProviderFactory readerUtil;
+    @ConfigurationValue("clarksnut.document.mapper.default")
+    private Optional<String> clarksnutDocumentMapperDefault;
 
     @Inject
     @ConfigurationValue("clarksnut.document.additionalTypes")
     private Optional<String[]> clarksnutAdditionalDocumentTypes;
 
+    @Inject
+    private Event<DocumentCreationEvent> creationEvent;
+
+    @Inject
+    private Event<DocumentRemovedEvent> removedEvent;
+
     @Override
     public DocumentModel addDocument(XmlUBLFileModel file, String fileProvider, boolean isVerified, DocumentProviderType providerType)
             throws UnsupportedDocumentTypeException, UnreadableDocumentException, UnrecognizableDocumentTypeException {
 
-        ParsedDocument parsedDocument = readDocument(file);
+        DocumentMapped parsedDocument = readDocument(file);
         if (parsedDocument == null) {
-            throw new UnreadableDocumentException(file.getDocumentType() + " Is supported but could not be read");
+            throw new UnreadableDocumentException(file.getDocumentType() + " Is supported but could not be map");
         }
         final Object jaxb = parsedDocument.getType();
-        final SkeletonDocument skeleton = parsedDocument.getSkeleton();
+        final DocumentMapped.DocumentBean skeleton = parsedDocument.getBean();
 
         DocumentModel document;
         DocumentModel previousDocument = getDocument(file.getDocumentType(), skeleton.getAssignedId(), skeleton.getSupplierAssignedId());
@@ -86,8 +93,7 @@ public class JpaDocumentProvider implements DocumentProvider {
 
         em.persist(versionEntity);
 
-        Event<DocumentCreationEvent> event = readerUtil.getCreationEvents(document.getType());
-        event.fire(new DocumentCreationEvent() {
+        creationEvent.fire(new DocumentCreationEvent() {
             @Override
             public String getDocumentType() {
                 return file.getDocumentType();
@@ -107,31 +113,16 @@ public class JpaDocumentProvider implements DocumentProvider {
         return document;
     }
 
-    private ParsedDocument readDocument(XmlUBLFileModel file) throws UnsupportedDocumentTypeException, UnrecognizableDocumentTypeException {
-        SortedSet<ParsedDocumentProvider> readers = readerUtil.getParser(file.getDocumentType());
-        if (readers.isEmpty()) {
-            Optional<DocumentType> optional = DocumentType.getByType(file.getDocumentType());
-            if (optional.isPresent()) {
-                throw new UnsupportedDocumentTypeException("Unsupported type=" + file.getDocumentType());
-            }
+    private DocumentMapped readDocument(XmlUBLFileModel file) throws UnsupportedDocumentTypeException, UnrecognizableDocumentTypeException {
+        String group = clarksnutDocumentMapperDefault.orElse("basic");
+        DocumentMapperProvider provider = DocumentMapperProviderFactory.getInstance().getParsedDocumentProvider(group, file.getDocumentType());
 
-            Optional<String> additionalOptional = Arrays.stream(clarksnutAdditionalDocumentTypes.orElse(new String[0])).filter(p -> p.equals(file.getDocumentType())).findFirst();
-            if (additionalOptional.isPresent()) {
-                throw new UnsupportedDocumentTypeException("Unsupported type=" + file.getDocumentType());
-            } else {
-                throw new UnrecognizableDocumentTypeException("Unrecognizable type=" + file.getDocumentType());
-            }
+        DocumentMapped documentMapped = provider.map(file);
+        if (documentMapped == null && !group.equals("basic")) {
+            provider = DocumentMapperProviderFactory.getInstance().getParsedDocumentProvider(group, file.getDocumentType());
+            documentMapped = provider.map(file);
         }
-
-        ParsedDocument parsedDocument = null;
-        for (ParsedDocumentProvider reader : readers) {
-            parsedDocument = reader.read(file);
-            if (parsedDocument != null) {
-                break;
-            }
-        }
-
-        return parsedDocument;
+        return documentMapped;
     }
 
     @Override
@@ -165,8 +156,7 @@ public class JpaDocumentProvider implements DocumentProvider {
         em.remove(entity);
         em.flush();
 
-        Event<DocumentRemovedEvent> event = readerUtil.getRemovedEvents(document.getType());
-        event.fire(() -> document);
+        removedEvent.fire(() -> document);
         return true;
     }
 
