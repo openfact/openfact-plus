@@ -24,7 +24,7 @@ public class PEVoidedDocumentsParsedDocumentProviderTest {
 
     @Test
     public void readRA_20170223_00004() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/voideddocuments/RA-20170223-00004.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/voideddocuments/RA-20170223-00004.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 

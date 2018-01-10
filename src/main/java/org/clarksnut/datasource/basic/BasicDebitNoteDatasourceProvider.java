@@ -6,7 +6,7 @@ import oasis.names.specification.ubl.schema.xsd.debitnote_21.DebitNoteType;
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.basic.beans.LineBean;
-import org.clarksnut.files.XmlFileModel;
+import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 
 import java.math.BigDecimal;
@@ -29,7 +29,7 @@ public class BasicDebitNoteDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlFileModel file) throws FileFetchException {
+    public Datasource getDatasource(XmlUBLFileModel file) throws FileFetchException {
         DebitNoteType debitNoteType = UBL21Reader.debitNote().read(file.getDocument());
         if (debitNoteType == null) {
             return null;

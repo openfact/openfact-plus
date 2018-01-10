@@ -14,6 +14,7 @@ import org.clarksnut.datasource.peru.beans.LineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoNotaCredito;
 import org.clarksnut.files.XmlFileModel;
+import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 
@@ -35,7 +36,7 @@ public class PeruCreditNoteDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlFileModel file) throws FileFetchException {
+    public Datasource getDatasource(XmlUBLFileModel file) throws FileFetchException {
         CreditNoteType creditNoteType = read(file);
         if (creditNoteType == null) {
             return null;

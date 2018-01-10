@@ -2,7 +2,6 @@ package org.clarksnut.documents.parser.pe.summarydocuments;
 
 import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.SkeletonDocument;
-import org.clarksnut.documents.parser.pe.voideddocuments.PEVoidedDocumentsParsedDocumentProvider;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.junit.Test;
@@ -11,13 +10,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import sunat.names.specification.ubl.peru.schema.xsd.summarydocuments_1.SummaryDocumentsType;
-import sunat.names.specification.ubl.peru.schema.xsd.voideddocuments_1.VoidedDocumentsType;
 
 import java.io.InputStream;
 import java.util.Calendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PESummaryDocumentsParsedDocumentProviderTest {
@@ -27,7 +24,7 @@ public class PESummaryDocumentsParsedDocumentProviderTest {
 
     @Test
     public void readRC_20170227_00001() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/summarydocuments/RC-20170227-00001.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/summarydocuments/RC-20170227-00001.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 

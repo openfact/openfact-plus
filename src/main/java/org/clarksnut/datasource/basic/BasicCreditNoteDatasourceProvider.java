@@ -6,7 +6,7 @@ import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.basic.beans.LineBean;
-import org.clarksnut.files.XmlFileModel;
+import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 
 import java.math.BigDecimal;
@@ -29,7 +29,7 @@ public class BasicCreditNoteDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlFileModel file) throws FileFetchException {
+    public Datasource getDatasource(XmlUBLFileModel file) throws FileFetchException {
         CreditNoteType creditNoteType = UBL21Reader.creditNote().read(file.getDocument());
         if (creditNoteType == null) {
             return null;

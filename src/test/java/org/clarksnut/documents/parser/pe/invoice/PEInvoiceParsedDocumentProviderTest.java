@@ -24,7 +24,7 @@ public class PEInvoiceParsedDocumentProviderTest {
 
     @Test
     public void readFF11_00000003() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/invoice/FF11-00000003.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/invoice/FF11-00000003.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 

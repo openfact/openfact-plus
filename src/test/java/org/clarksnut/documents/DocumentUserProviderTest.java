@@ -37,9 +37,9 @@ public class DocumentUserProviderTest extends AbstractProviderTest {
     @Before
     public void before() throws UnsupportedDocumentTypeException, UnreadableDocumentException, IOException, SAXException, ParserConfigurationException, SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException, UnrecognizableDocumentTypeException {
         Map<String, String> xmls = new HashMap<>();
-        xmls.put("Invoice", "/peru/document/invoice/FF11-00000003.xml");
-        xmls.put("CreditNote", "/peru/document/creditnote/FF11-3.xml");
-        xmls.put("DebitNote", "/peru/document/debitnote/FF11-5.xml");
+        xmls.put("Invoice", "/ubl/peru/invoice/FF11-00000003.xml");
+        xmls.put("CreditNote", "/ubl/peru/creditnote/FF11-3.xml");
+        xmls.put("DebitNote", "/ubl/peru/debitnote/FF11-5.xml");
 
         documentIds = new ArrayList<>();
 

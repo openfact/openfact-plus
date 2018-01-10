@@ -24,7 +24,7 @@ public class BasicCreditNoteParsedDocumentProviderTest {
 
     @Test
     public void readFF11_3() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/creditnote/FF11-3.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/creditnote/FF11-3.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 

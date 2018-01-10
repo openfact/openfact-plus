@@ -24,7 +24,7 @@ public class PEPerceptionParsedDocumentProviderTest {
 
     @Test
     public void readP001_123() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/perception/P001-123.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/perception/P001-123.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 

@@ -20,7 +20,7 @@ public class DocumentProviderTest extends AbstractProviderTest {
     public void addAndGetDocument() throws Exception {
         XmlUBLFileModel file = Mockito.mock(XmlUBLFileModel.class);
 
-        InputStream is = getClass().getClassLoader().getResourceAsStream("/peru/document/invoice/FF11-00000003.xml");
+        InputStream is = getClass().getClassLoader().getResourceAsStream("/ubl/peru/invoice/FF11-00000003.xml");
 
         assertThat(is).isNotNull();
 

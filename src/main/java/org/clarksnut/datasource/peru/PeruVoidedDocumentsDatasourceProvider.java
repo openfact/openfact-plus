@@ -6,6 +6,7 @@ import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.VoidedLineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.files.XmlFileModel;
+import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.VoidedDocumentsLineType;
@@ -28,7 +29,7 @@ public class PeruVoidedDocumentsDatasourceProvider implements DatasourceProvider
     }
 
     @Override
-    public Datasource getDatasource(XmlFileModel file) throws FileFetchException {
+    public Datasource getDatasource(XmlUBLFileModel file) throws FileFetchException {
         VoidedDocumentsType voidedDocumentsType = read(file);
         if (file == null) {
             return null;

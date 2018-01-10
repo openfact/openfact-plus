@@ -1,8 +1,7 @@
 package org.clarksnut.datasource.peru;
 
 import org.clarksnut.datasource.peru.beans.VoidedLineBean;
-import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.files.XmlFileModel;
+import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +18,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PeruVoidedDocumentsBeanProviderTest extends PeruBeanUtilsTest {
 
     @Mock
-    private XmlFileModel file;
+    private XmlUBLFileModel file;
 
     @Test
     public void getDatasourceRA_20170223_00004() throws Exception {
 
-        InputStream is = getClass().getResourceAsStream("/peru/document/voideddocuments/RA-20170223-00004.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/voideddocuments/RA-20170223-00004.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 

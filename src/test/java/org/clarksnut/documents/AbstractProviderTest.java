@@ -12,7 +12,6 @@ import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.clarksnut.query.Query;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
@@ -63,10 +62,10 @@ public abstract class AbstractProviderTest {
                 .addAsResource("standalone.xml", "standalone.xml")
                 .addAsWebInfResource("jboss-deployment-structure.xml", "jboss-deployment-structure.xml")
 
-                .addAsResource("peru/document/invoice/FF11-00000003.xml", "peru/document/invoice/FF11-00000003.xml")
-                .addAsResource("peru/document/invoice/BB11-1.xml", "peru/document/invoice/BB11-1.xml")
-                .addAsResource("peru/document/creditnote/FF11-3.xml", "peru/document/creditnote/FF11-3.xml")
-                .addAsResource("peru/document/debitnote/FF11-5.xml", "peru/document/debitnote/FF11-5.xml")
+                .addAsResource("ubl/peru/invoice/FF11-00000003.xml", "ubl/peru/invoice/FF11-00000003.xml")
+                .addAsResource("ubl/peru/invoice/BB11-1.xml", "ubl/peru/invoice/BB11-1.xml")
+                .addAsResource("ubl/peru/creditnote/FF11-3.xml", "ubl/peru/creditnote/FF11-3.xml")
+                .addAsResource("ubl/peru/debitnote/FF11-5.xml", "ubl/peru/debitnote/FF11-5.xml")
 
                 // Dependencies
                 .addAsLibraries(libs())

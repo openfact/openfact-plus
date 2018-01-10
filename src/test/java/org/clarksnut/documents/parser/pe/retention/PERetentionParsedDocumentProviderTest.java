@@ -2,7 +2,6 @@ package org.clarksnut.documents.parser.pe.retention;
 
 import org.clarksnut.documents.parser.ParsedDocument;
 import org.clarksnut.documents.parser.SkeletonDocument;
-import org.clarksnut.documents.parser.pe.perception.PEPerceptionParsedDocumentProvider;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.junit.Test;
@@ -10,14 +9,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.openfact.perception.PerceptionType;
 import org.openfact.retention.RetentionType;
 
 import java.io.InputStream;
 import java.util.Calendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PERetentionParsedDocumentProviderTest {
@@ -27,7 +24,7 @@ public class PERetentionParsedDocumentProviderTest {
 
     @Test
     public void read() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/retention/R001-123.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/retention/R001-123.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 

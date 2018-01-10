@@ -1,8 +1,7 @@
 package org.clarksnut.datasource.peru;
 
 import org.clarksnut.datasource.peru.beans.LineBean;
-import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.files.XmlFileModel;
+import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,11 +18,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
 
     @Mock
-    private XmlFileModel file;
+    private XmlUBLFileModel file;
 
     @Test
     public void getDatasourceBB11_1() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/invoice/BB11-1.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/invoice/BB11-1.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
@@ -97,7 +96,7 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
 
     @Test
     public void getDatasourceBB12_1() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/invoice/BB12-1.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/invoice/BB12-1.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
@@ -171,7 +170,7 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
 
     @Test
     public void getDatasourceBB13_1() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/invoice/BB13-1.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/invoice/BB13-1.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
@@ -245,7 +244,7 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
 
     @Test
     public void getDatasourceBB14_1() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/invoice/BB14-1.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/invoice/BB14-1.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
@@ -319,7 +318,7 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
 
     @Test
     public void getDatasourceFF11_3() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/invoice/FF11-00000003.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/invoice/FF11-00000003.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
@@ -393,7 +392,7 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
 
     @Test
     public void getDatasourceFF12_3() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/invoice/FF12-3.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/invoice/FF12-3.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
@@ -467,7 +466,7 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
 
     @Test
     public void getDatasourceFF13_2() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/invoice/FF13-3.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/invoice/FF13-3.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
@@ -541,7 +540,7 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
 
     @Test
     public void getDatasourceFF14_1() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/invoice/FF14-1.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/invoice/FF14-1.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 

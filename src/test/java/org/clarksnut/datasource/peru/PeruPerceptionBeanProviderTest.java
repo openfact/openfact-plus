@@ -1,8 +1,7 @@
 package org.clarksnut.datasource.peru;
 
 import org.clarksnut.datasource.peru.beans.PerceptionLineBean;
-import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.files.XmlFileModel;
+import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,11 +18,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PeruPerceptionBeanProviderTest extends PeruBeanUtilsTest {
 
     @Mock
-    private XmlFileModel file;
+    private XmlUBLFileModel file;
 
     @Test
     public void getDatasourceP001_123() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/perception/P001-123.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/perception/P001-123.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 

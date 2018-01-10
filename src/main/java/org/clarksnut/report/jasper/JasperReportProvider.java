@@ -56,7 +56,11 @@ public class JasperReportProvider implements ReportTemplateProvider {
             ReportTheme theme = themeProvider.getTheme(themeName, themeType);
 
             FileProvider fileProvider = fileStorageProviderUtil.getDatasourceProvider(document.getFileProvider());
-            XmlFileModel file = new FlyWeightXmlFileModel(new FlyWeightFileModel(fileProvider.getFile(document.getFileId())));
+            XmlUBLFileModel file = new FlyWeightXmlUBLFileModel(
+                    new FlyWeightXmlFileModel(
+                            new FlyWeightFileModel(fileProvider.getFile(document.getFileId()))
+                    )
+            );
             DatasourceProvider datasourceProvider = DatasourceFactory.getInstance().getDatasourceProvider(theme.getDatasource());
             Object bean = datasourceProvider.getDatasource(file);
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(Collections.singletonList(bean));

@@ -1,8 +1,7 @@
 package org.clarksnut.datasource.peru;
 
 import org.clarksnut.datasource.peru.beans.LineBean;
-import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.files.XmlFileModel;
+import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,11 +18,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
 
     @Mock
-    private XmlFileModel file;
+    private XmlUBLFileModel file;
     
     @Test
     public void getDatasourceFF11_5() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/debitnote/FF11-5.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/debitnote/FF11-5.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
@@ -103,7 +102,7 @@ public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
 
     @Test
     public void getDatasourceFF12_1() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/debitnote/FF12-1.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/debitnote/FF12-1.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
@@ -183,7 +182,7 @@ public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
 
     @Test
     public void getDatasourceFF14_1() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/debitnote/FF14-1.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/debitnote/FF14-1.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 

@@ -24,7 +24,7 @@ public class PEDebitNoteParsedDocumentProviderTest {
 
     @Test
     public void readFF11_5() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/peru/document/debitnote/FF11-5.xml");
+        InputStream is = getClass().getResourceAsStream("/ubl/peru/debitnote/FF11-5.xml");
 
         Mockito.when(this.file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 

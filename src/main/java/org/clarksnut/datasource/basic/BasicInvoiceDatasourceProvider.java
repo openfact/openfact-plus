@@ -6,7 +6,7 @@ import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.basic.beans.LineBean;
-import org.clarksnut.files.XmlFileModel;
+import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.files.exceptions.FileFetchException;
 
 import java.math.BigDecimal;
@@ -28,7 +28,7 @@ public class BasicInvoiceDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlFileModel file) throws FileFetchException {
+    public Datasource getDatasource(XmlUBLFileModel file) throws FileFetchException {
         InvoiceType invoiceType = UBL21Reader.invoice().read(file.getDocument());
         if (invoiceType == null) {
             return null;
