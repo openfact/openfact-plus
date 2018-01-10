@@ -11,9 +11,11 @@ public class DatasourceFactory {
     private Map<String, DatasourceProvider> providers = new HashMap<>();
 
     private DatasourceFactory() {
-        ServiceLoader<DatasourceProvider> serviceLoader = ServiceLoader.load(DatasourceProvider.class);
-        for (DatasourceProvider e : serviceLoader) {
-            providers.put(e.getName(), e);
+        synchronized (this) {
+            ServiceLoader<DatasourceProvider> serviceLoader = ServiceLoader.load(DatasourceProvider.class);
+            for (DatasourceProvider e : serviceLoader) {
+                providers.put(e.getName(), e);
+            }
         }
     }
 
