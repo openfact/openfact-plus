@@ -11,6 +11,7 @@ import org.clarksnut.models.utils.ClarksnutModelUtils;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +21,7 @@ public class JpaSpaceProvider implements SpaceProvider {
 
     private final static String[] SEARCH_FIELDS = {"assignedId", "name"};
 
-    @Inject
+    @PersistenceContext
     private EntityManager em;
 
     @Override

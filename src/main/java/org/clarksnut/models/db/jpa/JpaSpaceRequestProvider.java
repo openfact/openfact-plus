@@ -9,6 +9,7 @@ import org.clarksnut.models.db.jpa.entity.UserEntity;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.UUID;
@@ -19,12 +20,8 @@ public class JpaSpaceRequestProvider implements SpaceRequestProvider {
 
     private final static String[] SEARCH_FIELDS = {"assignedId", "name"};
 
+    @PersistenceContext
     private EntityManager em;
-
-    @Inject
-    public JpaSpaceRequestProvider(EntityManager em) {
-        this.em = em;
-    }
 
     @Override
     public SpaceRequestModel addRequest(SpaceModel space, UserModel user, FileModel userPhotograph, String message, RequestType type) {

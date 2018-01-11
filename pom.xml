@@ -392,19 +392,6 @@
             <version>4.5.3</version>
         </dependency>
 
-        <!--Liquibase-->
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <version>3.5.3</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.yaml</groupId>
-                    <artifactId>snakeyaml</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!--Gmail-->
         <dependency>
             <groupId>com.google.api-client</groupId>
