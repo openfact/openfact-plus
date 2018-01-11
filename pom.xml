@@ -192,10 +192,6 @@
         </dependency>
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
-            <artifactId>logstash</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
             <artifactId>bean-validation</artifactId>
         </dependency>
         <dependency>
@@ -205,10 +201,6 @@
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>infinispan</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>mail</artifactId>
         </dependency>
 
         <dependency>
