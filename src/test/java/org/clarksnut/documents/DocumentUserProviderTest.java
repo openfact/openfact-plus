@@ -52,7 +52,7 @@ public class DocumentUserProviderTest extends AbstractProviderTest {
             Mockito.when(file.getId()).thenReturn(UUID.randomUUID().toString());
             Mockito.when(file.getDocument()).thenReturn(ClarksnutModelUtils.toDocument(is));
 
-            DocumentModel document = documentProvider.addDocument(file, "jpa",true, DocumentProviderType.USER);
+            DocumentModel document = documentProvider.addDocument(file,true, DocumentProviderType.USER);
 
             documentIds.add(document.getId());
         }

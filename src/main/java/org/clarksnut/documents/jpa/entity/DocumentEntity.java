@@ -117,10 +117,6 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "file_id")
     private String fileId;
 
-    @NotNull(message = "fileProvider should not be null")
-    @Column(name = "file_provider")
-    private String fileProvider;
-
     @NotNull(message = "createdAt should not be null")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
@@ -333,12 +329,5 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.updatedAt = updatedAt;
     }
 
-    public String getFileProvider() {
-        return fileProvider;
-    }
-
-    public void setFileProvider(String fileProvider) {
-        this.fileProvider = fileProvider;
-    }
 }
 

@@ -6,7 +6,6 @@ import org.clarksnut.documents.DocumentProvider;
 import org.clarksnut.documents.DocumentProviderType;
 import org.clarksnut.files.FileModel;
 import org.clarksnut.files.FileProvider;
-import org.clarksnut.files.FileStorageProviderUtil;
 import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.files.exceptions.FileStorageException;
 import org.clarksnut.managers.DocumentManager;
@@ -51,7 +50,7 @@ public class DocumentsService {
     private UserProvider userProvider;
 
     @Inject
-    private FileStorageProviderUtil fileStorageProviderUtil;
+    private FileProvider fileProvider;
 
     @Inject
     private DocumentProvider documentProvider;
@@ -189,25 +188,21 @@ public class DocumentsService {
     @Path("/massive/download")
     @Produces("application/zip")
     public Response downloadDocuments(@QueryParam("documents") List<String> documentsId) {
-        Set<FileModel> files = documentsId.stream()
-                .map(this::getDocumentById)
-                .map(document -> {
-                    FileProvider fileProvider = fileStorageProviderUtil.getDatasourceProvider(document.getFileProvider());
-                    return fileProvider.getFile(document.getFileId());
-                })
-                .collect(Collectors.toSet());
-
         ZipBuilder zipInMemory = ZipBuilder.createZipInMemory();
-        for (FileModel file : files) {
-            try {
-                byte[] bytes = file.getFile();
-                zipInMemory.add(bytes).path(file.getFilename()).save();
-            } catch (FileFetchException e) {
-                logger.error("could not fetch file for zip", e);
-            } catch (IOException e) {
-                logger.error("Could not add file to zip", e);
-            }
-        }
+
+        documentsId.stream()
+                .map(this::getDocumentById)
+                .forEach(document -> {
+                    FileModel file = fileProvider.getFile(document.getFileId());
+                    try {
+                        zipInMemory.add(file.getFile()).path(document.getAssignedId()).save();
+                    } catch (IOException e) {
+                        logger.error("Could not add file to zip", e);
+                    } catch (FileFetchException e) {
+                        logger.error("could not fetch file for zip", e);
+                    }
+                });
+
         byte[] zip = zipInMemory.toBytes();
 
         Response.ResponseBuilder response = Response.ok(zip);
@@ -266,7 +261,6 @@ public class DocumentsService {
     public Response getXml(@PathParam("documentId") String documentId) {
         DocumentModel document = getDocumentById(documentId);
 
-        FileProvider fileProvider = fileStorageProviderUtil.getDatasourceProvider(document.getFileProvider());
         FileModel file = fileProvider.getFile(document.getFileId());
 
         byte[] reportBytes;

@@ -21,13 +21,12 @@ public class JpaUnsavedDocumentProvider implements UnsavedDocumentProvider {
     private EntityManager em;
 
     @Override
-    public UnsavedDocumentModel addDocument(XmlUBLFileModel file, String fileProvider, UnsavedReasonType reason) {
+    public UnsavedDocumentModel addDocument(XmlUBLFileModel file, UnsavedReasonType reason) {
         UnsavedDocumentEntity entity = new UnsavedDocumentEntity();
 
         entity.setId(UUID.randomUUID().toString());
         entity.setType(file.getDocumentType());
         entity.setFileId(file.getId());
-        entity.setFileProvider(fileProvider);
         entity.setReason(reason);
 
         em.persist(entity);

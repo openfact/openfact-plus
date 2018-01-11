@@ -61,11 +61,6 @@ public class SpaceRequestAdapter implements SpaceRequestModel, JpaModel<SpaceReq
     }
 
     @Override
-    public String getFileProvider() {
-        return request.getFileProvider();
-    }
-
-    @Override
     public Date getCreatedAt() {
         return request.getCreatedAt();
     }

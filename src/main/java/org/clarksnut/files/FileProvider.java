@@ -6,9 +6,8 @@ public interface FileProvider {
 
     /**
      * @param file      file value
-     * @param extension file extension e.g. .pdf
      */
-    FileModel addFile(byte[] file, String extension) throws FileStorageException;
+    FileModel addFile(byte[] file) throws FileStorageException;
 
     /**
      * @param id file unique identity

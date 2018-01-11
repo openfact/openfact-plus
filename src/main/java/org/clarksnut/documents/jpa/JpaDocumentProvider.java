@@ -51,7 +51,7 @@ public class JpaDocumentProvider implements DocumentProvider {
     private Event<DocumentRemovedEvent> removedEvent;
 
     @Override
-    public DocumentModel addDocument(XmlUBLFileModel file, String fileProvider, boolean isVerified, DocumentProviderType providerType)
+    public DocumentModel addDocument(XmlUBLFileModel file, boolean isVerified, DocumentProviderType providerType)
             throws UnsupportedDocumentTypeException, UnreadableDocumentException, UnrecognizableDocumentTypeException {
 
         DocumentMapped parsedDocument = readDocument(file);
@@ -70,7 +70,6 @@ public class JpaDocumentProvider implements DocumentProvider {
             documentEntity.setType(file.getDocumentType());
             documentEntity.setProvider(providerType);
             documentEntity.setFileId(file.getId());
-            documentEntity.setFileProvider(fileProvider);
             documentEntity.setVerified(isVerified);
 
             em.persist(documentEntity);
@@ -86,7 +85,6 @@ public class JpaDocumentProvider implements DocumentProvider {
         versionEntity.setType(file.getDocumentType());
         versionEntity.setProvider(providerType);
         versionEntity.setFileId(file.getId());
-        versionEntity.setFileProvider(fileProvider);
         versionEntity.setVerified(isVerified);
         versionEntity.setCurrentVersion(previousDocument == null);
         versionEntity.setDocument(DocumentAdapter.toEntity(document, em));

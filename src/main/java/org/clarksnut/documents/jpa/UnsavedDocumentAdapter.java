@@ -45,11 +45,6 @@ public class UnsavedDocumentAdapter implements UnsavedDocumentModel, JpaModel<Un
     }
 
     @Override
-    public String getFileProvider() {
-        return document.getFileProvider();
-    }
-
-    @Override
     public UnsavedReasonType getReason() {
         return document.getReason();
     }

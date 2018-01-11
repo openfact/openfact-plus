@@ -24,10 +24,6 @@ public class DocumentManager {
     private static final Logger logger = Logger.getLogger(DocumentManager.class);
 
     @Inject
-    @FileProviderName
-    private String fileProviderName;
-
-    @Inject
     private FileProvider fileProvider;
 
     @Inject
@@ -47,7 +43,7 @@ public class DocumentManager {
             FileFetchException,
             DocumentNotImportedException,
             DocumentNotImportedButSavedForFutureException {
-        FileModel fileModel = fileProvider.addFile(bytes, ".xml");
+        FileModel fileModel = fileProvider.addFile(bytes);
 
         XmlUBLFileModel xmlUBLFile = new FlyWeightXmlUBLFileModel(
                 new FlyWeightXmlFileModel(
@@ -55,12 +51,12 @@ public class DocumentManager {
         );
 
         try {
-            return documentProvider.addDocument(xmlUBLFile, fileProviderName, false, providerType);
+            return documentProvider.addDocument(xmlUBLFile, false, providerType);
         } catch (UnsupportedDocumentTypeException e) {
-            unsavedDocumentProvider.addDocument(xmlUBLFile, fileProviderName, UnsavedReasonType.UNSUPPORTED);
+            unsavedDocumentProvider.addDocument(xmlUBLFile, UnsavedReasonType.UNSUPPORTED);
             throw new DocumentNotImportedButSavedForFutureException("Document is a valid UBL but does not have a reader", e);
         } catch (UnreadableDocumentException e) {
-            unsavedDocumentProvider.addDocument(xmlUBLFile, fileProviderName, UnsavedReasonType.UNREADABLE);
+            unsavedDocumentProvider.addDocument(xmlUBLFile, UnsavedReasonType.UNREADABLE);
             throw new DocumentNotImportedButSavedForFutureException("Document is a valid UBL but readers could not read it", e);
         } catch (UnrecognizableDocumentTypeException e) {
             throw new DocumentNotImportedException("Document not imported", e);

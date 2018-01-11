@@ -23,16 +23,6 @@ public class FlyWeightXmlFileModel implements XmlFileModel {
     }
 
     @Override
-    public String getFilename() {
-        return this.file.getFilename();
-    }
-
-    @Override
-    public String getExtension() {
-        return this.file.getExtension();
-    }
-
-    @Override
     public byte[] getFile() throws FileFetchException {
         return this.file.getFile();
     }

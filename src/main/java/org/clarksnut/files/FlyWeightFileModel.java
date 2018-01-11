@@ -17,16 +17,6 @@ public class FlyWeightFileModel implements FileModel {
     }
 
     @Override
-    public String getFilename() {
-        return this.fileModel.getFilename();
-    }
-
-    @Override
-    public String getExtension() {
-        return this.fileModel.getExtension();
-    }
-
-    @Override
     public byte[] getFile() throws FileFetchException {
         if (bytes == null) {
             this.bytes = this.fileModel.getFile();

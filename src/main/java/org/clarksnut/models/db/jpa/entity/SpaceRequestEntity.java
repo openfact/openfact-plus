@@ -55,10 +55,6 @@ public class SpaceRequestEntity implements CreatableEntity, UpdatableEntity, Ser
     @Column(name = "file_id")
     private String fileId;
 
-    @NotNull(message = "fileProvider should not be null")
-    @Column(name = "file_provider")
-    private String fileProvider;
-
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
@@ -115,14 +111,6 @@ public class SpaceRequestEntity implements CreatableEntity, UpdatableEntity, Ser
 
     public void setFileId(String fileId) {
         this.fileId = fileId;
-    }
-
-    public String getFileProvider() {
-        return fileProvider;
-    }
-
-    public void setFileProvider(String fileProvider) {
-        this.fileProvider = fileProvider;
     }
 
     public Date getCreatedAt() {

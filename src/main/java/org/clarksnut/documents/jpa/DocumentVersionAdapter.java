@@ -64,11 +64,6 @@ public class DocumentVersionAdapter implements DocumentVersionModel, JpaModel<Do
     }
 
     @Override
-    public String getFileProvider() {
-        return documentVersion.getFileProvider();
-    }
-
-    @Override
     public Float getAmount() {
         return documentVersion.getAmount();
     }

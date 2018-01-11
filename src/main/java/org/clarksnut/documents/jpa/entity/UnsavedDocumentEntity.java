@@ -28,10 +28,6 @@ public class UnsavedDocumentEntity implements CreatableEntity, UpdatableEntity, 
     @Column(name = "file_id")
     private String fileId;
 
-    @NotNull(message = "fileProvider should not be null")
-    @Column(name = "file_provider")
-    private String fileProvider;
-
     @NotNull(message = "type should not be null")
     @Column(name = "type")
     private String type;
@@ -68,14 +64,6 @@ public class UnsavedDocumentEntity implements CreatableEntity, UpdatableEntity, 
 
     public void setFileId(String fileId) {
         this.fileId = fileId;
-    }
-
-    public String getFileProvider() {
-        return fileProvider;
-    }
-
-    public void setFileProvider(String fileProvider) {
-        this.fileProvider = fileProvider;
     }
 
     public Date getCreatedAt() {

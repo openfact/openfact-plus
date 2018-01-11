@@ -6,7 +6,6 @@ public interface Document {
 
     String getType();
     String getFileId();
-    String getFileProvider();
     String getAssignedId();
     Date getIssueDate();
 

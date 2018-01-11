@@ -8,8 +8,6 @@ public interface UnsavedDocumentModel {
 
     String getFileId();
 
-    String getFileProvider();
-
     UnsavedReasonType getReason();
 
 }

@@ -21,16 +21,6 @@ public class FileAdapter implements FileModel {
     }
 
     @Override
-    public String getFilename() {
-        return file.getFilename();
-    }
-
-    @Override
-    public String getExtension() {
-        return file.getFileExtension();
-    }
-
-    @Override
     public byte[] getFile() throws FileFetchException {
         return file.getFile();
     }

@@ -16,8 +16,6 @@ public interface SpaceRequestModel {
 
     String getFileId();
 
-    String getFileProvider();
-
     Date getCreatedAt();
 
     Date getUpdatedAt();

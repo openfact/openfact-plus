@@ -2,7 +2,6 @@ package org.clarksnut.files.jpa;
 
 import org.clarksnut.files.FileModel;
 import org.clarksnut.files.FileProvider;
-import org.clarksnut.files.FileStorageProviderType;
 import org.clarksnut.files.exceptions.FileStorageException;
 
 import javax.ejb.Stateless;
@@ -11,21 +10,18 @@ import javax.persistence.PersistenceContext;
 import java.util.UUID;
 
 @Stateless
-@FileStorageProviderType(storage = "jpa")
 public class JpaFileProvider implements FileProvider {
 
     @PersistenceContext
     private EntityManager em;
 
     @Override
-    public FileModel addFile(byte[] file, String extension) throws FileStorageException {
+    public FileModel addFile(byte[] file) throws FileStorageException {
         String id = UUID.randomUUID().toString();
 
         FileEntity entity = new FileEntity();
         entity.setId(id);
         entity.setFile(file);
-        entity.setFilename(id.concat(extension));
-        entity.setFileExtension(extension);
 
         try {
             em.persist(entity);

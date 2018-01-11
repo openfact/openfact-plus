@@ -81,10 +81,6 @@ public abstract class AbstractDocumentEntity {
     @Column(name = "file_id")
     private String fileId;
 
-    @NotNull(message = "fileProvider should not be null")
-    @Column(name = "file_provider")
-    private String fileProvider;
-
     @NotNull(message = "createdAt should not be null")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
@@ -279,11 +275,4 @@ public abstract class AbstractDocumentEntity {
         this.updatedAt = updatedAt;
     }
 
-    public String getFileProvider() {
-        return fileProvider;
-    }
-
-    public void setFileProvider(String fileProvider) {
-        this.fileProvider = fileProvider;
-    }
 }

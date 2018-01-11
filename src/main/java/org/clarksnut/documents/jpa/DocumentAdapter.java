@@ -59,11 +59,6 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public String getFileProvider() {
-        return document.getFileProvider();
-    }
-
-    @Override
     public Float getAmount() {
         return document.getAmount();
     }

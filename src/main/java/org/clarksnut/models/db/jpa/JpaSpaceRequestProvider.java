@@ -27,7 +27,7 @@ public class JpaSpaceRequestProvider implements SpaceRequestProvider {
     }
 
     @Override
-    public SpaceRequestModel addRequest(SpaceModel space, UserModel user, FileModel userPhotograph, String fileProvider, String message, RequestType type) {
+    public SpaceRequestModel addRequest(SpaceModel space, UserModel user, FileModel userPhotograph, String message, RequestType type) {
         SpaceEntity spaceEntity = SpaceAdapter.toEntity(space, em);
         UserEntity userEntity = UserAdapter.toEntity(user, em);
 
@@ -36,7 +36,6 @@ public class JpaSpaceRequestProvider implements SpaceRequestProvider {
         entity.setType(type);
         entity.setStatus(RequestStatusType.PENDING);
         entity.setFileId(userPhotograph.getId());
-        entity.setFileProvider(fileProvider);
         entity.setSpace(spaceEntity);
         entity.setUser(userEntity);
         em.persist(entity);

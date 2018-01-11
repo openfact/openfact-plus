@@ -9,7 +9,6 @@ public interface SpaceRequestProvider {
     SpaceRequestModel addRequest(SpaceModel space,
                                  UserModel user,
                                  FileModel userPhotograph,
-                                 String fileProvider,
                                  String message,
                                  RequestType type);
 

@@ -30,7 +30,7 @@ public class JasperReportProvider implements ReportTemplateProvider {
     private static final Logger logger = Logger.getLogger(JasperReportProvider.class);
 
     @Inject
-    private FileStorageProviderUtil fileStorageProviderUtil;
+    private FileProvider fileProvider;
 
     @Inject
     private JasperReportUtil jasperReportUtil;
@@ -55,7 +55,6 @@ public class JasperReportProvider implements ReportTemplateProvider {
             String themeType = document.getType().toLowerCase();
             ReportTheme theme = themeProvider.getTheme(themeName, themeType);
 
-            FileProvider fileProvider = fileStorageProviderUtil.getDatasourceProvider(document.getFileProvider());
             XmlUBLFileModel file = new FlyWeightXmlUBLFileModel(
                     new FlyWeightXmlFileModel(
                             new FlyWeightFileModel(fileProvider.getFile(document.getFileId()))

@@ -10,7 +10,7 @@ public interface DocumentProvider {
     /**
      * @param file that contains xml file to be persisted
      */
-    DocumentModel addDocument(XmlUBLFileModel file, String fileProvider, boolean isVerified, DocumentProviderType providerType)
+    DocumentModel addDocument(XmlUBLFileModel file, boolean isVerified, DocumentProviderType providerType)
             throws UnsupportedDocumentTypeException, UnrecognizableDocumentTypeException, UnreadableDocumentException;
 
     /**
