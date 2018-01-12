@@ -1,15 +1,27 @@
 package org.clarksnut.documents.jpa.entity;
 
+import org.clarksnut.common.jpa.CreatableEntity;
+import org.clarksnut.common.jpa.CreatedAtListener;
+import org.clarksnut.common.jpa.UpdatableEntity;
+import org.clarksnut.common.jpa.UpdatedAtListener;
 import org.clarksnut.documents.DocumentProviderType;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
-@MappedSuperclass
-public abstract class AbstractDocumentEntity {
+@Entity
+@Table(name = "cl_indexed_document")
+@EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
+public class IndexedDocumentEntity implements CreatableEntity, UpdatableEntity, Serializable {
+
+    @Id
+    @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
+    @Column(name = "id", length = 36)
+    private String id;
 
     @NotNull(message = "type should not be null")
     @Column(name = "type")
@@ -22,11 +34,6 @@ public abstract class AbstractDocumentEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "provider")
     private DocumentProviderType provider;
-
-    @NotNull(message = "verified should not be null")
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    @Column(name = "verified")
-    private boolean verified;
 
     @Column(name = "supplier_name")
     private String supplierName;
@@ -77,10 +84,6 @@ public abstract class AbstractDocumentEntity {
     @Column(name = "tax")
     private Float tax;
 
-    @NotNull(message = "fileId should not be null")
-    @Column(name = "file_id")
-    private String fileId;
-
     @NotNull(message = "createdAt should not be null")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
@@ -91,11 +94,14 @@ public abstract class AbstractDocumentEntity {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    public abstract String getId();
+    public String getId() {
+        return id;
+    }
 
-    /**
-     * Basic attributes
-     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getType() {
         return type;
     }
@@ -120,17 +126,6 @@ public abstract class AbstractDocumentEntity {
         this.provider = provider;
     }
 
-    public boolean isVerified() {
-        return verified;
-    }
-
-    public void setVerified(boolean verified) {
-        this.verified = verified;
-    }
-
-    /**
-     * Supplier
-     */
     public String getSupplierName() {
         return supplierName;
     }
@@ -171,9 +166,6 @@ public abstract class AbstractDocumentEntity {
         this.supplierCountry = supplierCountry;
     }
 
-    /**
-     * Customer
-     */
     public String getCustomerName() {
         return customerName;
     }
@@ -214,8 +206,6 @@ public abstract class AbstractDocumentEntity {
         this.customerCountry = customerCountry;
     }
 
-    /**
-     * */
     public String getAssignedId() {
         return assignedId;
     }
@@ -248,21 +238,11 @@ public abstract class AbstractDocumentEntity {
         this.tax = tax;
     }
 
-    /**
-     * Additional information
-     */
-    public String getFileId() {
-        return fileId;
-    }
-
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
 
+    @Override
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
@@ -271,6 +251,7 @@ public abstract class AbstractDocumentEntity {
         return updatedAt;
     }
 
+    @Override
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }

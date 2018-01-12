@@ -1,0 +1,2 @@
+org.clarksnut.files.uncompress.generic.GenericUncompressFileProvider
+org.clarksnut.files.uncompress.zip.ZipUncompressFileProvider

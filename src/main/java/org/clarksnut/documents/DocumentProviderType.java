@@ -5,17 +5,17 @@ public enum DocumentProviderType {
     /**
      * Authorized applications
      */
-    APPLICATION,
+    APPLICATION_COLLECTOR,
 
     /**
      * Uploaded documents by the user UI
      */
-    USER,
+    USER_COLLECTOR,
 
 
     /**
      * Mail repositories like gmail or outlook
      */
-    MAIL;
+    MAIL_COLLECTOR;
 
 }

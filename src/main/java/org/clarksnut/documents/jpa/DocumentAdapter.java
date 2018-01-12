@@ -5,8 +5,10 @@ import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentProviderType;
 import org.clarksnut.documents.DocumentVersionModel;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
+import org.clarksnut.documents.jpa.entity.DocumentVersionEntity;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,11 +41,6 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public boolean hasChanged() {
-        return document.isChanged();
-    }
-
-    @Override
     public String getType() {
         return document.getType();
     }
@@ -54,98 +51,8 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public String getFileId() {
-        return document.getFileId();
-    }
-
-    @Override
-    public Float getAmount() {
-        return document.getAmount();
-    }
-
-    @Override
-    public Float getTax() {
-        return document.getTax();
-    }
-
-    @Override
-    public String getCurrency() {
-        return document.getCurrency();
-    }
-
-    @Override
-    public Date getIssueDate() {
-        return document.getIssueDate();
-    }
-
-    @Override
-    public String getSupplierName() {
-        return document.getSupplierName();
-    }
-
-    @Override
     public String getSupplierAssignedId() {
         return document.getSupplierAssignedId();
-    }
-
-    @Override
-    public String getSupplierStreetAddress() {
-        return document.getSupplierStreetAddress();
-    }
-
-    @Override
-    public String getSupplierCity() {
-        return document.getSupplierCity();
-    }
-
-    @Override
-    public String getSupplierCountry() {
-        return document.getSupplierCountry();
-    }
-
-    @Override
-    public String getCustomerName() {
-        return document.getCustomerName();
-    }
-
-    @Override
-    public String getCustomerAssignedId() {
-        return document.getCustomerAssignedId();
-    }
-
-    @Override
-    public String getCustomerStreetAddress() {
-        return document.getCustomerStreetAddress();
-    }
-
-    @Override
-    public String getCustomerCity() {
-        return document.getCustomerCity();
-    }
-
-    @Override
-    public String getCustomerCountry() {
-        return document.getCustomerCountry();
-    }
-
-    @Override
-    public Date getCreatedAt() {
-        return document.getCreatedAt();
-    }
-
-    @Override
-    public Date getUpdatedAt() {
-        return document.getUpdatedAt();
-    }
-
-    @Override
-    public DocumentProviderType getProvider() {
-        return document.getProvider();
-    }
-
-    @Override
-    public boolean isVerified() {
-        return document.isVerified();
     }
 
     @Override
@@ -153,6 +60,21 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
         return document.getVersions().stream()
                 .map(f -> new DocumentVersionAdapter(em, this, f))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public DocumentVersionModel getCurrentVersion() {
+        TypedQuery<DocumentVersionEntity> typedQuery = em.createNamedQuery("getCurrentDocumentVersionByDocumentId", DocumentVersionEntity.class);
+        typedQuery.setParameter("documentId", document.getId());
+
+        List<DocumentVersionEntity> resultList = typedQuery.getResultList();
+        if (resultList.size() == 1) {
+            return new DocumentVersionAdapter(em, this, resultList.get(0));
+        } else if (resultList.size() == 0) {
+            return null;
+        } else {
+            throw new IllegalStateException("Invalid number of results");
+        }
     }
 
 }

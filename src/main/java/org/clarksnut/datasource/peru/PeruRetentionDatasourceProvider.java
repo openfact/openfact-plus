@@ -10,7 +10,6 @@ import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoRegimenRetencion;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
-import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.openfact.retention.RetentionType;
 import org.openfact.retention.SUNATRetentionDocumentReferenceType;
@@ -32,7 +31,7 @@ public class PeruRetentionDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file) throws FileFetchException {
+    public Datasource getDatasource(XmlUBLFileModel file)  {
         RetentionType retentionType = read(file);
         if (retentionType == null) {
             return null;
@@ -101,7 +100,7 @@ public class PeruRetentionDatasourceProvider implements DatasourceProvider {
         return bean;
     }
 
-    private RetentionType read(XmlFileModel file) throws FileFetchException {
+    private RetentionType read(XmlFileModel file)  {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), RetentionType.class);
         } catch (JAXBException e) {

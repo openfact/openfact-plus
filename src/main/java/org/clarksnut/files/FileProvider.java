@@ -1,13 +1,11 @@
 package org.clarksnut.files;
 
-import org.clarksnut.files.exceptions.FileStorageException;
-
 public interface FileProvider {
 
     /**
-     * @param file      file value
+     * @param file file value
      */
-    FileModel addFile(byte[] file) throws FileStorageException;
+    FileModel addFile(String filename, byte[] file);
 
     /**
      * @param id file unique identity
@@ -19,6 +17,6 @@ public interface FileProvider {
      * @param file to be removed
      * @return result of operation
      */
-    boolean removeFile(FileModel file) throws FileStorageException;
+    boolean removeFile(FileModel file);
 
 }

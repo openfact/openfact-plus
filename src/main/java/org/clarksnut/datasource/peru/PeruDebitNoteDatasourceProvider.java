@@ -15,7 +15,6 @@ import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoNotaDebito;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
-import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 
 import javax.xml.bind.JAXBException;
@@ -36,7 +35,7 @@ public class PeruDebitNoteDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file) throws FileFetchException {
+    public Datasource getDatasource(XmlUBLFileModel file)  {
         DebitNoteType debitNoteType = read(file);
         if (debitNoteType == null) {
             return null;
@@ -107,7 +106,7 @@ public class PeruDebitNoteDatasourceProvider implements DatasourceProvider {
         return bean;
     }
 
-    private DebitNoteType read(XmlFileModel file) throws FileFetchException {
+    private DebitNoteType read(XmlFileModel file)  {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), DebitNoteType.class);
         } catch (JAXBException e) {

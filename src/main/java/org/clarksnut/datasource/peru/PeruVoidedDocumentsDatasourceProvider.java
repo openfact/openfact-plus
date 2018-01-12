@@ -7,7 +7,6 @@ import org.clarksnut.datasource.peru.beans.VoidedLineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
-import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.VoidedDocumentsLineType;
 import sunat.names.specification.ubl.peru.schema.xsd.voideddocuments_1.VoidedDocumentsType;
@@ -29,7 +28,7 @@ public class PeruVoidedDocumentsDatasourceProvider implements DatasourceProvider
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file) throws FileFetchException {
+    public Datasource getDatasource(XmlUBLFileModel file)  {
         VoidedDocumentsType voidedDocumentsType = read(file);
         if (file == null) {
             return null;
@@ -64,7 +63,7 @@ public class PeruVoidedDocumentsDatasourceProvider implements DatasourceProvider
         return bean;
     }
 
-    private VoidedDocumentsType read(XmlFileModel file) throws FileFetchException {
+    private VoidedDocumentsType read(XmlFileModel file)  {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), VoidedDocumentsType.class);
         } catch (JAXBException e) {

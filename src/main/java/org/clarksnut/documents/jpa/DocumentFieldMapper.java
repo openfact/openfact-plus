@@ -2,6 +2,7 @@ package org.clarksnut.documents.jpa;
 
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentUserModel;
+import org.clarksnut.documents.IndexedDocumentModel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,15 +26,15 @@ public class DocumentFieldMapper implements Function<String, String> {
         Map<String, String> map = new HashMap<>();
 
         // Document
-        map.put(DocumentModel.TYPE, "type");
-        map.put(DocumentModel.ASSIGNED_ID, "assignedId");
-        map.put(DocumentModel.CURRENCY, "currency");
-        map.put(DocumentModel.ISSUE_DATE, "issueDate");
-        map.put(DocumentModel.AMOUNT, "amount");
-        map.put(DocumentModel.SUPPLIER_NAME, "supplierName");
-        map.put(DocumentModel.SUPPLIER_ASSIGNED_ID, "supplierAssignedId");
-        map.put(DocumentModel.CUSTOMER_NAME, "customerName");
-        map.put(DocumentModel.CUSTOMER_ASSIGNED_ID, "customerAssignedId");
+        map.put(IndexedDocumentModel.TYPE, "type");
+        map.put(IndexedDocumentModel.ASSIGNED_ID, "assignedId");
+        map.put(IndexedDocumentModel.CURRENCY, "currency");
+        map.put(IndexedDocumentModel.ISSUE_DATE, "issueDate");
+        map.put(IndexedDocumentModel.AMOUNT, "amount");
+        map.put(IndexedDocumentModel.SUPPLIER_NAME, "supplierName");
+        map.put(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID, "supplierAssignedId");
+        map.put(IndexedDocumentModel.CUSTOMER_NAME, "customerName");
+        map.put(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID, "customerAssignedId");
 
         // Document User
         map.put(DocumentUserModel.CHECKED, "starred");

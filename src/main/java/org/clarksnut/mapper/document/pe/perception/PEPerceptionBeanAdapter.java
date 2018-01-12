@@ -5,7 +5,6 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.Par
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyLegalEntityType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.AmountType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.IssueDateType;
 import org.clarksnut.mapper.document.DocumentMapped.DocumentBean;
 import org.clarksnut.mapper.document.pe.PEUtils;
 import org.openfact.perception.PerceptionType;

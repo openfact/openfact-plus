@@ -2,7 +2,6 @@ package org.clarksnut.mapper.document.pe.invoice;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.*;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PayableAmountType;
-import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import org.clarksnut.mapper.document.DocumentMapped.DocumentBean;
 import org.clarksnut.mapper.document.pe.PEUtils;

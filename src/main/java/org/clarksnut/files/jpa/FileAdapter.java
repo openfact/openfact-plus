@@ -1,11 +1,14 @@
 package org.clarksnut.files.jpa;
 
+import org.clarksnut.common.jpa.JpaModel;
+import org.clarksnut.documents.DocumentModel;
+import org.clarksnut.documents.jpa.DocumentAdapter;
+import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.files.FileModel;
-import org.clarksnut.files.exceptions.FileFetchException;
 
 import javax.persistence.EntityManager;
 
-public class FileAdapter implements FileModel {
+public class FileAdapter implements FileModel, JpaModel<FileEntity> {
 
     private final FileEntity file;
     private final EntityManager em;
@@ -15,13 +18,30 @@ public class FileAdapter implements FileModel {
         this.em = em;
     }
 
+    public static FileEntity toEntity(FileModel model, EntityManager em) {
+        if (model instanceof FileAdapter) {
+            return ((FileAdapter) model).getEntity();
+        }
+        return em.getReference(FileEntity.class, model.getId());
+    }
+
+    @Override
+    public FileEntity getEntity() {
+        return file;
+    }
+
     @Override
     public String getId() {
         return file.getId();
     }
 
     @Override
-    public byte[] getFile() throws FileFetchException {
+    public String getFilename() {
+        return file.getFilename();
+    }
+
+    @Override
+    public byte[] getFile()  {
         return file.getFile();
     }
 

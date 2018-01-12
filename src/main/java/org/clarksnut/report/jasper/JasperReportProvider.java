@@ -9,11 +9,10 @@ import net.sf.jasperreports.export.Exporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.DatasourceFactory;
+import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.files.*;
-import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.report.*;
 import org.clarksnut.report.exceptions.ReportException;
 import org.jboss.logging.Logger;
@@ -49,28 +48,29 @@ public class JasperReportProvider implements ReportTemplateProvider {
     }
 
     @Override
-    public byte[] getReport(ReportTemplateConfiguration config, DocumentModel document, ExportFormat exportFormat) throws FileFetchException, ReportException {
-        try {
-            String themeName = config.getThemeName() != null ? config.getThemeName().toLowerCase() : null;
-            String themeType = document.getType().toLowerCase();
-            ReportTheme theme = themeProvider.getTheme(themeName, themeType);
-
-            XmlUBLFileModel file = new FlyWeightXmlUBLFileModel(
-                    new FlyWeightXmlFileModel(
-                            new FlyWeightFileModel(fileProvider.getFile(document.getFileId()))
-                    )
-            );
-            DatasourceProvider datasourceProvider = DatasourceFactory.getInstance().getDatasourceProvider(theme.getDatasource());
-            Object bean = datasourceProvider.getDatasource(file);
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(Collections.singletonList(bean));
-
-            JasperPrint jasperPrint = jasperReportUtil.processReport(theme, theme.getName(), config.getAttributes(), dataSource, config.getLocale());
-            return export(jasperPrint, exportFormat);
-        } catch (IOException e) {
-            throw new ReportException("Could not read a resource on template", e);
-        } catch (JRException e) {
-            throw new ReportException("Failed to process jasper report", e);
-        }
+    public byte[] getReport(ReportTemplateConfiguration config, DocumentModel document, ExportFormat exportFormat) throws ReportException {
+//        try {
+//            String themeName = config.getThemeName() != null ? config.getThemeName().toLowerCase() : null;
+//            String themeType = document.getType().toLowerCase();
+//            ReportTheme theme = themeProvider.getTheme(themeName, themeType);
+//
+//            XmlUBLFileModel file = new FlyWeightXmlUBLFileModel(
+//                    new FlyWeightXmlFileModel(
+//                            new FlyWeightFileModel(fileProvider.getFile(document.getFileId()))
+//                    )
+//            );
+//            DatasourceProvider datasourceProvider = DatasourceFactory.getInstance().getDatasourceProvider(theme.getDatasource());
+//            Object bean = datasourceProvider.getDatasource(file);
+//            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(Collections.singletonList(bean));
+//
+//            JasperPrint jasperPrint = jasperReportUtil.processReport(theme, theme.getName(), config.getAttributes(), dataSource, config.getLocale());
+//            return export(jasperPrint, exportFormat);
+//        } catch (IOException e) {
+//            throw new ReportException("Could not read a resource on template", e);
+//        } catch (JRException e) {
+//            throw new ReportException("Failed to process jasper report", e);
+//        }
+        return null;
     }
 
     protected byte[] export(final JasperPrint print, ExportFormat format) throws JRException {

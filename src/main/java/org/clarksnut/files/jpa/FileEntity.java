@@ -12,6 +12,10 @@ public class FileEntity {
     @Column(name = "id", length = 36)
     private String id;
 
+    @NotNull
+    @Column(name = "filename")
+    private String filename;
+
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "file")
@@ -31,5 +35,13 @@ public class FileEntity {
 
     public byte[] getFile() {
         return file;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getFilename() {
+        return filename;
     }
 }

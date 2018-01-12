@@ -36,48 +36,50 @@ public class LuceneDocumentUserProvider implements DocumentUserProvider {
     private EntityManager em;
 
     private boolean isUserAllowedToSeeDocument(UserModel user, DocumentEntity documentEntity) {
-        List<String> documentPermittedSpaceIds = Arrays.asList(
-                documentEntity.getSupplierAssignedId(),
-                documentEntity.getCustomerAssignedId()
-        );
-
-        List<String> userPermittedSpaceIds = user.getAllPermitedSpaces().stream()
-                .map(SpaceModel::getAssignedId)
-                .collect(Collectors.toList());
-
-        userPermittedSpaceIds.retainAll(documentPermittedSpaceIds);
-
-        return !userPermittedSpaceIds.isEmpty();
+//        List<String> documentPermittedSpaceIds = Arrays.asList(
+//                documentEntity.getSupplierAssignedId(),
+//                documentEntity.getCustomerAssignedId()
+//        );
+//
+//        List<String> userPermittedSpaceIds = user.getAllPermitedSpaces().stream()
+//                .map(SpaceModel::getAssignedId)
+//                .collect(Collectors.toList());
+//
+//        userPermittedSpaceIds.retainAll(documentPermittedSpaceIds);
+//
+//        return !userPermittedSpaceIds.isEmpty();
+        return false;
     }
 
     public org.apache.lucene.search.Query getQuery(UserModel user, DocumentUserQueryModel query, QueryBuilder queryBuilder, SpaceModel... space) {
-        if (query.getDocumentFilters().isEmpty() && query.getUserDocumentFilters().isEmpty()) {
-            throw new IllegalStateException("Invalid query, at least one query should be requested");
-        }
-
-        // Space query
-        Set<String> userPermittedSpaceIds = getUserPermittedSpaces(user, space);
-        if (userPermittedSpaceIds.isEmpty()) {
-            return null;
-        }
-
-        BooleanJunction<BooleanJunction> boolQueryBuilder = queryBuilder.bool();
-        for (SimpleQuery q : query.getDocumentFilters()) {
-            if (query.getDocumentFilters().isEmpty() || query.getUserDocumentFilters().isEmpty()) {
-                boolQueryBuilder.must(LuceneQueryParser.toLuceneQuery(q, new DocumentFieldMapper(), queryBuilder));
-            } else {
-                boolQueryBuilder.must(LuceneQueryParser.toLuceneQuery(q, new DocumentFieldMapper("document"), queryBuilder));
-            }
-        }
-        for (SimpleQuery q : query.getUserDocumentFilters()) {
-            boolQueryBuilder.must(LuceneQueryParser.toLuceneQuery(q, new DocumentFieldMapper(), queryBuilder));
-        }
-
-        DocumentFieldMapper fieldMapper = new DocumentFieldMapper();
-        String permittedSpaceIdsString = userPermittedSpaceIds.stream().collect(Collectors.joining(" "));
-        boolQueryBuilder.should(queryBuilder.keyword().onField(fieldMapper.apply(DocumentModel.SUPPLIER_ASSIGNED_ID)).matching(permittedSpaceIdsString).createQuery());
-        boolQueryBuilder.should(queryBuilder.keyword().onField(fieldMapper.apply(DocumentModel.CUSTOMER_ASSIGNED_ID)).matching(permittedSpaceIdsString).createQuery());
-        return boolQueryBuilder.createQuery();
+//        if (query.getDocumentFilters().isEmpty() && query.getUserDocumentFilters().isEmpty()) {
+//            throw new IllegalStateException("Invalid query, at least one query should be requested");
+//        }
+//
+//        // Space query
+//        Set<String> userPermittedSpaceIds = getUserPermittedSpaces(user, space);
+//        if (userPermittedSpaceIds.isEmpty()) {
+//            return null;
+//        }
+//
+//        BooleanJunction<BooleanJunction> boolQueryBuilder = queryBuilder.bool();
+//        for (SimpleQuery q : query.getDocumentFilters()) {
+//            if (query.getDocumentFilters().isEmpty() || query.getUserDocumentFilters().isEmpty()) {
+//                boolQueryBuilder.must(LuceneQueryParser.toLuceneQuery(q, new DocumentFieldMapper(), queryBuilder));
+//            } else {
+//                boolQueryBuilder.must(LuceneQueryParser.toLuceneQuery(q, new DocumentFieldMapper("document"), queryBuilder));
+//            }
+//        }
+//        for (SimpleQuery q : query.getUserDocumentFilters()) {
+//            boolQueryBuilder.must(LuceneQueryParser.toLuceneQuery(q, new DocumentFieldMapper(), queryBuilder));
+//        }
+//
+//        DocumentFieldMapper fieldMapper = new DocumentFieldMapper();
+//        String permittedSpaceIdsString = userPermittedSpaceIds.stream().collect(Collectors.joining(" "));
+//        boolQueryBuilder.should(queryBuilder.keyword().onField(fieldMapper.apply(DocumentModel.SUPPLIER_ASSIGNED_ID)).matching(permittedSpaceIdsString).createQuery());
+//        boolQueryBuilder.should(queryBuilder.keyword().onField(fieldMapper.apply(DocumentModel.CUSTOMER_ASSIGNED_ID)).matching(permittedSpaceIdsString).createQuery());
+//        return boolQueryBuilder.createQuery();
+        return null;
     }
 
     private Set<String> getUserPermittedSpaces(UserModel user, SpaceModel... space) {

@@ -7,7 +7,6 @@ import org.clarksnut.models.db.jpa.entity.SpaceRequestEntity;
 import org.clarksnut.models.db.jpa.entity.UserEntity;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;

@@ -1,25 +1,28 @@
 package org.clarksnut.files;
 
-import org.clarksnut.files.exceptions.FileFetchException;
-
 public class FlyWeightFileModel implements FileModel {
 
-    protected final FileModel fileModel;
+    protected final FileModel model;
     protected byte[] bytes;
 
     public FlyWeightFileModel(FileModel fileModel) {
-        this.fileModel = fileModel;
+        this.model = fileModel;
     }
 
     @Override
     public String getId() {
-        return this.fileModel.getId();
+        return this.model.getId();
     }
 
     @Override
-    public byte[] getFile() throws FileFetchException {
+    public String getFilename() {
+        return model.getFilename();
+    }
+
+    @Override
+    public byte[] getFile() {
         if (bytes == null) {
-            this.bytes = this.fileModel.getFile();
+            this.bytes = this.model.getFile();
         }
         return this.bytes;
     }

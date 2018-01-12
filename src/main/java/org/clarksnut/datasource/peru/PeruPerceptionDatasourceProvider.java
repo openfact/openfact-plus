@@ -10,7 +10,6 @@ import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoRegimenPercepcion;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
-import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.openfact.perception.PerceptionType;
 import org.openfact.perception.SUNATPerceptionDocumentReferenceType;
@@ -32,7 +31,7 @@ public class PeruPerceptionDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file) throws FileFetchException {
+    public Datasource getDatasource(XmlUBLFileModel file)  {
         PerceptionType perceptionType = read(file);
         if (perceptionType == null) {
             return null;
@@ -101,7 +100,7 @@ public class PeruPerceptionDatasourceProvider implements DatasourceProvider {
         return bean;
     }
 
-    private PerceptionType read(XmlFileModel file) throws FileFetchException {
+    private PerceptionType read(XmlFileModel file)  {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), PerceptionType.class);
         } catch (JAXBException e) {

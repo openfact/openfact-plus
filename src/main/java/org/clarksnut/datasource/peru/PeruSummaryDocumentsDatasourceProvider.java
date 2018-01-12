@@ -11,7 +11,6 @@ import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoPagoResumen;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
-import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import sunat.names.specification.ubl.peru.schema.xsd.summarydocuments_1.SummaryDocumentsType;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.SummaryDocumentsLineType;
@@ -33,7 +32,7 @@ public class PeruSummaryDocumentsDatasourceProvider implements DatasourceProvide
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file) throws FileFetchException {
+    public Datasource getDatasource(XmlUBLFileModel file)  {
         SummaryDocumentsType summaryDocumentsType = read(file);
         if (summaryDocumentsType == null) {
             return null;
@@ -99,7 +98,7 @@ public class PeruSummaryDocumentsDatasourceProvider implements DatasourceProvide
         return bean;
     }
 
-    private SummaryDocumentsType read(XmlFileModel file) throws FileFetchException {
+    private SummaryDocumentsType read(XmlFileModel file)  {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), SummaryDocumentsType.class);
         } catch (JAXBException e) {

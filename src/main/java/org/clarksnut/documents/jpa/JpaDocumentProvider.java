@@ -1,10 +1,9 @@
 package org.clarksnut.documents.jpa;
 
-import org.clarksnut.documents.DocumentModel;
+import org.apache.commons.io.FileUtils;
+import org.clarksnut.documents.*;
 import org.clarksnut.documents.DocumentModel.DocumentCreationEvent;
 import org.clarksnut.documents.DocumentModel.DocumentRemovedEvent;
-import org.clarksnut.documents.DocumentProvider;
-import org.clarksnut.documents.DocumentProviderType;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
 import org.clarksnut.documents.exceptions.UnrecognizableDocumentTypeException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
@@ -13,6 +12,7 @@ import org.clarksnut.documents.jpa.entity.DocumentUtil;
 import org.clarksnut.documents.jpa.entity.DocumentVersionEntity;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
+import org.clarksnut.mapper.document.DocumentMapped.DocumentBean;
 import org.clarksnut.mapper.document.DocumentMapperProvider;
 import org.clarksnut.mapper.document.DocumentMapperProviderFactory;
 import org.jboss.logging.Logger;
@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,69 +46,100 @@ public class JpaDocumentProvider implements DocumentProvider {
     private Optional<String[]> clarksnutAdditionalDocumentTypes;
 
     @Inject
+    private Event<DocumentEntity> documentEntityEvent;
+
+    @Inject
     private Event<DocumentCreationEvent> creationEvent;
 
     @Inject
     private Event<DocumentRemovedEvent> removedEvent;
 
+    public static DocumentVersionEntity toDocumentVersionEntity(DocumentBean bean) {
+        DocumentVersionEntity entity = new DocumentVersionEntity();
+
+        entity.setAmount(bean.getAmount());
+        entity.setTax(bean.getTax());
+        entity.setCurrency(bean.getCurrency());
+        entity.setIssueDate(bean.getIssueDate());
+
+        entity.setSupplierName(bean.getSupplierName());
+        entity.setSupplierStreetAddress(bean.getSupplierStreetAddress());
+        entity.setSupplierCity(bean.getSupplierCity());
+        entity.setSupplierCountry(bean.getSupplierCountry());
+
+        entity.setCustomerName(bean.getCustomerName());
+        entity.setCustomerAssignedId(bean.getCustomerAssignedId());
+        entity.setCustomerStreetAddress(bean.getCustomerStreetAddress());
+        entity.setCustomerCity(bean.getCustomerCity());
+        entity.setCustomerCountry(bean.getCustomerCountry());
+
+        return entity;
+    }
+
     @Override
-    public DocumentModel addDocument(XmlUBLFileModel file, boolean isVerified, DocumentProviderType providerType)
+    public DocumentModel addDocument(ImportedDocumentModel importedDocument, XmlUBLFileModel file)
             throws UnsupportedDocumentTypeException, UnreadableDocumentException, UnrecognizableDocumentTypeException {
 
-        DocumentMapped parsedDocument = readDocument(file);
-        if (parsedDocument == null) {
+        DocumentMapped mappedDocument = readDocument(file);
+        if (mappedDocument == null) {
             throw new UnreadableDocumentException(file.getDocumentType() + " Is supported but could not be map");
         }
-        final Object jaxb = parsedDocument.getType();
-        final DocumentMapped.DocumentBean skeleton = parsedDocument.getBean();
 
-        DocumentModel document;
-        DocumentModel previousDocument = getDocument(file.getDocumentType(), skeleton.getAssignedId(), skeleton.getSupplierAssignedId());
-        if (previousDocument == null) {
-            DocumentEntity documentEntity = DocumentUtil.toDocumentEntity(skeleton);
+        final DocumentBean documentBean = mappedDocument.getBean();
 
+        DocumentModel document = getDocument(file.getDocumentType(), documentBean.getAssignedId(), documentBean.getSupplierAssignedId());
+        if (document == null) {
+            DocumentEntity documentEntity = new DocumentEntity();
             documentEntity.setId(UUID.randomUUID().toString());
             documentEntity.setType(file.getDocumentType());
-            documentEntity.setProvider(providerType);
-            documentEntity.setFileId(file.getId());
-            documentEntity.setVerified(isVerified);
-
+            documentEntity.setAssignedId(documentBean.getAssignedId());
+            documentEntity.setSupplierAssignedId(documentBean.getSupplierAssignedId());
             em.persist(documentEntity);
+
+            DocumentVersionEntity documentVersionEntity = toDocumentVersionEntity(documentBean);
+            documentVersionEntity.setId(UUID.randomUUID().toString());
+            documentVersionEntity.setImportedFile(ImportedDocumentAdapter.toEntity(importedDocument, em));
+            documentVersionEntity.setDocument(documentEntity);
+            em.persist(documentVersionEntity);
+
             document = new DocumentAdapter(em, documentEntity);
         } else {
-            document = previousDocument;
+            byte[] current = document.getCurrentVersion()
+                    .getImportedDocument()
+                    .getFile()
+                    .getFile();
+            byte[] newVersion = file.getFile();
+            if (!Arrays.equals(current, newVersion)) {
+                DocumentVersionEntity documentVersionEntity = toDocumentVersionEntity(documentBean);
+                documentVersionEntity.setId(UUID.randomUUID().toString());
+                documentVersionEntity.setImportedFile(ImportedDocumentAdapter.toEntity(importedDocument, em));
+                documentVersionEntity.setDocument(DocumentAdapter.toEntity(document, em));
+                em.persist(documentVersionEntity);
+            } else {
+                importedDocument.setStatus(ImportedDocumentStatus.ALREADY_IMPORTED);
+            }
         }
 
+        importedDocument.setDocumentReferenceId(document.getId());
 
-        DocumentVersionEntity versionEntity = DocumentUtil.toDocumentVersionEntity(skeleton);
+//        creationEvent.fire(new DocumentCreationEvent() {
+//            @Override
+//            public String getDocumentType() {
+//                return file.getDocumentType();
+//            }
+//
+//            @Override
+//            public Object getJaxb() {
+//                return mappedDocument.getType();
+//            }
+//
+//            @Override
+//            public DocumentModel getCreatedDocument() {
+//                return document;
+//            }
+//        });
 
-        versionEntity.setId(UUID.randomUUID().toString());
-        versionEntity.setType(file.getDocumentType());
-        versionEntity.setProvider(providerType);
-        versionEntity.setFileId(file.getId());
-        versionEntity.setVerified(isVerified);
-        versionEntity.setCurrentVersion(previousDocument == null);
-        versionEntity.setDocument(DocumentAdapter.toEntity(document, em));
-
-        em.persist(versionEntity);
-
-        creationEvent.fire(new DocumentCreationEvent() {
-            @Override
-            public String getDocumentType() {
-                return file.getDocumentType();
-            }
-
-            @Override
-            public Object getJaxb() {
-                return jaxb;
-            }
-
-            @Override
-            public DocumentModel getCreatedDocument() {
-                return document;
-            }
-        });
-
+        documentEntityEvent.fire(DocumentAdapter.toEntity(document, em));
         return document;
     }
 

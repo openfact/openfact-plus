@@ -1,12 +1,10 @@
 package org.clarksnut.files;
 
-import org.clarksnut.files.exceptions.FileFetchException;
-
 public class FlyWeightXmlUBLFileModel extends FlyWeightXmlFileModel implements XmlUBLFileModel {
 
     protected String documentType;
 
-    public FlyWeightXmlUBLFileModel(XmlFileModel file) throws FileFetchException {
+    public FlyWeightXmlUBLFileModel(XmlFileModel file)  {
         super(file);
         String documentType = XmlUBLFileModel.getDocumentType(file);
         if (documentType == null) {

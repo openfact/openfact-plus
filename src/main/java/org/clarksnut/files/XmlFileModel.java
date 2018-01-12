@@ -1,6 +1,5 @@
 package org.clarksnut.files;
 
-import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -12,7 +11,7 @@ public interface XmlFileModel extends FileModel {
 
     Document getDocument();
 
-    static Document isXmlFile(FileModel file) throws FileFetchException {
+    static Document isXmlFile(FileModel file)  {
         byte[] bytes = file.getFile();
         try {
             return ClarksnutModelUtils.toDocument(bytes);

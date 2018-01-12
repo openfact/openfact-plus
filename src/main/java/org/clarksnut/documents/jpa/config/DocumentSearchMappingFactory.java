@@ -31,14 +31,12 @@ public class DocumentSearchMappingFactory {
 
         indexedMapping
                 .property("id", ElementType.FIELD).documentId().name("id")
-                .property("changed", ElementType.FIELD).field().name("changed")
 
                 /*
                  * Basic attributes */
                 .property("type", ElementType.FIELD).field().name("type").analyzer("staticTextAnalyzer")
                 .property("currency", ElementType.FIELD).field().name("currency").analyzer("staticTextAnalyzer")
                 .property("provider", ElementType.FIELD).field().name("provider").analyzer("staticTextAnalyzer")
-                .property("verified", ElementType.FIELD).field().name("verified")
 
                 /*
                  * Supplier */

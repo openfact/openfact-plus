@@ -2,7 +2,6 @@ package org.clarksnut.files.jpa;
 
 import org.clarksnut.files.FileModel;
 import org.clarksnut.files.FileProvider;
-import org.clarksnut.files.exceptions.FileStorageException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,19 +15,15 @@ public class JpaFileProvider implements FileProvider {
     private EntityManager em;
 
     @Override
-    public FileModel addFile(byte[] file) throws FileStorageException {
+    public FileModel addFile(String filename, byte[] file)  {
         String id = UUID.randomUUID().toString();
 
         FileEntity entity = new FileEntity();
         entity.setId(id);
+        entity.setFilename(filename);
         entity.setFile(file);
 
-        try {
-            em.persist(entity);
-        } catch (Throwable e) {
-            throw new FileStorageException("Could not persist file", e);
-        }
-
+        em.persist(entity);
         return new FileAdapter(em, entity);
     }
 
@@ -40,14 +35,10 @@ public class JpaFileProvider implements FileProvider {
     }
 
     @Override
-    public boolean removeFile(FileModel file) throws FileStorageException {
+    public boolean removeFile(FileModel file)  {
         FileEntity entity = em.find(FileEntity.class, file.getId());
         if (entity == null) return false;
-        try {
-            em.remove(entity);
-        } catch (Throwable e) {
-            throw new FileStorageException("Could not remove file", e);
-        }
+        em.remove(entity);
         return true;
     }
 }

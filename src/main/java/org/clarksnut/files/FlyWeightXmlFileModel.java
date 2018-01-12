@@ -1,30 +1,34 @@
 package org.clarksnut.files;
 
-import org.clarksnut.files.exceptions.FileFetchException;
 import org.w3c.dom.Document;
 
 public class FlyWeightXmlFileModel implements XmlFileModel {
 
-    protected final FileModel file;
+    protected final FileModel model;
     protected Document document;
 
-    public FlyWeightXmlFileModel(FileModel file) throws FileFetchException {
-        Document document = XmlFileModel.isXmlFile(file);
+    public FlyWeightXmlFileModel(FileModel model)  {
+        Document document = XmlFileModel.isXmlFile(model);
         if (document == null) {
             throw new IllegalStateException("File is not xml");
         }
         this.document = document;
-        this.file = file;
+        this.model = model;
     }
 
     @Override
     public String getId() {
-        return this.file.getId();
+        return this.model.getId();
     }
 
     @Override
-    public byte[] getFile() throws FileFetchException {
-        return this.file.getFile();
+    public String getFilename() {
+        return model.getFilename();
+    }
+
+    @Override
+    public byte[] getFile()  {
+        return this.model.getFile();
     }
 
     @Override

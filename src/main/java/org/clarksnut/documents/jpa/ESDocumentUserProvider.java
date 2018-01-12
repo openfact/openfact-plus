@@ -57,33 +57,34 @@ public class ESDocumentUserProvider implements DocumentUserProvider {
     }
 
     public String getQuery(UserModel user, DocumentUserQueryModel query, SpaceModel... space) {
-        if (query.getDocumentFilters().isEmpty() && query.getUserDocumentFilters().isEmpty()) {
-            throw new IllegalStateException("Invalid query, at least one query should be requested");
-        }
-
-        // Space query
-        Set<String> userPermittedSpaceIds = getUserPermittedSpaces(user, space);
-        if (userPermittedSpaceIds.isEmpty()) {
-            return null;
-        }
-
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        for (SimpleQuery q : query.getDocumentFilters()) {
-            if (query.getDocumentFilters().isEmpty() || query.getUserDocumentFilters().isEmpty()) {
-                boolQueryBuilder.filter(ESQueryParser.toQueryBuilder(q, new DocumentFieldMapper()));
-            } else {
-                boolQueryBuilder.filter(ESQueryParser.toQueryBuilder(q, new DocumentFieldMapper("document")));
-            }
-        }
-        for (SimpleQuery q : query.getUserDocumentFilters()) {
-            boolQueryBuilder.filter(ESQueryParser.toQueryBuilder(q, new DocumentFieldMapper()));
-        }
-
-        DocumentFieldMapper fieldMapper = new DocumentFieldMapper();
-        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(DocumentModel.SUPPLIER_ASSIGNED_ID), userPermittedSpaceIds));
-        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(DocumentModel.CUSTOMER_ASSIGNED_ID), userPermittedSpaceIds));
-        boolQueryBuilder.minimumShouldMatch(1);
-        return boolQueryBuilder.toString();
+//        if (query.getDocumentFilters().isEmpty() && query.getUserDocumentFilters().isEmpty()) {
+//            throw new IllegalStateException("Invalid query, at least one query should be requested");
+//        }
+//
+//        // Space query
+//        Set<String> userPermittedSpaceIds = getUserPermittedSpaces(user, space);
+//        if (userPermittedSpaceIds.isEmpty()) {
+//            return null;
+//        }
+//
+//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+//        for (SimpleQuery q : query.getDocumentFilters()) {
+//            if (query.getDocumentFilters().isEmpty() || query.getUserDocumentFilters().isEmpty()) {
+//                boolQueryBuilder.filter(ESQueryParser.toQueryBuilder(q, new DocumentFieldMapper()));
+//            } else {
+//                boolQueryBuilder.filter(ESQueryParser.toQueryBuilder(q, new DocumentFieldMapper("document")));
+//            }
+//        }
+//        for (SimpleQuery q : query.getUserDocumentFilters()) {
+//            boolQueryBuilder.filter(ESQueryParser.toQueryBuilder(q, new DocumentFieldMapper()));
+//        }
+//
+//        DocumentFieldMapper fieldMapper = new DocumentFieldMapper();
+//        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(DocumentModel.SUPPLIER_ASSIGNED_ID), userPermittedSpaceIds));
+//        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(DocumentModel.CUSTOMER_ASSIGNED_ID), userPermittedSpaceIds));
+//        boolQueryBuilder.minimumShouldMatch(1);
+//        return boolQueryBuilder.toString();
+        return null;
     }
 
     private Set<String> getUserPermittedSpaces(UserModel user, SpaceModel... space) {

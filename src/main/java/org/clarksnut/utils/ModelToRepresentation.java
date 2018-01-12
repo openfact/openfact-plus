@@ -110,71 +110,71 @@ public class ModelToRepresentation {
         return rep;
     }
 
-    public DocumentRepresentation.Data toRepresentation(DocumentModel model, UriInfo uriInfo) {
-        DocumentRepresentation.Data rep = new DocumentRepresentation.Data();
-
-        rep.setId(model.getId());
-        rep.setType(ModelType.UBL_DOCUMENT.getAlias());
-
-        // Links
-        DocumentRepresentation.DocumentLink links = new DocumentRepresentation.DocumentLink();
-        URI self = uriInfo.getBaseUriBuilder()
-                .path(DocumentsService.class)
-                .path(DocumentsService.class, "getDocumentUser")
-                .build(model.getId());
-        URI fileLink = uriInfo.getBaseUriBuilder()
-                .path(FilesService.class)
-                .path(FilesService.class, "getFile")
-                .build(model.getFileId());
-
-        links.setSelf(self.toString());
-        links.setFilelink(fileLink.toString());
-
-        rep.setLinks(links);
-
-        // Relationships
-        DocumentRepresentation.Relationships relationships = new DocumentRepresentation.Relationships();
-        DocumentRepresentation.OwnedBy ownedBy = new DocumentRepresentation.OwnedBy();
-        relationships.setOwnedBy(ownedBy);
-        rep.setRelationships(relationships);
-
-//        List<SpaceRepresentation.Data> owners = model.getSpaces().stream().map(space -> {
-//            SpaceRepresentation.Data spaceData = new SpaceRepresentation.Data();
-//            spaceData.setId(space.getId());
-//            spaceData.setType(ModelType.SPACES.getAlias());
-//            return spaceData;
-//        }).collect(Collectors.toList());
-//        ownedBy.setData(owners); // save
-
-//        GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
-//        ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
-//                .path(SpacesService.class)
-//                .path(SpacesService.class, "getSpace")
-//                .build(model.getSpace().getId()).toString());
-//        ownedBy.setLinks(ownedLinks); // save
-
-        // Attributes
-        DocumentRepresentation.Attributes attributes = new DocumentRepresentation.Attributes();
-        rep.setAttributes(attributes);
-
-        attributes.setId(model.getId());
-        attributes.setAssignedId(model.getAssignedId());
-        attributes.setType(model.getType());
-        attributes.setAmount(model.getAmount());
-        attributes.setCurrency(model.getCurrency());
-        attributes.setIssueDate(model.getIssueDate());
-        attributes.setSupplierName(model.getSupplierName());
-        attributes.setSupplierAssignedId(model.getSupplierAssignedId());
-        attributes.setCustomerName(model.getCustomerName());
-        attributes.setCustomerAssignedId(model.getCustomerAssignedId());
-        attributes.setProvider(model.getProvider().toString());
-//        attributes.setStarred(model.isStarred());
-//        attributes.setTags(new HashSet<>(model.getTags()));
-        attributes.setCreatedAt(model.getCreatedAt());
-        attributes.setUpdatedAt(model.getUpdatedAt());
-
-        return rep;
-    }
+//    public DocumentRepresentation.Data toRepresentation(DocumentModel model, UriInfo uriInfo) {
+//        DocumentRepresentation.Data rep = new DocumentRepresentation.Data();
+//
+//        rep.setId(model.getId());
+//        rep.setType(ModelType.UBL_DOCUMENT.getAlias());
+//
+//        // Links
+//        DocumentRepresentation.DocumentLink links = new DocumentRepresentation.DocumentLink();
+//        URI self = uriInfo.getBaseUriBuilder()
+//                .path(DocumentsService.class)
+//                .path(DocumentsService.class, "getDocumentUser")
+//                .build(model.getId());
+//        URI fileLink = uriInfo.getBaseUriBuilder()
+//                .path(FilesService.class)
+//                .path(FilesService.class, "getFile")
+//                .build(model.getFileId());
+//
+//        links.setSelf(self.toString());
+//        links.setFilelink(fileLink.toString());
+//
+//        rep.setLinks(links);
+//
+//        // Relationships
+//        DocumentRepresentation.Relationships relationships = new DocumentRepresentation.Relationships();
+//        DocumentRepresentation.OwnedBy ownedBy = new DocumentRepresentation.OwnedBy();
+//        relationships.setOwnedBy(ownedBy);
+//        rep.setRelationships(relationships);
+//
+////        List<SpaceRepresentation.Data> owners = model.getSpaces().stream().map(space -> {
+////            SpaceRepresentation.Data spaceData = new SpaceRepresentation.Data();
+////            spaceData.setId(space.getId());
+////            spaceData.setType(ModelType.SPACES.getAlias());
+////            return spaceData;
+////        }).collect(Collectors.toList());
+////        ownedBy.setData(owners); // save
+//
+////        GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
+////        ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
+////                .path(SpacesService.class)
+////                .path(SpacesService.class, "getSpace")
+////                .build(model.getSpace().getId()).toString());
+////        ownedBy.setLinks(ownedLinks); // save
+//
+//        // Attributes
+//        DocumentRepresentation.Attributes attributes = new DocumentRepresentation.Attributes();
+//        rep.setAttributes(attributes);
+//
+//        attributes.setId(model.getId());
+//        attributes.setAssignedId(model.getAssignedId());
+//        attributes.setType(model.getType());
+//        attributes.setAmount(model.getAmount());
+//        attributes.setCurrency(model.getCurrency());
+//        attributes.setIssueDate(model.getIssueDate());
+//        attributes.setSupplierName(model.getSupplierName());
+//        attributes.setSupplierAssignedId(model.getSupplierAssignedId());
+//        attributes.setCustomerName(model.getCustomerName());
+//        attributes.setCustomerAssignedId(model.getCustomerAssignedId());
+//        attributes.setProvider(model.getProvider().toString());
+////        attributes.setStarred(model.isStarred());
+////        attributes.setTags(new HashSet<>(model.getTags()));
+//        attributes.setCreatedAt(model.getCreatedAt());
+//        attributes.setUpdatedAt(model.getUpdatedAt());
+//
+//        return rep;
+//    }
 
 //    public SpaceRepresentation toRepresentation(SharedSpaceModel model) {
 //        SpaceRepresentation rep = toRepresentation(model.getSpace(), false);

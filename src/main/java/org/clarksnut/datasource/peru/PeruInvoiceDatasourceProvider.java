@@ -11,7 +11,6 @@ import org.clarksnut.datasource.peru.beans.LineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
-import org.clarksnut.files.exceptions.FileFetchException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 
 import javax.xml.bind.JAXBException;
@@ -32,7 +31,7 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file) throws FileFetchException {
+    public Datasource getDatasource(XmlUBLFileModel file)  {
         InvoiceType invoiceType = read(file);
         if (invoiceType == null) {
             return null;
@@ -107,7 +106,7 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
         return bean;
     }
 
-    private InvoiceType read(XmlFileModel file) throws FileFetchException {
+    private InvoiceType read(XmlFileModel file)  {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), InvoiceType.class);
         } catch (JAXBException e) {

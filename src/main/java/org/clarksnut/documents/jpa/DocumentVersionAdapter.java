@@ -4,6 +4,7 @@ import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentProviderType;
 import org.clarksnut.documents.DocumentVersionModel;
+import org.clarksnut.documents.ImportedDocumentModel;
 import org.clarksnut.documents.jpa.entity.DocumentVersionEntity;
 
 import javax.persistence.EntityManager;
@@ -21,7 +22,7 @@ public class DocumentVersionAdapter implements DocumentVersionModel, JpaModel<Do
         this.documentVersion = documentVersion;
     }
 
-    public static DocumentVersionEntity toEntity(DocumentModel model, EntityManager em) {
+    public static DocumentVersionEntity toEntity(DocumentVersionModel model, EntityManager em) {
         if (model instanceof DocumentVersionAdapter) {
             return ((DocumentVersionAdapter) model).getEntity();
         }
@@ -49,18 +50,23 @@ public class DocumentVersionAdapter implements DocumentVersionModel, JpaModel<Do
     }
 
     @Override
-    public String getType() {
-        return documentVersion.getType();
+    public ImportedDocumentModel getImportedDocument() {
+        return new ImportedDocumentAdapter( em, documentVersion.getImportedFile());
     }
 
     @Override
-    public String getAssignedId() {
-        return documentVersion.getAssignedId();
+    public String getType() {
+        return null;
     }
 
     @Override
     public String getFileId() {
         return documentVersion.getFileId();
+    }
+
+    @Override
+    public String getAssignedId() {
+        return null;
     }
 
     @Override
@@ -90,7 +96,7 @@ public class DocumentVersionAdapter implements DocumentVersionModel, JpaModel<Do
 
     @Override
     public String getSupplierAssignedId() {
-        return documentVersion.getSupplierAssignedId();
+        return null;
     }
 
     @Override
@@ -146,11 +152,6 @@ public class DocumentVersionAdapter implements DocumentVersionModel, JpaModel<Do
     @Override
     public DocumentProviderType getProvider() {
         return documentVersion.getProvider();
-    }
-
-    @Override
-    public boolean isVerified() {
-        return documentVersion.isVerified();
     }
 
 }

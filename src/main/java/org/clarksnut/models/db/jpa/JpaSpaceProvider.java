@@ -9,7 +9,6 @@ import org.clarksnut.models.db.jpa.entity.UserEntity;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;

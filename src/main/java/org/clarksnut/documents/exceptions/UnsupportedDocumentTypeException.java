@@ -1,5 +1,8 @@
 package org.clarksnut.documents.exceptions;
 
+/**
+ * Document is not an xml or is not supported by the system
+ */
 public class UnsupportedDocumentTypeException extends Exception {
 
     public UnsupportedDocumentTypeException() {
