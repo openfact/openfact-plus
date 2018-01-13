@@ -618,7 +618,7 @@
                                     <classifier>wildfly-11-dist</classifier>
                                     <type>zip</type>
                                     <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.outputDirectory}/modules/system/layers/base</outputDirectory>
+                                    <outputDirectory>${project.build.outputDirectory}/modules</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.hibernate</groupId>
@@ -627,7 +627,7 @@
                                     <classifier>wildfly-11-dist</classifier>
                                     <type>zip</type>
                                     <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.outputDirectory}/modules/system/layers/base</outputDirectory>
+                                    <outputDirectory>${project.build.outputDirectory}/modules</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
