@@ -4,7 +4,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.clarksnut.documents.*;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
-import org.clarksnut.documents.exceptions.UnrecognizableDocumentTypeException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.files.*;
 import org.clarksnut.files.uncompress.UncompressFileProviderFacade;
@@ -16,7 +15,10 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -34,7 +36,6 @@ public class ImportedDocumentManager {
     private DocumentProvider documentProvider;
 
     private DocumentModel addDocument(ImportedDocumentModel importedDocument) throws
-            UnrecognizableDocumentTypeException,
             UnsupportedDocumentTypeException,
             UnreadableDocumentException {
         XmlUBLFileModel xmlUBLFile = new FlyWeightXmlUBLFileModel(
@@ -52,7 +53,7 @@ public class ImportedDocumentManager {
         if (!uncompressedFile.isCompressedFile()) {
             fileToImport = new BasicCompressedFileModel(file);
         } else {
-            List<FileModel> childrenFiles =  uncompressedFile.getEntries()
+            List<FileModel> childrenFiles = uncompressedFile.getEntries()
                     .stream()
                     .map(fileEntry -> fileProvider.addFile(fileEntry.getFilename(), fileEntry.getBytes()))
                     .collect(Collectors.toList());
@@ -71,7 +72,7 @@ public class ImportedDocumentManager {
 
         documentsToImport.stream()
                 .filter(p -> {
-                    String filenameExtension = FilenameUtils.getExtension(p.getFilename());
+                    String filenameExtension = FilenameUtils.getExtension(p.getFile().getFilename());
                     return filenameExtension.equalsIgnoreCase("xml");
                 })
                 .forEach(item -> {
@@ -79,8 +80,6 @@ public class ImportedDocumentManager {
                         DocumentModel document = addDocument(item);
                         item.setStatus(ImportedDocumentStatus.IMPORTED);
                         logger.debug("Document created! id:" + document.getId());
-                    } catch (UnrecognizableDocumentTypeException e) {
-                        item.setStatus(ImportedDocumentStatus.NOT_IMPORTED_DUE_TO_IMPOSSIBLE_TO_PARSE);
                     } catch (UnsupportedDocumentTypeException e) {
                         item.setStatus(ImportedDocumentStatus.NOT_IMPORTED_DUE_TO_UNSUPPORTED_DOCUMENT_TYPE);
                     } catch (UnreadableDocumentException e) {

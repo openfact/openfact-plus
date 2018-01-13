@@ -24,12 +24,12 @@ public class FilesService {
 //
 //    @GET
 //    @Path("{fileId}")
-//    public Response getFile(@PathParam("fileId") String fileId) {
-//        FileModel file = fileProvider.getFile(fileId);
+//    public Response getFileAsBytes(@PathParam("fileId") String fileId) {
+//        FileModel file = fileProvider.getFileAsBytes(fileId);
 //
 //        Response.ResponseBuilder response;
 //        try {
-//            response = Response.ok(file.getFile());
+//            response = Response.ok(file.getFileAsBytes());
 //        } catch (FileFetchException e) {
 //            logger.error("Could not fetch file from storage");
 //            return ErrorResponse.error("Could not read file", Response.Status.SERVICE_UNAVAILABLE);

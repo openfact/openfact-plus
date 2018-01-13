@@ -2,25 +2,23 @@ package org.clarksnut.documents.jpa;
 
 import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.documents.DocumentProviderType;
 import org.clarksnut.documents.DocumentVersionModel;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.DocumentVersionEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> {
 
     private final EntityManager em;
-    private final DocumentEntity document;
+    private final DocumentEntity entity;
 
     public DocumentAdapter(EntityManager em, DocumentEntity document) {
         this.em = em;
-        this.document = document;
+        this.entity = document;
     }
 
     public static DocumentEntity toEntity(DocumentModel model, EntityManager em) {
@@ -32,32 +30,32 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
 
     @Override
     public DocumentEntity getEntity() {
-        return document;
+        return entity;
     }
 
     @Override
     public String getId() {
-        return document.getId();
+        return entity.getId();
     }
 
     @Override
     public String getType() {
-        return document.getType();
+        return entity.getType();
     }
 
     @Override
     public String getAssignedId() {
-        return document.getAssignedId();
+        return entity.getAssignedId();
     }
 
     @Override
     public String getSupplierAssignedId() {
-        return document.getSupplierAssignedId();
+        return entity.getSupplierAssignedId();
     }
 
     @Override
     public List<DocumentVersionModel> getVersions() {
-        return document.getVersions().stream()
+        return entity.getVersions().stream()
                 .map(f -> new DocumentVersionAdapter(em, this, f))
                 .collect(Collectors.toList());
     }
@@ -65,7 +63,7 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     @Override
     public DocumentVersionModel getCurrentVersion() {
         TypedQuery<DocumentVersionEntity> typedQuery = em.createNamedQuery("getCurrentDocumentVersionByDocumentId", DocumentVersionEntity.class);
-        typedQuery.setParameter("documentId", document.getId());
+        typedQuery.setParameter("documentId", entity.getId());
 
         List<DocumentVersionEntity> resultList = typedQuery.getResultList();
         if (resultList.size() == 1) {

@@ -8,7 +8,7 @@ public interface XmlUBLFileModel extends XmlFileModel {
 
     static String getDocumentType(XmlFileModel file)  {
         try {
-            return ClarksnutModelUtils.getDocumentType(file.getFile());
+            return ClarksnutModelUtils.getDocumentType(file.getFileAsBytes());
         } catch (Exception e) {
             return null;
         }

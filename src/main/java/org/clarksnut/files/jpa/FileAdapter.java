@@ -1,9 +1,6 @@
 package org.clarksnut.files.jpa;
 
 import org.clarksnut.common.jpa.JpaModel;
-import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.documents.jpa.DocumentAdapter;
-import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.files.FileModel;
 
 import javax.persistence.EntityManager;
@@ -41,7 +38,7 @@ public class FileAdapter implements FileModel, JpaModel<FileEntity> {
     }
 
     @Override
-    public byte[] getFile()  {
+    public byte[] getFileAsBytes()  {
         return file.getFile();
     }
 

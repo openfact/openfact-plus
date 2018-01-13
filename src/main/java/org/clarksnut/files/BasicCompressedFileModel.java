@@ -28,8 +28,8 @@ public class BasicCompressedFileModel implements CompressedFileModel {
     }
 
     @Override
-    public byte[] getFile() {
-        return model.getFile();
+    public byte[] getFileAsBytes() {
+        return model.getFileAsBytes();
     }
 
     @Override

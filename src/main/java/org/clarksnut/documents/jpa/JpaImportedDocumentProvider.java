@@ -26,7 +26,6 @@ public class JpaImportedDocumentProvider implements ImportedDocumentProvider {
 
         ImportedDocumentEntity importedParentDocumentEntity = new ImportedDocumentEntity();
         importedParentDocumentEntity.setId(UUID.randomUUID().toString());
-        importedParentDocumentEntity.setFilename(file.getFilename());
         importedParentDocumentEntity.setFile(FileAdapter.toEntity(file, em));
         importedParentDocumentEntity.setProvider(provider);
         em.persist(importedParentDocumentEntity);
@@ -35,7 +34,6 @@ public class JpaImportedDocumentProvider implements ImportedDocumentProvider {
             file.getChildrenIfExists().forEach(fileEntry -> {
                 ImportedDocumentEntity importedChildDocumentEntity = new ImportedDocumentEntity();
                 importedChildDocumentEntity.setId(UUID.randomUUID().toString());
-                importedChildDocumentEntity.setFilename(fileEntry.getFilename());
                 importedChildDocumentEntity.setFile(FileAdapter.toEntity(fileEntry, em));
                 importedChildDocumentEntity.setProvider(provider);
                 importedChildDocumentEntity.setParent(importedChildDocumentEntity);

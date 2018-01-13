@@ -1,11 +1,5 @@
 package org.clarksnut.query.es;
 
-import org.clarksnut.documents.DocumentUserQueryModel;
-import org.clarksnut.documents.jpa.DocumentFieldMapper;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 //@RunWith(MockitoJUnitRunner.class)
@@ -13,7 +7,7 @@ public class ESQueryParserTest {
 
 //    @Test
 //    public void toQueryBuilderWithNullQueries() throws Exception {
-//        DocumentUserQueryModel query = DocumentUserQueryModel.builder().build();
+//        IndexedDocumentQueryModel query = IndexedDocumentQueryModel.builder().build();
 //
 //        boolean exception = false;
 //        try {
@@ -29,8 +23,8 @@ public class ESQueryParserTest {
 //    public void toQueryBuilderWithNotAllowedSpacesByUser() throws Exception {
 //        Mockito.when(user.getAllPermitedSpaces()).thenReturn(new HashSet<>());
 //
-//        DocumentUserQueryModel query = DocumentUserQueryModel.builder()
-//                .addDocumentFilter(new TermQuery(DocumentModel.CURRENCY, "PEN"))
+//        IndexedDocumentQueryModel query = IndexedDocumentQueryModel.builder()
+//                .addFilter(new TermQuery(DocumentModel.CURRENCY, "PEN"))
 //                .build();
 //
 //        String esQuery = ESQueryParser.toQueryBuilder(user, query);
@@ -48,8 +42,8 @@ public class ESQueryParserTest {
 //
 //        Mockito.when(user.getAllPermitedSpaces()).thenReturn(permittedSpaces);
 //
-//        DocumentUserQueryModel query = DocumentUserQueryModel.builder()
-//                .addDocumentFilter(new TermQuery(DocumentModel.CURRENCY, "PEN"))
+//        IndexedDocumentQueryModel query = IndexedDocumentQueryModel.builder()
+//                .addFilter(new TermQuery(DocumentModel.CURRENCY, "PEN"))
 //                .build();
 //
 //        ESQueryParser parser = new ESQueryParser();
@@ -68,8 +62,8 @@ public class ESQueryParserTest {
 //
 //        Mockito.when(user.getAllPermitedSpaces()).thenReturn(permittedSpaces);
 //
-//        DocumentUserQueryModel query = DocumentUserQueryModel.builder()
-//                .addDocumentFilter(new TermQuery(DocumentModel.CURRENCY, "PEN"))
+//        IndexedDocumentQueryModel query = IndexedDocumentQueryModel.builder()
+//                .addFilter(new TermQuery(DocumentModel.CURRENCY, "PEN"))
 //                .build();
 //
 //        ESQueryParser parser = new ESQueryParser();
@@ -125,7 +119,7 @@ public class ESQueryParserTest {
 //
 //        Mockito.when(user.getAllPermitedSpaces()).thenReturn(permittedSpaces);
 //
-//        DocumentUserQueryModel query = DocumentUserQueryModel.builder()
+//        IndexedDocumentQueryModel query = IndexedDocumentQueryModel.builder()
 //                .addUserDocumentFilter(new TermQuery(DocumentUserModel.VIEWED, true))
 //                .build();
 //
@@ -182,8 +176,8 @@ public class ESQueryParserTest {
 //
 //        Mockito.when(user.getAllPermitedSpaces()).thenReturn(permittedSpaces);
 //
-//        DocumentUserQueryModel query = DocumentUserQueryModel.builder()
-//                .addDocumentFilter(new TermQuery(DocumentModel.TYPE, "Invoice"))
+//        IndexedDocumentQueryModel query = IndexedDocumentQueryModel.builder()
+//                .addFilter(new TermQuery(DocumentModel.TYPE, "Invoice"))
 //                .addUserDocumentFilter(new TermQuery(DocumentUserModel.VIEWED, true))
 //                .build();
 //

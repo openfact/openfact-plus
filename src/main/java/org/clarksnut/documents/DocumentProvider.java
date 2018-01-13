@@ -1,7 +1,6 @@
 package org.clarksnut.documents;
 
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
-import org.clarksnut.documents.exceptions.UnrecognizableDocumentTypeException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.files.XmlUBLFileModel;
 
@@ -12,7 +11,6 @@ public interface DocumentProvider {
      */
     DocumentModel addDocument(ImportedDocumentModel importedDocument, XmlUBLFileModel file) throws
             UnsupportedDocumentTypeException,
-            UnrecognizableDocumentTypeException,
             UnreadableDocumentException;
 
     /**

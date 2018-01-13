@@ -27,8 +27,8 @@ public class FlyWeightXmlFileModel implements XmlFileModel {
     }
 
     @Override
-    public byte[] getFile()  {
-        return this.model.getFile();
+    public byte[] getFileAsBytes()  {
+        return this.model.getFileAsBytes();
     }
 
     @Override

@@ -8,7 +8,6 @@ import java.util.Set;
 public interface ImportedDocumentModel {
 
     String getId();
-    String getFilename();
     DocumentProviderType getProvider();
 
     boolean isCompressed();

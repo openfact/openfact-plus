@@ -20,9 +20,9 @@ public class FlyWeightFileModel implements FileModel {
     }
 
     @Override
-    public byte[] getFile() {
+    public byte[] getFileAsBytes() {
         if (bytes == null) {
-            this.bytes = this.model.getFile();
+            this.bytes = this.model.getFileAsBytes();
         }
         return this.bytes;
     }

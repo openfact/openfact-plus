@@ -55,21 +55,6 @@ public class DocumentVersionAdapter implements DocumentVersionModel, JpaModel<Do
     }
 
     @Override
-    public String getType() {
-        return null;
-    }
-
-    @Override
-    public String getFileId() {
-        return documentVersion.getFileId();
-    }
-
-    @Override
-    public String getAssignedId() {
-        return null;
-    }
-
-    @Override
     public Float getAmount() {
         return documentVersion.getAmount();
     }
@@ -92,11 +77,6 @@ public class DocumentVersionAdapter implements DocumentVersionModel, JpaModel<Do
     @Override
     public String getSupplierName() {
         return documentVersion.getSupplierName();
-    }
-
-    @Override
-    public String getSupplierAssignedId() {
-        return null;
     }
 
     @Override
@@ -147,11 +127,6 @@ public class DocumentVersionAdapter implements DocumentVersionModel, JpaModel<Do
     @Override
     public Date getUpdatedAt() {
         return documentVersion.getUpdatedAt();
-    }
-
-    @Override
-    public DocumentProviderType getProvider() {
-        return documentVersion.getProvider();
     }
 
 }

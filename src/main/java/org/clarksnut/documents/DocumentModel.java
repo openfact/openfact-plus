@@ -5,11 +5,8 @@ import java.util.List;
 public interface DocumentModel {
 
     String getId();
-
     String getType();
-
     String getAssignedId();
-
     String getSupplierAssignedId();
 
     List<DocumentVersionModel> getVersions();

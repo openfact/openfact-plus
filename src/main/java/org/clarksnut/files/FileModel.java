@@ -9,5 +9,5 @@ public interface FileModel {
     /**
      * @return file value on bytes
      */
-    byte[] getFile() ;
+    byte[] getFileAsBytes() ;
 }

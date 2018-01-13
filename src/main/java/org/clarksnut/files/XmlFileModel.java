@@ -12,7 +12,7 @@ public interface XmlFileModel extends FileModel {
     Document getDocument();
 
     static Document isXmlFile(FileModel file)  {
-        byte[] bytes = file.getFile();
+        byte[] bytes = file.getFileAsBytes();
         try {
             return ClarksnutModelUtils.toDocument(bytes);
         } catch (ParserConfigurationException | IOException | SAXException e) {

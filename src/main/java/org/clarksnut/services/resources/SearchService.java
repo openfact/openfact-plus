@@ -218,7 +218,7 @@ public class SearchService {
 //            orderBy = Stream.of(query.getOrderBy().split("(?<=[a-z])(?=[A-Z])")).collect(Collectors.joining("_")).toLowerCase();
 //        }
 //
-//        DocumentUserQueryModel documentQuery = DocumentUserQueryModel.builder()
+//        IndexedDocumentQueryModel documentQuery = IndexedDocumentQueryModel.builder()
 //                .query("{\"query\":" + boolQueryBuilder.toString() + "}", true)
 //                .orderBy(orderBy, query.isAsc())
 //                .offset(query.getOffset() != null ? query.getOffset() : 0)

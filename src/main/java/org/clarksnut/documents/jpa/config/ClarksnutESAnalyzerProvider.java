@@ -1,5 +1,7 @@
 package org.clarksnut.documents.jpa.config;
 
+import org.hibernate.search.elasticsearch.analyzer.ElasticsearchTokenFilterFactory;
+import org.hibernate.search.elasticsearch.analyzer.ElasticsearchTokenizerFactory;
 import org.hibernate.search.elasticsearch.analyzer.definition.ElasticsearchAnalysisDefinitionProvider;
 import org.hibernate.search.elasticsearch.analyzer.definition.ElasticsearchAnalysisDefinitionRegistryBuilder;
 
@@ -13,8 +15,8 @@ public class ClarksnutESAnalyzerProvider implements ElasticsearchAnalysisDefinit
 
         if (Objects.equals(indexManager, "elasticsearch")) {
             // Elasticsearch
-//            builder
-//                    .analyzer("staticTextAnalyzer")
+            builder
+                    .analyzer("staticTextAnalyzer");
 //                    .withTokenizer(ElasticsearchTokenizerFactory.class)
 //                    .param("type", "'standard'")
 //                    .tokenFilter(ElasticsearchTokenFilterFactory.class)
@@ -23,9 +25,9 @@ public class ClarksnutESAnalyzerProvider implements ElasticsearchAnalysisDefinit
 //                    .param("type", "'lowercase'")
 //                    .tokenFilter(ElasticsearchTokenFilterFactory.class)
 //                    .param("type", "'asciifolding'");
-//
-//            builder
-//                    .analyzer("nameTextAnalyzer")
+
+            builder
+                    .analyzer("nameTextAnalyzer");
 //                    .tokenizer(ElasticsearchTokenizerFactory.class)
 //                    .param("type", "'standard'")
 //                    .tokenFilter(ElasticsearchTokenFilterFactory.class)

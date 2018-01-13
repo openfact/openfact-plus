@@ -1,36 +1,21 @@
 package org.clarksnut.services.resources;
 
-import jodd.io.ZipBuilder;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentProvider;
-import org.clarksnut.documents.DocumentProviderType;
-import org.clarksnut.files.FileModel;
 import org.clarksnut.files.FileProvider;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
-import org.clarksnut.report.ExportFormat;
-import org.clarksnut.report.ReportTemplateConfiguration;
 import org.clarksnut.report.ReportTemplateProvider;
-import org.clarksnut.report.exceptions.ReportException;
-import org.clarksnut.representations.idm.DocumentRepresentation;
-import org.clarksnut.services.ErrorResponse;
-import org.clarksnut.services.ErrorResponseException;
-import org.clarksnut.services.util.SSOContext;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.keycloak.representations.AccessToken;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.stream.Collectors;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
 
 @Stateless
 @Path("/documents")
@@ -185,9 +170,9 @@ public class DocumentsService {
 //        documentsId.stream()
 //                .map(this::getDocumentById)
 //                .forEach(document -> {
-//                    FileModel file = fileProvider.getFile(document.getFileId());
+//                    FileModel file = fileProvider.getFileAsBytes(document.getFileId());
 //                    try {
-//                        zipInMemory.add(file.getFile()).path(document.getAssignedId()).save();
+//                        zipInMemory.add(file.getFileAsBytes()).path(document.getAssignedId()).save();
 //                    } catch (IOException e) {
 //                        logger.error("Could not add file to zip", e);
 //                    } catch (FileFetchException e) {
@@ -253,11 +238,11 @@ public class DocumentsService {
 //    public Response getXml(@PathParam("documentId") String documentId) {
 //        DocumentModel document = getDocumentById(documentId);
 //
-//        FileModel file = fileProvider.getFile(document.getFileId());
+//        FileModel file = fileProvider.getFileAsBytes(document.getFileId());
 //
 //        byte[] reportBytes;
 //        try {
-//            reportBytes = file.getFile();
+//            reportBytes = file.getFileAsBytes();
 //        } catch (FileFetchException e) {
 //            return ErrorResponse.error("Could not fetch file, please try again", Response.Status.INTERNAL_SERVER_ERROR);
 //        }

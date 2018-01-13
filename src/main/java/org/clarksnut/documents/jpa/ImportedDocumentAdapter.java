@@ -41,11 +41,6 @@ public class ImportedDocumentAdapter implements ImportedDocumentModel, JpaModel<
     }
 
     @Override
-    public String getFilename() {
-        return document.getFilename();
-    }
-
-    @Override
     public DocumentProviderType getProvider() {
         return document.getProvider();
     }

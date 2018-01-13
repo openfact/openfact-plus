@@ -29,10 +29,6 @@ public class ImportedDocumentEntity implements CreatableEntity, UpdatableEntity,
     @Column(name = "id", length = 36)
     private String id;
 
-    @NotNull(message = "filename should not be null")
-    @Column(name = "filename")
-    private String filename;
-
     @NotNull
     @Type(type = "org.hibernate.type.NumericBooleanType")
     @Column(name = "compressed")
@@ -80,14 +76,6 @@ public class ImportedDocumentEntity implements CreatableEntity, UpdatableEntity,
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
     }
 
     public DocumentProviderType getProvider() {

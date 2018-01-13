@@ -1,14 +1,14 @@
 package org.clarksnut.documents.jpa;
 
-import org.apache.commons.io.FileUtils;
-import org.clarksnut.documents.*;
+import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentModel.DocumentCreationEvent;
 import org.clarksnut.documents.DocumentModel.DocumentRemovedEvent;
+import org.clarksnut.documents.DocumentProvider;
+import org.clarksnut.documents.ImportedDocumentModel;
+import org.clarksnut.documents.ImportedDocumentStatus;
 import org.clarksnut.documents.exceptions.UnreadableDocumentException;
-import org.clarksnut.documents.exceptions.UnrecognizableDocumentTypeException;
 import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
-import org.clarksnut.documents.jpa.entity.DocumentUtil;
 import org.clarksnut.documents.jpa.entity.DocumentVersionEntity;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
@@ -18,6 +18,7 @@ import org.clarksnut.mapper.document.DocumentMapperProviderFactory;
 import org.jboss.logging.Logger;
 import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -42,17 +43,35 @@ public class JpaDocumentProvider implements DocumentProvider {
     private Optional<String> clarksnutDocumentMapperDefault;
 
     @Inject
-    @ConfigurationValue("clarksnut.document.additionalTypes")
-    private Optional<String[]> clarksnutAdditionalDocumentTypes;
-
-    @Inject
-    private Event<DocumentEntity> documentEntityEvent;
-
-    @Inject
     private Event<DocumentCreationEvent> creationEvent;
 
     @Inject
     private Event<DocumentRemovedEvent> removedEvent;
+
+    private String defaultDocumentMapperGroup;
+
+    @PostConstruct
+    public void init() {
+        defaultDocumentMapperGroup = clarksnutDocumentMapperDefault.orElse("basic");
+    }
+
+    private DocumentMapped readDocument(XmlUBLFileModel file) throws UnsupportedDocumentTypeException {
+        DocumentMapperProvider mapperProvider = DocumentMapperProviderFactory
+                .getInstance()
+                .getParsedDocumentProvider(defaultDocumentMapperGroup, file.getDocumentType());
+        if (mapperProvider == null && !defaultDocumentMapperGroup.equals("basic")) {
+            mapperProvider = DocumentMapperProviderFactory
+                    .getInstance()
+                    .getParsedDocumentProvider("basic", file.getDocumentType());
+        }
+        if (mapperProvider == null) {
+            throw new UnsupportedDocumentTypeException("Could not find a DocumentMapperProvider for " +
+                    "group[" + defaultDocumentMapperGroup + "/basic] " +
+                    "documentType[" + file.getDocumentType() + "]");
+        }
+
+        return mapperProvider.map(file);
+    }
 
     public static DocumentVersionEntity toDocumentVersionEntity(DocumentBean bean) {
         DocumentVersionEntity entity = new DocumentVersionEntity();
@@ -77,12 +96,10 @@ public class JpaDocumentProvider implements DocumentProvider {
     }
 
     @Override
-    public DocumentModel addDocument(ImportedDocumentModel importedDocument, XmlUBLFileModel file)
-            throws UnsupportedDocumentTypeException, UnreadableDocumentException, UnrecognizableDocumentTypeException {
-
+    public DocumentModel addDocument(ImportedDocumentModel importedDocument, XmlUBLFileModel file) throws UnsupportedDocumentTypeException, UnreadableDocumentException {
         DocumentMapped mappedDocument = readDocument(file);
         if (mappedDocument == null) {
-            throw new UnreadableDocumentException(file.getDocumentType() + " Is supported but could not be map");
+            throw new UnreadableDocumentException("Mapper was not able to read XMLUBLFile[" + file.getDocumentType() + "]");
         }
 
         final DocumentBean documentBean = mappedDocument.getBean();
@@ -98,8 +115,9 @@ public class JpaDocumentProvider implements DocumentProvider {
 
             DocumentVersionEntity documentVersionEntity = toDocumentVersionEntity(documentBean);
             documentVersionEntity.setId(UUID.randomUUID().toString());
-            documentVersionEntity.setImportedFile(ImportedDocumentAdapter.toEntity(importedDocument, em));
+            documentVersionEntity.setCurrentVersion(true);
             documentVersionEntity.setDocument(documentEntity);
+            documentVersionEntity.setImportedFile(ImportedDocumentAdapter.toEntity(importedDocument, em));
             em.persist(documentVersionEntity);
 
             document = new DocumentAdapter(em, documentEntity);
@@ -107,13 +125,13 @@ public class JpaDocumentProvider implements DocumentProvider {
             byte[] current = document.getCurrentVersion()
                     .getImportedDocument()
                     .getFile()
-                    .getFile();
-            byte[] newVersion = file.getFile();
-            if (!Arrays.equals(current, newVersion)) {
+                    .getFileAsBytes();
+            if (!Arrays.equals(current, file.getFileAsBytes())) {
                 DocumentVersionEntity documentVersionEntity = toDocumentVersionEntity(documentBean);
                 documentVersionEntity.setId(UUID.randomUUID().toString());
-                documentVersionEntity.setImportedFile(ImportedDocumentAdapter.toEntity(importedDocument, em));
+                documentVersionEntity.setCurrentVersion(false);
                 documentVersionEntity.setDocument(DocumentAdapter.toEntity(document, em));
+                documentVersionEntity.setImportedFile(ImportedDocumentAdapter.toEntity(importedDocument, em));
                 em.persist(documentVersionEntity);
             } else {
                 importedDocument.setStatus(ImportedDocumentStatus.ALREADY_IMPORTED);
@@ -122,37 +140,25 @@ public class JpaDocumentProvider implements DocumentProvider {
 
         importedDocument.setDocumentReferenceId(document.getId());
 
-//        creationEvent.fire(new DocumentCreationEvent() {
-//            @Override
-//            public String getDocumentType() {
-//                return file.getDocumentType();
-//            }
-//
-//            @Override
-//            public Object getJaxb() {
-//                return mappedDocument.getType();
-//            }
-//
-//            @Override
-//            public DocumentModel getCreatedDocument() {
-//                return document;
-//            }
-//        });
+        DocumentModel createdDocument = document;
+        creationEvent.fire(new DocumentCreationEvent() {
+            @Override
+            public String getDocumentType() {
+                return file.getDocumentType();
+            }
 
-        documentEntityEvent.fire(DocumentAdapter.toEntity(document, em));
+            @Override
+            public Object getJaxb() {
+                return mappedDocument.getType();
+            }
+
+            @Override
+            public DocumentModel getCreatedDocument() {
+                return createdDocument;
+            }
+        });
+
         return document;
-    }
-
-    private DocumentMapped readDocument(XmlUBLFileModel file) throws UnsupportedDocumentTypeException, UnrecognizableDocumentTypeException {
-        String group = clarksnutDocumentMapperDefault.orElse("basic");
-        DocumentMapperProvider provider = DocumentMapperProviderFactory.getInstance().getParsedDocumentProvider(group, file.getDocumentType());
-
-        DocumentMapped documentMapped = provider.map(file);
-        if (documentMapped == null && !group.equals("basic")) {
-            provider = DocumentMapperProviderFactory.getInstance().getParsedDocumentProvider(group, file.getDocumentType());
-            documentMapped = provider.map(file);
-        }
-        return documentMapped;
     }
 
     @Override

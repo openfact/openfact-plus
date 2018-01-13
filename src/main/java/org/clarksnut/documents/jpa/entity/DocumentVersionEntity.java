@@ -4,7 +4,6 @@ import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
-import org.clarksnut.documents.DocumentProviderType;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -31,6 +30,7 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
     @Column(name = "is_current_version")
     private boolean isCurrentVersion;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_id", foreignKey = @ForeignKey)
     private DocumentEntity document;
@@ -43,10 +43,19 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
     @Column(name = "currency")
     private String currency;
 
-    @NotNull(message = "provider should not be null")
-    @Enumerated(EnumType.STRING)
-    @Column(name = "provider")
-    private DocumentProviderType provider;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "issue_date")
+    private Date issueDate;
+
+    @Digits(integer = 10, fraction = 4, message = "amount has incorrect number of integer/fraction")
+    @Type(type = "org.hibernate.type.FloatType")
+    @Column(name = "amount")
+    private Float amount;
+
+    @Digits(integer = 10, fraction = 4, message = "tax has incorrect number of integer/fraction")
+    @Type(type = "org.hibernate.type.FloatType")
+    @Column(name = "tax")
+    private Float tax;
 
     @Column(name = "supplier_name")
     private String supplierName;
@@ -74,24 +83,6 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
 
     @Column(name = "customer_country")
     private String customerCountry;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "issue_date")
-    private Date issueDate;
-
-    @Digits(integer = 10, fraction = 4, message = "amount has incorrect number of integer/fraction")
-    @Type(type = "org.hibernate.type.FloatType")
-    @Column(name = "amount")
-    private Float amount;
-
-    @Digits(integer = 10, fraction = 4, message = "tax has incorrect number of integer/fraction")
-    @Type(type = "org.hibernate.type.FloatType")
-    @Column(name = "tax")
-    private Float tax;
-
-    @NotNull(message = "fileId should not be null")
-    @Column(name = "file_id")
-    private String fileId;
 
     @NotNull(message = "createdAt should not be null")
     @Temporal(TemporalType.TIMESTAMP)
@@ -141,14 +132,6 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
 
     public void setCurrency(String currency) {
         this.currency = currency;
-    }
-
-    public DocumentProviderType getProvider() {
-        return provider;
-    }
-
-    public void setProvider(DocumentProviderType provider) {
-        this.provider = provider;
     }
 
     public String getSupplierName() {
@@ -245,14 +228,6 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
 
     public void setTax(Float tax) {
         this.tax = tax;
-    }
-
-    public String getFileId() {
-        return fileId;
-    }
-
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
     }
 
     public Date getCreatedAt() {

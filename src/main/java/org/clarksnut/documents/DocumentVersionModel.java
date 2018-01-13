@@ -6,14 +6,9 @@ public interface DocumentVersionModel {
 
     String getId();
     boolean isCurrentVersion();
-    DocumentProviderType getProvider();
 
     DocumentModel getDocument();
-
     ImportedDocumentModel getImportedDocument();
-    String getType();
-    String getFileId();
-    String getAssignedId();
 
     Date getIssueDate();
     String getCurrency();
@@ -21,7 +16,6 @@ public interface DocumentVersionModel {
 
     Float getTax();
     String getSupplierName();
-    String getSupplierAssignedId();
     String getSupplierStreetAddress();
     String getSupplierCity();
 

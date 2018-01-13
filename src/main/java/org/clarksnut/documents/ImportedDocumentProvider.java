@@ -1,7 +1,6 @@
 package org.clarksnut.documents;
 
 import org.clarksnut.files.CompressedFileModel;
-import org.clarksnut.files.FileModel;
 
 public interface ImportedDocumentProvider {
 

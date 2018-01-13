@@ -1,7 +1,7 @@
 package org.clarksnut.documents.jpa.config;
 
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
-import org.clarksnut.documents.jpa.entity.DocumentUserEntity;
+import org.clarksnut.documents.jpa.entity.IndexedDocumentEntity;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Factory;
 import org.hibernate.search.annotations.Resolution;
@@ -19,15 +19,12 @@ public class DocumentSearchMappingFactory {
         boolean isElasticsearch = !Objects.equals(indexManager, "elasticsearch");
 
         SearchMapping mapping = new SearchMapping();
-
         documentEntityMapping(mapping, isElasticsearch);
-//        documentUserEntityMapping(mapping, isElasticsearch);
-
         return mapping;
     }
 
     private void documentEntityMapping(SearchMapping mapping, boolean isElasticsearch) {
-        IndexedMapping indexedMapping = mapping.entity(DocumentEntity.class).indexed();
+        IndexedMapping indexedMapping = mapping.entity(IndexedDocumentEntity.class).indexed();
 
         indexedMapping
                 .property("id", ElementType.FIELD).documentId().name("id")
@@ -57,18 +54,6 @@ public class DocumentSearchMappingFactory {
                 /*
                 * Relationships */
                 .property("documentUsers", ElementType.FIELD).containedIn();
-    }
-
-    private void documentUserEntityMapping(SearchMapping mapping, boolean isElasticsearch) {
-        mapping
-                .entity(DocumentUserEntity.class).indexed()
-                .property("id", ElementType.FIELD).documentId()
-                .property("starred", ElementType.FIELD).field()
-                .property("viewed", ElementType.FIELD).field()
-                .property("checked", ElementType.FIELD).field()
-                .property("userId", ElementType.FIELD).field()
-                .property("tags", ElementType.FIELD).indexEmbedded()
-                .property("document", ElementType.FIELD).indexEmbedded().includeEmbeddedObjectId(true);
     }
 
 }

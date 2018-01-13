@@ -1,7 +1,5 @@
 package org.clarksnut.documents.jpa;
 
-import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.documents.DocumentUserModel;
 import org.clarksnut.documents.IndexedDocumentModel;
 
 import java.util.HashMap;
@@ -37,10 +35,10 @@ public class DocumentFieldMapper implements Function<String, String> {
         map.put(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID, "customerAssignedId");
 
         // Document User
-        map.put(DocumentUserModel.CHECKED, "starred");
-        map.put(DocumentUserModel.VIEWED, "viewed");
-        map.put(DocumentUserModel.CHECKED, "checked");
-        map.put(DocumentUserModel.TAGS, "tags");
+        map.put(IndexedDocumentModel.CHECKED, "starred");
+        map.put(IndexedDocumentModel.VIEWED, "viewed");
+        map.put(IndexedDocumentModel.CHECKED, "checked");
+        map.put(IndexedDocumentModel.TAGS, "tags");
 
         return map;
     }

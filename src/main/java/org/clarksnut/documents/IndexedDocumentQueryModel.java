@@ -5,11 +5,10 @@ import org.clarksnut.query.SimpleQuery;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DocumentUserQueryModel {
+public class IndexedDocumentQueryModel {
 
     private final String filterText;
-    private final Set<SimpleQuery> documentFilters;
-    private final Set<SimpleQuery> userDocumentFilters;
+    private final Set<SimpleQuery> filters;
 
     private final String orderBy;
     private final boolean asc;
@@ -17,10 +16,9 @@ public class DocumentUserQueryModel {
     private final Integer offset;
     private final Integer limit;
 
-    private DocumentUserQueryModel(Builder builder) {
+    private IndexedDocumentQueryModel(Builder builder) {
         this.filterText = builder.filterText;
-        this.documentFilters = builder.documentFilters;
-        this.userDocumentFilters = builder.userDocumentFilters;
+        this.filters = builder.filters;
 
         this.orderBy = builder.orderBy;
         this.asc = builder.asc;
@@ -37,12 +35,8 @@ public class DocumentUserQueryModel {
         return filterText;
     }
 
-    public Set<SimpleQuery> getDocumentFilters() {
-        return documentFilters;
-    }
-
-    public Set<SimpleQuery> getUserDocumentFilters() {
-        return userDocumentFilters;
+    public Set<SimpleQuery> getFilters() {
+        return filters;
     }
 
     public String getOrderBy() {
@@ -64,8 +58,7 @@ public class DocumentUserQueryModel {
     public static class Builder {
 
         private String filterText;
-        private Set<SimpleQuery> documentFilters = new HashSet<>();
-        private Set<SimpleQuery> userDocumentFilters = new HashSet<>();
+        private Set<SimpleQuery> filters = new HashSet<>();
 
         private boolean asc;
         private String orderBy;
@@ -78,13 +71,8 @@ public class DocumentUserQueryModel {
             return this;
         }
 
-        public Builder addDocumentFilter(SimpleQuery query) {
-            this.documentFilters.add(query);
-            return this;
-        }
-
-        public Builder addUserDocumentFilter(SimpleQuery query) {
-            this.userDocumentFilters.add(query);
+        public Builder addFilter(SimpleQuery query) {
+            this.filters.add(query);
             return this;
         }
 
@@ -104,8 +92,8 @@ public class DocumentUserQueryModel {
             return this;
         }
 
-        public DocumentUserQueryModel build() {
-            return new DocumentUserQueryModel(this);
+        public IndexedDocumentQueryModel build() {
+            return new IndexedDocumentQueryModel(this);
         }
 
     }
