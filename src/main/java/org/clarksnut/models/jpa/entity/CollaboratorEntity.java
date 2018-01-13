@@ -1,4 +1,4 @@
-package org.clarksnut.models.db.jpa.entity;
+package org.clarksnut.models.jpa.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;

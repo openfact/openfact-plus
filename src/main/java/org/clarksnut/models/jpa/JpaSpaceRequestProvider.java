@@ -1,10 +1,10 @@
-package org.clarksnut.models.db.jpa;
+package org.clarksnut.models.jpa;
 
 import org.clarksnut.files.FileModel;
 import org.clarksnut.models.*;
-import org.clarksnut.models.db.jpa.entity.SpaceEntity;
-import org.clarksnut.models.db.jpa.entity.SpaceRequestEntity;
-import org.clarksnut.models.db.jpa.entity.UserEntity;
+import org.clarksnut.models.jpa.entity.SpaceEntity;
+import org.clarksnut.models.jpa.entity.SpaceRequestEntity;
+import org.clarksnut.models.jpa.entity.UserEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

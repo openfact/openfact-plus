@@ -1,9 +1,9 @@
-package org.clarksnut.models.db.jpa;
+package org.clarksnut.models.jpa;
 
 import org.clarksnut.models.BrokerType;
 import org.clarksnut.models.UserLinkedBrokerModel;
 import org.clarksnut.models.UserModel;
-import org.clarksnut.models.db.jpa.entity.UserLinkedBrokerEntity;
+import org.clarksnut.models.jpa.entity.UserLinkedBrokerEntity;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;

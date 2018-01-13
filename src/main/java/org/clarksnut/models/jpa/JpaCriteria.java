@@ -1,4 +1,4 @@
-package org.clarksnut.models.db.jpa;
+package org.clarksnut.models.jpa;
 
 import org.clarksnut.models.QueryModel;
 

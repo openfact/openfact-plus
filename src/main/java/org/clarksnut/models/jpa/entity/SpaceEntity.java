@@ -1,4 +1,4 @@
-package org.clarksnut.models.db.jpa.entity;
+package org.clarksnut.models.jpa.entity;
 
 import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;

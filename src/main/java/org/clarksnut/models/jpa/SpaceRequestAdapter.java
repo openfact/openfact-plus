@@ -1,8 +1,8 @@
-package org.clarksnut.models.db.jpa;
+package org.clarksnut.models.jpa;
 
 import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.models.*;
-import org.clarksnut.models.db.jpa.entity.SpaceRequestEntity;
+import org.clarksnut.models.jpa.entity.SpaceRequestEntity;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
