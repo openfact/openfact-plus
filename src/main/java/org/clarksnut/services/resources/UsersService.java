@@ -41,6 +41,17 @@ public class UsersService {
     @Inject
     private ModelToRepresentation modelToRepresentation;
 
+    private UserModel getUser(HttpServletRequest httpServletRequest) {
+        KeycloakPrincipal principal = (KeycloakPrincipal) httpServletRequest.getUserPrincipal();
+        String username = principal.getKeycloakSecurityContext().getIdToken().getPreferredUsername();
+
+        UserModel user = userProvider.getUserByUsername(username);
+        if (user == null) {
+            throw new NotFoundException();
+        }
+        return user;
+    }
+
     private UserModel getUserByIdentityID(String identityID) {
         UserModel user = userProvider.getUserByIdentityID(identityID);
         if (user == null) {
@@ -76,10 +87,7 @@ public class UsersService {
     @PATCH
     @Produces(MediaType.APPLICATION_JSON)
     public UserRepresentation currentUser(@Context final HttpServletRequest httpServletRequest, final UserRepresentation userRepresentation) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        String kcUserID = (String) principal.getKeycloakSecurityContext().getToken().getOtherClaims().get("userID");
-
-        UserModel user = getUserByIdentityID(kcUserID);
+        UserModel user = getUser(httpServletRequest);
         UserAttributesRepresentation userAttributesRepresentation = userRepresentation.getData().getAttributes();
 
         if (userAttributesRepresentation != null) {

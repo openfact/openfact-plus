@@ -1,22 +1,31 @@
 package org.clarksnut.services.resources;
 
-import org.clarksnut.documents.DocumentProvider;
-import org.clarksnut.models.QueryModel;
-import org.clarksnut.models.SpaceProvider;
-import org.clarksnut.models.UserModel;
-import org.clarksnut.models.UserProvider;
+import org.clarksnut.documents.*;
+import org.clarksnut.models.*;
+import org.clarksnut.query.*;
+import org.clarksnut.representations.idm.DocumentQueryRepresentation;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.SpaceRepresentation;
 import org.clarksnut.representations.idm.UserRepresentation;
+import org.clarksnut.services.ErrorResponse;
+import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.utils.ModelToRepresentation;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.hibernate.search.query.dsl.QueryBuilder;
+import org.keycloak.KeycloakPrincipal;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
+import java.text.ParseException;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,13 +44,16 @@ public class SearchService {
     private UserProvider userProvider;
 
     @Inject
-    private DocumentProvider documentProvider;
+    private IndexedDocumentProvider indexedDocumentProvider;
 
     @Inject
     private ModelToRepresentation modelToRepresentation;
 
-    private UserModel getUserByIdentityID(String identityID) {
-        UserModel user = userProvider.getUserByIdentityID(identityID);
+    private UserModel getUser(HttpServletRequest httpServletRequest) {
+        KeycloakPrincipal principal = (KeycloakPrincipal) httpServletRequest.getUserPrincipal();
+        String username = principal.getKeycloakSecurityContext().getIdToken().getPreferredUsername();
+
+        UserModel user = userProvider.getUserByUsername(username);
         if (user == null) {
             throw new NotFoundException();
         }
@@ -78,171 +90,161 @@ public class SearchService {
         return new GenericDataRepresentation<>(data);
     }
 
-//    @GET
-//    @Path("documents")
-//    public Response searchDocuments(@Context HttpServletRequest httpServletRequest,
-//                                    @QueryParam("q") String q) throws ErrorResponseException {
-//        // Query
-//        DocumentQueryRepresentation query;
-//        try {
-//            query = new DocumentQueryRepresentation(q);
-//        } catch (ParseException e) {
-//            return ErrorResponse.error("Bad query request", Response.Status.BAD_REQUEST);
-//        }
-//
-//        // User context
-//        SSOContext ssoContext = new SSOContext(httpServletRequest);
-//        AccessToken accessToken = ssoContext.getParsedAccessToken();
-//        String kcUserID = (String) accessToken.getOtherClaims().get("userID");
-//        UserModel user = getUserByIdentityID(kcUserID);
-//
-//        Set<SpaceModel> ownedSpaces = user.getOwnedSpaces();
-//        Set<SpaceModel> collaboratedSpaces = user.getCollaboratedSpaces();
-//
-//        Set<String> allSpaces = new HashSet<>();
-//        allSpaces.addAll(ownedSpaces.stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
-//        allSpaces.addAll(collaboratedSpaces.stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
-//        if (query.getSpaces() != null && !query.getSpaces().isEmpty()) {
-//            allSpaces.retainAll(query.getSpaces());
-//        }
-//        if (allSpaces.isEmpty()) {
-//            Map<String, Object> meta = new HashMap<>();
-//            meta.put("totalCount", 0);
-//            return Response.ok(new GenericDataRepresentation<>(new ArrayList<>(), Collections.emptyMap(), meta)).build();
-//        }
-//
-//        // ES
-//        QueryBuilder filterTextQuery;
-//        if (query.getFilterText() != null && !query.getFilterText().trim().isEmpty() && !query.getFilterText().trim().equals("*")) {
-//            filterTextQuery = QueryBuilders.multiMatchQuery(query.getFilterText(),
-//                    DocumentModel.ASSIGNED_ID,
-//                    DocumentModel.SUPPLIER_NAME,
-//                    DocumentModel.CUSTOMER_NAME,
-//                    DocumentModel.SUPPLIER_ASSIGNED_ID,
-//                    DocumentModel.CUSTOMER_ASSIGNED_ID
-//            );
-//        } else {
-//            filterTextQuery = QueryBuilders.matchAllQuery();
-//        }
-//
-//        QueryBuilder typeQuery = null;
-//        if (query.getTypes() != null && !query.getTypes().isEmpty()) {
-//            typeQuery = QueryBuilders.termsQuery(DocumentModel.TYPE, query.getTypes());
-//        }
-//
-//        QueryBuilder currencyQuery = null;
-//        if (query.getCurrencies() != null && !query.getCurrencies().isEmpty()) {
-//            currencyQuery = QueryBuilders.termsQuery(DocumentModel.CURRENCY, query.getCurrencies());
-//        }
-//
-//        QueryBuilder tagSQuery = null;
-//        if (query.getTags() != null && !query.getTags().isEmpty()) {
-//            tagSQuery = QueryBuilders.termsQuery(DocumentModel.TAGS, query.getTags());
-//        }
-//
-//        QueryBuilder starQuery = null;
-//        if (query.getStarred() != null) {
-//            starQuery = QueryBuilders.termQuery(DocumentModel.STARRED, query.getStarred());
-//        }
-//
-//        RangeQueryBuilder amountQuery = null;
-//        if (query.getGreaterThan() != null || query.getLessThan() != null) {
-//            amountQuery = QueryBuilders.rangeQuery(DocumentModel.AMOUNT);
-//            if (query.getGreaterThan() != null) {
-//                amountQuery.gte(query.getGreaterThan());
-//            }
-//            if (query.getLessThan() != null) {
-//                amountQuery.lte(query.getLessThan());
-//            }
-//        }
-//
-//        RangeQueryBuilder issueDateQuery = null;
-//        if (query.getAfter() != null || query.getBefore() != null) {
-//            issueDateQuery = QueryBuilders.rangeQuery(DocumentModel.ISSUE_DATE);
-//            if (query.getAfter() != null) {
-//                issueDateQuery.gte(query.getAfter());
-//            }
-//            if (query.getBefore() != null) {
-//                issueDateQuery.lte(query.getBefore());
-//            }
-//        }
-//
-//        QueryBuilder roleQuery = null;
-//        if (query.getRole() != null) {
-//            switch (query.getRole()) {
-//                case SENDER:
-//                    roleQuery = QueryBuilders.termsQuery(DocumentModel.SUPPLIER_ASSIGNED_ID, allSpaces);
-//                    break;
-//                case RECEIVER:
-//                    roleQuery = QueryBuilders.termsQuery(DocumentModel.CUSTOMER_ASSIGNED_ID, allSpaces);
-//                    break;
-//                default:
-//                    throw new IllegalStateException("Invalid role:" + query.getRole());
-//            }
-//        }
-//
-//        QueryBuilder supplierQuery = QueryBuilders.termsQuery(DocumentModel.SUPPLIER_ASSIGNED_ID, allSpaces);
-//        QueryBuilder customerQuery = QueryBuilders.termsQuery(DocumentModel.CUSTOMER_ASSIGNED_ID, allSpaces);
-//
-//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
-//                .must(filterTextQuery)
-//                .should(supplierQuery)
-//                .should(customerQuery)
-//                .minimumShouldMatch(1);
-//        if (typeQuery != null) {
-//            boolQueryBuilder.filter(typeQuery);
-//        }
-//        if (currencyQuery != null) {
-//            boolQueryBuilder.filter(currencyQuery);
-//        }
-//        if (tagSQuery != null) {
-//            boolQueryBuilder.filter(tagSQuery);
-//        }
-//        if (starQuery != null) {
-//            boolQueryBuilder.filter(starQuery);
-//        }
-//        if (amountQuery != null) {
-//            boolQueryBuilder.filter(amountQuery);
-//        }
-//        if (issueDateQuery != null) {
-//            boolQueryBuilder.filter(issueDateQuery);
-//        }
-//        if (roleQuery != null) {
-//            boolQueryBuilder.must(roleQuery);
-//        }
-//
-//        String orderBy;
-//        if (query.getOrderBy() == null) {
-//            orderBy = DocumentModel.ISSUE_DATE;
-//        } else {
-//            orderBy = Stream.of(query.getOrderBy().split("(?<=[a-z])(?=[A-Z])")).collect(Collectors.joining("_")).toLowerCase();
-//        }
-//
-//        IndexedDocumentQueryModel documentQuery = IndexedDocumentQueryModel.builder()
-//                .query("{\"query\":" + boolQueryBuilder.toString() + "}", true)
-//                .orderBy(orderBy, query.isAsc())
-//                .offset(query.getOffset() != null ? query.getOffset() : 0)
-//                .limit(query.getLimit() != null ? query.getLimit() : 10)
-//                .build();
-//        List<DocumentModel> documents = documentProvider.getDocumentsUser(documentQuery);
-//        int totalResults = documentProvider.getDocumentsUserSize(documentQuery);
-//
-//        // Meta
-//        Map<String, Object> meta = new HashMap<>();
-//        meta.put("totalCount", totalResults);
-//
-//        // Links
-//        Map<String, String> links = new HashMap<>();
-//
-//        return Response.ok(new GenericDataRepresentation<>(documents.stream()
-//                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
-//                .collect(Collectors.toList()), links, meta)).build();
-//    }
+    @GET
+    @Path("documents")
+    public Response searchDocuments(@Context HttpServletRequest httpServletRequest,
+                                    @QueryParam("q") String q) throws ErrorResponseException {
+        // User context
+        UserModel user = getUser(httpServletRequest);
 
-    public static void main(String[] args) {
-        String str = "issueDate";
-        String s = Stream.of(str.split("(?<=[a-z])(?=[A-Z])")).collect(Collectors.joining("_"));
-        String[] split = str.split("(?<=[a-z])(?=[A-Z])");
-        System.out.println(s);
+        // Query
+        DocumentQueryRepresentation query;
+        try {
+            query = new DocumentQueryRepresentation(q);
+        } catch (ParseException e) {
+            return ErrorResponse.error("Bad query request", Response.Status.BAD_REQUEST);
+        }
+
+        Set<SpaceModel> ownedSpaces = user.getOwnedSpaces();
+        Set<SpaceModel> collaboratedSpaces = user.getCollaboratedSpaces();
+
+        Set<String> allSpaces = new HashSet<>();
+        allSpaces.addAll(ownedSpaces.stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
+        allSpaces.addAll(collaboratedSpaces.stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
+        if (query.getSpaces() != null && !query.getSpaces().isEmpty()) {
+            allSpaces.retainAll(query.getSpaces());
+        }
+        if (allSpaces.isEmpty()) {
+            Map<String, Object> meta = new HashMap<>();
+            meta.put("totalCount", 0);
+            return Response.ok(new GenericDataRepresentation<>(new ArrayList<>(), Collections.emptyMap(), meta)).build();
+        }
+
+        // ES
+        Query filterTextQuery;
+        if (query.getFilterText() != null && !query.getFilterText().trim().isEmpty() && !query.getFilterText().trim().equals("*")) {
+            filterTextQuery = new MultiMatchQuery(query.getFilterText(),
+                    IndexedDocumentModel.ASSIGNED_ID,
+                    IndexedDocumentModel.SUPPLIER_NAME,
+                    IndexedDocumentModel.CUSTOMER_NAME,
+                    IndexedDocumentModel.SUPPLIER_ASSIGNED_ID,
+                    IndexedDocumentModel.CUSTOMER_ASSIGNED_ID
+            );
+        } else {
+            filterTextQuery = new MatchAllQuery();
+        }
+
+        TermsQuery typeQuery = null;
+        if (query.getTypes() != null && !query.getTypes().isEmpty()) {
+            typeQuery = new TermsQuery(IndexedDocumentModel.TYPE, query.getTypes());
+        }
+
+        TermsQuery currencyQuery = null;
+        if (query.getCurrencies() != null && !query.getCurrencies().isEmpty()) {
+            currencyQuery = new TermsQuery(IndexedDocumentModel.CURRENCY, query.getCurrencies());
+        }
+
+        TermsQuery tagSQuery = null;
+        if (query.getTags() != null && !query.getTags().isEmpty()) {
+            tagSQuery = new TermsQuery(IndexedDocumentModel.TAGS, query.getTags());
+        }
+
+        TermQuery starQuery = null;
+        if (query.getStarred() != null) {
+            starQuery = new TermQuery(IndexedDocumentModel.STARRED, query.getStarred());
+        }
+
+        RangeQuery amountQuery = null;
+        if (query.getGreaterThan() != null || query.getLessThan() != null) {
+            amountQuery = new RangeQuery(IndexedDocumentModel.AMOUNT);
+            if (query.getGreaterThan() != null) {
+                amountQuery.gte(query.getGreaterThan());
+            }
+            if (query.getLessThan() != null) {
+                amountQuery.lte(query.getLessThan());
+            }
+        }
+
+        RangeQuery issueDateQuery = null;
+        if (query.getAfter() != null || query.getBefore() != null) {
+            issueDateQuery = new RangeQuery(IndexedDocumentModel.ISSUE_DATE);
+            if (query.getAfter() != null) {
+                issueDateQuery.gte(query.getAfter());
+            }
+            if (query.getBefore() != null) {
+                issueDateQuery.lte(query.getBefore());
+            }
+        }
+
+        TermsQuery roleQuery = null;
+        if (query.getRole() != null) {
+            switch (query.getRole()) {
+                case SENDER:
+                    roleQuery = new TermsQuery(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID, allSpaces);
+                    break;
+                case RECEIVER:
+                    roleQuery = new TermsQuery(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID, allSpaces);
+                    break;
+                default:
+                    throw new IllegalStateException("Invalid role:" + query.getRole());
+            }
+        }
+
+        TermsQuery supplierQuery = new TermsQuery(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID, allSpaces);
+        TermsQuery customerQuery = new TermsQuery(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID, allSpaces);
+
+
+        BoolQuery boolQueryBuilder = new BoolQuery()
+                .must(filterTextQuery)
+                .should(supplierQuery)
+                .should(customerQuery)
+                .minimumShouldMatch(1);
+        if (typeQuery != null) {
+            boolQueryBuilder.filter(typeQuery);
+        }
+        if (currencyQuery != null) {
+            boolQueryBuilder.filter(currencyQuery);
+        }
+        if (tagSQuery != null) {
+            boolQueryBuilder.filter(tagSQuery);
+        }
+        if (starQuery != null) {
+            boolQueryBuilder.filter(starQuery);
+        }
+        if (amountQuery != null) {
+            boolQueryBuilder.filter(amountQuery);
+        }
+        if (issueDateQuery != null) {
+            boolQueryBuilder.filter(issueDateQuery);
+        }
+        if (roleQuery != null) {
+            boolQueryBuilder.must(roleQuery);
+        }
+
+        String orderBy;
+        if (query.getOrderBy() == null) {
+            orderBy = IndexedDocumentModel.ISSUE_DATE;
+        } else {
+            orderBy = Stream.of(query.getOrderBy().split("(?<=[a-z])(?=[A-Z])")).collect(Collectors.joining("_")).toLowerCase();
+        }
+
+        IndexedDocumentQueryModel documentQuery = IndexedDocumentQueryModel.builder()
+                .orderBy(orderBy, query.isAsc())
+                .offset(query.getOffset() != null ? query.getOffset() : 0)
+                .limit(query.getLimit() != null ? query.getLimit() : 10)
+                .build();
+        SearchResultModel<IndexedDocumentModel> result = indexedDocumentProvider.getDocumentsUser(user, documentQuery);
+
+        // Meta
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("totalCount", result.getTotalResults());
+
+        // Links
+        Map<String, String> links = new HashMap<>();
+
+        return Response.ok(new GenericDataRepresentation<>(result.getItems().stream()
+                .map(indexedDocument -> modelToRepresentation.toRepresentation(user, indexedDocument.getDocument(), uriInfo))
+                .collect(Collectors.toList()), links, meta)).build();
     }
+
 }

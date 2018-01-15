@@ -5,7 +5,6 @@ import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentProviderType;
 import org.clarksnut.documents.IndexedDocumentModel;
 import org.clarksnut.files.FileModel;
-import org.clarksnut.files.FileProvider;
 import org.clarksnut.files.uncompress.exceptions.NotReadableCompressFileException;
 import org.clarksnut.managers.DocumentManager;
 import org.clarksnut.managers.ImportedDocumentManager;
@@ -53,9 +52,6 @@ public class DocumentsService {
     private UserProvider userProvider;
 
     @Inject
-    private FileProvider fileProvider;
-
-    @Inject
     private ImportedDocumentManager importedDocumentManager;
 
     @Inject
@@ -75,8 +71,11 @@ public class DocumentsService {
         return document;
     }
 
-    private UserModel getUserByIdentityID(String identityID) {
-        UserModel user = userProvider.getUserByIdentityID(identityID);
+    private UserModel getUser(HttpServletRequest httpServletRequest) {
+        KeycloakPrincipal principal = (KeycloakPrincipal) httpServletRequest.getUserPrincipal();
+        String username = principal.getKeycloakSecurityContext().getIdToken().getPreferredUsername();
+
+        UserModel user = userProvider.getUserByUsername(username);
         if (user == null) {
             throw new NotFoundException();
         }
@@ -139,12 +138,9 @@ public class DocumentsService {
     @GET
     @Path("{documentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public DocumentRepresentation getDocument(@PathParam("documentId") String documentId,
-                                              @Context final HttpServletRequest httpServletRequest) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        String kcUserID = (String) principal.getKeycloakSecurityContext().getToken().getOtherClaims().get("userID");
-
-        UserModel user = getUserByIdentityID(kcUserID);
+    public DocumentRepresentation getDocument(@Context final HttpServletRequest httpServletRequest,
+                                              @PathParam("documentId") String documentId) {
+        UserModel user = getUser(httpServletRequest);
         DocumentModel document = getDocumentById(user, documentId);
 
         return modelToRepresentation.toRepresentation(user, document, uriInfo).toSpaceRepresentation();
@@ -156,10 +152,7 @@ public class DocumentsService {
     public DocumentRepresentation updateDocument(@Context final HttpServletRequest httpServletRequest,
                                                  @PathParam("documentId") String documentId,
                                                  DocumentRepresentation documentRepresentation) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        String kcUserID = (String) principal.getKeycloakSecurityContext().getToken().getOtherClaims().get("userID");
-
-        UserModel user = getUserByIdentityID(kcUserID);
+        UserModel user = getUser(httpServletRequest);
         DocumentModel document = getDocumentById(user, documentId);
         IndexedDocumentModel indexedDocument = document.getIndexedDocument();
 
@@ -174,10 +167,7 @@ public class DocumentsService {
     @Produces(MediaType.APPLICATION_JSON)
     public void updateDocuments(@Context final HttpServletRequest httpServletRequest,
                                 GenericDataRepresentation<List<DocumentRepresentation.Data>> representation) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        String kcUserID = (String) principal.getKeycloakSecurityContext().getToken().getOtherClaims().get("userID");
-
-        UserModel user = getUserByIdentityID(kcUserID);
+        UserModel user = getUser(httpServletRequest);
 
         representation.getData().forEach(documentRepresentation -> {
             DocumentModel document = getDocumentById(user, documentRepresentation.getId());
@@ -204,11 +194,7 @@ public class DocumentsService {
     @Produces("application/zip")
     public Response downloadDocuments(@Context final HttpServletRequest httpServletRequest,
                                       @QueryParam("documents") List<String> documentsId) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        String kcUserID = (String) principal.getKeycloakSecurityContext().getToken().getOtherClaims().get("userID");
-
-        UserModel user = getUserByIdentityID(kcUserID);
-
+        UserModel user = getUser(httpServletRequest);
 
         ZipBuilder zipInMemory = ZipBuilder.createZipInMemory();
         documentsId.stream()
@@ -238,10 +224,7 @@ public class DocumentsService {
             @QueryParam("theme") String theme,
             @QueryParam("format") @DefaultValue("PDF") String format
     ) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        String kcUserID = (String) principal.getKeycloakSecurityContext().getToken().getOtherClaims().get("userID");
-
-        UserModel user = getUserByIdentityID(kcUserID);
+        UserModel user = getUser(httpServletRequest);
 
         //
         ExportFormat exportFormat = ExportFormat.valueOf(format.toUpperCase());
@@ -278,10 +261,7 @@ public class DocumentsService {
     @Produces("application/xml")
     public Response getXml(@Context final HttpServletRequest httpServletRequest,
                            @PathParam("documentId") String documentId) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        String kcUserID = (String) principal.getKeycloakSecurityContext().getToken().getOtherClaims().get("userID");
-
-        UserModel user = getUserByIdentityID(kcUserID);
+        UserModel user = getUser(httpServletRequest);
         DocumentModel document = getDocumentById(user, documentId);
 
         FileModel file = document.getCurrentVersion().getImportedDocument().getFile();
@@ -300,10 +280,7 @@ public class DocumentsService {
             @PathParam("documentId") String documentId,
             @QueryParam("theme") String theme,
             @QueryParam("format") @DefaultValue("PDF") String format) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        String kcUserID = (String) principal.getKeycloakSecurityContext().getToken().getOtherClaims().get("userID");
-
-        UserModel user = getUserByIdentityID(kcUserID);
+        UserModel user = getUser(httpServletRequest);
         DocumentModel document = getDocumentById(user, documentId);
 
         //

@@ -1,6 +1,7 @@
 package org.clarksnut.documents.jpa;
 
 import org.clarksnut.common.jpa.JpaModel;
+import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.IndexedDocumentModel;
 import org.clarksnut.documents.jpa.entity.IndexedDocumentEntity;
 
@@ -117,6 +118,11 @@ public class IndexedDocumentAdapter implements IndexedDocumentModel, JpaModel<In
     @Override
     public Date getUpdatedAt() {
         return entity.getUpdatedAt();
+    }
+
+    @Override
+    public DocumentModel getDocument() {
+        return new DocumentAdapter(em, entity.getDocument());
     }
 
     @Override

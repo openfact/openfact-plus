@@ -46,6 +46,8 @@ public interface IndexedDocumentModel {
     Date getCreatedAt();
     Date getUpdatedAt();
 
+    DocumentModel getDocument();
+
     /**
      * User interaction
      * */
