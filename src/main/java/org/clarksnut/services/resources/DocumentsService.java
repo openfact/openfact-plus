@@ -24,7 +24,6 @@ import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

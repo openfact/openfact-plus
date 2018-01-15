@@ -36,6 +36,17 @@
             <property name="hibernate.search.elasticsearch.analysis_definition_provider"
                       value="org.clarksnut.documents.jpa.config.ClarksnutESAnalyzerProvider"/>
 
+
+
+            <property name="hibernate.search.indexing_strategy" value="manual"/>
+
+
+            <!--Filesystem-->
+            <property name="hibernate.search.default.directory_provider"
+                      value="infinispan"/>
+            <property name="hibernate.search.default.indexBase"
+                      value="/var/lucene/indexes"/>
+
             <!--Elasticsearch-->
             <property name="hibernate.search.default.elasticsearch.host"
                       value="${env.CN_ELASTICSEARCH_HOST:}"/>

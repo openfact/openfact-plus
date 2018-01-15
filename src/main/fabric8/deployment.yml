@@ -97,10 +97,16 @@ spec:
         volumeMounts:
         - name: clarksnut-config
           mountPath: /deployments/config
+        - name: clarksnut-lucene-data
+          mountPath: /var/lucene/indexes
+          readOnly: false
       volumes:
       - name: clarksnut-config
         secret:
           secretName: clarksnut-config
+      - name: clarksnut-lucene-data
+        persistentVolumeClaim:
+          claimName: clarksnut-lucene-data
   triggers:
   - type: ConfigChange
   - imageChangeParams:

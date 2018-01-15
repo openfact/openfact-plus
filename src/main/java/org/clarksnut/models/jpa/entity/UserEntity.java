@@ -26,8 +26,7 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username"),
         @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username"),
-        @NamedQuery(name = "getUserByIdentityID", query = "select u from UserEntity u where u.identityID = :identityID"),
-        @NamedQuery(name = "getUserWithOfflineToken", query = "select u from UserEntity u left join fetch u.linkedBrokers b where u.offlineToken is not null order by u.username")
+        @NamedQuery(name = "getUserByIdentityID", query = "select u from UserEntity u where u.identityID = :identityID")
 })
 public class UserEntity implements CreatableEntity, UpdatableEntity, Serializable {
 

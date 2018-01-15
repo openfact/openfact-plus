@@ -1,6 +1,9 @@
 package org.clarksnut.services.resources;
 
-import org.clarksnut.documents.*;
+import org.clarksnut.documents.IndexedDocumentModel;
+import org.clarksnut.documents.IndexedDocumentProvider;
+import org.clarksnut.documents.IndexedDocumentQueryModel;
+import org.clarksnut.documents.SearchResultModel;
 import org.clarksnut.models.*;
 import org.clarksnut.query.*;
 import org.clarksnut.representations.idm.DocumentQueryRepresentation;
@@ -10,10 +13,6 @@ import org.clarksnut.representations.idm.UserRepresentation;
 import org.clarksnut.services.ErrorResponse;
 import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.utils.ModelToRepresentation;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
-import org.hibernate.search.query.dsl.QueryBuilder;
 import org.keycloak.KeycloakPrincipal;
 
 import javax.ejb.Stateless;

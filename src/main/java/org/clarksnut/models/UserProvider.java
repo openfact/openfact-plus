@@ -35,19 +35,4 @@ public interface UserProvider {
      * @return all users after apply query
      */
     List<UserModel> getUsers(QueryModel query);
-
-    /**
-     * @return all users who has offline token
-     */
-    List<UserModel> getUsersWithOfflineToken();
-
-    /**
-     * @return all users who has offline token
-     */
-    List<UserModel> getUsersWithOfflineToken(int offset, int limit);
-
-    /**
-     * @param user bean. All data on user will be updated on the database. Use this on not EJB components. Null Fields will never be changed
-     */
-    void updateUser(UserBean user);
 }

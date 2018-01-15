@@ -12,7 +12,6 @@ import org.clarksnut.services.resources.utils.PATCH;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
 import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

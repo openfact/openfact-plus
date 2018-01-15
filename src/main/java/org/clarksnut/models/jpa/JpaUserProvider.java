@@ -1,10 +1,8 @@
 package org.clarksnut.models.jpa;
 
 import org.clarksnut.models.QueryModel;
-import org.clarksnut.models.UserBean;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
-import org.clarksnut.models.exceptions.ModelException;
 import org.clarksnut.models.jpa.entity.UserEntity;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 
@@ -67,55 +65,6 @@ public class JpaUserProvider implements UserProvider {
         return typedQuery.getResultList().stream()
                 .map(f -> new UserAdapter(em, f))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<UserModel> getUsersWithOfflineToken() {
-        return getUsersWithOfflineToken(-1, -1);
-    }
-
-    @Override
-    public List<UserModel> getUsersWithOfflineToken(int offset, int limit) {
-        TypedQuery<UserEntity> query = em.createNamedQuery("getUserWithOfflineToken", UserEntity.class);
-        if (offset != -1) {
-            query.setFirstResult(offset);
-        }
-        if (limit != -1) {
-            query.setMaxResults(limit);
-        }
-
-        return query.getResultList().stream()
-                .map(f -> new UserAdapter(em, f))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void updateUser(UserBean user) {
-        UserEntity userEntity = null;
-        if (user.getId() != null) {
-            userEntity = em.find(UserEntity.class, user.getId());
-        } else if (user.getIdentityID() != null) {
-            TypedQuery<UserEntity> query = em.createNamedQuery("getUserByIdentityID", UserEntity.class);
-            query.setParameter("identityID", user.getIdentityID());
-            List<UserEntity> entities = query.getResultList();
-            if (entities.size() == 1) {
-                userEntity = entities.get(0);
-            } else if (entities.size() > 1) {
-                throw new ModelException("Inconsistent data, found more than one user with identityID=" + user.getIdentityID());
-            }
-        } else {
-            throw new ModelException("Could not identity user identity, please add id or identityID information");
-        }
-
-        if (userEntity == null) {
-            throw new ModelException("User not found");
-        }
-
-        if (user.getRegistrationComplete() != null) {
-            userEntity.setRegistrationCompleted(user.getRegistrationComplete());
-        }
-
-        em.merge(userEntity);
     }
 
 }
