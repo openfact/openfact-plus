@@ -2,7 +2,6 @@ package org.clarksnut.services.resources;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.clarksnut.models.QueryModel;
-import org.clarksnut.models.SpaceProvider;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.models.utils.JacksonUtil;
@@ -10,12 +9,10 @@ import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.UserAttributesRepresentation;
 import org.clarksnut.representations.idm.UserRepresentation;
 import org.clarksnut.services.resources.utils.PATCH;
-import org.clarksnut.services.util.SSOContext;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
-import org.keycloak.jose.jws.JWSInputException;
-import org.keycloak.representations.AccessToken;
-import org.keycloak.util.TokenUtil;
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -39,9 +36,6 @@ public class UsersService {
     private UriInfo uriInfo;
 
     @Inject
-    private SpaceProvider spaceProvider;
-
-    @Inject
     private UserProvider userProvider;
 
     @Inject
@@ -55,101 +49,81 @@ public class UsersService {
         return user;
     }
 
+    @GET
+    @Path("{identityID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public UserRepresentation getUser(@PathParam("identityID") String identityID) {
+        UserModel user = getUserByIdentityID(identityID);
+        return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public GenericDataRepresentation getUsers(@QueryParam("filter[username]") String username) {
+        QueryModel.Builder queryBuilder = QueryModel.builder();
+
+        if (username != null) {
+            queryBuilder.addFilter(UserModel.USERNAME, username);
+        }
+
+        List<UserRepresentation.Data> data = userProvider.getUsers(queryBuilder.build())
+                .stream()
+                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
+                .collect(Collectors.toList());
+        return new GenericDataRepresentation<>(data);
+    }
+
     @PATCH
     @Produces(MediaType.APPLICATION_JSON)
-    public UserRepresentation currentUser(@Context final HttpServletRequest httpServletRequest,
-                                          final UserRepresentation userRepresentation) {
+    public UserRepresentation currentUser(@Context final HttpServletRequest httpServletRequest, final UserRepresentation userRepresentation) {
+        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
+        String kcUserID = (String) principal.getKeycloakSecurityContext().getToken().getOtherClaims().get("userID");
 
-        SSOContext ssoContext = new SSOContext(httpServletRequest);
-        AccessToken accessToken = ssoContext.getParsedAccessToken();
-
-        String kcUserID = (String) accessToken.getOtherClaims().get("userID");
         UserModel user = getUserByIdentityID(kcUserID);
+        UserAttributesRepresentation userAttributesRepresentation = userRepresentation.getData().getAttributes();
 
-        UserAttributesRepresentation attributes = userRepresentation.getData().getAttributes();
-
-        if (attributes != null) {
-            // Refresh Token
-            String refreshToken = attributes.getRefreshToken();
-            if (refreshToken != null) {
-                if (refreshToken != null) {
-                    try {
-                        if (TokenUtil.isOfflineToken(refreshToken)) {
-                            user.setOfflineRefreshToken(refreshToken);
-                        } else {
-                            throw new BadRequestException("Invalid Token Type");
-                        }
-                    } catch (JWSInputException e) {
-                        logger.error("Could not decode token", e);
-                    }
-                }
-            }
-
+        if (userAttributesRepresentation != null) {
             // Is registration completed
-            Boolean registrationCompleted = attributes.getRegistrationCompleted();
+            Boolean registrationCompleted = userAttributesRepresentation.getRegistrationCompleted();
             if (registrationCompleted != null) {
                 user.setRegistrationCompleted(registrationCompleted);
             }
 
             // Context Information
-            JsonNode contextInformation = attributes.getContextInformation();
+            JsonNode contextInformation = userAttributesRepresentation.getContextInformation();
             if (contextInformation != null) {
                 JsonNode currentContextInformation = user.getContextInformation() != null ? user.getContextInformation() : JacksonUtil.toJsonNode("{}");
                 user.setContextInformation(JacksonUtil.override(currentContextInformation, contextInformation));
             }
 
             // Favorite Spaces
-            Set<String> favoriteSpaces = attributes.getFavoriteSpaces();
+            Set<String> favoriteSpaces = userAttributesRepresentation.getFavoriteSpaces();
             if (favoriteSpaces != null && !favoriteSpaces.isEmpty()) {
                 user.setFavoriteSpaces(favoriteSpaces);
             }
 
             // Profile
-            if (attributes.getFullName() != null) {
-                user.setFullName(attributes.getFullName());
+            if (userAttributesRepresentation.getFullName() != null) {
+                user.setFullName(userAttributesRepresentation.getFullName());
             }
-            if (attributes.getCompany() != null) {
-                user.setCompany(attributes.getCompany());
+            if (userAttributesRepresentation.getCompany() != null) {
+                user.setCompany(userAttributesRepresentation.getCompany());
             }
-            if (attributes.getImageURL() != null) {
-                user.setImageURL(attributes.getImageURL());
+            if (userAttributesRepresentation.getImageURL() != null) {
+                user.setImageURL(userAttributesRepresentation.getImageURL());
             }
-            if (attributes.getUrl() != null) {
-                user.setUrl(attributes.getUrl());
+            if (userAttributesRepresentation.getUrl() != null) {
+                user.setUrl(userAttributesRepresentation.getUrl());
             }
-            if (attributes.getBio() != null) {
-                user.setBio(attributes.getBio());
+            if (userAttributesRepresentation.getBio() != null) {
+                user.setBio(userAttributesRepresentation.getBio());
             }
 
-            if (attributes.getLanguage() != null) {
-                user.setLanguage(attributes.getLanguage());
+            if (userAttributesRepresentation.getLanguage() != null) {
+                user.setLanguage(userAttributesRepresentation.getLanguage());
             }
         }
 
-        // Build result
-        return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public GenericDataRepresentation getUsers(@QueryParam("filter[username]") String usernameFilter) {
-        QueryModel.Builder queryBuilder = QueryModel.builder();
-
-        if (usernameFilter != null) {
-            queryBuilder.addFilter(UserModel.USERNAME, usernameFilter);
-        }
-
-        List<UserRepresentation.Data> data = userProvider.getUsers(queryBuilder.build()).stream()
-                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
-                .collect(Collectors.toList());
-        return new GenericDataRepresentation<>(data);
-    }
-
-    @GET
-    @Path("{identityID}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public UserRepresentation getUser(@PathParam("identityID") String identityID) {
-        UserModel user = getUserByIdentityID(identityID);
         return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
     }
 

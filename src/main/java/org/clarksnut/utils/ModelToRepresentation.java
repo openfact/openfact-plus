@@ -1,18 +1,20 @@
 package org.clarksnut.utils;
 
+import org.clarksnut.documents.DocumentModel;
+import org.clarksnut.documents.DocumentVersionModel;
+import org.clarksnut.documents.IndexedDocumentModel;
 import org.clarksnut.models.ModelType;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
-import org.clarksnut.representations.idm.GenericLinksRepresentation;
-import org.clarksnut.representations.idm.SpaceRepresentation;
-import org.clarksnut.representations.idm.UserAttributesRepresentation;
-import org.clarksnut.representations.idm.UserRepresentation;
+import org.clarksnut.representations.idm.*;
+import org.clarksnut.services.resources.DocumentsService;
 import org.clarksnut.services.resources.SpacesService;
 import org.clarksnut.services.resources.UsersService;
 
 import javax.ejb.Stateless;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -110,71 +112,63 @@ public class ModelToRepresentation {
         return rep;
     }
 
-//    public DocumentRepresentation.Data toRepresentation(DocumentModel model, UriInfo uriInfo) {
-//        DocumentRepresentation.Data rep = new DocumentRepresentation.Data();
-//
-//        rep.setId(model.getId());
-//        rep.setType(ModelType.UBL_DOCUMENT.getAlias());
-//
-//        // Links
-//        DocumentRepresentation.DocumentLink links = new DocumentRepresentation.DocumentLink();
-//        URI self = uriInfo.getBaseUriBuilder()
-//                .path(DocumentsService.class)
-//                .path(DocumentsService.class, "getIndexedDocument")
-//                .build(model.getId());
-//        URI fileLink = uriInfo.getBaseUriBuilder()
-//                .path(FilesService.class)
-//                .path(FilesService.class, "getFileAsBytes")
-//                .build(model.getFileId());
-//
-//        links.setSelf(self.toString());
-//        links.setFilelink(fileLink.toString());
-//
-//        rep.setLinks(links);
-//
-//        // Relationships
-//        DocumentRepresentation.Relationships relationships = new DocumentRepresentation.Relationships();
-//        DocumentRepresentation.OwnedBy ownedBy = new DocumentRepresentation.OwnedBy();
-//        relationships.setOwnedBy(ownedBy);
-//        rep.setRelationships(relationships);
-//
-////        List<SpaceRepresentation.Data> owners = model.getSpaces().stream().map(space -> {
-////            SpaceRepresentation.Data spaceData = new SpaceRepresentation.Data();
-////            spaceData.setId(space.getId());
-////            spaceData.setType(ModelType.SPACES.getAlias());
-////            return spaceData;
-////        }).collect(Collectors.toList());
-////        ownedBy.setData(owners); // save
-//
-////        GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
-////        ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
-////                .path(SpacesService.class)
-////                .path(SpacesService.class, "getSpace")
-////                .build(model.getSpace().getId()).toString());
-////        ownedBy.setLinks(ownedLinks); // save
-//
-//        // Attributes
-//        DocumentRepresentation.Attributes attributes = new DocumentRepresentation.Attributes();
-//        rep.setAttributes(attributes);
-//
-//        attributes.setId(model.getId());
-//        attributes.setAssignedId(model.getAssignedId());
-//        attributes.setType(model.getType());
-//        attributes.setAmount(model.getAmount());
-//        attributes.setCurrency(model.getCurrency());
-//        attributes.setIssueDate(model.getIssueDate());
-//        attributes.setSupplierName(model.getSupplierName());
-//        attributes.setSupplierAssignedId(model.getSupplierAssignedId());
-//        attributes.setCustomerName(model.getCustomerName());
-//        attributes.setCustomerAssignedId(model.getCustomerAssignedId());
-//        attributes.setProvider(model.getProvider().toString());
-////        attributes.setStarred(model.isStarred());
-////        attributes.setTags(new HashSet<>(model.getTags()));
-//        attributes.setCreatedAt(model.getCreatedAt());
-//        attributes.setUpdatedAt(model.getUpdatedAt());
-//
-//        return rep;
-//    }
+    public DocumentRepresentation.Data toRepresentation(UserModel user, DocumentModel model, UriInfo uriInfo) {
+        DocumentRepresentation.Data rep = new DocumentRepresentation.Data();
+
+        IndexedDocumentModel indexedDocument = model.getIndexedDocument();
+        DocumentVersionModel documentCurrentVersion = model.getCurrentVersion();
+        List<DocumentVersionModel> documentVersions = model.getVersions();
+
+
+        rep.setId(model.getId());
+        rep.setType(ModelType.UBL_DOCUMENT.getAlias());
+
+        // Links
+        DocumentRepresentation.DocumentLink links = new DocumentRepresentation.DocumentLink();
+        URI self = uriInfo.getBaseUriBuilder()
+                .path(DocumentsService.class)
+                .path(DocumentsService.class, "getIndexedDocument")
+                .build(model.getId());
+
+        links.setSelf(self.toString());
+
+        rep.setLinks(links);
+
+        // Attributes
+        DocumentRepresentation.Attributes attributes = new DocumentRepresentation.Attributes();
+        rep.setAttributes(attributes);
+
+        attributes.setId(model.getId());
+        attributes.setType(model.getType());
+        attributes.setAssignedId(model.getAssignedId());
+        attributes.setSupplierAssignedId(model.getSupplierAssignedId());
+
+        attributes.setIssueDate(documentCurrentVersion.getIssueDate());
+        attributes.setCurrency(documentCurrentVersion.getCurrency());
+        attributes.setAmount(documentCurrentVersion.getAmount());
+        attributes.setTax(documentCurrentVersion.getTax());
+
+        attributes.setSupplierName(documentCurrentVersion.getSupplierName());
+        attributes.setSupplierStreetAddress(documentCurrentVersion.getSupplierStreetAddress());
+        attributes.setSupplierCity(documentCurrentVersion.getSupplierCity());
+        attributes.setSupplierCountry(documentCurrentVersion.getSupplierCountry());
+        attributes.setCustomerAssignedId(documentCurrentVersion.getCustomerAssignedId());
+        attributes.setCustomerName(documentCurrentVersion.getCustomerName());
+        attributes.setCustomerStreetAddress(documentCurrentVersion.getCustomerStreetAddress());
+        attributes.setCustomerCity(documentCurrentVersion.getCustomerCity());
+        attributes.setCustomerCountry(documentCurrentVersion.getCustomerCountry());
+
+        attributes.setViewed(indexedDocument.getUserViews().contains(user.getId()));
+        attributes.setStarred(indexedDocument.getUserStars().contains(user.getId()));
+        attributes.setChecked(indexedDocument.getUserChecks().contains(user.getId()));
+
+        attributes.setCreatedAt(model.getCreatedAt());
+        attributes.setUpdatedAt(model.getUpdatedAt());
+
+        attributes.setVersions(documentVersions.stream().map(DocumentVersionModel::getId).collect(Collectors.toSet()));
+
+        return rep;
+    }
 
 //    public SpaceRepresentation toRepresentation(SharedSpaceModel model) {
 //        SpaceRepresentation rep = toRepresentation(model.getSpace(), false);

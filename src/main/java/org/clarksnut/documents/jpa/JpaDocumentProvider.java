@@ -162,8 +162,8 @@ public class JpaDocumentProvider implements DocumentProvider {
     }
 
     @Override
-    public DocumentModel getDocument(String documentId) {
-        DocumentEntity entity = em.find(DocumentEntity.class, documentId);
+    public DocumentModel getDocument(String id) {
+        DocumentEntity entity = em.find(DocumentEntity.class, id);
         if (entity == null) return null;
         return new DocumentAdapter(em, entity);
     }

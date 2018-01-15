@@ -1,6 +1,5 @@
 package org.clarksnut.documents.jpa.config;
 
-import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.IndexedDocumentEntity;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Factory;

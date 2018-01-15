@@ -40,6 +40,9 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "assigned_id")
     private String assignedId;
 
+    @OneToOne(mappedBy = "document", fetch = FetchType.LAZY)
+    private IndexedDocumentEntity indexedDocument;
+
     @OneToMany(mappedBy = "document", fetch = FetchType.LAZY)
     private List<DocumentVersionEntity> versions = new ArrayList<>();
 
@@ -111,5 +114,12 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.updatedAt = updatedAt;
     }
 
+    public IndexedDocumentEntity getIndexedDocument() {
+        return indexedDocument;
+    }
+
+    public void setIndexedDocument(IndexedDocumentEntity indexedDocument) {
+        this.indexedDocument = indexedDocument;
+    }
 }
 

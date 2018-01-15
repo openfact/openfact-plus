@@ -3,9 +3,10 @@ package org.clarksnut.services.resources;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.representations.idm.UserRepresentation;
-import org.clarksnut.services.util.SSOContext;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
 
 import javax.ejb.Stateless;
@@ -30,9 +31,6 @@ public class UserService {
     @Context
     private UriInfo uriInfo;
 
-    @Context
-    private HttpServletRequest request;
-
     @Inject
     private UserProvider userProvider;
 
@@ -42,8 +40,8 @@ public class UserService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public UserRepresentation getCurrentUser(@Context final HttpServletRequest httpServletRequest) {
-        SSOContext ssoContext = new SSOContext(httpServletRequest);
-        AccessToken accessToken = ssoContext.getParsedAccessToken();
+        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
+        AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
 
         String kcUserID = (String) accessToken.getOtherClaims().get("userID");
         String kcUsername = accessToken.getPreferredUsername();

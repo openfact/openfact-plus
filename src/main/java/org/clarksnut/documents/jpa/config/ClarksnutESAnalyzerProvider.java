@@ -1,7 +1,5 @@
 package org.clarksnut.documents.jpa.config;
 
-import org.hibernate.search.elasticsearch.analyzer.ElasticsearchTokenFilterFactory;
-import org.hibernate.search.elasticsearch.analyzer.ElasticsearchTokenizerFactory;
 import org.hibernate.search.elasticsearch.analyzer.definition.ElasticsearchAnalysisDefinitionProvider;
 import org.hibernate.search.elasticsearch.analyzer.definition.ElasticsearchAnalysisDefinitionRegistryBuilder;
 

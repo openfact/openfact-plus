@@ -1,5 +1,6 @@
 package org.clarksnut.documents;
 
+import java.util.Date;
 import java.util.List;
 
 public interface DocumentModel {
@@ -11,6 +12,11 @@ public interface DocumentModel {
 
     List<DocumentVersionModel> getVersions();
     DocumentVersionModel getCurrentVersion();
+
+    IndexedDocumentModel getIndexedDocument();
+
+    Date getCreatedAt();
+    Date getUpdatedAt();
 
     interface DocumentCreationEvent {
         String getDocumentType();

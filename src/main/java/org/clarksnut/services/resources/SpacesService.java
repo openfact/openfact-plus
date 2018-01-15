@@ -62,18 +62,14 @@ public class SpacesService {
         // Create space
         SpaceModel space = spaceProvider.getByAssignedId(attributes.getAssignedId());
         if (space != null) {
-            if (space.getOwner() == null) {
-                space.setOwner(user);
-            } else {
-                throw new ErrorResponseException("Space already exists", Response.Status.CONFLICT);
-            }
-        } else {
-            space = spaceProvider.addSpace(attributes.getAssignedId(), attributes.getName(), user);
+            throw new ErrorResponseException("Space already exists", Response.Status.CONFLICT);
         }
+
+        space = spaceProvider.addSpace(attributes.getAssignedId(), attributes.getName(), user);
         space.setDescription(attributes.getDescription());
 
-        SpaceRepresentation.Data createdSpaceRep = modelToRepresentation.toRepresentation(space, uriInfo);
-        return Response.status(Response.Status.CREATED).entity(createdSpaceRep.toSpaceRepresentation()).build();
+        SpaceRepresentation.Data createdSpaceRepresentation = modelToRepresentation.toRepresentation(space, uriInfo);
+        return Response.status(Response.Status.CREATED).entity(createdSpaceRepresentation.toSpaceRepresentation()).build();
     }
 
     @GET
@@ -87,7 +83,7 @@ public class SpacesService {
     @PATCH
     @Path("{spaceId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public SpaceRepresentation updateSpace(@PathParam("spaceId") String spaceId, SpaceRepresentation spaceRepresentation) {
+    public SpaceRepresentation updateSpace(@PathParam("spaceId") String spaceId, final SpaceRepresentation spaceRepresentation) {
         SpaceModel space = getSpaceById(spaceId);
 
         SpaceRepresentation.Data data = spaceRepresentation.getData();

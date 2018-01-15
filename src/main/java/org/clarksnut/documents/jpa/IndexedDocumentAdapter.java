@@ -3,7 +3,6 @@ package org.clarksnut.documents.jpa;
 import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.documents.IndexedDocumentModel;
 import org.clarksnut.documents.jpa.entity.IndexedDocumentEntity;
-import org.clarksnut.models.UserModel;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
@@ -13,12 +12,10 @@ import java.util.Set;
 public class IndexedDocumentAdapter implements IndexedDocumentModel, JpaModel<IndexedDocumentEntity> {
 
     private final EntityManager em;
-    private final UserModel user;
     private final IndexedDocumentEntity entity;
 
-    public IndexedDocumentAdapter(EntityManager em, UserModel user, IndexedDocumentEntity entity) {
+    public IndexedDocumentAdapter(EntityManager em, IndexedDocumentEntity entity) {
         this.em = em;
-        this.user = user;
         this.entity = entity;
     }
 

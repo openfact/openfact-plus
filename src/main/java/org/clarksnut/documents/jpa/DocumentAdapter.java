@@ -3,11 +3,13 @@ package org.clarksnut.documents.jpa;
 import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentVersionModel;
+import org.clarksnut.documents.IndexedDocumentModel;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.DocumentVersionEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,6 +75,21 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
         } else {
             throw new IllegalStateException("Invalid number of results");
         }
+    }
+
+    @Override
+    public IndexedDocumentModel getIndexedDocument() {
+        return new IndexedDocumentAdapter(em, entity.getIndexedDocument());
+    }
+
+    @Override
+    public Date getCreatedAt() {
+        return entity.getCreatedAt();
+    }
+
+    @Override
+    public Date getUpdatedAt() {
+        return entity.getUpdatedAt();
     }
 
 }

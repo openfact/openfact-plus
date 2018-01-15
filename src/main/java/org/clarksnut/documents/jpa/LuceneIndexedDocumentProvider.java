@@ -107,7 +107,7 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
         // Result
         List<IndexedDocumentEntity> resultList = fullTextQuery.getResultList();
         List<IndexedDocumentModel> items = resultList.stream()
-                .map(f -> new IndexedDocumentAdapter(em, user, f))
+                .map(f -> new IndexedDocumentAdapter(em, f))
                 .collect(Collectors.toList());
 
         return new SearchResultModel<IndexedDocumentModel>() {

@@ -26,10 +26,6 @@ public interface UserModel {
 
     void setRegistrationCompleted(boolean registrationCompleted);
 
-    String getOfflineRefreshToken();
-
-    void setOfflineRefreshToken(String offlineRefreshToken);
-
     String getImageURL();
 
     void setImageURL(String imageURL);

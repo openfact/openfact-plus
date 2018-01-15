@@ -4,8 +4,8 @@ import org.clarksnut.models.QueryModel;
 import org.clarksnut.models.UserBean;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
-import org.clarksnut.models.jpa.entity.UserEntity;
 import org.clarksnut.models.exceptions.ModelException;
+import org.clarksnut.models.jpa.entity.UserEntity;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 
 import javax.ejb.Stateless;
@@ -111,9 +111,6 @@ public class JpaUserProvider implements UserProvider {
             throw new ModelException("User not found");
         }
 
-        if (user.getOfflineToken() != null) {
-            userEntity.setOfflineToken(user.getOfflineToken());
-        }
         if (user.getRegistrationComplete() != null) {
             userEntity.setRegistrationCompleted(user.getRegistrationComplete());
         }

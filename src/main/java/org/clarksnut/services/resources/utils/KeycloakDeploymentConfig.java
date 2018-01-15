@@ -1,4 +1,4 @@
-package org.clarksnut.services.resources;
+package org.clarksnut.services.resources.utils;
 
 import org.jboss.logging.Logger;
 import org.keycloak.adapters.KeycloakDeployment;

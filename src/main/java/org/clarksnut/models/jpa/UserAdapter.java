@@ -62,16 +62,6 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     }
 
     @Override
-    public String getOfflineRefreshToken() {
-        return user.getOfflineToken();
-    }
-
-    @Override
-    public void setOfflineRefreshToken(String refreshToken) {
-        user.setOfflineToken(refreshToken);
-    }
-
-    @Override
     public String getImageURL() {
         return user.getImageURL();
     }

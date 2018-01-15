@@ -79,19 +79,30 @@ public class DocumentRepresentation {
 
     public static class Attributes {
         private String id;
-        private String assignedId;
         private String type;
+        private String assignedId;
+        private String supplierAssignedId;
+
+        private Date issueDate;
         private String currency;
         private Float amount;
-        private Date issueDate;
+        private Float tax;
+
         private String supplierName;
-        private String supplierAssignedId;
+        private String supplierStreetAddress;
+        private String supplierCity;
+        private String supplierCountry;
         private String customerName;
         private String customerAssignedId;
-        private String provider;
-        private Boolean starred;
-        private Set<String> tags;
+        private String customerStreetAddress;
+        private String customerCity;
+        private String customerCountry;
 
+        private Boolean viewed;
+        private Boolean starred;
+        private Boolean checked;
+
+        private Set<String> versions;
 
         @JsonProperty("created-at")
         private Date createdAt;
@@ -121,14 +132,6 @@ public class DocumentRepresentation {
 
         public void setType(String type) {
             this.type = type;
-        }
-
-        public Set<String> getTags() {
-            return tags;
-        }
-
-        public void setTags(Set<String> tags) {
-            this.tags = tags;
         }
 
         public Date getCreatedAt() {
@@ -203,20 +206,92 @@ public class DocumentRepresentation {
             this.customerAssignedId = customerAssignedId;
         }
 
-        public String getProvider() {
-            return provider;
-        }
-
-        public void setProvider(String provider) {
-            this.provider = provider;
-        }
-
         public Boolean getStarred() {
             return starred;
         }
 
         public void setStarred(Boolean starred) {
             this.starred = starred;
+        }
+
+        public Float getTax() {
+            return tax;
+        }
+
+        public void setTax(Float tax) {
+            this.tax = tax;
+        }
+
+        public String getSupplierStreetAddress() {
+            return supplierStreetAddress;
+        }
+
+        public void setSupplierStreetAddress(String supplierStreetAddress) {
+            this.supplierStreetAddress = supplierStreetAddress;
+        }
+
+        public String getSupplierCity() {
+            return supplierCity;
+        }
+
+        public void setSupplierCity(String supplierCity) {
+            this.supplierCity = supplierCity;
+        }
+
+        public String getSupplierCountry() {
+            return supplierCountry;
+        }
+
+        public void setSupplierCountry(String supplierCountry) {
+            this.supplierCountry = supplierCountry;
+        }
+
+        public String getCustomerStreetAddress() {
+            return customerStreetAddress;
+        }
+
+        public void setCustomerStreetAddress(String customerStreetAddress) {
+            this.customerStreetAddress = customerStreetAddress;
+        }
+
+        public String getCustomerCity() {
+            return customerCity;
+        }
+
+        public void setCustomerCity(String customerCity) {
+            this.customerCity = customerCity;
+        }
+
+        public String getCustomerCountry() {
+            return customerCountry;
+        }
+
+        public void setCustomerCountry(String customerCountry) {
+            this.customerCountry = customerCountry;
+        }
+
+        public Boolean getViewed() {
+            return viewed;
+        }
+
+        public void setViewed(Boolean viewed) {
+            this.viewed = viewed;
+        }
+
+        public Boolean getChecked() {
+            return checked;
+        }
+
+        public void setChecked(Boolean checked) {
+            this.checked = checked;
+        }
+
+        public Set<String> getVersions() {
+            return versions;
+        }
+
+        public void setVersions(Set<String> versions) {
+            this.versions = versions;
         }
     }
 

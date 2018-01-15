@@ -93,10 +93,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "registration_complete")
     private boolean registrationCompleted;
 
-    @Size(max = 2048)
-    @Column(name = "offline_token", length = 2048)
-    private String offlineToken;
-
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Set<SpaceEntity> ownedSpaces = new HashSet<>();
 
@@ -235,14 +231,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     public void setRegistrationCompleted(boolean registrationCompleted) {
         this.registrationCompleted = registrationCompleted;
-    }
-
-    public String getOfflineToken() {
-        return offlineToken;
-    }
-
-    public void setOfflineToken(String offlineToken) {
-        this.offlineToken = offlineToken;
     }
 
     public Set<SpaceEntity> getOwnedSpaces() {

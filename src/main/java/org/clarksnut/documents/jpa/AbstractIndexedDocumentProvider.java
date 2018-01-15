@@ -1,7 +1,6 @@
 package org.clarksnut.documents.jpa;
 
 import org.clarksnut.documents.IndexedDocumentModel;
-import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.IndexedDocumentEntity;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
@@ -12,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public abstract class AbstractIndexedDocumentProvider {
 
@@ -50,7 +48,7 @@ public abstract class AbstractIndexedDocumentProvider {
             IndexedDocumentEntity indexedDocumentEntity = resultList.get(0);
 
             if (isUserAllowedToSeeDocument(user, indexedDocumentEntity)) {
-                return new IndexedDocumentAdapter(getEntityManager(), user, indexedDocumentEntity);
+                return new IndexedDocumentAdapter(getEntityManager(), indexedDocumentEntity);
             } else {
                 return null;
             }

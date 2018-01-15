@@ -6,7 +6,6 @@ import org.clarksnut.documents.IndexedDocumentProvider;
 import org.clarksnut.documents.IndexedDocumentQueryModel;
 import org.clarksnut.documents.SearchResultModel;
 import org.clarksnut.documents.jpa.IndexedManagerType.Type;
-import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.IndexedDocumentEntity;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
@@ -110,7 +109,7 @@ public class ESIndexedDocumentProvider extends AbstractIndexedDocumentProvider i
         // Result
         List<IndexedDocumentEntity> resultList = fullTextQuery.getResultList();
         List<IndexedDocumentModel> items = resultList.stream()
-                .map(f -> new IndexedDocumentAdapter(em, user, f))
+                .map(f -> new IndexedDocumentAdapter(em, f))
                 .collect(Collectors.toList());
 
         return new SearchResultModel<IndexedDocumentModel>() {

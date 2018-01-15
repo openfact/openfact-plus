@@ -96,6 +96,11 @@ public class IndexedDocumentEntity implements CreatableEntity, UpdatableEntity, 
     private Date updatedAt;
 
 
+    @NotNull
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    private DocumentEntity document;
+
     @ElementCollection
     @Column(name = "value")
     @CollectionTable(name = "user_starts", joinColumns = {@JoinColumn(name = "indexed_document_id")})
@@ -290,5 +295,13 @@ public class IndexedDocumentEntity implements CreatableEntity, UpdatableEntity, 
 
     public void setUserChecks(Set<String> userChecks) {
         this.userChecks = userChecks;
+    }
+
+    public DocumentEntity getDocument() {
+        return document;
+    }
+
+    public void setDocument(DocumentEntity document) {
+        this.document = document;
     }
 }

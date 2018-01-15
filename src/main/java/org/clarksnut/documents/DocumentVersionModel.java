@@ -13,18 +13,17 @@ public interface DocumentVersionModel {
     Date getIssueDate();
     String getCurrency();
     Float getAmount();
-
     Float getTax();
+
     String getSupplierName();
     String getSupplierStreetAddress();
     String getSupplierCity();
-
     String getSupplierCountry();
+
     String getCustomerName();
     String getCustomerAssignedId();
-    String getCustomerStreetAddress();
     String getCustomerCity();
-
+    String getCustomerStreetAddress();
     String getCustomerCountry();
 
     Date getCreatedAt();
