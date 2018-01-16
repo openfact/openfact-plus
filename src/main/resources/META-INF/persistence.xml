@@ -34,11 +34,17 @@
             <!--<property name="hibernate.search.default.directory_provider"-->
                       <!--value="infinispan"/>-->
             <!--<property name="hibernate.search.infinispan.cachemanager_jndiname"-->
-                      <!--value="java:jboss/datasources/ClarksnutDS"/>-->
-            <!--<property name="hibernate.search.infinispan.configuration.transport_override_resourcename"-->
-                      <!--value="jgroups.xml"/>-->
-            <!--<property name="hibernate.search.infinispan.cachemanager_jndiname"-->
-            <!--value="java:jboss/infinispan/container/hibernateSearch"/>-->
+                      <!--value="java:jboss/infinispan/hibernateSearch"/>-->
+            <!--<property name="hibernate.search.infinispan.chunk_size"-->
+                      <!--value="300000000"/>-->
+            <!--<property name="hibernate.search.reader.strategy"-->
+                      <!--value="shared"/>-->
+            <!--<property name="hibernate.search.worker.execution"-->
+                      <!--value="sync"/>-->
+            <!--<property name="hibernate.search.jmx_enabled"-->
+                      <!--value="true"/>-->
+            <!--<property name="hibernate.search.autoregister_listeners"-->
+                      <!--value="true"/>-->
 
             <property name="hibernate.search.model_mapping"
                       value="org.clarksnut.documents.jpa.config.DocumentSearchMappingFactory"/>

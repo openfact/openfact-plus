@@ -11,4 +11,26 @@
         </local-cache>
         <local-cache name="timestamps"/>
     </cache-container>
+    <!--<cache-container name="hibernateSearch" default-cache="LuceneIndexesData" jndi-name="java:jboss/infinispan/hibernateSearch">-->
+        <!--<transport lock-timeout="60000"/>-->
+        <!--<replicated-cache name="LuceneIndexesMetadata" mode="SYNC">-->
+            <!--<binary-keyed-jdbc-store data-source="java:jboss/datasources/InfinispanDatasource" shared="true" passivation="false" purge="false">-->
+                <!--<property name="createTableOnStart">true</property>-->
+                <!--<binary-keyed-table>-->
+                    <!--<id-column name="ID_COLUMN" type="VARCHAR(255)"/>-->
+                    <!--<data-column name="DATUM" type="BYTEA"/>-->
+                <!--</binary-keyed-table>-->
+            <!--</binary-keyed-jdbc-store>-->
+        <!--</replicated-cache>-->
+        <!--<replicated-cache name="LuceneIndexesData" mode="SYNC">-->
+            <!--<binary-keyed-jdbc-store data-source="java:jboss/datasources/InfinispanDatasource" shared="true" passivation="false" purge="false">-->
+                <!--<property name="createTableOnStart">true</property>-->
+                <!--<binary-keyed-table>-->
+                    <!--<id-column name="ID_COLUMN" type="VARCHAR(255)"/>-->
+                    <!--<data-column name="DATUM" type="BYTEA"/>-->
+                <!--</binary-keyed-table>-->
+            <!--</binary-keyed-jdbc-store>-->
+        <!--</replicated-cache>-->
+        <!--<replicated-cache name="LuceneIndexesLocking" mode="SYNC"/>-->
+    <!--</cache-container>-->
 </subsystem>
