@@ -559,9 +559,6 @@
                         <DB_PASSWORD>sa</DB_PASSWORD>
 
                         <!--Hibernate-->
-                        <CN_HIBERNATE_SHOW_SQL>true</CN_HIBERNATE_SHOW_SQL>
-                        <CN_HIBERNATE_FORMAT_SQL>true</CN_HIBERNATE_FORMAT_SQL>
-                        <CN_HIBERNATE_SECOND_LEVEL_CACHE>false</CN_HIBERNATE_SECOND_LEVEL_CACHE>
 
                         <!--Elasticsearch-->
                         <CN_ELASTICSEARCH_HOST>http://localhost:9200</CN_ELASTICSEARCH_HOST>

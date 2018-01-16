@@ -6,9 +6,6 @@ items:
   metadata:
     name: clarksnut
   data:
-    cn.hibernate.show_sql: "false"
-    cn.hibernate.format_sql: "false"
-    cn.hibernate.second_level_cache: "true"
     cn.hibernate.index_manager: "filesystem"
     cn.elasticsearch.host: "http://elasticsearch:9200"
     cn.elasticsearch.index_schema_management_strategy: "create"

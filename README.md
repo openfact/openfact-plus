@@ -44,17 +44,13 @@ Wait until the server starts, and then go to: <http://localhost:8080>
 
 Database strategy can be configured using environment variables:
 ```
-export CN_HIBERNATE_SHOW_SQL=[true|false]
 export CN_HIBERNATE_FORMAT_SQL=[true|false]
-export CN_HIBERNATE_SECOND_LEVEL_CACHE=[true|false]
 ```
 
 Default values:
 ```
 CN_HIBERNATE_STRATEGY=update
-CN_HIBERNATE_SHOW_SQL=false
 CN_HIBERNATE_FORMAT_SQL=false
-CN_HIBERNATE_SECOND_LEVEL_CACHE=true
 ```
 
 ## Configure database search strategy (Optional):

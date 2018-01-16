@@ -20,21 +20,6 @@ spec:
           value: /deployments
         - name: JAVA_OPTIONS
           value: -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.project.stage=production -Dswarm.keycloak.json.path=/deployments/config/keycloak.json
-        - name: CN_HIBERNATE_SHOW_SQL
-          valueFrom:
-            configMapKeyRef:
-              name: clarksnut
-              key: cn.hibernate.show_sql
-        - name: CN_HIBERNATE_FORMAT_SQL
-          valueFrom:
-            configMapKeyRef:
-              name: clarksnut
-              key: cn.hibernate.format_sql
-        - name: CN_HIBERNATE_SECOND_LEVEL_CACHE
-          valueFrom:
-            configMapKeyRef:
-              name: clarksnut
-              key: cn.hibernate.second_level_cache
         - name: CN_HIBERNATE_INDEX_MANAGER
           valueFrom:
             configMapKeyRef:
