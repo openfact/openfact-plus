@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: clarksnut
+  data:
+    cn.hibernate.index_manager: "directory-based"
+    cn.elasticsearch.host: "http://elasticsearch:9200"
+    cn.elasticsearch.index_schema_management_strategy: "create"
+    cn.elasticsearch.required_index_status: "green"
+    cn.elasticsearch.aws.enabled: "false"
+    cn.elasticsearch.aws.region: "us-east-1"
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: clarksnut
+  type: Opaque
+  data:
+    cn.elasticsearch.user: "ZWxhc3RpYw=="
+    cn.elasticsearch.password: "Y2hhbmdlbWU="
+    cn.elasticsearch.aws.access_key: "bXlhY2Nlc3NrZXk="
+    cn.elasticsearch.aws.secret_key: "bXlzZWNyZXRrZXk="
+- apiVersion: v1
+  kind: Secret
+  type: Opaque
+  metadata:
+    name: clarksnut-config
+  data:
+    clarksnut-stages.yml: cHJvamVjdDoKICBzdGFnZTogcHJvZHVjdGlvbgpzd2FybToKICBlZToKICAgIHNwZWMtZGVzY3JpcHRvci1wcm9wZXJ0eS1yZXBsYWNlbWVudDogdHJ1ZQogIGRhdGFzb3VyY2VzOgogICAgZGF0YS1zb3VyY2VzOgogICAgICBDbGFya3NudXREUzoKICAgICAgICBqbmRpLW5hbWU6IGphdmE6amJvc3MvZGF0YXNvdXJjZXMvQ2xhcmtzbnV0RFMKICAgICAgICBkcml2ZXItbmFtZTogcG9zdGdyZXNxbAogICAgICAgIHVzZXItbmFtZTogY2xhcmtzbnV0CiAgICAgICAgcGFzc3dvcmQ6IGNsYXJrc251dAogICAgICAgIGNvbm5lY3Rpb24tdXJsOiBqZGJjOnBvc3RncmVzcWw6Ly9jbGFya3NudXQtZGI6NTQzMi9jbGFya3NudXQKICBpbmZpbmlzcGFuOgogICAgY2FjaGUtY29udGFpbmVyczoKICAgICAgaGliZXJuYXRlLW9ybToKICAgICAgICBqbmRpLW5hbWU6IGphdmE6amJvc3MvaW5maW5pc3Bhbi9oaWJlcm5hdGUtb3JtCiAgICAgICAgbW9kdWxlOiBvcmcuaGliZXJuYXRlLmluZmluaXNwYW46NS4yLjEyLkZpbmFsCiAgICAgICAgbG9jYWwtY2FjaGVzOgogICAgICAgICAgZW50aXR5OgogICAgICAgICAgICB0cmFuc2FjdGlvbi1jb21wb25lbnQ6CiAgICAgICAgICAgICAgbW9kZTogTk9OX1hBCiAgICAgICAgICAgIGV2aWN0aW9uLWNvbXBvbmVudDoKICAgICAgICAgICAgICBtYXgtZW50cmllczogMTAwMDAKICAgICAgICAgICAgICBzdHJhdGVneTogTFJVCiAgICAgICAgICAgIGV4cGlyYXRpb24tY29tcG9uZW50OgogICAgICAgICAgICAgIG1heC1pZGxlOiAxMDAwMDAKICAgICAgICAgIGxvY2FsLXF1ZXJ5OgogICAgICAgICAgICBldmljdGlvbi1jb21wb25lbnQ6CiAgICAgICAgICAgICAgc3RyYXRlZ3k6IExSVQogICAgICAgICAgICAgIG1heC1lbnRyaWVzOiAxMDAwMAogICAgICAgICAgICBleHBpcmF0aW9uLWNvbXBvbmVudDoKICAgICAgICAgICAgICBtYXgtaWRsZTogMTAwMDAwCiAgICAgICAgICB0aW1lc3RhbXBzOgpjbGFya3NudXQ6CiAgcmVwb3J0OgogICAgZGVmYXVsdDogY2xhcmtzbnV0CiAgICBjYWNoZVJlcG9ydHM6IHRydWUKICAgIGNhY2hlVGVtcGxhdGVzOiB0cnVlCiAgICBmb2xkZXI6CiAgICAgIGRpcjogL3JlcG9ydHMKICBkb2N1bWVudDoKICAgIG1hcHBlcjoKICAgICAgZGVmYXVsdDogYmFzaWM=
+    keycloak.json: ew0KICAicmVhbG0iOiAiY2xhcmtzbnV0IiwNCiAgImF1dGgtc2VydmVyLXVybCI6ICJodHRwczovL2tleWNsb2FrLmNvbSIsDQogICJyZXNvdXJjZSI6ICJjbGFya3NudXQtcGxhdGZvcm0iLA0KICAic3NsLXJlcXVpcmVkIjogImV4dGVybmFsIiwNCiAgImNyZWRlbnRpYWxzIjogew0KICAgICJzZWNyZXQiOiAiWWpjNE56Tm1PREF0Tm1Ga055MDBOR0UxTFRrM1kySXRZbVF5TVRBM09EbGxZalF4Ig0KICB9LA0KICAiYmVhcmVyLW9ubHkiOiB0cnVlLA0KICAiZW5hYmxlLWNvcnMiOiB0cnVlDQp9

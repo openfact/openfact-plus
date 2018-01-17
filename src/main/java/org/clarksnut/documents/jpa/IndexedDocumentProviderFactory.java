@@ -13,39 +13,16 @@ import java.util.Optional;
 @Stateless
 public class IndexedDocumentProviderFactory {
 
-    @Inject
-    @ConfigurationValue("clarksnut.document.index_manager")
-    private Optional<String> clarksnutDocumentIndexManager;
-
-    @Inject
-    @IndexedManagerType(type = Type.ELASTICSEARCH)
-    private IndexedDocumentProvider esProvider;
-
-    @Inject
-    @IndexedManagerType(type = Type.LUCENE)
-    private IndexedDocumentProvider luceneProvider;
-
-    private IndexedDocumentProvider defaultIndexedDocumentProvider;
-
-    @PostConstruct
-    public void init() {
-        String indexManager = clarksnutDocumentIndexManager.orElse("lucene");
-        Type indexManagerType = Type.valueOf(indexManager.toUpperCase());
-
-        switch (indexManagerType) {
-            case ELASTICSEARCH:
-                defaultIndexedDocumentProvider = esProvider;
-                break;
-            case LUCENE:
-                defaultIndexedDocumentProvider = luceneProvider;
-                break;
-            default:
-                throw new IllegalStateException("Invalid index manager");
-        }
-    }
-
     @Produces
-    public IndexedDocumentProvider getIndexedDocumentProvider() {
-        return defaultIndexedDocumentProvider;
+    public IndexedDocumentProvider getIndexedDocumentProvider(@IndexedManagerType(type = Type.ELASTICSEARCH) IndexedDocumentProvider es,
+                                                              @IndexedManagerType(type = Type.LUCENE) IndexedDocumentProvider lucene) {
+        String indexManager = System.getenv("HIBERNATE_INDEX_MANAGER");
+        if (indexManager.equalsIgnoreCase("elasticsearch")) {
+            return es;
+        } else if (indexManager.equalsIgnoreCase("directory-based")) {
+            return lucene;
+        } else {
+            throw new IllegalStateException("Invalid HIBERNATE_INDEX_MANAGER:" + indexManager);
+        }
     }
 }

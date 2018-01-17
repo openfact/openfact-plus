@@ -1,3 +1,5 @@
+project:
+  stage: production
 swarm:
   ee:
     spec-descriptor-property-replacement: true
@@ -5,15 +7,15 @@ swarm:
     data-sources:
       ClarksnutDS:
         jndi-name: java:jboss/datasources/ClarksnutDS
-        driver-name: h2
-        connection-url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-        user-name: sa
-        password: sa
+        driver-name: postgresql
+        user-name: clarksnut
+        password: clarksnut
+        connection-url: jdbc:postgresql://clarksnut-db:5432/clarksnut
   infinispan:
     cache-containers:
       hibernate-orm:
         jndi-name: java:jboss/infinispan/hibernate-orm
-        module: "org.hibernate.infinispan:${version.hibernate}"
+        module: org.hibernate.infinispan:5.2.12.Final
         local-caches:
           entity:
             transaction-component:
@@ -33,7 +35,10 @@ swarm:
 clarksnut:
   report:
     default: clarksnut
-    cacheReports: false
-    cacheTemplates: false
+    cacheReports: true
+    cacheTemplates: true
     folder:
-      dir: "/reports"
+      dir: /reports
+  document:
+    mapper:
+      default: basic

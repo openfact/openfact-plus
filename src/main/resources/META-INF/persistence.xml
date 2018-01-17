@@ -6,73 +6,41 @@
              version="2.1">
     <persistence-unit name="ClarksnutPU" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/ClarksnutDS</jta-data-source>
-
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
-
         <properties>
             <!--Hibernate ORM-->
-            <property name="jboss.as.jpa.providerModule"
-                      value="org.hibernate:${version.hibernate}"/>
+            <property name="jboss.as.jpa.providerModule" value="org.hibernate:${version.hibernate}"/>
 
-            <property name="hibernate.show_sql"
-                      value="false"/>
-            <property name="hibernate.format_sql"
-                      value="false"/>
-            <property name="hibernate.cache.use_query_cache"
-                      value="true"/>
-            <property name="hibernate.cache.use_second_level_cache"
-                      value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="false"/>
+
+            <!--Second level cache-->
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.infinispan.JndiInfinispanRegionFactory" />
+            <property name="hibernate.cache.infinispan.cachemanager" value="java:jboss/infinispan/hibernate-orm" />
 
             <!--Hibernate SEARCH-->
-            <property name="wildfly.jpa.hibernate.search.module"
-                      value="org.hibernate.search.orm:${version.hibernate-search}"/>
+            <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>
 
-            <property name="hibernate.search.default.indexmanager"
-                      value="${env.CN_HIBERNATE_INDEX_MANAGER:directory-based}"/>
+            <property name="hibernate.search.default.indexmanager" value="${env.CN_HIBERNATE_INDEX_MANAGER:directory-based}"/>
 
-            <!--<property name="hibernate.search.default.directory_provider"-->
-                      <!--value="infinispan"/>-->
-            <!--<property name="hibernate.search.infinispan.cachemanager_jndiname"-->
-                      <!--value="java:jboss/infinispan/hibernateSearch"/>-->
-            <!--<property name="hibernate.search.infinispan.chunk_size"-->
-                      <!--value="300000000"/>-->
-            <!--<property name="hibernate.search.reader.strategy"-->
-                      <!--value="shared"/>-->
-            <!--<property name="hibernate.search.worker.execution"-->
-                      <!--value="sync"/>-->
-            <!--<property name="hibernate.search.jmx_enabled"-->
-                      <!--value="true"/>-->
-            <!--<property name="hibernate.search.autoregister_listeners"-->
-                      <!--value="true"/>-->
-
-            <property name="hibernate.search.model_mapping"
-                      value="org.clarksnut.documents.jpa.config.DocumentSearchMappingFactory"/>
-            <property name="hibernate.search.lucene.analysis_definition_provider"
-                      value="org.clarksnut.documents.jpa.config.ClarksnutLuceneAnalyzerProvider"/>
-            <property name="hibernate.search.elasticsearch.analysis_definition_provider"
-                      value="org.clarksnut.documents.jpa.config.ClarksnutESAnalyzerProvider"/>
+            <property name="hibernate.search.model_mapping" value="org.clarksnut.documents.jpa.config.DocumentSearchMappingFactory"/>
+            <property name="hibernate.search.lucene.analysis_definition_provider" value="org.clarksnut.documents.jpa.config.ClarksnutLuceneAnalyzerProvider"/>
+            <property name="hibernate.search.elasticsearch.analysis_definition_provider" value="org.clarksnut.documents.jpa.config.ClarksnutESAnalyzerProvider"/>
 
             <!--Elasticsearch-->
-            <property name="hibernate.search.default.elasticsearch.host"
-                      value="${env.CN_ELASTICSEARCH_HOST:}"/>
-            <property name="hibernate.search.default.elasticsearch.username"
-                      value="${env.CN_ELASTICSEARCH_USER:}"/>
-            <property name="hibernate.search.default.elasticsearch.password"
-                      value="${env.CN_ELASTICSEARCH_PASSWORD:}"/>
-            <property name="hibernate.search.default.elasticsearch.index_schema_management_strategy"
-                      value="${env.CN_ELASTICSEARCH_INDEX_SCHEMA_MANAGEMENT_STRATEGY:update}"/>
-            <property name="hibernate.search.default.elasticsearch.required_index_status"
-                      value="${env.CN_ELASTICSEARCH_REQUIRED_INDEX_STATUS:green}"/>
+            <property name="hibernate.search.default.elasticsearch.host" value="${env.CN_ELASTICSEARCH_HOST:}"/>
+            <property name="hibernate.search.default.elasticsearch.username" value="${env.CN_ELASTICSEARCH_USER:}"/>
+            <property name="hibernate.search.default.elasticsearch.password" value="${env.CN_ELASTICSEARCH_PASSWORD:}"/>
+            <property name="hibernate.search.default.elasticsearch.index_schema_management_strategy" value="${env.CN_ELASTICSEARCH_INDEX_SCHEMA_MANAGEMENT_STRATEGY:update}"/>
+            <property name="hibernate.search.default.elasticsearch.required_index_status" value="${env.CN_ELASTICSEARCH_REQUIRED_INDEX_STATUS:green}"/>
 
-            <property name="hibernate.search.default.elasticsearch.aws.signing.enabled"
-                      value="${env.CN_ELASTICSEARCH_AWS_ENABLED:false}"/>
-            <property name="hibernate.search.default.elasticsearch.aws.access_key"
-                      value="${env.CN_ELASTICSEARCH_AWS_ACCESS_KEY:}"/>
-            <property name="hibernate.search.default.elasticsearch.aws.secret_key"
-                      value="${env.CN_ELASTICSEARCH_AWS_SECRET_KEY:}"/>
-            <property name="hibernate.search.default.elasticsearch.aws.region"
-                      value="${env.CN_ELASTICSEARCH_AWS_REGION:}"/>
+            <property name="hibernate.search.default.elasticsearch.aws.signing.enabled" value="${env.CN_ELASTICSEARCH_AWS_ENABLED:false}"/>
+            <property name="hibernate.search.default.elasticsearch.aws.access_key" value="${env.CN_ELASTICSEARCH_AWS_ACCESS_KEY:}"/>
+            <property name="hibernate.search.default.elasticsearch.aws.secret_key" value="${env.CN_ELASTICSEARCH_AWS_SECRET_KEY:}"/>
+            <property name="hibernate.search.default.elasticsearch.aws.region" value="${env.CN_ELASTICSEARCH_AWS_REGION:}"/>
         </properties>
     </persistence-unit>
 </persistence>

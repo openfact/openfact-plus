@@ -1,0 +1,1015 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  labels:
+    app: clarksnut-dependencies
+    provider: fabric8
+    version: 1.0-SNAPSHOT
+    group: io.clarksnut.platform.packages
+  name: clarksnut-dependencies
+objects:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    annotations:
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/keycloak/target/keycloak-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      app: keycloak
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: keycloak
+  data:
+    kc.user: YWRtaW4K
+    kc.password: YWRtaW4K
+    kc.clientid.secret: Yjc4NzNmODAtNmFkNy00NGE1LTk3Y2ItYmQyMTA3ODllYjQx
+    kc.private.key: TUlJQ1dnSUJBQUtCZ0VqbFpOMVE3d2c1UU9IelhHcXlOZi9xL1ZIUTBvSjJOZGVPRHMxOHh1WkpHSkxEZVA4ZU5QY2trbGdWb1RJaFZzOTlaNXRMTTFoUCs5R213ODI1dVVXRnZsNHg1MGoyYW0yNUFIOGlpUGhreUw2aEx6dThzYnd3clU5R1RpcllqRVM5RlNRVWF6TmlWMVhYSGR5TGRvRm03dzMzZDVobFdpT1M4NmNmRnNGN0FnTUJBQUVDZ1lBUE5NTDRvOVJwQzhCc0lkN3FadWg2elNNd3VQWGd2eFgyTkMwRVVuNFBOYnBKaXpzblJMN1p1eWhIOWFNZG1QVEo3YWY2TGhLMDNtSnlWbTVMOE8wanlYQ2JzaWdkTVUxSDF4UmZiZ1JOUTViRHpHZUJzYTlFSHlpa2dDbkVTNXRZcFVKQnRzNjdKOVNYTU56VTFDckliM2JPQUhsaXp2aWozaE9KS0plQWlRSkJBSkJzVEd2VmtYZzFTZ0l2bk42dXlIU0h3V0hLaVhFOVdCQ1VQTkZrMklyNmtDYUlEeTB4MHlHbklBcVA3SmdJeE1lR0M1Njl4VmZEcEYvZnIyaTFvQjhDUVFDQk5xSTF3TlZvczVlTGhKcXdGNThLWURLbWZlRjY2QkJXblBJQ01UMFVaL1lCTFc1UlRCbzUvVDlnemxLQk1LUmVRanp6K1ZaQ0F2cHdhb09FUWNNbEFrQnFyc1VvNXVNRk5BQU9hMU5xbnh2T0VMWUY0ZEh6UjBnMVB2dEtCajk3TWltbmZOd1JHM3dGb09tblE3ZVdldXU1STBpVUkwU1NWeCtsL3BzWk13a3JBa0JBTDQ1Mld6cm5qc2JKNUc0ZTZTejByNEtabDlCcENGd05XbHNSWWJvd3A4L1pGK05EK1NUU0I0M3pIYXA0U0Z4dUFrTmJBbEdwNnViUzd1WXp6YU1OQWtCRFRvSXQxL1FHUExBM2JaVzV1YTdLZ3VtdzFtMjF5Y1BmdUFkYklpclhMdE16SGR3dXFuQkFMbElJOXBFZU4xTEttNzR1cGswZDluTitxS05lT2RQSA==
+    kc.public.key: TUlHZU1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTUFEQ0JpQUtCZ0VqbFpOMVE3d2c1UU9IelhHcXlOZi9xL1ZIUTBvSjJOZGVPRHMxOHh1WkpHSkxEZVA4ZU5QY2trbGdWb1RJaFZzOTlaNXRMTTFoUCs5R213ODI1dVVXRnZsNHg1MGoyYW0yNUFIOGlpUGhreUw2aEx6dThzYnd3clU5R1RpcllqRVM5RlNRVWF6TmlWMVhYSGR5TGRvRm03dzMzZDVobFdpT1M4NmNmRnNGN0FnTUJBQUU9
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: c0a681b2565e7710e8adb7f7ddd9ce4bcc0f037a
+      fabric8.io/git-branch: master
+      fabric8.io/scm-con-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/clarksnut-db
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/clarksnut-db
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/clarksnut/clarksnut-platform/apps/clarksnut-db
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/clarksnut-db/target/clarksnut-db-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      service: clarksnut-db
+      app: clarksnut-db
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: clarksnut-db
+  spec:
+    ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      service: clarksnut-db
+      app: clarksnut-db
+      provider: fabric8
+      group: io.clarksnut.platform.apps
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      service.alpha.openshift.io/dependencies: '[{"name":"keycloak-db","namespace":"","kind":"Service"}]'
+      fabric8.io/git-commit: c0a681b2565e7710e8adb7f7ddd9ce4bcc0f037a
+      fabric8.io/git-branch: master
+      fabric8.io/scm-con-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/keycloak
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/keycloak
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/clarksnut/clarksnut-platform/apps/keycloak
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/keycloak/target/keycloak-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      expose: "true"
+      app: keycloak
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: keycloak
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: keycloak
+      provider: fabric8
+      group: io.clarksnut.platform.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: c0a681b2565e7710e8adb7f7ddd9ce4bcc0f037a
+      fabric8.io/git-branch: master
+      fabric8.io/scm-con-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/keycloak-db
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/keycloak-db
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/clarksnut/clarksnut-platform/apps/keycloak-db
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/keycloak-db/target/keycloak-db-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      service: keycloak-db
+      app: keycloak-db
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: keycloak-db
+  spec:
+    ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      service: keycloak-db
+      app: keycloak-db
+      provider: fabric8
+      group: io.clarksnut.platform.apps
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/target-platform: openshift
+      service.alpha.openshift.io/dependencies: '[{"name":"keycloak-db","namespace":"","kind":"Service"}]'
+      fabric8.io/git-commit: c0a681b2565e7710e8adb7f7ddd9ce4bcc0f037a
+      fabric8.io/git-branch: master
+      fabric8.io/scm-con-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/keycloak
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/keycloak
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/clarksnut/clarksnut-platform/apps/keycloak
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/keycloak/target/keycloak-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      expose: "true"
+      app: keycloak
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: sso
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: keycloak
+      provider: fabric8
+      group: io.clarksnut.platform.apps
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/clarksnut-db/target/clarksnut-db-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      app: clarksnut-db
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: clarksnut-db-postgresql-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/keycloak-db/target/keycloak-db-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      app: keycloak-db
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: keycloak-db-postgresql-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    labels:
+      fabric8.io/kind: package
+      provider: fabric8.io
+      version: 1.0-SNAPSHOT
+      app: clarksnut-dependencies
+      group: io.clarksnut.platform.packages
+    name: clarksnut-system
+  data:
+    metadata-url: http://central.maven.org/maven2/io/clarksnut/platform/packages/clarksnut-system/maven-metadata.xml
+    package-url-prefix: http://central.maven.org/maven2/io/clarksnut/platform/packages/clarksnut-system/%[1]s/clarksnut-system-%[1]s-
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      expose.config.fabric8.io/apiserver-url-key: apiserver.url
+      expose.service-key.config.fabric8.io/clarksnutui: clarksnutui.url
+      expose.service-key.config.fabric8.io/keycloak: keycloak.url
+      expose.service-key.config.fabric8.io/jenkins: jenkins.url
+      expose-full.service-key.config.fabric8.io/clarksnut: clarksnut.api.url
+      expose-no-path.service-key.config.fabric8.io/auth: auth.url
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/keycloak/target/keycloak-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      app: keycloak
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: keycloak
+  data:
+    db.url: keycloak-db
+    db.port: "5432"
+    apiserver.url: http://kubernetes
+    clarksnutui.url: http://clarksnutui
+    jenkins.url: http://jenkins
+    keycloak.url: http://keycloak
+    auth.api.url: http://auth
+    clarksnut.api.url: http://clarksnut
+    clarksnut-realm.json: |-
+      {
+        "realm": "clarksnut",
+        "enabled": true,
+        "loginTheme": "clarksnut",
+        "privateKey": "${KEYCLOAK_PRIVATEKEY}",
+        "publicKey": "${KEYCLOAK_PUBLICKEY}",
+        "sslRequired": "external",
+        "accessTokenLifespan": 2592000,
+        "accessTokenLifespanForImplicitFlow": 1296000,
+        "ssoSessionIdleTimeout": 2592000,
+        "accessCodeLifespanUserAction": 36000,
+        "accessCodeLifespanLogin": 2592000,
+        "ssoSessionMaxLifespan": 2592000,
+        "offlineSessionIdleTimeout": 2592000,
+        "accessCodeLifespan": 60,
+        "clients": [
+          {
+            "clientId": "clarksnut-online-platform",
+            "enabled": true,
+            "standardFlowEnabled": true,
+            "implicitFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "authorizationServicesEnabled": true,
+            "fullScopeAllowed": true,
+            "serviceAccountsEnabled": true,
+            "clientAuthenticatorType": "client-secret",
+            "secret": "${KEYCLOAK_CLIENTID_SECRET}",
+            "publicClient": true,
+            "adminUrl": "",
+            "baseUrl": "",
+            "redirectUris": [
+              "http://localhost:8080/api/login/*",
+              "${AUTH_URL}*",
+              "${CLARKSNUT_URL}*",
+              "${JENKINS_URL}/securityRealm/finishLogin",
+              "${KEYCLOAK_URL}/*"
+            ],
+            "webOrigins": [
+              "*"
+            ],
+            "defaultRoles": [
+              "uma_protection"
+            ],
+            "authorizationSettings": {
+              "allowRemoteResourceManagement": true,
+              "policyEnforcementMode": "ENFORCING",
+              "scopes": [
+                {
+                  "name": "user"
+                },
+                {
+                  "name": "admin"
+                }
+              ]
+            },
+            "protocolMappers": [
+              {
+                "id": "0dc3e03b-f0c3-4e7e-b0c9-d99c46ba9161",
+                "name": "Approved",
+                "protocol": "openid-connect",
+                "protocolMapper": "oidc-usermodel-attribute-mapper",
+                "consentRequired": false,
+                "config": {
+                  "userinfo.token.claim": "true",
+                  "user.attribute": "approved",
+                  "id.token.claim": "false",
+                  "access.token.claim": "true",
+                  "claim.name": "approved",
+                  "jsonType.label": "boolean"
+                }
+              },
+              {
+                "id" : "5f949838-20b6-4544-998c-96d066298b3d",
+                "name" : "email",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usermodel-property-mapper",
+                "consentRequired" : true,
+                "consentText" : "${email}",
+                "config" : {
+                  "userinfo.token.claim" : "true",
+                  "user.attribute" : "email",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "email",
+                  "jsonType.label" : "String"
+                }
+              }, {
+                "id" : "7bd87e1c-76a7-4856-ab58-a49d15ccdad8",
+                "name" : "given name",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usermodel-property-mapper",
+                "consentRequired" : true,
+                "consentText" : "${givenName}",
+                "config" : {
+                  "userinfo.token.claim" : "true",
+                  "user.attribute" : "firstName",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "given_name",
+                  "jsonType.label" : "String"
+                }
+              }, {
+                "id" : "fd7a276f-12bf-4cb9-86a5-d91dd00518e7",
+                "name" : "username",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usermodel-property-mapper",
+                "consentRequired" : true,
+                "consentText" : "${username}",
+                "config" : {
+                  "userinfo.token.claim" : "true",
+                  "user.attribute" : "username",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "preferred_username",
+                  "jsonType.label" : "String"
+                }
+              }, {
+                "id" : "a7fd0801-be94-4540-af9f-45f0f8914224",
+                "name" : "role list",
+                "protocol" : "saml",
+                "protocolMapper" : "saml-role-list-mapper",
+                "consentRequired" : false,
+                "config" : {
+                  "single" : "false",
+                  "attribute.nameformat" : "Basic",
+                  "attribute.name" : "Role"
+                }
+              }, {
+                "id" : "fbf2ac93-fb3b-4e15-afc8-585e5e8e1049",
+                "name" : "full name",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-full-name-mapper",
+                "consentRequired" : true,
+                "consentText" : "${fullName}",
+                "config" : {
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "userinfo.token.claim" : "true"
+                }
+              }, {
+                "id" : "3d6c2c1f-f048-45b1-b1cf-a0774397ad7f",
+                "name" : "Client IP Address",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usersessionmodel-note-mapper",
+                "consentRequired" : false,
+                "consentText" : "",
+                "config" : {
+                  "user.session.note" : "clientAddress",
+                  "userinfo.token.claim" : "true",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "clientAddress",
+                  "jsonType.label" : "String"
+                }
+              }, {
+                "id" : "57ec513a-aa97-46b8-b888-4c2f9197d6db",
+                "name" : "family name",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usermodel-property-mapper",
+                "consentRequired" : true,
+                "consentText" : "${familyName}",
+                "config" : {
+                  "userinfo.token.claim" : "true",
+                  "user.attribute" : "lastName",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "family_name",
+                  "jsonType.label" : "String"
+                }
+              }, {
+                "id" : "bdc1ad99-471f-4c83-aa2e-03fbcf620954",
+                "name" : "Client ID",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usersessionmodel-note-mapper",
+                "consentRequired" : false,
+                "consentText" : "",
+                "config" : {
+                  "user.session.note" : "clientId",
+                  "userinfo.token.claim" : "true",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "clientId",
+                  "jsonType.label" : "String"
+                }
+              }, {
+                "id" : "1fa76490-354b-4b62-a6d0-b767a165d2a1",
+                "name" : "Client Host",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usersessionmodel-note-mapper",
+                "consentRequired" : false,
+                "consentText" : "",
+                "config" : {
+                  "user.session.note" : "clientHost",
+                  "userinfo.token.claim" : "true",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "clientHost",
+                  "jsonType.label" : "String"
+                }
+              }
+            ]
+          },
+          {
+            "clientId": "che",
+            "enabled": true,
+            "redirectUris": [
+              "*"
+            ],
+            "implicitFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "publicClient": true,
+            "protocol": "openid-connect",
+            "fullScopeAllowed": true
+          }
+        ],
+        "users": [
+          {
+            "username": "service-account-clarksnut-online-platform",
+            "enabled": true,
+            "totp": false,
+            "emailVerified": false,
+            "email": "service-account-clarksnut-online-platform@placeholder.org",
+            "serviceAccountClientId": "clarksnut-online-platform",
+            "credentials": [],
+            "disableableCredentialTypes": [],
+            "requiredActions": [],
+            "realmRoles": [
+              "offline_access",
+              "uma_authorization"
+            ],
+            "clientRoles": {
+              "realm-management": [
+                "view-users",
+                "manage-authorization"
+              ],
+              "broker": [
+                "read-token"
+              ],
+              "clarksnut-online-platform": [
+                "uma_protection"
+              ],
+              "account": [
+                "manage-account",
+                "view-profile"
+              ]
+            },
+            "groups": []
+          }
+        ],
+        "clientScopeMappings": {
+          "realm-management": [
+            {
+              "client": "clarksnut-online-platform",
+              "roles": [
+                "view-users"
+              ]
+            },
+            {
+              "client": "clarksnut-online-platform",
+              "roles": [
+                "manage-authorization"
+              ]
+            }
+          ],
+          "broker": [
+            {
+              "client": "clarksnut-online-platform",
+              "roles": [
+                "read-token"
+              ]
+            }
+          ]
+        },
+        "roles": {
+          "realm": [
+            {
+              "name": "user",
+              "description": "Read space"
+            },
+            {
+              "name": "admin",
+              "description": "Admin space"
+            }
+          ]
+        },
+        "identityProviders": [
+          {
+            "alias": "google",
+            "providerId": "google",
+            "enabled": true,
+            "updateProfileFirstLogin": "true",
+            "storeToken": "true",
+            "trustEmail": true,
+            "addReadTokenRoleOnCreate": true,
+            "config": {
+              "hideOnLoginPage": "${HIDE_GOOGLE_BTN}",
+              "clientSecret": "${GOOGLE_OAUTH_CLIENT_SECRET}",
+              "clientId": "${GOOGLE_OAUTH_CLIENT_ID}",
+              "defaultScope": "openid profile email https://www.googleapis.com/auth/gmail.readonly",
+              "useJwksUrl": "true"
+            }
+          }
+        ],
+        "identityProviderMappers": [
+          {
+            "name": "approved",
+            "identityProviderAlias": "google",
+            "identityProviderMapper": "hardcoded-attribute-idp-mapper",
+            "config": {
+              "attribute.value": "true",
+              "attribute": "approved"
+            }
+          }
+        ]
+      }
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      fabric8.io/git-commit: c0a681b2565e7710e8adb7f7ddd9ce4bcc0f037a
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=clarksnut-db&var-version=1.0-SNAPSHOT
+      fabric8.io/scm-con-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/clarksnut-db
+      fabric8.io/scm-url: http://github.com/clarksnut/clarksnut-platform/apps/clarksnut-db
+      fabric8.io/git-branch: master
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/clarksnut-db
+      fabric8.io/scm-tag: app-console-2.0.1
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/clarksnut-db/target/clarksnut-db-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      service: clarksnut-db
+      app: clarksnut-db
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: clarksnut-db
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      app: clarksnut-db
+      provider: fabric8
+      group: io.clarksnut.platform.apps
+    strategy:
+      rollingParams:
+        timeoutSeconds: 7200
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: c0a681b2565e7710e8adb7f7ddd9ce4bcc0f037a
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=clarksnut-db&var-version=1.0-SNAPSHOT
+          fabric8.io/scm-con-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/clarksnut-db
+          fabric8.io/scm-url: http://github.com/clarksnut/clarksnut-platform/apps/clarksnut-db
+          fabric8.io/git-branch: master
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/clarksnut-db
+          fabric8.io/scm-tag: app-console-2.0.1
+        labels:
+          service: clarksnut-db
+          app: clarksnut-db
+          provider: fabric8
+          version: 1.0-SNAPSHOT
+          group: io.clarksnut.platform.apps
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_DATABASE
+            value: clarksnut
+          - name: POSTGRESQL_PASSWORD
+            value: clarksnut
+          - name: POSTGRESQL_USER
+            value: clarksnut
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          image: registry.centos.org/postgresql/postgresql:9.6
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            failureThreshold: 6
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          name: clarksnut-db
+          ports:
+          - containerPort: 5432
+            name: postgresql
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            timeoutSeconds: 3
+          volumeMounts:
+          - mountPath: /var/lib/pgsql
+            name: clarksnut-db-postgresql-data
+            readOnly: false
+        volumes:
+        - name: clarksnut-db-postgresql-data
+          persistentVolumeClaim:
+            claimName: clarksnut-db-postgresql-data
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      configmap.fabric8.io/update-on-change: keycloak
+      fabric8.io/target-platform: openshift
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/keycloak/target/keycloak-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      app: keycloak
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: keycloak
+  spec:
+    replicas: 1
+    strategy:
+      rollingParams:
+        timeoutSeconds: 7200
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          pod.beta.kubernetes.io/init-containers: |-
+            [{
+              "name": "git-cloner",
+              "image": "fabric8/builder-clients:0.11",
+              "imagePullPolicy": "IfNotPresent",
+              "command": [ "/bin/bash" ],
+              "args": [
+                "-c",
+                "rm -rf /keycloak-theme/login && git clone https://github.com/clarksnut/clarksnut-keycloak-theme.git /keycloak-theme/login && cd /keycloak-theme/login"
+              ],
+              "volumeMounts": [{
+                "name": "keycloak-theme",
+                "mountPath": "/keycloak-theme"
+              }]
+            },
+            {
+              "name": "openshift-ca-pemtokeystore",
+              "image": "jimmidyson/pemtokeystore:v0.2.0",
+              "imagePullPolicy": "IfNotPresent",
+              "args": [
+                "-keystore", "/tls-keystore/openshift-truststore.jks",
+                "-ca-file", "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+                "-ca-file", "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt",
+                "-ca-dir", "/usr/share/ca-certificates/mozilla"
+              ],
+              "volumeMounts": [{
+                "name": "keycloak-tls",
+                "mountPath": "/tls-keystore"
+              }]
+            },
+            {
+              "name": "envvar-substitution",
+              "image": "fabric8/envsubst-file:1.0.0",
+              "imagePullPolicy": "IfNotPresent",
+              "args": [
+                "clarksnut-realm.json"
+              ],
+              "env": [{
+                "name": "AUTH_URL",
+                "valueFrom": {
+                        "configMapKeyRef": {
+                            "name": "keycloak",
+                            "key": "auth.api.url"
+                        }
+                    }
+              },
+              {
+                "name": "CLARKSNUT_URL",
+                "valueFrom": {
+                        "configMapKeyRef": {
+                            "name": "keycloak",
+                            "key": "clarksnut.api.url"
+                        }
+                    }
+              },
+              {
+                "name": "KEYCLOAK_URL",
+                "valueFrom": {
+                        "configMapKeyRef": {
+                            "name": "keycloak",
+                            "key": "keycloak.url"
+                        }
+                    }
+              },
+              {
+                "name": "CLARKSNUTUI_URL",
+                "valueFrom": {
+                        "configMapKeyRef": {
+                            "name": "keycloak",
+                            "key": "clarksnutui.url"
+                        }
+                    }
+              },
+              {
+                "name": "KEYCLOAK_PRIVATEKEY",
+                "valueFrom": {
+                        "secretKeyRef": {
+                            "name": "keycloak",
+                            "key": "kc.private.key"
+                        }
+                    }
+              },
+              {
+                "name": "KEYCLOAK_PUBLICKEY",
+                "valueFrom": {
+                        "secretKeyRef": {
+                            "name": "keycloak",
+                            "key": "kc.public.key"
+                        }
+                    }
+              },
+              {
+                "name": "KEYCLOAK_CLIENTID_SECRET",
+                "valueFrom": {
+                        "secretKeyRef": {
+                            "name": "keycloak",
+                            "key": "kc.clientid.secret"
+                        }
+                    }
+              },
+              {
+                "name": "K8S_API_SERVER",
+                "valueFrom": {
+                        "configMapKeyRef": {
+                            "name": "keycloak",
+                            "key": "apiserver.url"
+                        }
+                    }
+              },
+              {
+                "name": "HIDE_OPENSHIFT_BTN",
+                "value": "false"
+              },
+              {
+                "name": "HIDE_GITHUB_BTN",
+                "value": "true"
+              }],
+              "volumeMounts": [
+              {
+                "name": "keycloak-config",
+                "mountPath": "/workdir/clarksnut-realm.json",
+                "subPath": "config/clarksnut-realm.json"
+              },
+              {
+                "name": "keycloak-subst-config",
+                "mountPath": "/processed"
+              }
+              ]
+            },
+            {
+                "name": "init-dependencyservice",
+                "image": "fabric8/fabric8-dependency-wait-service:v6632df1",
+                "imagePullPolicy": "IfNotPresent",
+                "command": ["sh", "-c", "fabric8-dependency-wait-service-linux-amd64 postgres://keycloak@keycloak-db:5432"],
+                "env": [{
+                  "name": "DEPENDENCY_POLL_INTERVAL",
+                  "value": "1"
+                }, {
+                  "name": "DEPENDENCY_LOG_VERBOSE",
+                  "value": "true"
+                }]
+            }]
+        labels:
+          app: keycloak
+          provider: fabric8
+          version: 1.0-SNAPSHOT
+          group: io.clarksnut.platform.apps
+      spec:
+        containers:
+        - args:
+          - -b $(INTERNAL_POD_IP)
+          - -Djgroups.bind_addr=global
+          - -Djboss.node.name=$(INTERNAL_POD_IP)
+          - -Djavax.net.ssl.trustStore=/opt/jboss/keycloak/standalone/configuration/tls/openshift-truststore.jks
+          - -Dkeycloak.migration.action=import
+          - -Dkeycloak.migration.provider=singleFile
+          - -Dkeycloak.migration.file=/opt/jboss/keycloak/standalone/configuration/import/clarksnut-realm.json
+          - -Dkeycloak.migration.strategy=IGNORE_EXISTING
+          env:
+          - name: POSTGRES_HOSTNAME
+            value: keycloak-db
+          - name: POSTGRES_USER
+            value: keycloak
+          - name: POSTGRES_PASSWORD
+            value: keycloak
+          - name: OPERATING_MODE
+            value: standalone
+          - name: POSTGRES_PORT_5432_TCP_ADDR
+            value: keycloak-db
+          - name: INTERNAL_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: KEYCLOAK_USER
+            valueFrom:
+              secretKeyRef:
+                key: kc.user
+                name: keycloak
+          - name: KEYCLOAK_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: kc.password
+                name: keycloak
+          - name: KEYCLOAK_CLIENTID_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: kc.clientid.secret
+                name: keycloak
+          - name: KEYCLOAK_PRIVATEKEY
+            valueFrom:
+              secretKeyRef:
+                key: kc.private.key
+                name: keycloak
+          - name: KEYCLOAK_PUBLICKEY
+            valueFrom:
+              secretKeyRef:
+                key: kc.public.key
+                name: keycloak
+          - name: HIDE_GOOGLE_BTN
+            value: "false"
+          image: fabric8/keycloak-postgres:v15751c8
+          livenessProbe:
+            httpGet:
+              path: /auth
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+          name: keycloak
+          readinessProbe:
+            httpGet:
+              path: /auth
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+          volumeMounts:
+          - mountPath: /opt/jboss/keycloak/standalone/configuration/tls
+            name: keycloak-tls
+          - mountPath: /opt/jboss/keycloak/standalone/configuration/import
+            name: keycloak-subst-config
+          - mountPath: /opt/jboss/keycloak/themes/clarksnut
+            name: keycloak-theme
+        volumes:
+        - emptyDir: {}
+          name: keycloak-tls
+        - emptyDir: {}
+          name: keycloak-subst-config
+        - configMap:
+            items:
+            - key: clarksnut-realm.json
+              path: config/clarksnut-realm.json
+            name: keycloak
+          name: keycloak-config
+        - emptyDir: {}
+          name: keycloak-theme
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      fabric8.io/git-commit: c0a681b2565e7710e8adb7f7ddd9ce4bcc0f037a
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=keycloak-db&var-version=1.0-SNAPSHOT
+      fabric8.io/scm-con-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/keycloak-db
+      fabric8.io/scm-url: http://github.com/clarksnut/clarksnut-platform/apps/keycloak-db
+      fabric8.io/git-branch: master
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/keycloak-db
+      fabric8.io/scm-tag: app-console-2.0.1
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/keycloak-db/target/keycloak-db-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      service: keycloak-db
+      app: keycloak-db
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: keycloak-db
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      app: keycloak-db
+      provider: fabric8
+      group: io.clarksnut.platform.apps
+    strategy:
+      rollingParams:
+        timeoutSeconds: 7200
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: c0a681b2565e7710e8adb7f7ddd9ce4bcc0f037a
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=keycloak-db&var-version=1.0-SNAPSHOT
+          fabric8.io/scm-con-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/keycloak-db
+          fabric8.io/scm-url: http://github.com/clarksnut/clarksnut-platform/apps/keycloak-db
+          fabric8.io/git-branch: master
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/keycloak-db
+          fabric8.io/scm-tag: app-console-2.0.1
+        labels:
+          service: keycloak-db
+          app: keycloak-db
+          provider: fabric8
+          version: 1.0-SNAPSHOT
+          group: io.clarksnut.platform.apps
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_DATABASE
+            value: keycloak
+          - name: POSTGRESQL_PASSWORD
+            value: keycloak
+          - name: POSTGRESQL_USER
+            value: keycloak
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          image: registry.centos.org/postgresql/postgresql:9.6
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            failureThreshold: 6
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          name: keycloak-db
+          ports:
+          - containerPort: 5432
+            name: postgresql
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            timeoutSeconds: 3
+          volumeMounts:
+          - mountPath: /var/lib/pgsql
+            name: keycloak-db-postgresql-data
+            readOnly: false
+        volumes:
+        - name: keycloak-db-postgresql-data
+          persistentVolumeClaim:
+            claimName: keycloak-db-postgresql-data
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/keycloak/target/keycloak-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      app: keycloak
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: keycloak
+  spec:
+    to:
+      kind: Service
+      name: keycloak
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      fabric8.io/target-platform: openshift
+      service.alpha.openshift.io/dependencies: '[{"name":"keycloak-db","namespace":"","kind":"Service"}]'
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/keycloak/target/keycloak-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      expose: "true"
+      app: keycloak
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: sso
+  spec:
+    port:
+      targetPort: 8080
+    to:
+      kind: Service
+      name: sso

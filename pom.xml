@@ -267,13 +267,6 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${version.hibernate}</version>
             <scope>provided</scope>
-            <!--Necessary after import hibernate-infinispan-->
-            <exclusions>
-                <exclusion>
-                    <groupId>dom4j</groupId>
-                    <artifactId>dom4j</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -295,23 +288,18 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-search-elasticsearch-aws</artifactId>
-            <version>5.8.1.Final</version>
+            <version>${version.hibernate-search}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-search-serialization-avro</artifactId>
-            <version>5.8.2.Final</version>
+            <version>${version.hibernate-search}</version>
         </dependency>
 
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-search-engine</artifactId>
             <version>${version.hibernate-search}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-infinispan</artifactId>
-            <version>${version.hibernate}</version>
         </dependency>
 
         <!--Liquibase-->
@@ -324,13 +312,6 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-cdi</artifactId>
             <version>${version.liquibase}</version>
-        </dependency>
-
-        <!-- Infinispan integration: hb search-->
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-directory-provider</artifactId>
-            <version>9.0.1.Final</version>
         </dependency>
 
         <!--Keycloak-->
@@ -390,18 +371,6 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.3</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-cachestore-jdbc</artifactId>
-            <version>8.2.4.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>com.mchange</groupId>
-            <artifactId>c3p0</artifactId>
-            <version>0.9.5-pre10</version>
         </dependency>
 
         <!--Google Guava-->
@@ -624,6 +593,14 @@
                                     <classifier>wildfly-11-dist</classifier>
                                     <type>zip</type>
                                     <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}/modules</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.infinispan</groupId>
+                                    <artifactId>infinispan-wildfly-modules</artifactId>
+                                    <version>9.1.4.Final</version>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.outputDirectory}/modules</outputDirectory>
                                 </artifactItem>
                             </artifactItems>

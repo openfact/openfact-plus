@@ -1,5 +1,5 @@
 metadata:
-  name: clarksnut-lucene-data
+  name: clarksnut-fs-lucene-data
 spec:
   accessModes:
   - ReadWriteOnce
