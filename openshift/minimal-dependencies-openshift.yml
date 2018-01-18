@@ -1,0 +1,163 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  labels:
+    app: clarksnut-minimal-dependencies
+    provider: fabric8
+    version: 1.0-SNAPSHOT
+    group: io.clarksnut.platform.packages
+  name: clarksnut-minimal-dependencies
+objects:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: c0a681b2565e7710e8adb7f7ddd9ce4bcc0f037a
+      fabric8.io/git-branch: master
+      fabric8.io/scm-con-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/clarksnut-db
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/clarksnut-db
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/clarksnut/clarksnut-platform/apps/clarksnut-db
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/clarksnut-db/target/clarksnut-db-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      service: clarksnut-db
+      app: clarksnut-db
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: clarksnut-db
+  spec:
+    ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      service: clarksnut-db
+      app: clarksnut-db
+      provider: fabric8
+      group: io.clarksnut.platform.apps
+    type: ClusterIP
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/clarksnut-db/target/clarksnut-db-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      app: clarksnut-db
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: clarksnut-db-postgresql-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      fabric8.io/git-commit: c0a681b2565e7710e8adb7f7ddd9ce4bcc0f037a
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=clarksnut-db&var-version=1.0-SNAPSHOT
+      fabric8.io/scm-con-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/clarksnut-db
+      fabric8.io/scm-url: http://github.com/clarksnut/clarksnut-platform/apps/clarksnut-db
+      fabric8.io/git-branch: master
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/clarksnut-db
+      fabric8.io/scm-tag: app-console-2.0.1
+      maven.fabric8.io/source-url: jar:file:/home/admin/git/clarksnut-platform/apps/clarksnut-db/target/clarksnut-db-1.0-SNAPSHOT.jar!/META-INF/fabric8/openshift.yml
+    labels:
+      service: clarksnut-db
+      app: clarksnut-db
+      provider: fabric8
+      version: 1.0-SNAPSHOT
+      group: io.clarksnut.platform.apps
+    name: clarksnut-db
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      app: clarksnut-db
+      provider: fabric8
+      group: io.clarksnut.platform.apps
+    strategy:
+      rollingParams:
+        timeoutSeconds: 7200
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: c0a681b2565e7710e8adb7f7ddd9ce4bcc0f037a
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=clarksnut-db&var-version=1.0-SNAPSHOT
+          fabric8.io/scm-con-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/clarksnut-db
+          fabric8.io/scm-url: http://github.com/clarksnut/clarksnut-platform/apps/clarksnut-db
+          fabric8.io/git-branch: master
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:clarksnut/clarksnut-platform.git/apps/clarksnut-db
+          fabric8.io/scm-tag: app-console-2.0.1
+        labels:
+          service: clarksnut-db
+          app: clarksnut-db
+          provider: fabric8
+          version: 1.0-SNAPSHOT
+          group: io.clarksnut.platform.apps
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_DATABASE
+            value: clarksnut
+          - name: POSTGRESQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: db.user
+                name: clarksnut
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: db.password
+                name: clarksnut
+          - name: POSTGRESQL_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: db.admin.password
+                name: clarksnut
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          image: registry.centos.org/postgresql/postgresql:9.6
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            failureThreshold: 6
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          name: clarksnut-db
+          ports:
+          - containerPort: 5432
+            name: postgresql
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            timeoutSeconds: 3
+          volumeMounts:
+          - mountPath: /var/lib/pgsql
+            name: clarksnut-db-postgresql-data
+            readOnly: false
+        volumes:
+        - name: clarksnut-db-postgresql-data
+          persistentVolumeClaim:
+            claimName: clarksnut-db-postgresql-data
+    triggers:
+    - type: ConfigChange
