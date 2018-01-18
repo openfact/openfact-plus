@@ -1,11 +1,8 @@
 {
   "realm": "clarksnut",
-  "auth-server-url": "https://keycloak.com",
-  "resource": "clarksnut-platform",
-  "ssl-required": "external",
-  "credentials": {
-    "secret": "Yjc4NzNmODAtNmFkNy00NGE1LTk3Y2ItYmQyMTA3ODllYjQx"
-  },
   "bearer-only": true,
+  "auth-server-url": "https://keycloak.com/auth",
+  "ssl-required": "external",
+  "resource": "clarksnut-restful-api",
   "enable-cors": true
 }
