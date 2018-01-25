@@ -43,7 +43,7 @@ public class UserService {
         KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
         AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
 
-        String kcUserID = (String) accessToken.getOtherClaims().get("userID");
+        String kcUserID = principal.getName();
         String kcUsername = accessToken.getPreferredUsername();
 
         // Get user from DB

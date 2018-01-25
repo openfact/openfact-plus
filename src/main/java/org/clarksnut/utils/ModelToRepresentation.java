@@ -52,12 +52,11 @@ public class ModelToRepresentation {
         attributes.setCreatedAt(model.getCreatedAt());
         attributes.setUpdatedAt(model.getUpdatedAt());
 
-        attributes.setContextInformation(model.getContextInformation());
         attributes.setFavoriteSpaces(model.getFavoriteSpaces());
         attributes.setOwnedSpaces(model.getOwnedSpaces().stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
         attributes.setCollaboratedSpaces(model.getCollaboratedSpaces().stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
 
-        attributes.setLanguage(model.getLanguage());
+        attributes.setDefaultLanguage(model.getDefaultLanguage());
 
         rep.setAttributes(attributes);
         return rep;

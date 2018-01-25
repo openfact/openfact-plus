@@ -50,9 +50,9 @@ public interface UserModel {
 
     void setEmailTheme(String emailTheme);
 
-    String getLanguage();
+    String getDefaultLanguage();
 
-    void setLanguage(String language);
+    void setDefaultLanguage(String language);
 
     Date getCreatedAt();
 
@@ -63,8 +63,6 @@ public interface UserModel {
     Set<SpaceModel> getCollaboratedSpaces();
 
     Set<SpaceModel> getAllPermitedSpaces();
-
-    JsonNode getContextInformation();
 
     Set<String> getFavoriteSpaces();
 

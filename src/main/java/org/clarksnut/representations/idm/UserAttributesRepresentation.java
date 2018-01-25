@@ -1,7 +1,6 @@
 package org.clarksnut.representations.idm;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Date;
 import java.util.List;
@@ -54,13 +53,12 @@ public class UserAttributesRepresentation {
     private List<RequestAccessToSpaceRepresentation> spaceRequests;
 
     private String refreshToken;
-    private JsonNode contextInformation;
 
     private Set<String> favoriteSpaces;
     private Set<String> ownedSpaces;
     private Set<String> collaboratedSpaces;
 
-    private String language;
+    private String defaultLanguage;
 
     public String getUserID() {
         return userID;
@@ -190,14 +188,6 @@ public class UserAttributesRepresentation {
         this.refreshToken = refreshToken;
     }
 
-    public JsonNode getContextInformation() {
-        return contextInformation;
-    }
-
-    public void setContextInformation(JsonNode contextInformation) {
-        this.contextInformation = contextInformation;
-    }
-
     public Set<String> getFavoriteSpaces() {
         return favoriteSpaces;
     }
@@ -222,11 +212,11 @@ public class UserAttributesRepresentation {
         this.collaboratedSpaces = collaboratedSpaces;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getDefaultLanguage() {
+        return defaultLanguage;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setDefaultLanguage(String defaultLanguage) {
+        this.defaultLanguage = defaultLanguage;
     }
 }

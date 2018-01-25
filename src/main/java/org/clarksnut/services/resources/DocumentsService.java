@@ -234,7 +234,7 @@ public class DocumentsService {
 
         ReportTemplateConfiguration reportConfig = ReportTemplateConfiguration.builder()
                 .themeName(theme)
-                .locale(user.getLanguage() != null ? new Locale(user.getLanguage()) : Locale.ENGLISH)
+                .locale(user.getDefaultLanguage() != null ? new Locale(user.getDefaultLanguage()) : Locale.ENGLISH)
                 .build();
 
         ZipBuilder zipInMemory = ZipBuilder.createZipInMemory();
@@ -286,7 +286,7 @@ public class DocumentsService {
         ExportFormat exportFormat = ExportFormat.valueOf(format.toUpperCase());
         ReportTemplateConfiguration reportConfig = ReportTemplateConfiguration.builder()
                 .themeName(theme)
-                .locale(user.getLanguage() != null ? new Locale(user.getLanguage()) : Locale.ENGLISH)
+                .locale(user.getDefaultLanguage() != null ? new Locale(user.getDefaultLanguage()) : Locale.ENGLISH)
                 .build();
 
         byte[] reportBytes;

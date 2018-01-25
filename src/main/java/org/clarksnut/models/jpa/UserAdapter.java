@@ -122,12 +122,12 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     }
 
     @Override
-    public String getLanguage() {
+    public String getDefaultLanguage() {
         return user.getLanguage();
     }
 
     @Override
-    public void setLanguage(String language) {
+    public void setDefaultLanguage(String language) {
         user.setLanguage(language);
     }
 
@@ -182,14 +182,6 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
         return Stream.concat(ownedSpaces.stream(), collaboratedSpaces.stream().map(CollaboratorEntity::getSpace))
                 .map(f -> new SpaceAdapter(em, f))
                 .collect(Collectors.toSet());
-    }
-
-    @Override
-    public JsonNode getContextInformation() {
-        if (user.getContextInformation() != null) {
-            return JacksonUtil.toJsonNode(user.getContextInformation().getValue());
-        }
-        return null;
     }
 
     @Override

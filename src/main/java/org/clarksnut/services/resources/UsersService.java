@@ -1,10 +1,8 @@
 package org.clarksnut.services.resources;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.clarksnut.models.QueryModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
-import org.clarksnut.models.utils.JacksonUtil;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.UserAttributesRepresentation;
 import org.clarksnut.representations.idm.UserRepresentation;
@@ -12,6 +10,8 @@ import org.clarksnut.services.resources.utils.PATCH;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
 import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.representations.AccessToken;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -41,8 +41,9 @@ public class UsersService {
     private ModelToRepresentation modelToRepresentation;
 
     private UserModel getUser(HttpServletRequest httpServletRequest) {
-        KeycloakPrincipal principal = (KeycloakPrincipal) httpServletRequest.getUserPrincipal();
-        String username = principal.getKeycloakSecurityContext().getIdToken().getPreferredUsername();
+        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
+        AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
+        String username = accessToken.getPreferredUsername();
 
         UserModel user = userProvider.getUserByUsername(username);
         if (user == null) {
@@ -96,13 +97,6 @@ public class UsersService {
                 user.setRegistrationCompleted(registrationCompleted);
             }
 
-            // Context Information
-            JsonNode contextInformation = userAttributesRepresentation.getContextInformation();
-            if (contextInformation != null) {
-                JsonNode currentContextInformation = user.getContextInformation() != null ? user.getContextInformation() : JacksonUtil.toJsonNode("{}");
-                user.setContextInformation(JacksonUtil.override(currentContextInformation, contextInformation));
-            }
-
             // Favorite Spaces
             Set<String> favoriteSpaces = userAttributesRepresentation.getFavoriteSpaces();
             if (favoriteSpaces != null && !favoriteSpaces.isEmpty()) {
@@ -126,8 +120,8 @@ public class UsersService {
                 user.setBio(userAttributesRepresentation.getBio());
             }
 
-            if (userAttributesRepresentation.getLanguage() != null) {
-                user.setLanguage(userAttributesRepresentation.getLanguage());
+            if (userAttributesRepresentation.getDefaultLanguage() != null) {
+                user.setDefaultLanguage(userAttributesRepresentation.getDefaultLanguage());
             }
         }
 
