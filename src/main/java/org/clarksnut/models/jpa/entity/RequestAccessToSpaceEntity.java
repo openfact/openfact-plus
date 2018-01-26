@@ -4,22 +4,24 @@ import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
-import org.clarksnut.models.RequestStatusType;
 import org.clarksnut.models.RequestAccessScope;
+import org.clarksnut.models.RequestStatusType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "cl_space_request")
+@Table(name = "cl_request_access_to_space")
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getSpaceRequestBySpaceId", query = "select r from SpaceRequestEntity r inner join r.space s where s.id = :spaceId")
+        @NamedQuery(name = "getRequestAccesstoSpaceById", query = "select r from RequestAccessToSpaceEntity r where r.id =:id")
 })
-public class SpaceRequestEntity implements CreatableEntity, UpdatableEntity, Serializable {
+public class RequestAccessToSpaceEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
@@ -27,33 +29,23 @@ public class SpaceRequestEntity implements CreatableEntity, UpdatableEntity, Ser
     private String id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "space_id", foreignKey = @ForeignKey)
-    private SpaceEntity space;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey)
-    private UserEntity user;
-
-    @NotNull
-    @Size(max = 255)
     @Column(name = "message")
     private String message;
 
-    @NotNull(message = "type should not be null")
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type")
-    private RequestAccessScope type;
-
-    @NotNull(message = "status should not be null")
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private RequestStatusType status;
 
-    @NotNull(message = "fileId should not be null")
-    @Column(name = "file_id")
-    private String fileId;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "scope")
+    private RequestAccessScope scope;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "space_id", foreignKey = @ForeignKey)
+    private SpaceEntity space;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -73,28 +65,12 @@ public class SpaceRequestEntity implements CreatableEntity, UpdatableEntity, Ser
         this.id = id;
     }
 
-    public SpaceEntity getSpace() {
-        return space;
-    }
-
-    public void setSpace(SpaceEntity space) {
-        this.space = space;
-    }
-
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public RequestAccessScope getType() {
-        return type;
-    }
-
-    public void setType(RequestAccessScope type) {
-        this.type = type;
     }
 
     public RequestStatusType getStatus() {
@@ -105,12 +81,12 @@ public class SpaceRequestEntity implements CreatableEntity, UpdatableEntity, Ser
         this.status = status;
     }
 
-    public String getFileId() {
-        return fileId;
+    public RequestAccessScope getScope() {
+        return scope;
     }
 
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
+    public void setScope(RequestAccessScope scope) {
+        this.scope = scope;
     }
 
     public Date getCreatedAt() {
@@ -131,11 +107,11 @@ public class SpaceRequestEntity implements CreatableEntity, UpdatableEntity, Ser
         this.updatedAt = updatedAt;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public void setSpace(SpaceEntity space) {
+        this.space = space;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public SpaceEntity getSpace() {
+        return space;
     }
 }

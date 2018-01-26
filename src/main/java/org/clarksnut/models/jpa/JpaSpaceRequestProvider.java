@@ -23,7 +23,7 @@ public class JpaSpaceRequestProvider implements SpaceRequestProvider {
     private EntityManager em;
 
     @Override
-    public SpaceRequestModel addRequest(SpaceModel space, UserModel user, FileModel userPhotograph, String message, RequestType type) {
+    public SpaceRequestModel addRequest(SpaceModel space, UserModel user, FileModel userPhotograph, String message, RequestAccessScope type) {
         SpaceEntity spaceEntity = SpaceAdapter.toEntity(space, em);
         UserEntity userEntity = UserAdapter.toEntity(user, em);
 

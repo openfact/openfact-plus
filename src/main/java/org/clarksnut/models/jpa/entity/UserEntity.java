@@ -74,8 +74,8 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "email_theme")
     private String emailTheme;
 
-    @Column(name = "language")
-    private String language;
+    @Column(name = "default_language")
+    private String defaultLanguage;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -288,11 +288,11 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.emailTheme = emailTheme;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getDefaultLanguage() {
+        return defaultLanguage;
     }
 
-    public void setLanguage(String locale) {
-        this.language = locale;
+    public void setDefaultLanguage(String defaultLanguage) {
+        this.defaultLanguage = defaultLanguage;
     }
 }

@@ -10,7 +10,7 @@ public interface SpaceRequestProvider {
                                  UserModel user,
                                  FileModel userPhotograph,
                                  String message,
-                                 RequestType type);
+                                 RequestAccessScope type);
 
     SpaceRequestModel getRequest(String id);
 

@@ -41,7 +41,7 @@ public class SpaceRequestAdapter implements SpaceRequestModel, JpaModel<SpaceReq
     }
 
     @Override
-    public RequestType getType() {
+    public RequestAccessScope getType() {
         return request.getType();
     }
 

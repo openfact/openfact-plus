@@ -10,7 +10,9 @@ public enum ModelType {
 
     UBL_DOCUMENT("ubl-document"),
 
-    THEMES("themes");
+    THEMES("themes"),
+
+    REQUEST_ACCESS_TO_SPACE("request-access"),;
 
     private String alias;
 

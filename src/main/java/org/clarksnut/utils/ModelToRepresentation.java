@@ -4,6 +4,7 @@ import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentVersionModel;
 import org.clarksnut.documents.IndexedDocumentModel;
 import org.clarksnut.models.ModelType;
+import org.clarksnut.models.RequestAccessToSpaceModel;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.representations.idm.*;
@@ -174,17 +175,26 @@ public class ModelToRepresentation {
 //        rep.setPermissions(model.getPermissions().stream().getUblMessages(PermissionType::getName).collect(Collectors.toList()));
 //        return rep;
 //    }
-//
-//    public RequestAccessToSpaceRepresentation toRepresentation(RequestAccessToSpaceModel model) {
-//        RequestAccessToSpaceRepresentation rep = new RequestAccessToSpaceRepresentation();
-//
-//        rep.setMessage(model.getMessage());
-//        rep.setPermissions(model.getPermissions().stream().getUblMessages(PermissionType::getName).collect(Collectors.toList()));
-//        rep.setStatus(model.getStatus().getName());
-//
-//        return rep;
-//    }
-//
+
+    public RequestAccessSpaceToRepresentation.Data toRepresentation(RequestAccessToSpaceModel model) {
+        RequestAccessSpaceToRepresentation.Data rep = new RequestAccessSpaceToRepresentation.Data();
+
+        rep.setId(model.getId());
+        rep.setType(ModelType.REQUEST_ACCESS_TO_SPACE.getAlias());
+
+        // Attributes
+        RequestAccessSpaceToRepresentation.Attributes attributes = new RequestAccessSpaceToRepresentation.Attributes();
+        rep.setAttributes(attributes);
+
+        attributes.setScope(model.getScope().toString());
+        attributes.setMessage(model.getMessage());
+        attributes.setStatus(model.getStatus().toString());
+        attributes.setCreatedAt(model.getCreatedAt());
+        attributes.setUpdatedAt(model.getUpdatedAt());
+
+        return rep;
+    }
+
 //    public RepositoryRepresentation toRepresentation(UserRepositoryModel model) {
 //        RepositoryRepresentation rep = new RepositoryRepresentation();
 //

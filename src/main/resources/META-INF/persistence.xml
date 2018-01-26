@@ -5,7 +5,7 @@
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
     <persistence-unit name="ClarksnutPU" transaction-type="JTA">
-        <jta-data-source>java:jboss/datasources/ClarksnutDS</jta-data-source>
+        <!--<jta-data-source>java:jboss/datasources/ClarksnutDS</jta-data-source>-->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>

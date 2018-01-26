@@ -1,10 +1,7 @@
 package org.clarksnut.services.resources;
 
 import org.clarksnut.models.*;
-import org.clarksnut.representations.idm.GenericDataRepresentation;
-import org.clarksnut.representations.idm.SpaceRepresentation;
-import org.clarksnut.representations.idm.TypedGenericDataRepresentation;
-import org.clarksnut.representations.idm.UserRepresentation;
+import org.clarksnut.representations.idm.*;
 import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.services.resources.utils.PATCH;
 import org.clarksnut.utils.ModelToRepresentation;
@@ -208,4 +205,17 @@ public class SpacesService {
         }
     }
 
+    @POST
+    @Path("{spaceId}/request-access")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response requestAccessToSpace(@PathParam("spaceId") String spaceId, final RequestAccessSpaceToRepresentation representation) {
+        RequestAccessSpaceToRepresentation.Data data = representation.getData();
+        RequestAccessSpaceToRepresentation.Attributes attributes = data.getAttributes();
+
+        SpaceModel space = getSpaceById(spaceId);
+        RequestAccessToSpaceModel requestAccess = space.addRequestAccess(RequestAccessScope.valueOf(attributes.getScope()), attributes.getMessage());
+
+        RequestAccessSpaceToRepresentation.Data createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(requestAccess);
+        return Response.status(Response.Status.CREATED).entity(createdRequestAccessRepresentation.toRequestAccessSpaceToRepresentation()).build();
+    }
 }

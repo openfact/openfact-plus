@@ -1,8 +1,8 @@
 {
-  "realm": "${sso.realm:clarksnut}",
+  "realm": "clarksnut",
   "bearer-only": true,
-  "auth-server-url": "${sso.auth.server.url:http://localhost:8180/auth}",
+  "auth-server-url": "http://keycloak-keycloak-sso.apps.console.sistcoop.org/auth",
   "ssl-required": "external",
-  "resource": "${sso.clientId:clarksnut-restful-api}",
+  "resource": "clarksnut-restful-api",
   "enable-cors": true
 }

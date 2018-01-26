@@ -26,4 +26,6 @@ public interface SpaceModel {
 
     void addCollaborators(UserModel user);
     boolean removeCollaborators(UserModel user);
+
+    RequestAccessToSpaceModel addRequestAccess(RequestAccessScope scope, String message);
 }

@@ -679,13 +679,12 @@
                         <artifactId>liquibase-maven-plugin</artifactId>
                         <version>${version.liquibase}</version>
                         <configuration>
-                            <changeLogFile>${project.build.directory}/changelog-master.xml</changeLogFile>
-
                             <url>jdbc:h2:mem:clarksnut;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</url>
                             <driver>org.h2.Driver</driver>
                             <username>sa</username>
                             <password>sa</password>
 
+                            <changeLogFile>${project.build.directory}/changelog-master.xml</changeLogFile>
                             <diffChangeLogFile>${project.build.directory}/changelog-diff.xml</diffChangeLogFile>
                             <dropFirst>true</dropFirst>
                             <referenceUrl>hibernate:spring:org.clarksnut?dialect=org.hibernate.dialect.H2Dialect</referenceUrl>

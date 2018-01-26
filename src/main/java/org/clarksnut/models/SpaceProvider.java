@@ -51,5 +51,4 @@ public interface SpaceProvider {
      * @return spaces according to query
      */
     List<SpaceModel> getSpaces(QueryModel query);
-
 }

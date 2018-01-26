@@ -123,12 +123,12 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
 
     @Override
     public String getDefaultLanguage() {
-        return user.getLanguage();
+        return user.getDefaultLanguage();
     }
 
     @Override
     public void setDefaultLanguage(String language) {
-        user.setLanguage(language);
+        user.setDefaultLanguage(language);
     }
 
     @Override
