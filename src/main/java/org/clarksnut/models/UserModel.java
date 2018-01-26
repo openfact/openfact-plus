@@ -9,6 +9,7 @@ import java.util.Set;
 public interface UserModel {
 
     String USERNAME = "username";
+    String FULL_NAME = "fullName";
 
     String getId();
 

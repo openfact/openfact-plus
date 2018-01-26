@@ -13,12 +13,23 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Stateless
 public class JpaSpaceProvider implements SpaceProvider {
 
-    private final static String[] SEARCH_FIELDS = {"assignedId", "name"};
+    private final static String[] SEARCH_FIELDS = {SpaceModel.ASSIGNED_ID, SpaceModel.NAME};
+    private final static Function<String, String> FIELD_MAPPER = modelFieldName -> {
+        switch (modelFieldName) {
+            case SpaceModel.ASSIGNED_ID:
+                return "assignedId";
+            case SpaceModel.NAME:
+                return "name";
+            default:
+                return modelFieldName;
+        }
+    };
 
     @PersistenceContext
     private EntityManager em;
@@ -90,7 +101,7 @@ public class JpaSpaceProvider implements SpaceProvider {
 
     @Override
     public List<SpaceModel> getSpaces(QueryModel query) {
-        TypedQuery<SpaceEntity> typedQuery = new JpaCriteria<>(em, SpaceEntity.class, SpaceEntity.class, query, SEARCH_FIELDS).buildTypedQuery();
+        TypedQuery<SpaceEntity> typedQuery = new JpaCriteria<>(em, SpaceEntity.class, SpaceEntity.class, query, SEARCH_FIELDS, FIELD_MAPPER).buildTypedQuery();
         return typedQuery.getResultList().stream()
                 .map(f -> new SpaceAdapter(em, f))
                 .collect(Collectors.toList());

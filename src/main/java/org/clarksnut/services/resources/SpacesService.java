@@ -1,9 +1,6 @@
 package org.clarksnut.services.resources;
 
-import org.clarksnut.models.SpaceModel;
-import org.clarksnut.models.SpaceProvider;
-import org.clarksnut.models.UserModel;
-import org.clarksnut.models.UserProvider;
+import org.clarksnut.models.*;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.SpaceRepresentation;
 import org.clarksnut.representations.idm.TypedGenericDataRepresentation;
@@ -47,6 +44,25 @@ public class SpacesService {
             throw new NotFoundException();
         }
         return space;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public GenericDataRepresentation getSpaces(@QueryParam("q") String filterText,
+                                               @QueryParam("assignedId") String assignedId) {
+        QueryModel.Builder queryBuilder = QueryModel.builder();
+
+        if (filterText != null) {
+            queryBuilder.filterText(filterText);
+        }
+        if (assignedId != null) {
+            queryBuilder.addFilter(SpaceModel.ASSIGNED_ID, assignedId);
+        }
+
+        List<SpaceRepresentation.Data> data = spaceProvider.getSpaces(queryBuilder.build()).stream()
+                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
+                .collect(Collectors.toList());
+        return new GenericDataRepresentation<>(data);
     }
 
     @POST

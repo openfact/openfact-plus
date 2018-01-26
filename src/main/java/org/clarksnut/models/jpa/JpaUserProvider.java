@@ -1,6 +1,7 @@
 package org.clarksnut.models.jpa;
 
 import org.clarksnut.models.QueryModel;
+import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.models.jpa.entity.UserEntity;
@@ -11,12 +12,23 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Stateless
 public class JpaUserProvider implements UserProvider {
 
-    private final static String[] SEARCH_FIELDS = {"username", "fullName"};
+    private final static String[] SEARCH_FIELDS = {UserModel.USERNAME, UserModel.FULL_NAME};
+    private final static Function<String, String> FIELD_MAPPER = modelFieldName -> {
+        switch (modelFieldName) {
+            case UserModel.USERNAME:
+                return "username";
+            case UserModel.FULL_NAME:
+                return "fullName";
+            default:
+                return modelFieldName;
+        }
+    };
 
     @PersistenceContext
     private EntityManager em;
@@ -60,7 +72,7 @@ public class JpaUserProvider implements UserProvider {
 
     @Override
     public List<UserModel> getUsers(QueryModel query) {
-        TypedQuery<UserEntity> typedQuery = new JpaCriteria<>(em, UserEntity.class, UserEntity.class, query, SEARCH_FIELDS)
+        TypedQuery<UserEntity> typedQuery = new JpaCriteria<>(em, UserEntity.class, UserEntity.class, query, SEARCH_FIELDS, FIELD_MAPPER)
                 .buildTypedQuery();
         return typedQuery.getResultList().stream()
                 .map(f -> new UserAdapter(em, f))

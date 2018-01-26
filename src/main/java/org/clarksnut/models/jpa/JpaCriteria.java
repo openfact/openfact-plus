@@ -1,6 +1,7 @@
 package org.clarksnut.models.jpa;
 
 import org.clarksnut.models.QueryModel;
+import org.clarksnut.models.jpa.entity.SpaceEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.Root;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 public class JpaCriteria<T, R> {
 
@@ -21,6 +23,7 @@ public class JpaCriteria<T, R> {
     private final Class<R> rClass;
 
     private final String[] searchFields;
+    private Function<String, String> fieldMapper;
 
     protected final CriteriaBuilder cb;
     protected final CriteriaQuery cq;
@@ -28,7 +31,7 @@ public class JpaCriteria<T, R> {
 
     protected final Set<Predicate> predicates;
 
-    public JpaCriteria(EntityManager em, Class<T> tClass, Class<R> rClass, QueryModel query, String[] searchFields) {
+    public JpaCriteria(EntityManager em, Class<T> tClass, Class<R> rClass, QueryModel query, String[] searchFields, Function<String, String> fieldMapper) {
         this.em = em;
         this.query = query;
 
@@ -36,6 +39,7 @@ public class JpaCriteria<T, R> {
         this.rClass = rClass;
 
         this.searchFields = searchFields;
+        this.fieldMapper = fieldMapper;
 
         this.cb = em.getCriteriaBuilder();
         this.cq = cb.createQuery(tClass);
@@ -50,7 +54,7 @@ public class JpaCriteria<T, R> {
         if (query.getFilterText() != null && !query.getFilterText().trim().isEmpty()) {
             Set<Predicate> orPredicates = new HashSet<>();
             for (String field : searchFields) {
-                orPredicates.add(cb.like(cb.upper(root.get(field)), "%" + query.getFilterText().toUpperCase() + "%"));
+                orPredicates.add(cb.like(cb.upper(root.get(fieldMapper.apply(field))), "%" + query.getFilterText().toUpperCase() + "%"));
             }
             predicates.add(cb.or(orPredicates.toArray(new Predicate[orPredicates.size()])));
         }
@@ -58,7 +62,7 @@ public class JpaCriteria<T, R> {
         if (query.getFilters() != null && !query.getFilters().isEmpty()) {
             Set<Predicate> andPredicates = new HashSet<>();
             for (Map.Entry<String, String> entry : query.getFilters().entrySet()) {
-                andPredicates.add(cb.like(cb.upper(root.get(entry.getKey())), "%" + entry.getValue().toUpperCase() + "%"));
+                andPredicates.add(cb.equal(root.get(fieldMapper.apply(entry.getKey())), entry.getValue()));
             }
             predicates.add(cb.and(andPredicates.toArray(new Predicate[andPredicates.size()])));
         }
