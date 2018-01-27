@@ -50,7 +50,6 @@ public class UserAttributesRepresentation {
     private String providerType;
 
     private List<SpaceRepresentation> spaces;
-    private List<RequestAccessToSpaceRepresentation> spaceRequests;
 
     private String refreshToken;
 
@@ -170,14 +169,6 @@ public class UserAttributesRepresentation {
 
     public void setSpaces(List<SpaceRepresentation> spaces) {
         this.spaces = spaces;
-    }
-
-    public List<RequestAccessToSpaceRepresentation> getSpaceRequests() {
-        return spaceRequests;
-    }
-
-    public void setSpaceRequests(List<RequestAccessToSpaceRepresentation> spaceRequests) {
-        this.spaceRequests = spaceRequests;
     }
 
     public String getRefreshToken() {
