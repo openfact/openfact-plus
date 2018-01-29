@@ -3,18 +3,15 @@ package org.clarksnut.models.jpa;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.models.SpaceModel;
-import org.clarksnut.models.UserLinkedBrokerModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.jpa.entity.CollaboratorEntity;
 import org.clarksnut.models.jpa.entity.SpaceEntity;
 import org.clarksnut.models.jpa.entity.UserContextInformationEntity;
 import org.clarksnut.models.jpa.entity.UserEntity;
-import org.clarksnut.models.utils.JacksonUtil;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -209,13 +206,6 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public void setFavoriteSpaces(Set<String> spaces) {
         user.setFavoriteSpaces(spaces);
-    }
-
-    @Override
-    public List<UserLinkedBrokerModel> getLinkedBrokers() {
-        return user.getLinkedBrokers().stream()
-                .map(f -> new UserLinkedBrokerAdapter(em, this, f))
-                .collect(Collectors.toList());
     }
 
     @Override

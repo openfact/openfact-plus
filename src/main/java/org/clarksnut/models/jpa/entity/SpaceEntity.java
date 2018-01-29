@@ -15,11 +15,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "cl_space", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "assigned_id"),
-        @UniqueConstraint(columnNames = "name")
+        @UniqueConstraint(columnNames = "assigned_id")
 }, indexes = {
-        @Index(columnList = "assigned_id", unique = true),
-        @Index(columnList = "name", unique = true)
+        @Index(columnList = "assigned_id", unique = true)
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({

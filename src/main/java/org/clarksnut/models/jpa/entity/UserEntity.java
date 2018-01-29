@@ -101,9 +101,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserContextInformationEntity contextInformation;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private Set<UserLinkedBrokerEntity> linkedBrokers = new HashSet<>();
-
     @ElementCollection
     @Column(name = "value")
     @CollectionTable(name = "favorite_spaces", joinColumns = {@JoinColumn(name = "user_id")})
@@ -254,14 +251,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     public void setVersion(int version) {
         this.version = version;
-    }
-
-    public Set<UserLinkedBrokerEntity> getLinkedBrokers() {
-        return linkedBrokers;
-    }
-
-    public void setLinkedBrokers(Set<UserLinkedBrokerEntity> linkedBrokers) {
-        this.linkedBrokers = linkedBrokers;
     }
 
     public Set<CollaboratorEntity> getCollaboratedSpaces() {

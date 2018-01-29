@@ -70,6 +70,4 @@ public interface UserModel {
     void setFavoriteSpaces(Set<String> spaces);
 
     void setContextInformation(JsonNode contextInformation);
-
-    List<UserLinkedBrokerModel> getLinkedBrokers();
 }

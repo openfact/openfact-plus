@@ -34,7 +34,6 @@ public class ImportedDocumentEntity implements CreatableEntity, UpdatableEntity,
     @Column(name = "compressed")
     private boolean compressed;
 
-    @NotNull(message = "status should not be null")
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private ImportedDocumentStatus status;

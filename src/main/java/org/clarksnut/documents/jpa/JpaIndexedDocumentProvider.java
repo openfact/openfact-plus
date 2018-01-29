@@ -3,6 +3,7 @@ package org.clarksnut.documents.jpa;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentModel.DocumentCreationEvent;
 import org.clarksnut.documents.DocumentVersionModel;
+import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.DocumentVersionEntity;
 import org.clarksnut.documents.jpa.entity.IndexedDocumentEntity;
 
@@ -21,7 +22,7 @@ public class JpaIndexedDocumentProvider {
         DocumentModel document = documentCreationEvent.getCreatedDocument();
         DocumentVersionModel currentVersion = document.getCurrentVersion();
 
-
+        DocumentEntity documentEntity = DocumentAdapter.toEntity(document, em);
         DocumentVersionEntity documentVersionEntity = DocumentVersionAdapter.toEntity(currentVersion, em);
 
         IndexedDocumentEntity entity = new IndexedDocumentEntity();
@@ -47,6 +48,7 @@ public class JpaIndexedDocumentProvider {
         entity.setCreatedAt(documentVersionEntity.getCreatedAt());
         entity.setUpdatedAt(documentVersionEntity.getUpdatedAt());
 
+        entity.setDocument(documentEntity);
         em.persist(entity);
     }
 

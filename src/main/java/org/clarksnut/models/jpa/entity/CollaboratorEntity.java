@@ -4,7 +4,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "cl_collaborator")
+@Table(name = "cl_collaborator", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "space_id"})
+})
 @IdClass(CollaboratorEntity.Key.class)
 @NamedQueries({
         @NamedQuery(name = "getCollaboratorsBySpaceId", query = "select c from CollaboratorEntity c inner join c.space s where s.id = :spaceId")
@@ -20,13 +22,6 @@ public class CollaboratorEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "space_id")
     private SpaceEntity space;
-
-//    @NotNull
-//    @ElementCollection(targetClass = PermissionType.class)
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "VALUE")
-//    @CollectionTable(name = "PERMISSIONS", joinColumns = {@JoinColumn(name = "USER_ID"), @JoinColumn(name = "SPACE_ID")})
-//    private Set<PermissionType> permissions = new HashSet<>();
 
     public CollaboratorEntity() {
     }
@@ -51,14 +46,6 @@ public class CollaboratorEntity implements Serializable {
     public void setSpace(SpaceEntity space) {
         this.space = space;
     }
-
-//    public Set<PermissionType> getPermissions() {
-//        return permissions;
-//    }
-//
-//    public void setPermissions(Set<PermissionType> permissions) {
-//        this.permissions = permissions;
-//    }
 
     public static class Key implements Serializable {
 
