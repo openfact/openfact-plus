@@ -166,3 +166,4 @@ mvn wildfly-swarm:run -pl app -DskipTests -Dswarm.project.stage.file=file:///app
 
 # Deploy to Openshift
 If you are using Openshift you can use [this tutorial for Openshift](https://github.com/clarksnut/clarksnut/blob/master/docs/openshift.md).
+
