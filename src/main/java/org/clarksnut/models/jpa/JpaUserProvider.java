@@ -1,7 +1,6 @@
 package org.clarksnut.models.jpa;
 
 import org.clarksnut.models.QueryModel;
-import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.models.jpa.entity.UserEntity;

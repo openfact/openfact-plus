@@ -104,10 +104,7 @@ public class DocumentRepresentation {
 
         private Set<String> versions;
 
-        @JsonProperty("created-at")
         private Date createdAt;
-
-        @JsonProperty("updated-at")
         private Date updatedAt;
 
         public String getId() {

@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,15 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
     }
 
     @Override
+    public void addOwner(UserModel user) {
+        CollaboratorEntity entity = new CollaboratorEntity();
+        entity.setRole(PermissionType.OWNER);
+        entity.setSpace(space);
+        entity.setUser(UserAdapter.toEntity(user, em));
+        em.persist(entity);
+    }
+
+    @Override
     public String getName() {
         return space.getName();
     }
@@ -67,9 +77,15 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
     }
 
     @Override
-    public UserModel getOwner() {
-        UserEntity owner = space.getOwner();
-        return owner != null ? new UserAdapter(em, owner) : null;
+    public Set<UserModel> getOwners() {
+        TypedQuery<CollaboratorEntity> query = em.createNamedQuery("getCollaboratorsBySpaceIdAndRole", CollaboratorEntity.class);
+        query.setParameter("spaceId", space.getId());
+        query.setParameter("role", PermissionType.OWNER);
+
+        return query.getResultList().stream()
+                .map(CollaboratorEntity::getUser)
+                .map(user -> new UserAdapter(em, user))
+                .collect(Collectors.toSet());
     }
 
     @Override

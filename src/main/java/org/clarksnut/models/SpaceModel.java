@@ -2,6 +2,7 @@ package org.clarksnut.models;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public interface SpaceModel {
 
@@ -10,7 +11,9 @@ public interface SpaceModel {
 
     String getId();
     String getAssignedId();
-    UserModel getOwner();
+
+    void addOwner(UserModel user);
+    Set<UserModel> getOwners();
 
     String getName();
     void setName(String name);

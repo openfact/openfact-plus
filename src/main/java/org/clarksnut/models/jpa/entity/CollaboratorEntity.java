@@ -1,6 +1,9 @@
 package org.clarksnut.models.jpa.entity;
 
+import org.clarksnut.models.PermissionType;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -9,7 +12,12 @@ import java.io.Serializable;
 })
 @IdClass(CollaboratorEntity.Key.class)
 @NamedQueries({
-        @NamedQuery(name = "getCollaboratorsBySpaceId", query = "select c from CollaboratorEntity c inner join c.space s where s.id = :spaceId")
+        @NamedQuery(name = "getCollaboratorsBySpaceId", query = "select c from CollaboratorEntity c inner join c.space s where s.id = :spaceId"),
+        @NamedQuery(name = "getCollaboratorsBySpaceIdAndRole", query = "select c from CollaboratorEntity c inner join c.space s where s.id = :spaceId and c.role =:role"),
+        @NamedQuery(name = "getCollaboratorsByUserId", query = "select c from CollaboratorEntity c inner join c.user u where u.id = :userId"),
+        @NamedQuery(name = "getCollaboratorsByUserIdAndRole", query = "select c from CollaboratorEntity c inner join c.user u where u.id = :userId and c.role in :role"),
+        @NamedQuery(name = "countCollaboratorsByUserIdAndRole", query = "select count(c) from CollaboratorEntity c inner join c.user u where u.id = :userId and c.role in :role"),
+        @NamedQuery(name = "deleteCollaboratorsBySpaceId", query = "delete from CollaboratorEntity c where c.space.id = :spaceId"),
 })
 public class CollaboratorEntity implements Serializable {
 
@@ -22,6 +30,11 @@ public class CollaboratorEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "space_id")
     private SpaceEntity space;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private PermissionType role;
 
     public CollaboratorEntity() {
     }
@@ -45,6 +58,14 @@ public class CollaboratorEntity implements Serializable {
 
     public void setSpace(SpaceEntity space) {
         this.space = space;
+    }
+
+    public PermissionType getRole() {
+        return role;
+    }
+
+    public void setRole(PermissionType role) {
+        this.role = role;
     }
 
     public static class Key implements Serializable {

@@ -16,6 +16,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -69,8 +70,8 @@ public class SpacesService {
         SpaceRepresentation.Attributes attributes = data.getAttributes();
         SpaceRepresentation.Relationships relationships = data.getRelationships();
 
-        SpaceRepresentation.OwnedBy ownedBy = relationships.getOwnedBy();
-        UserModel user = userProvider.getUserByIdentityID(ownedBy.getData().getId());
+        List<SpaceRepresentation.OwnedBy> ownedBy = relationships.getOwnedBy();
+        Set<UserModel> owners = ownedBy.stream().map(r -> userProvider.getUserByIdentityID(r.getData().getId())).collect(Collectors.toSet());
 
         // Create space
         SpaceModel space = spaceProvider.getByAssignedId(attributes.getAssignedId());
@@ -78,7 +79,10 @@ public class SpacesService {
             throw new ErrorResponseException("Space already exists", Response.Status.CONFLICT);
         }
 
-        space = spaceProvider.addSpace(attributes.getAssignedId(), attributes.getName(), user);
+        space = spaceProvider.addSpace(attributes.getAssignedId(), attributes.getName());
+        for (UserModel user : owners) {
+            space.addOwner(user);
+        }
         space.setDescription(attributes.getDescription());
 
         SpaceRepresentation.Data createdSpaceRepresentation = modelToRepresentation.toRepresentation(space, uriInfo);

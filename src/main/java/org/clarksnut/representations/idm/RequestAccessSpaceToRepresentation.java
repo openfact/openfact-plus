@@ -1,7 +1,5 @@
 package org.clarksnut.representations.idm;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Date;
 
 public class RequestAccessSpaceToRepresentation {
@@ -62,10 +60,8 @@ public class RequestAccessSpaceToRepresentation {
         private String status;
         private String scope;
 
-        @JsonProperty("created-at")
-        private Date createdAt;
 
-        @JsonProperty("updated-at")
+        private Date createdAt;
         private Date updatedAt;
 
         public String getMessage() {

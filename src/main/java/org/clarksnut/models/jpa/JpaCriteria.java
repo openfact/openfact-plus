@@ -1,7 +1,6 @@
 package org.clarksnut.models.jpa;
 
 import org.clarksnut.models.QueryModel;
-import org.clarksnut.models.jpa.entity.SpaceEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

@@ -2,13 +2,9 @@ package org.clarksnut.documents.jpa;
 
 import org.clarksnut.documents.IndexedDocumentProvider;
 import org.clarksnut.documents.jpa.IndexedManagerType.Type;
-import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-import java.util.Optional;
 
 @Stateless
 public class IndexedDocumentProviderFactory {

@@ -1,17 +1,15 @@
 package org.clarksnut.models.jpa;
 
-import org.clarksnut.models.QueryModel;
-import org.clarksnut.models.SpaceModel;
-import org.clarksnut.models.SpaceProvider;
-import org.clarksnut.models.UserModel;
+import org.clarksnut.models.*;
+import org.clarksnut.models.jpa.entity.CollaboratorEntity;
 import org.clarksnut.models.jpa.entity.SpaceEntity;
-import org.clarksnut.models.jpa.entity.UserEntity;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -35,19 +33,13 @@ public class JpaSpaceProvider implements SpaceProvider {
     private EntityManager em;
 
     @Override
-    public SpaceModel addSpace(String assignedId, String name, UserModel owner) {
-        UserEntity userEntity = UserAdapter.toEntity(owner, em);
-
+    public SpaceModel addSpace(String assignedId, String name) {
         SpaceEntity entity = new SpaceEntity();
         entity.setId(ClarksnutModelUtils.generateId());
         entity.setAssignedId(assignedId);
         entity.setName(name);
-        entity.setOwner(userEntity);
         em.persist(entity);
         em.flush();
-
-        // Cache
-        userEntity.getOwnedSpaces().add(entity);
 
         return new SpaceAdapter(em, entity);
     }
@@ -72,31 +64,47 @@ public class JpaSpaceProvider implements SpaceProvider {
     public boolean removeSpace(SpaceModel space) {
         SpaceEntity entity = em.find(SpaceEntity.class, space.getId());
         if (entity == null) return false;
+
+        em.createNamedQuery("deleteCollaboratorsBySpaceId").setParameter("spaceId", space.getId()).executeUpdate();
         em.remove(entity);
-        em.flush();
         return true;
     }
 
     @Override
     public List<SpaceModel> getSpaces(UserModel user) {
-        TypedQuery<SpaceEntity> query = em.createNamedQuery("getSpacesByUserId", SpaceEntity.class);
-        query.setParameter("userId", user.getId());
-        return query.getResultList().stream()
-                .map(f -> new SpaceAdapter(em, f))
-                .collect(Collectors.toList());
+        return getSpaces(user, -1, -1);
     }
 
     @Override
-    public List<SpaceModel> getSpaces(UserModel user, int offset, int limit) {
-        TypedQuery<SpaceEntity> query = em.createNamedQuery("getSpacesByUserId", SpaceEntity.class);
+    public List<SpaceModel> getSpaces(UserModel user, int offset, int limit, PermissionType... role) {
+        if (role == null || role.length == 0) {
+            role = PermissionType.values();
+        }
+
+        TypedQuery<CollaboratorEntity> query = em.createNamedQuery("getCollaboratorsByUserIdAndRole", CollaboratorEntity.class);
         query.setParameter("userId", user.getId());
+        query.setParameter("role", Arrays.asList(role));
 
         if (offset != -1) query.setFirstResult(offset);
         if (limit != -1) query.setMaxResults(limit);
 
         return query.getResultList().stream()
+                .map(CollaboratorEntity::getSpace)
                 .map(f -> new SpaceAdapter(em, f))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public int countSpaces(UserModel user, PermissionType... role) {
+        if (role == null || role.length == 0) {
+            role = PermissionType.values();
+        }
+
+        TypedQuery<Long> query = em.createNamedQuery("countCollaboratorsByUserIdAndRole", Long.class);
+        query.setParameter("userId", user.getId());
+        query.setParameter("role", Arrays.asList(role));
+
+        return query.getSingleResult().intValue();
     }
 
     @Override

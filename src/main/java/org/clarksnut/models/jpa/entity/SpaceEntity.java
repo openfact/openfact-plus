@@ -21,8 +21,7 @@ import java.util.Set;
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getSpaceByAssignedId", query = "select s from SpaceEntity s where s.assignedId = :assignedId"),
-        @NamedQuery(name = "getSpacesByUserId", query = "select s from SpaceEntity s inner join s.owner o where o.id = :userId")
+        @NamedQuery(name = "getSpaceByAssignedId", query = "select s from SpaceEntity s where s.assignedId = :assignedId")
 })
 public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
@@ -43,16 +42,8 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
     @Column(name = "description")
     private String description;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", foreignKey = @ForeignKey)
-    private UserEntity owner;
-
     @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
     private Set<CollaboratorEntity> collaborators = new HashSet<>();
-//
-//    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
-//    private Set<RequestAccessToSpaceEntity> accessRequests = new HashSet<>();
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -100,14 +91,6 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
         this.description = description;
     }
 
-    public UserEntity getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserEntity owner) {
-        this.owner = owner;
-    }
-
     public Set<CollaboratorEntity> getCollaborators() {
         return collaborators;
     }
@@ -115,14 +98,6 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
     public void setCollaborators(Set<CollaboratorEntity> collaborators) {
         this.collaborators = collaborators;
     }
-
-//    public Set<RequestAccessToSpaceEntity> getAccessRequests() {
-//        return accessRequests;
-//    }
-//
-//    public void setAccessRequests(Set<RequestAccessToSpaceEntity> accessRequests) {
-//        this.accessRequests = accessRequests;
-//    }
 
     public Date getCreatedAt() {
         return createdAt;

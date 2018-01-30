@@ -1,8 +1,7 @@
 package org.clarksnut.representations.idm;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Date;
+import java.util.List;
 
 public class SpaceRepresentation {
 
@@ -80,10 +79,8 @@ public class SpaceRepresentation {
         private String assignedId;
         private String description;
 
-        @JsonProperty("created-at")
-        private Date createdAt;
 
-        @JsonProperty("updated-at")
+        private Date createdAt;
         private Date updatedAt;
 
         public String getName() {
@@ -128,15 +125,14 @@ public class SpaceRepresentation {
     }
 
     public static class Relationships {
-        @JsonProperty("owned-by")
-        private OwnedBy ownedBy;
+        private List<OwnedBy> ownedBy;
         private Collaborators collaborators;
 
-        public OwnedBy getOwnedBy() {
+        public List<OwnedBy> getOwnedBy() {
             return ownedBy;
         }
 
-        public void setOwnedBy(OwnedBy ownedBy) {
+        public void setOwnedBy(List<OwnedBy> ownedBy) {
             this.ownedBy = ownedBy;
         }
 

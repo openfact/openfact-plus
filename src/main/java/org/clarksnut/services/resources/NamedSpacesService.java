@@ -1,9 +1,6 @@
 package org.clarksnut.services.resources;
 
-import org.clarksnut.models.SpaceModel;
-import org.clarksnut.models.SpaceProvider;
-import org.clarksnut.models.UserModel;
-import org.clarksnut.models.UserProvider;
+import org.clarksnut.models.*;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.SpaceRepresentation;
 import org.clarksnut.utils.ModelToRepresentation;
@@ -71,7 +68,7 @@ public class NamedSpacesService {
         List<SpaceModel> spaces = spaceProvider.getSpaces(user, offset, limit + 1);
 
         // Meta
-        int totalCount = user.getOwnedSpaces().size();
+        int totalCount = spaceProvider.countSpaces(user);
 
         Map<String, Object> meta = new HashMap<>();
         meta.put("totalCount", totalCount);
@@ -119,7 +116,7 @@ public class NamedSpacesService {
         SpaceModel space = getSpaceByAssignedID(assignedID);
 
         // TODO check if user has access to space
-        if (space.getOwner() != null && (space.getOwner().equals(user) || user.getCollaboratedSpaces().contains(space))) {
+        if (space.getOwners() != null && (space.getOwners().equals(user) || user.getCollaboratedSpaces().contains(space))) {
             return modelToRepresentation.toRepresentation(space, uriInfo).toSpaceRepresentation();
         }
 

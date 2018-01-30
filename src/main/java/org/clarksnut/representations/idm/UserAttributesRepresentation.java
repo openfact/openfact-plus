@@ -1,7 +1,5 @@
 package org.clarksnut.representations.idm;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -15,11 +13,11 @@ public class UserAttributesRepresentation {
     private String identityID;
 
     // The date of creation of the user
-    @JsonProperty("created-at")
+
     private Date createdAt;
 
     // The date of update of the user
-    @JsonProperty("updated-at")
+
     private Date updatedAt;
 
     // The user's full name

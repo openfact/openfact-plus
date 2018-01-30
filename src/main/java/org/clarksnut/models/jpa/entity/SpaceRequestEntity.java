@@ -4,8 +4,8 @@ import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
-import org.clarksnut.models.RequestStatusType;
 import org.clarksnut.models.RequestAccessScope;
+import org.clarksnut.models.RequestStatusType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

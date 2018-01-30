@@ -3,10 +3,7 @@ package org.clarksnut.utils;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentVersionModel;
 import org.clarksnut.documents.IndexedDocumentModel;
-import org.clarksnut.models.ModelType;
-import org.clarksnut.models.RequestAccessToSpaceModel;
-import org.clarksnut.models.SpaceModel;
-import org.clarksnut.models.UserModel;
+import org.clarksnut.models.*;
 import org.clarksnut.representations.idm.*;
 import org.clarksnut.services.resources.DocumentsService;
 import org.clarksnut.services.resources.SpacesService;
@@ -15,6 +12,7 @@ import org.clarksnut.services.resources.UsersService;
 import javax.ejb.Stateless;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,22 +79,27 @@ public class ModelToRepresentation {
 
         // Relationships
         SpaceRepresentation.Relationships relationships = new SpaceRepresentation.Relationships();
-        SpaceRepresentation.OwnedBy ownedBy = new SpaceRepresentation.OwnedBy();
-        relationships.setOwnedBy(ownedBy);
+        List<SpaceRepresentation.OwnedBy> owners = new ArrayList<>();
+        relationships.setOwnedBy(owners);
         rep.setRelationships(relationships);
 
-        if (model.getOwner() != null) {
+        for (UserModel user : model.getOwners()) {
             UserRepresentation.Data userData = new UserRepresentation.Data();
-            userData.setId(model.getOwner().getIdentityID());
+            userData.setId(user.getIdentityID());
             userData.setType(ModelType.IDENTITIES.getAlias());
+            userData.setScope(PermissionType.OWNER.toString());
+
+            SpaceRepresentation.OwnedBy ownedBy = new SpaceRepresentation.OwnedBy();
             ownedBy.setData(userData); // save
 
             GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
             ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
                     .path(UsersService.class)
                     .path(UsersService.class, "getUser")
-                    .build(model.getOwner().getIdentityID()).toString());
+                    .build(user.getIdentityID()).toString());
             ownedBy.setLinks(ownedLinks); // save
+
+            owners.add(ownedBy);
         }
 
         // Attributes

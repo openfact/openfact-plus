@@ -92,9 +92,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "registration_complete")
     private boolean registrationCompleted;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
-    private Set<SpaceEntity> ownedSpaces = new HashSet<>();
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<CollaboratorEntity> collaboratedSpaces = new HashSet<>();
 
@@ -227,14 +224,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     public void setRegistrationCompleted(boolean registrationCompleted) {
         this.registrationCompleted = registrationCompleted;
-    }
-
-    public Set<SpaceEntity> getOwnedSpaces() {
-        return ownedSpaces;
-    }
-
-    public void setOwnedSpaces(Set<SpaceEntity> ownedSpaces) {
-        this.ownedSpaces = ownedSpaces;
     }
 
     public void setContextInformation(UserContextInformationEntity contextInformation) {
