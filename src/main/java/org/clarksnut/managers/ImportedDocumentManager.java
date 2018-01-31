@@ -49,6 +49,8 @@ public class ImportedDocumentManager {
         FileModel file = fileProvider.addFile(filename, bytes);
 
         CompressedFileModel fileToImport;
+
+        // Uncompress if need
         UncompressedFileModel uncompressedFile = new UncompressFileProviderFacade().uncompress(filename, bytes);
         if (!uncompressedFile.isCompressedFile()) {
             fileToImport = new BasicCompressedFileModel(file);
@@ -61,6 +63,7 @@ public class ImportedDocumentManager {
             fileToImport = new BasicCompressedFileModel(file, childrenFiles);
         }
 
+        // Import uncompressed files
         ImportedDocumentModel importedDocument = importedDocumentProvider.importDocument(fileToImport, providerType);
 
         Set<ImportedDocumentModel> documentsToImport;

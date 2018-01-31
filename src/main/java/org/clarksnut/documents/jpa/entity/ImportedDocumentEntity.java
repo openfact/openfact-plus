@@ -43,7 +43,6 @@ public class ImportedDocumentEntity implements CreatableEntity, UpdatableEntity,
     @Column(name = "provider")
     private DocumentProviderType provider;
 
-    @NotNull(message = "documentReferenceId should not be null")
     @Column(name = "document_reference_id")
     private String documentReferenceId;
 

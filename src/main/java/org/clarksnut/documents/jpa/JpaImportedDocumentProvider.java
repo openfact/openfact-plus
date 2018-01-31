@@ -28,6 +28,7 @@ public class JpaImportedDocumentProvider implements ImportedDocumentProvider {
         importedParentDocumentEntity.setId(UUID.randomUUID().toString());
         importedParentDocumentEntity.setFile(FileAdapter.toEntity(file, em));
         importedParentDocumentEntity.setProvider(provider);
+        importedParentDocumentEntity.setCompressed(file.isCompressed());
         em.persist(importedParentDocumentEntity);
 
         if (file.isCompressed()) {
@@ -38,6 +39,9 @@ public class JpaImportedDocumentProvider implements ImportedDocumentProvider {
                 importedChildDocumentEntity.setProvider(provider);
                 importedChildDocumentEntity.setParent(importedChildDocumentEntity);
                 em.persist(importedChildDocumentEntity);
+
+                // Temporal Cache
+                importedParentDocumentEntity.getChildren().add(importedChildDocumentEntity);
             });
         }
 

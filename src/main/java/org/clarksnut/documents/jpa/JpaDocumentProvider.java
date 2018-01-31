@@ -121,6 +121,24 @@ public class JpaDocumentProvider implements DocumentProvider {
             em.persist(documentVersionEntity);
 
             document = new DocumentAdapter(em, documentEntity);
+
+            DocumentModel documentCreated = document;
+            creationEvent.fire(new DocumentCreationEvent() {
+                @Override
+                public String getDocumentType() {
+                    return file.getDocumentType();
+                }
+
+                @Override
+                public Object getJaxb() {
+                    return mappedDocument.getType();
+                }
+
+                @Override
+                public DocumentModel getCreatedDocument() {
+                    return documentCreated;
+                }
+            });
         } else {
             byte[] current = document.getCurrentVersion()
                     .getImportedDocument()
@@ -133,31 +151,14 @@ public class JpaDocumentProvider implements DocumentProvider {
                 documentVersionEntity.setDocument(DocumentAdapter.toEntity(document, em));
                 documentVersionEntity.setImportedFile(ImportedDocumentAdapter.toEntity(importedDocument, em));
                 em.persist(documentVersionEntity);
+
+                importedDocument.setStatus(ImportedDocumentStatus.IMPORTED);
             } else {
                 importedDocument.setStatus(ImportedDocumentStatus.ALREADY_IMPORTED);
             }
         }
 
         importedDocument.setDocumentReferenceId(document.getId());
-
-        DocumentModel createdDocument = document;
-        creationEvent.fire(new DocumentCreationEvent() {
-            @Override
-            public String getDocumentType() {
-                return file.getDocumentType();
-            }
-
-            @Override
-            public Object getJaxb() {
-                return mappedDocument.getType();
-            }
-
-            @Override
-            public DocumentModel getCreatedDocument() {
-                return createdDocument;
-            }
-        });
-
         return document;
     }
 
