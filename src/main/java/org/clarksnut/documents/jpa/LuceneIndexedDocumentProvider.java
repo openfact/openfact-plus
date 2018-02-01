@@ -7,11 +7,9 @@ import org.clarksnut.documents.IndexedDocumentProvider;
 import org.clarksnut.documents.IndexedDocumentQueryModel;
 import org.clarksnut.documents.SearchResultModel;
 import org.clarksnut.documents.jpa.IndexedManagerType.Type;
-import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.IndexedDocumentEntity;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
-import org.clarksnut.query.SimpleQuery;
 import org.clarksnut.query.es.LuceneQueryParser;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
@@ -24,6 +22,7 @@ import org.jboss.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,9 +37,7 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
     private EntityManager em;
 
     public org.apache.lucene.search.Query getQuery(UserModel user, IndexedDocumentQueryModel query, QueryBuilder queryBuilder, SpaceModel... space) {
-        if (query.getFilters().isEmpty() && query.getFilters().isEmpty()) {
-            throw new IllegalStateException("Invalid query, at least one query should be requested");
-        }
+        DocumentFieldMapper fieldMapper = new DocumentFieldMapper();
 
         // Space query
         Set<String> userPermittedSpaceIds = getUserPermittedSpaces(user, space);
@@ -48,13 +45,26 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
             return null;
         }
 
+        // Filter Text
+        Query filterTextQuery;
+        if (query.getFilterText() != null && !query.getFilterText().trim().isEmpty() && !query.getFilterText().trim().equals("*")) {
+            filterTextQuery = queryBuilder.keyword()
+                    .onFields(Arrays.stream(IndexedDocumentModel.FILTER_TEXT_FIELDS).map(fieldMapper).toArray(String[]::new))
+                    .matching(query.getFilterText())
+                    .createQuery();
+        } else {
+            filterTextQuery = queryBuilder.all().createQuery();
+        }
+
+
+        // Filters
         BooleanJunction<BooleanJunction> boolQueryBuilder = queryBuilder.bool();
-        for (SimpleQuery q : query.getFilters()) {
+        for (org.clarksnut.query.Query q : query.getFilters()) {
             boolQueryBuilder.must(LuceneQueryParser.toLuceneQuery(q, new DocumentFieldMapper(), queryBuilder));
         }
 
-        DocumentFieldMapper fieldMapper = new DocumentFieldMapper();
         String permittedSpaceIdsString = userPermittedSpaceIds.stream().collect(Collectors.joining(" "));
+        boolQueryBuilder.must(filterTextQuery);
         boolQueryBuilder.should(queryBuilder.keyword().onField(fieldMapper.apply(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID)).matching(permittedSpaceIdsString).createQuery());
         boolQueryBuilder.should(queryBuilder.keyword().onField(fieldMapper.apply(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID)).matching(permittedSpaceIdsString).createQuery());
         return boolQueryBuilder.createQuery();
@@ -69,7 +79,7 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
     public SearchResultModel<IndexedDocumentModel> getDocumentsUser(UserModel user, IndexedDocumentQueryModel query, SpaceModel... space) {
         FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
 
-        QueryBuilder queryBuilder = fullTextEm.getSearchFactory().buildQueryBuilder().forEntity(DocumentEntity.class).get();
+        QueryBuilder queryBuilder = fullTextEm.getSearchFactory().buildQueryBuilder().forEntity(IndexedDocumentEntity.class).get();
 
         Query luceneQuery = getQuery(user, query, queryBuilder, space);
 
@@ -90,7 +100,7 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
             }
         }
 
-        FullTextQuery fullTextQuery = fullTextEm.createFullTextQuery(luceneQuery);
+        FullTextQuery fullTextQuery = fullTextEm.createFullTextQuery(luceneQuery, IndexedDocumentEntity.class);
 
         if (sort != null) {
             fullTextQuery.setSort(sort);

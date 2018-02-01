@@ -130,7 +130,7 @@ public class ModelToRepresentation {
         DocumentRepresentation.DocumentLink links = new DocumentRepresentation.DocumentLink();
         URI self = uriInfo.getBaseUriBuilder()
                 .path(DocumentsService.class)
-                .path(DocumentsService.class, "getIndexedDocument")
+                .path(DocumentsService.class, "getDocument")
                 .build(model.getId());
 
         links.setSelf(self.toString());

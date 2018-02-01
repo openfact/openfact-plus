@@ -71,8 +71,8 @@ public class IndexedDocumentQueryModel {
             return this;
         }
 
-        public Builder addFilter(SimpleQuery query) {
-            this.filters.add(query);
+        public Builder addFilter(SimpleQuery SimpleQuery) {
+            this.filters.add(SimpleQuery);
             return this;
         }
 

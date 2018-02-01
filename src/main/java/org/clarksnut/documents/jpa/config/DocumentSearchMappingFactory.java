@@ -4,28 +4,17 @@ import org.clarksnut.documents.jpa.entity.IndexedDocumentEntity;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Factory;
 import org.hibernate.search.annotations.Resolution;
-import org.hibernate.search.cfg.IndexedMapping;
 import org.hibernate.search.cfg.SearchMapping;
 
 import java.lang.annotation.ElementType;
-import java.util.Objects;
 
 public class DocumentSearchMappingFactory {
 
     @Factory
     public SearchMapping getSearchMapping() {
-        String indexManager = System.getenv("HIBERNATE_INDEX_MANAGER");
-        boolean isElasticsearch = !Objects.equals(indexManager, "elasticsearch");
-
         SearchMapping mapping = new SearchMapping();
-        documentEntityMapping(mapping, isElasticsearch);
-        return mapping;
-    }
+        mapping.entity(IndexedDocumentEntity.class).indexed()
 
-    private void documentEntityMapping(SearchMapping mapping, boolean isElasticsearch) {
-        IndexedMapping indexedMapping = mapping.entity(IndexedDocumentEntity.class).indexed();
-
-        indexedMapping
                 .property("id", ElementType.FIELD).documentId().name("id")
 
                 /*
@@ -48,11 +37,13 @@ public class DocumentSearchMappingFactory {
                  * Additional information */
                 .property("assignedId", ElementType.FIELD).field().name("assignedId").analyze(Analyze.NO).sortableField()
                 .property("amount", ElementType.FIELD).field().name("amount").analyze(Analyze.NO).sortableField()
-                .property("issueDate", ElementType.FIELD).field().name("issueDate").analyze(Analyze.NO).dateBridge(Resolution.MILLISECOND)
+                .property("issueDate", ElementType.FIELD).field().name("issueDate").analyze(Analyze.NO).sortableField().numericField().dateBridge(Resolution.DAY)
 
                 /*
                 * Relationships */
                 .property("documentUsers", ElementType.FIELD).containedIn();
+
+        return mapping;
     }
 
 }

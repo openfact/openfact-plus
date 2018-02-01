@@ -5,6 +5,14 @@ import java.util.Set;
 
 public interface IndexedDocumentModel {
 
+    String[] FILTER_TEXT_FIELDS = {
+            IndexedDocumentModel.ASSIGNED_ID,
+            IndexedDocumentModel.SUPPLIER_NAME,
+            IndexedDocumentModel.CUSTOMER_NAME,
+            IndexedDocumentModel.SUPPLIER_ASSIGNED_ID,
+            IndexedDocumentModel.CUSTOMER_ASSIGNED_ID
+    };
+
     String ASSIGNED_ID = "assignedId";
 
     String SUPPLIER_NAME = "supplierName";

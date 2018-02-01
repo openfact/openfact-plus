@@ -9,7 +9,7 @@ import org.clarksnut.documents.jpa.IndexedManagerType.Type;
 import org.clarksnut.documents.jpa.entity.IndexedDocumentEntity;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
-import org.clarksnut.query.SimpleQuery;
+import org.clarksnut.query.Query;
 import org.clarksnut.query.es.ESQueryParser;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -50,7 +50,7 @@ public class ESIndexedDocumentProvider extends AbstractIndexedDocumentProvider i
         }
 
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        for (SimpleQuery q : query.getFilters()) {
+        for (Query q : query.getFilters()) {
             boolQueryBuilder.filter(ESQueryParser.toQueryBuilder(q, new DocumentFieldMapper()));
         }
 
