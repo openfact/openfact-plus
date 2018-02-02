@@ -24,24 +24,24 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="supplierName" class="java.lang.String"/>
-	<field name="supplierAssignedId" class="java.lang.String"/>
-	<field name="supplierStreetAddress" class="java.lang.String"/>
-	<field name="supplierCity" class="java.lang.String"/>
-	<field name="supplierCountry" class="java.lang.String"/>
-	<field name="customerName" class="java.lang.String"/>
-	<field name="customerAssignedId" class="java.lang.String"/>
-	<field name="customerStreetAddress" class="java.lang.String"/>
-	<field name="customerCity" class="java.lang.String"/>
-	<field name="customerCountry" class="java.lang.String"/>
-	<field name="type" class="java.lang.String"/>
-	<field name="assignedId" class="java.lang.String"/>
-	<field name="issueDate" class="java.util.Date"/>
-	<field name="tax" class="java.lang.Float"/>
-	<field name="amount" class="java.lang.Float"/>
-	<field name="currency" class="java.lang.String"/>
-	<field name="id" class="java.lang.String"/>
-	<field name="location" class="java.lang.String"/>
+	<field name="model_supplierName" class="java.lang.String"/>
+	<field name="model_supplierAssignedId" class="java.lang.String"/>
+	<field name="model_supplierStreetAddress" class="java.lang.String"/>
+	<field name="model_supplierCity" class="java.lang.String"/>
+	<field name="model_supplierCountry" class="java.lang.String"/>
+	<field name="model_customerName" class="java.lang.String"/>
+	<field name="model_customerAssignedId" class="java.lang.String"/>
+	<field name="model_customerStreetAddress" class="java.lang.String"/>
+	<field name="model_customerCity" class="java.lang.String"/>
+	<field name="model_customerCountry" class="java.lang.String"/>
+	<field name="model_type" class="java.lang.String"/>
+	<field name="model_assignedId" class="java.lang.String"/>
+	<field name="model_issueDate" class="java.util.Date"/>
+	<field name="model_tax" class="java.lang.Float"/>
+	<field name="model_amount" class="java.lang.Float"/>
+	<field name="model_currency" class="java.lang.String"/>
+	<field name="model_id" class="java.lang.String"/>
+	<field name="model_location" class="java.lang.String"/>
 	<background>
 		<band height="842">
 			<frame>
@@ -104,47 +104,47 @@
 			<textField>
 				<reportElement style="text-content" x="445" y="180" width="99" height="15" uuid="df9df29b-7ff3-49b9-8b70-c4f6d440aef3"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{type}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_type}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="text-content" x="445" y="195" width="99" height="15" uuid="d249d6a8-2577-42cb-a190-95bf14e076a7"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{assignedId}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_assignedId}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="text-date" x="445" y="210" width="99" height="15" uuid="4db463a6-8163-4dd3-b349-635458f3c239"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{issueDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_issueDate}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="text-content" x="10" y="250" width="200" height="15" uuid="5be8e4c7-370b-42e8-b079-da1f9dc14261">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{customerAssignedId}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_customerAssignedId}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="text-content" x="10" y="235" width="200" height="15" uuid="60de5e15-2ebf-4fbb-8912-9e5290405535">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{customerName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_customerName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement style="postal-address" x="10" y="295" width="230" height="15" uuid="7c3e2bdb-e64c-4073-bc26-de54ec2350b1">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{customerCountry}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_customerCountry}.toUpperCase()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement style="postal-address" x="10" y="280" width="230" height="15" uuid="c9c97bf8-71cd-45e7-bf8f-4789b91e5a07">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{customerCity}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_customerCity}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement style="postal-address" x="10" y="265" width="230" height="15" uuid="447fb48c-2408-4e2d-bd9c-379ba354707f">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{customerStreetAddress}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_customerStreetAddress}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="subtitle" x="10" y="220" width="200" height="15" uuid="0f628310-141f-4041-ad38-dfde9b5a9364">
@@ -163,25 +163,25 @@
 				<reportElement style="title2" x="110" y="150" width="200" height="15" uuid="4581aaf7-62dd-489a-9429-278e7115737a">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{supplierAssignedId}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_supplierAssignedId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement style="postal-address" x="10" y="170" width="230" height="15" uuid="82ea2fd6-ad42-4835-b079-6d9af32f9a00">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{supplierStreetAddress}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_supplierStreetAddress}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement style="postal-address" x="10" y="185" width="230" height="15" uuid="483d8112-06b2-4cad-b559-216869ef5eca">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{supplierCity}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_supplierCity}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement style="postal-address" x="10" y="200" width="230" height="15" uuid="7f65899c-f985-4dec-aca2-8bcff22f75a1">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{supplierCountry}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_supplierCountry}.toUpperCase()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="title2" x="10" y="150" width="100" height="15" uuid="6b65809b-e93a-4b29-9ecf-f38c881e4bf3">
@@ -195,27 +195,27 @@
 			</image>
 			<textField>
 				<reportElement style="title" x="11" y="100" width="349" height="50" uuid="9f2167e1-5f4d-4a31-a4a1-dce260d2518e"/>
-				<textFieldExpression><![CDATA[$F{supplierName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_supplierName}]]></textFieldExpression>
 			</textField>
 			<frame>
 				<reportElement style="blue-background" x="370" y="0" width="205" height="70" forecolor="#0659C0" backcolor="#00659C" uuid="8d0c138d-9777-43cb-80d4-22c1c1514f57"/>
 				<line>
-					<reportElement x="101" y="11" width="1" height="49" forecolor="#FFFFFF" uuid="38ba31ef-4e69-4ab3-8041-29eedd50ab09"/>
+					<reportElement x="78" y="11" width="1" height="49" forecolor="#FFFFFF" uuid="38ba31ef-4e69-4ab3-8041-29eedd50ab09"/>
 				</line>
 				<staticText>
-					<reportElement style="text-white" x="108" y="15" width="86" height="20" uuid="1e4f5c1b-f76f-4c08-b2e2-7607d4342bbd"/>
+					<reportElement style="text-white" x="89" y="15" width="100" height="20" uuid="1e4f5c1b-f76f-4c08-b2e2-7607d4342bbd"/>
 					<textElement textAlignment="Left">
 						<font size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[CLARKSNUT]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="text-white" x="108" y="35" width="86" height="20" uuid="03e6be48-92ea-4aad-87f9-91bcab6029ee"/>
+					<reportElement style="text-white" x="89" y="35" width="86" height="20" uuid="03e6be48-92ea-4aad-87f9-91bcab6029ee"/>
 					<textElement textAlignment="Left"/>
 					<text><![CDATA[WEB SERVICES]]></text>
 				</staticText>
 				<image>
-					<reportElement x="29" y="10" width="50" height="50" uuid="4980cb03-6c75-4111-832a-d499b23a2dcc"/>
+					<reportElement x="14" y="10" width="50" height="50" uuid="4980cb03-6c75-4111-832a-d499b23a2dcc"/>
 					<imageExpression><![CDATA[$P{LOGO_URL}]]></imageExpression>
 				</image>
 			</frame>
@@ -237,33 +237,33 @@
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{tax}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_tax}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="text-number" x="460" y="36" width="78" height="15" uuid="f6f920f9-2d2e-4700-972c-2c9b10e4aaa3">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_amount}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="text-content" x="410" y="20" width="50" height="15" uuid="3d7e846a-f161-42d3-bab9-35db733128ba">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{currency}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_currency}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="text-content" x="410" y="36" width="50" height="15" uuid="4818f71d-cd30-4a6c-8575-3eb76ddb29e5">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{currency}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{model_currency}]]></textFieldExpression>
 			</textField>
 			<componentElement>
 				<reportElement x="176" y="80" width="202" height="58" uuid="e8c35c07-8170-457d-b693-3920f7d40fe4"/>
 				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<jr:codeExpression><![CDATA[$F{location}]]></jr:codeExpression>
+					<jr:codeExpression><![CDATA[$F{model_location}]]></jr:codeExpression>
 				</jr:QRCode>
 			</componentElement>
 			<staticText>

@@ -7,7 +7,7 @@ import org.clarksnut.datasource.peru.beans.SummaryLineBean;
 import java.util.Date;
 import java.util.List;
 
-public class PeruSummaryDocumentsDatasource extends Datasource {
+public class PeruSummaryDocumentsDatasource implements Datasource {
 
     private String idAsignado;
 

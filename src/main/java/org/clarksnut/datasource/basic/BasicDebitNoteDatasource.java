@@ -8,7 +8,7 @@ import org.clarksnut.datasource.basic.beans.SupplierBean;
 import java.util.Date;
 import java.util.List;
 
-public class BasicDebitNoteDatasource extends Datasource {
+public class BasicDebitNoteDatasource implements Datasource {
 
     private Date issueDate;
     private String currency;

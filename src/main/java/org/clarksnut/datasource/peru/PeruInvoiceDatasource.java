@@ -6,7 +6,7 @@ import org.clarksnut.datasource.peru.beans.*;
 import java.util.Date;
 import java.util.List;
 
-public class PeruInvoiceDatasource extends Datasource {
+public class PeruInvoiceDatasource implements Datasource {
 
     private String idAsignado;
     private String tipoDocumento;

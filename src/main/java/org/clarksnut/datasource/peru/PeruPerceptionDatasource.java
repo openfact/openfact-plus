@@ -8,7 +8,7 @@ import org.clarksnut.datasource.peru.beans.ProveedorBean;
 import java.util.Date;
 import java.util.List;
 
-public class PeruPerceptionDatasource extends Datasource {
+public class PeruPerceptionDatasource implements Datasource {
 
     private String idAsignado;
     private Date fechaEmision;

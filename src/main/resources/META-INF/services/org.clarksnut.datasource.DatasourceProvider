@@ -1,3 +1,4 @@
+org.clarksnut.datasource.basic.EmptyDatasourceProvider
 org.clarksnut.datasource.basic.BasicInvoiceDatasourceProvider
 org.clarksnut.datasource.basic.BasicCreditNoteDatasourceProvider
 org.clarksnut.datasource.basic.BasicDebitNoteDatasourceProvider

@@ -8,7 +8,7 @@ import org.clarksnut.datasource.peru.beans.RetentionLineBean;
 import java.util.Date;
 import java.util.List;
 
-public class PeruRetentionDatasource extends Datasource {
+public class PeruRetentionDatasource implements Datasource {
 
     private String idAsignado;
     private Date fechaEmision;
