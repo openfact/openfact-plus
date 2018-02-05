@@ -7,8 +7,6 @@
         <dependencies>
             <module name="org.hibernate.search.engine" export="true" services="import" slot="5.8"/>
             <module name="org.hibernate.search.orm" export="true" services="import" slot="5.8"/>
-
-            <module name="org.infinispan.core" slot="ispn-9.1" services="import" export="true"/>
         </dependencies>
     </deployment>
 </jboss-deployment-structure>
