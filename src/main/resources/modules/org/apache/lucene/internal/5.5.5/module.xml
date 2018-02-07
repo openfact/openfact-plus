@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="org.apache.lucene.internal" slot="5.5.5" xmlns="urn:jboss:module:1.1">
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
+    <resources>
+        <artifact name="org.apache.lucene:lucene-backward-codecs:5.5.5"/>
+        <artifact name="org.apache.lucene:lucene-misc:5.5.5"/>
+    </resources>
+    <dependencies>
+        <module name="javax.api" optional="true"/>
+        <module name="org.apache.lucene" slot="5.5.5"/>
+    </dependencies>
+</module>

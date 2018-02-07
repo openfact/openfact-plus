@@ -4,9 +4,5 @@
         <exclusions>
             <module name="org.javassist"/>
         </exclusions>
-        <dependencies>
-            <module name="org.hibernate.search.engine" export="true" services="import" slot="5.8"/>
-            <module name="org.hibernate.search.orm" export="true" services="import" slot="5.8"/>
-        </dependencies>
     </deployment>
 </jboss-deployment-structure>

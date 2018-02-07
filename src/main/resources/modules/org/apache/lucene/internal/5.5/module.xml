@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module-alias name="org.apache.lucene.internal" slot="5.5" target-name="org.apache.lucene.internal" target-slot="5.5.5" xmlns="urn:jboss:module:1.1"/>

@@ -34,9 +34,9 @@
         <version.keycloak>2.5.5.Final</version.keycloak>
 
         <!--Hibernate-->
-        <version.hibernate>5.2.12.Final</version.hibernate>
+        <version.hibernate>5.2.13.Final</version.hibernate>
         <version.hibernate-validator>5.2.4.Final</version.hibernate-validator>
-        <version.hibernate-search>5.8.2.Final</version.hibernate-search>
+        <version.hibernate-search>5.9.0.Final</version.hibernate-search>
 
         <!--Jdbc drivers-->
         <version.h2>1.4.187</version.h2>
@@ -191,6 +191,10 @@
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>hibernate-search</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>batch-jberet</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.wildfly.core</groupId>
@@ -235,7 +239,12 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${version.hibernate}</version>
-            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>dom4j</groupId>
+                    <artifactId>dom4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -247,7 +256,6 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-search-orm</artifactId>
             <version>${version.hibernate-search}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -259,12 +267,6 @@
             <artifactId>hibernate-search-elasticsearch-aws</artifactId>
             <version>${version.hibernate-search}</version>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-search-serialization-avro</artifactId>
-            <version>${version.hibernate-search}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-search-engine</artifactId>
@@ -550,15 +552,6 @@
                                     <overWrite>false</overWrite>
                                     <outputDirectory>${project.build.outputDirectory}/modules</outputDirectory>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.hibernate</groupId>
-                                    <artifactId>hibernate-search-modules</artifactId>
-                                    <version>${version.hibernate-search}</version>
-                                    <classifier>wildfly-11-dist</classifier>
-                                    <type>zip</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.outputDirectory}/modules</outputDirectory>
-                                </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
@@ -732,16 +725,6 @@
 
         <profile>
             <id>openshift</id>
-            <!--<dependencies>-->
-                <!--<dependency>-->
-                    <!--<groupId>org.wildfly.swarm</groupId>-->
-                    <!--<artifactId>jgroups</artifactId>-->
-                <!--</dependency>-->
-                <!--<dependency>-->
-                    <!--<groupId>org.wildfly.swarm</groupId>-->
-                    <!--<artifactId>topology-openshift</artifactId>-->
-                <!--</dependency>-->
-            <!--</dependencies>-->
             <build>
                 <plugins>
                     <plugin>
@@ -765,14 +748,14 @@
                                     <exclude>webapp</exclude>
                                 </excludes>
                             </generator>
-                            <!--<enricher>-->
-                                <!--<config>-->
-                                    <!--<wildfly-swarm-health-check>-->
-                                        <!--<path>/</path>-->
-                                    <!--</wildfly-swarm-health-check>-->
-                                <!--</config>-->
-                            <!--</enricher>-->
-                        
+                            <enricher>
+                                <config>
+                                    <wildfly-swarm-health-check>
+                                        <path>/</path>
+                                    </wildfly-swarm-health-check>
+                                </config>
+                            </enricher>
+
           <resources>
             <labels>
               <all>

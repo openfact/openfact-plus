@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module-alias name="com.google.code.gson" slot="2.8" target-name="com.google.code.gson" target-slot="2.8.2" xmlns="urn:jboss:module:1.1"/>
