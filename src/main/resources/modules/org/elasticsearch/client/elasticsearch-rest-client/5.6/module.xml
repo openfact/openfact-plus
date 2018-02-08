@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module-alias name="org.elasticsearch.client.elasticsearch-rest-client" slot="5.6" target-name="org.elasticsearch.client.elasticsearch-rest-client" target-slot="5.6.7" xmlns="urn:jboss:module:1.1"/>

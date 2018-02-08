@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: clarksnut
+    labels:
+      app: clarksnut
+  data:
+    cn.hibernate.index_manager: "directory-based"
+    cn.hibernate.lucene_index_directory: "/var/lucene/indexes"
+    cn.elasticsearch.host: "http://elasticsearch:9200"
+    cn.elasticsearch.index_schema_management_strategy: "create"
+    cn.elasticsearch.required_index_status: "green"
+    cn.elasticsearch.aws.enabled: "false"
+    cn.elasticsearch.aws.region: "us-east-1"

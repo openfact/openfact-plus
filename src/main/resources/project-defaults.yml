@@ -16,3 +16,6 @@ clarksnut:
     cacheTemplates: false
     folder:
       dir: "/reports"
+  document:
+      mapper:
+        default: basic

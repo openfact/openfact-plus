@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  labels:
+    app: clarksnut
+  name: clarksnut-dependencies
+objects:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      app: clarksnut
+    name: clarksnut-fs-lucene-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi

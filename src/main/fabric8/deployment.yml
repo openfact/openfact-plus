@@ -18,13 +18,20 @@ spec:
               fieldPath: metadata.namespace
         - name: JAVA_APP_DIR
           value: /deployments
+        - name: SSO_AUTH_SERVER_URL
+          value: ${SSO_AUTH_SERVER_URL}
         - name: JAVA_OPTIONS
-          value: -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.project.stage=production -Dswarm.keycloak.json.path=/deployments/config/keycloak.json
+          value: -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.project.stage=production
         - name: CN_HIBERNATE_INDEX_MANAGER
           valueFrom:
             configMapKeyRef:
               name: clarksnut
               key: cn.hibernate.index_manager
+        - name: CN_LUCENE_INDEX_DIRECTORY
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.hibernate.lucene_index_directory
         - name: CN_ELASTICSEARCH_HOST
           valueFrom:
             configMapKeyRef:

@@ -1,12 +1,11 @@
-project:
-  stage: production
+logger:
+  level: DEBUG
 swarm:
   ee:
     spec-descriptor-property-replacement: true
   datasources:
     data-sources:
       ClarksnutDS:
-        jndi-name: java:jboss/datasources/ClarksnutDS
         driver-name: postgresql
         user-name: clarksnut
         password: clarksnut
@@ -18,6 +17,17 @@ clarksnut:
     cacheTemplates: true
     folder:
       dir: /reports
+---
+project:
+  stage: production
+clarksnut:
   document:
     mapper:
       default: basic
+---
+project:
+  stage: production-peru
+clarksnut:
+  document:
+    mapper:
+      default: peru

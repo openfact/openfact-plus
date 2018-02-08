@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.openshift</groupId>
@@ -8,7 +10,7 @@
 
     <groupId>org.clarksnut</groupId>
     <artifactId>clarksnut</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0.Final</version>
 
     <packaging>war</packaging>
 
@@ -34,9 +36,9 @@
         <version.keycloak>2.5.5.Final</version.keycloak>
 
         <!--Hibernate-->
-        <version.hibernate>5.2.13.Final</version.hibernate>
+        <version.hibernate>5.2.12.Final</version.hibernate>
         <version.hibernate-validator>5.2.4.Final</version.hibernate-validator>
-        <version.hibernate-search>5.9.0.Final</version.hibernate-search>
+        <version.hibernate-search>5.8.2.Final</version.hibernate-search>
 
         <!--Jdbc drivers-->
         <version.h2>1.4.187</version.h2>
@@ -105,6 +107,21 @@
             </releases>
             <snapshots>
                 <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
             </snapshots>
         </repository>
     </repositories>
@@ -234,17 +251,12 @@
             <scope>test</scope>
         </dependency>
 
-        <!--Hibernate-->
+        <!--Hibernate orm-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${version.hibernate}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>dom4j</groupId>
-                    <artifactId>dom4j</artifactId>
-                </exclusion>
-            </exclusions>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -252,25 +264,31 @@
             <version>${version.hibernate-validator}</version>
             <scope>provided</scope>
         </dependency>
+
+        <!--Hibernate search-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-search-orm</artifactId>
             <version>${version.hibernate-search}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-search-elasticsearch</artifactId>
-            <version>${version.hibernate-search}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-search-elasticsearch-aws</artifactId>
-            <version>${version.hibernate-search}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-search-engine</artifactId>
             <version>${version.hibernate-search}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-elasticsearch</artifactId>
+            <version>${version.hibernate-search}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-elasticsearch-aws</artifactId>
+            <version>${version.hibernate-search}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!--Liquibase-->
@@ -440,26 +458,7 @@
             </testResource>
         </testResources>
 
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>io.fabric8</groupId>
-                    <artifactId>fabric8-maven-plugin</artifactId>
-                    <version>${fabric8.maven.plugin.version}</version>
-                    <configuration>
-                        <resources>
-                            <labels>
-                                <all>
-                                    <space>clarksnut</space>
-                                </all>
-                            </labels>
-                        </resources>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -474,17 +473,14 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${maven-failsafe-plugin.version}</version>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <classpathDependencyExcludes>
-                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-openshift
-                        </classpathDependencyExclude>
-                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-kubernetes
-                        </classpathDependencyExclude>
+                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-openshift</classpathDependencyExclude>
+                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-kubernetes</classpathDependencyExclude>
                     </classpathDependencyExcludes>
                     <environmentVariables>
                         <!--Datasource-->
@@ -547,6 +543,15 @@
                                     <groupId>org.hibernate</groupId>
                                     <artifactId>hibernate-orm-modules</artifactId>
                                     <version>${version.hibernate}</version>
+                                    <classifier>wildfly-11-dist</classifier>
+                                    <type>zip</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}/modules</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.hibernate</groupId>
+                                    <artifactId>hibernate-search-modules</artifactId>
+                                    <version>${version.hibernate-search}</version>
                                     <classifier>wildfly-11-dist</classifier>
                                     <type>zip</type>
                                     <overWrite>false</overWrite>
@@ -638,7 +643,8 @@
                             <changeLogFile>${project.build.directory}/changelog-master.xml</changeLogFile>
                             <diffChangeLogFile>${project.build.directory}/changelog-diff.xml</diffChangeLogFile>
                             <dropFirst>true</dropFirst>
-                            <referenceUrl>hibernate:spring:org.clarksnut?dialect=org.hibernate.dialect.H2Dialect</referenceUrl>
+                            <referenceUrl>hibernate:spring:org.clarksnut?dialect=org.hibernate.dialect.H2Dialect
+                            </referenceUrl>
                         </configuration>
                         <executions>
                             <execution>
@@ -756,14 +762,14 @@
                                 </config>
                             </enricher>
 
-          <resources>
-            <labels>
-              <all>
-                <space>clarksnut</space>
-              </all>
-            </labels>
-          </resources>
-        </configuration>
+                            <resources>
+                                <labels>
+                                    <all>
+                                        <space>clarksnut</space>
+                                    </all>
+                                </labels>
+                            </resources>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
