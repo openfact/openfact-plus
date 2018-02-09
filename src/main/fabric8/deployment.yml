@@ -21,7 +21,7 @@ spec:
         - name: SSO_AUTH_SERVER_URL
           value: ${SSO_AUTH_SERVER_URL}
         - name: JAVA_OPTIONS
-          value: -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.project.stage=production
+          value: -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.project.stage=production-peru
         - name: CN_HIBERNATE_INDEX_MANAGER
           valueFrom:
             configMapKeyRef:
