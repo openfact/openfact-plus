@@ -235,6 +235,7 @@ public class DocumentsService {
     public Response importDocument(final MultipartFormDataInput multipartFormDataInput) throws ErrorResponseException {
         Map<String, List<InputPart>> formParts = multipartFormDataInput.getFormDataMap();
         List<InputPart> inputParts = formParts.get("file");
+        List<InputPart> filename = formParts.get("filename");
 
         for (InputPart inputPart : inputParts) {
             // Extract file

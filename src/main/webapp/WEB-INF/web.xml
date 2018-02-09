@@ -8,6 +8,16 @@
 
     <security-constraint>
         <web-resource-collection>
+            <web-resource-name>Collector Resources</web-resource-name>
+            <url-pattern>/api/documents/*</url-pattern>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>collector</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
             <web-resource-name>API Resources</web-resource-name>
             <url-pattern>/api/*</url-pattern>
         </web-resource-collection>
@@ -21,6 +31,9 @@
         <auth-method>KEYCLOAK</auth-method>
     </login-config>
 
+    <security-role>
+        <role-name>collector</role-name>
+    </security-role>
     <security-role>
         <role-name>user</role-name>
     </security-role>

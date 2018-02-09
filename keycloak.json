@@ -1,8 +1,0 @@
-{
-  "realm": "clarksnut",
-  "bearer-only": true,
-  "auth-server-url": "https://keycloak.com/auth",
-  "ssl-required": "external",
-  "resource": "clarksnut-restful-api",
-  "enable-cors": true
-}

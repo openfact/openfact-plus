@@ -16,7 +16,7 @@ import java.util.Date;
 @Table(name = "cl_document_version")
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getCurrentDocumentVersionByDocumentId", query = "select dv from DocumentVersionEntity dv inner join dv.document doc where doc.id=:documentId")
+        @NamedQuery(name = "getCurrentDocumentVersionByDocumentId", query = "select dv from DocumentVersionEntity dv inner join dv.document doc where doc.id=:documentId and dv.isCurrentVersion = true")
 })
 public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
