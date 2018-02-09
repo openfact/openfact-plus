@@ -64,9 +64,13 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
         }
 
         String permittedSpaceIdsString = userPermittedSpaceIds.stream().collect(Collectors.joining(" "));
+        Query spaceFilterQuery = queryBuilder.bool()
+                .should(queryBuilder.keyword().onField(fieldMapper.apply(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID)).matching(permittedSpaceIdsString).createQuery())
+                .should(queryBuilder.keyword().onField(fieldMapper.apply(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID)).matching(permittedSpaceIdsString).createQuery())
+                .createQuery();
+
         boolQueryBuilder.must(filterTextQuery);
-        boolQueryBuilder.should(queryBuilder.keyword().onField(fieldMapper.apply(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID)).matching(permittedSpaceIdsString).createQuery());
-        boolQueryBuilder.should(queryBuilder.keyword().onField(fieldMapper.apply(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID)).matching(permittedSpaceIdsString).createQuery());
+        boolQueryBuilder.filteredBy(spaceFilterQuery);
         return boolQueryBuilder.createQuery();
     }
 

@@ -7,6 +7,7 @@ import org.clarksnut.documents.ImportedDocumentProvider;
 import org.clarksnut.files.FileProvider;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
+import org.clarksnut.models.exceptions.ForbiddenExceptionModel;
 import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
@@ -20,15 +21,9 @@ public class DocumentManager {
     private static final Logger logger = Logger.getLogger(DocumentManager.class);
 
     @Inject
-    private FileProvider fileProvider;
-
-    @Inject
-    private ImportedDocumentProvider importedDocumentProvider;
-
-    @Inject
     private DocumentProvider documentProvider;
 
-    public DocumentModel getDocumentById(UserModel user, String documentId) {
+    public DocumentModel getDocumentById(UserModel user, String documentId) throws ForbiddenExceptionModel {
         DocumentModel document = documentProvider.getDocument(documentId);
         if (document == null) return null;
 
@@ -38,9 +33,9 @@ public class DocumentManager {
                 .collect(Collectors.toSet());
         if (permittedSpacesIds.contains(document.getSupplierAssignedId()) || permittedSpacesIds.contains(documentCurrentVersion.getCustomerAssignedId())) {
             return document;
+        } else {
+            throw new ForbiddenExceptionModel();
         }
-
-        return null;
     }
 
 }

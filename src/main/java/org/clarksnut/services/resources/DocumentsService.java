@@ -9,6 +9,7 @@ import org.clarksnut.managers.ImportedDocumentManager;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
+import org.clarksnut.models.exceptions.ForbiddenExceptionModel;
 import org.clarksnut.query.RangeQuery;
 import org.clarksnut.query.TermQuery;
 import org.clarksnut.query.TermsQuery;
@@ -69,7 +70,7 @@ public class DocumentsService {
     @Inject
     private IndexedDocumentProvider indexedDocumentProvider;
 
-    private DocumentModel getDocumentById(UserModel user, String documentId) {
+    private DocumentModel getDocumentById(UserModel user, String documentId) throws ForbiddenExceptionModel {
         DocumentModel document = documentManager.getDocumentById(user, documentId);
         if (document == null) {
             throw new NotFoundException();
@@ -92,7 +93,7 @@ public class DocumentsService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDocuments(@Context HttpServletRequest httpServletRequest,
-                                    @QueryParam("q") String q) throws ErrorResponseException {
+                                 @QueryParam("q") String q) throws ErrorResponseException {
         // User context
         UserModel user = getUser(httpServletRequest);
 
@@ -235,7 +236,6 @@ public class DocumentsService {
     public Response importDocument(final MultipartFormDataInput multipartFormDataInput) throws ErrorResponseException {
         Map<String, List<InputPart>> formParts = multipartFormDataInput.getFormDataMap();
         List<InputPart> inputParts = formParts.get("file");
-        List<InputPart> filename = formParts.get("filename");
 
         for (InputPart inputPart : inputParts) {
             // Extract file
@@ -286,7 +286,12 @@ public class DocumentsService {
     public DocumentRepresentation getDocument(@Context final HttpServletRequest httpServletRequest,
                                               @PathParam("documentId") String documentId) {
         UserModel user = getUser(httpServletRequest);
-        DocumentModel document = getDocumentById(user, documentId);
+        DocumentModel document;
+        try {
+            document = getDocumentById(user, documentId);
+        } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+            throw new ForbiddenException("User not allowed to access this document");
+        }
 
         return modelToRepresentation.toRepresentation(user, document, uriInfo).toSpaceRepresentation();
     }
@@ -298,7 +303,13 @@ public class DocumentsService {
                                                  @PathParam("documentId") String documentId,
                                                  DocumentRepresentation documentRepresentation) {
         UserModel user = getUser(httpServletRequest);
-        DocumentModel document = getDocumentById(user, documentId);
+        DocumentModel document;
+        try {
+            document = getDocumentById(user, documentId);
+        } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+            throw new ForbiddenException("User not allowed to access this document");
+        }
+
         IndexedDocumentModel indexedDocument = document.getIndexedDocument();
 
         DocumentRepresentation.Data data = documentRepresentation.getData();
@@ -315,7 +326,12 @@ public class DocumentsService {
         UserModel user = getUser(httpServletRequest);
 
         representation.getData().forEach(documentRepresentation -> {
-            DocumentModel document = getDocumentById(user, documentRepresentation.getId());
+            DocumentModel document = null;
+            try {
+                document = getDocumentById(user, documentRepresentation.getId());
+            } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+                throw new ForbiddenException("User not allowed to access this document");
+            }
             updateDocument(documentRepresentation.getAttributes(), user, document);
         });
     }
@@ -343,7 +359,13 @@ public class DocumentsService {
 
         ZipBuilder zipInMemory = ZipBuilder.createZipInMemory();
         documentsId.stream()
-                .map(documentId -> getDocumentById(user, documentId))
+                .map(documentId -> {
+                    try {
+                        return getDocumentById(user, documentId);
+                    } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+                        throw new ForbiddenException("User not allowed to access this document");
+                    }
+                })
                 .forEach(document -> {
                     FileModel file = document.getCurrentVersion().getImportedDocument().getFile();
                     try {
@@ -375,7 +397,13 @@ public class DocumentsService {
         ExportFormat exportFormat = ExportFormat.valueOf(format.toUpperCase());
 
         Set<DocumentModel> documents = documentsId.stream()
-                .map(documentId -> getDocumentById(user, documentId))
+                .map(documentId -> {
+                    try {
+                        return getDocumentById(user, documentId);
+                    } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+                        throw new ForbiddenException("User not allowed to access this document");
+                    }
+                })
                 .collect(Collectors.toSet());
 
         ReportTemplateConfiguration reportConfig = ReportTemplateConfiguration.builder()
@@ -407,7 +435,12 @@ public class DocumentsService {
     public Response getXml(@Context final HttpServletRequest httpServletRequest,
                            @PathParam("documentId") String documentId) {
         UserModel user = getUser(httpServletRequest);
-        DocumentModel document = getDocumentById(user, documentId);
+        DocumentModel document;
+        try {
+            document = getDocumentById(user, documentId);
+        } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+            throw new ForbiddenException("User not allowed to access this document");
+        }
 
         FileModel file = document.getCurrentVersion().getImportedDocument().getFile();
 
@@ -426,7 +459,12 @@ public class DocumentsService {
             @QueryParam("theme") String theme,
             @QueryParam("format") @DefaultValue("PDF") String format) {
         UserModel user = getUser(httpServletRequest);
-        DocumentModel document = getDocumentById(user, documentId);
+        DocumentModel document = null;
+        try {
+            document = getDocumentById(user, documentId);
+        } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+            throw new ForbiddenException("User not allowed to access this document");
+        }
 
         //
         ExportFormat exportFormat = ExportFormat.valueOf(format.toUpperCase());
