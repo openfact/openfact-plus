@@ -105,19 +105,25 @@ public class DocumentsService {
             return ErrorResponse.error("Bad query request", Response.Status.BAD_REQUEST);
         }
 
+
         Map<String, SpaceModel> allPermittedSpaces = new HashMap<>();
         for (SpaceModel space : user.getAllPermitedSpaces()) {
-            allPermittedSpaces.put(space.getAssignedId(), space);
-        }
-        if (query.getSpaces() != null) {
-            for (String assignedId : query.getSpaces()) {
-                allPermittedSpaces.remove(assignedId);
-            }
+            allPermittedSpaces.put(space.getId(), space);
         }
         if (allPermittedSpaces.isEmpty()) {
             Map<String, Object> meta = new HashMap<>();
             meta.put("totalCount", 0);
             return Response.ok(new GenericDataRepresentation<>(new ArrayList<>(), Collections.emptyMap(), meta)).build();
+        }
+
+
+        Map<String, SpaceModel> selectedSpaces = new HashMap<>();
+        if (query.getSpaces() != null) {
+            for (String spaceId : query.getSpaces()) {
+                if (allPermittedSpaces.containsKey(spaceId)) {
+                    selectedSpaces.put(spaceId, allPermittedSpaces.get(spaceId));
+                }
+            }
         }
 
         // ES
@@ -212,7 +218,7 @@ public class DocumentsService {
             builder.addFilter(roleQuery);
         }
 
-        SpaceModel[] spaces = allPermittedSpaces.values().toArray(new SpaceModel[allPermittedSpaces.size()]);
+        SpaceModel[] spaces = selectedSpaces.values().toArray(new SpaceModel[selectedSpaces.size()]);
         SearchResultModel<IndexedDocumentModel> result = indexedDocumentProvider.getDocumentsUser(user, builder.build(), spaces);
 
         // Meta
