@@ -1,5 +1,5 @@
-logger:
-  level: DEBUG
+project:
+  stage: production-peru
 swarm:
   ee:
     spec-descriptor-property-replacement: true
@@ -17,17 +17,6 @@ clarksnut:
     cacheTemplates: true
     folder:
       dir: /reports
----
-project:
-  stage: production
-clarksnut:
-  document:
-    mapper:
-      default: basic
----
-project:
-  stage: production-peru
-clarksnut:
   document:
     mapper:
       default: peru
