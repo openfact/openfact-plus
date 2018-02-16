@@ -1,7 +1,7 @@
 {
   "realm": "${sso.realm:clarksnut}",
   "bearer-only": true,
-  "auth-server-url": "${sso.auth.server.url:http://localhost:8180/auth}",
+  "auth-server-url": "${sso.auth.server.url:http://localhost:8081/auth}",
   "ssl-required": "external",
   "resource": "${sso.clientId:clarksnut-restful-api}",
   "enable-cors": true

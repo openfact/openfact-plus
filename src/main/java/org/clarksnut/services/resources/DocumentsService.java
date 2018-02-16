@@ -118,12 +118,14 @@ public class DocumentsService {
 
 
         Map<String, SpaceModel> selectedSpaces = new HashMap<>();
-        if (query.getSpaces() != null) {
+        if (query.getSpaces() != null && !query.getSpaces().isEmpty()) {
             for (String spaceId : query.getSpaces()) {
                 if (allPermittedSpaces.containsKey(spaceId)) {
                     selectedSpaces.put(spaceId, allPermittedSpaces.get(spaceId));
                 }
             }
+        } else {
+            selectedSpaces = allPermittedSpaces;
         }
 
         // ES
@@ -173,10 +175,10 @@ public class DocumentsService {
         if (query.getRole() != null) {
             switch (query.getRole()) {
                 case SENDER:
-                    roleQuery = new TermsQuery(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID, allPermittedSpaces.entrySet());
+                    roleQuery = new TermsQuery(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID, selectedSpaces.keySet());
                     break;
                 case RECEIVER:
-                    roleQuery = new TermsQuery(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID, allPermittedSpaces.entrySet());
+                    roleQuery = new TermsQuery(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID, selectedSpaces.keySet());
                     break;
                 default:
                     throw new IllegalStateException("Invalid role:" + query.getRole());
