@@ -172,8 +172,13 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
 
     @Override
     public Set<SpaceModel> getCollaboratedSpaces() {
-        return user.getCollaboratedSpaces().stream()
-                .map(f -> new SpaceAdapter(em, f.getSpace()))
+        TypedQuery<CollaboratorEntity> query = em.createNamedQuery("getCollaboratorsByUserIdAndRole", CollaboratorEntity.class);
+        query.setParameter("userId", user.getId());
+        query.setParameter("role", PermissionType.COLLABORATOR);
+
+        return query.getResultList().stream()
+                .map(CollaboratorEntity::getSpace)
+                .map(space -> new SpaceAdapter(em, space))
                 .collect(Collectors.toSet());
     }
 

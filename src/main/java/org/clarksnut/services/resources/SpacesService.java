@@ -2,6 +2,7 @@ package org.clarksnut.services.resources;
 
 import org.clarksnut.models.*;
 import org.clarksnut.representations.idm.*;
+import org.clarksnut.services.ErrorResponse;
 import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.services.resources.utils.PATCH;
 import org.clarksnut.utils.ModelToRepresentation;
@@ -190,7 +191,7 @@ public class SpacesService {
         SpaceModel space = getSpaceById(spaceId);
 
         for (UserRepresentation.Data data : representation.getData()) {
-            UserModel user = userProvider.getUserByIdentityID(data.getId());
+            UserModel user = userProvider.getUserByUsername(data.getAttributes().getUsername());
             space.addCollaborators(user);
         }
     }
@@ -198,15 +199,22 @@ public class SpacesService {
     @DELETE
     @Path("{spaceId}/collaborators/{identityID}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void removeSpaceCollaborators(
+    public Response removeSpaceCollaborators(
             @PathParam("spaceId") String spaceId,
-            @PathParam("identityID") String identityID) {
+            @PathParam("identityID") String identityID) throws ErrorResponseException {
         SpaceModel space = getSpaceById(spaceId);
         UserModel user = userProvider.getUserByIdentityID(identityID);
+
+        if (space.getOwners().contains(user)) {
+            return ErrorResponse.error("Could not delete the owner", Response.Status.BAD_REQUEST);
+        }
+
         boolean result = space.removeCollaborators(user);
         if (!result) {
             throw new InternalServerErrorException();
         }
+
+        return Response.ok().build();
     }
 
     @POST
@@ -222,4 +230,36 @@ public class SpacesService {
         RequestAccessSpaceToRepresentation.Data createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(requestAccess);
         return Response.status(Response.Status.CREATED).entity(createdRequestAccessRepresentation.toRequestAccessSpaceToRepresentation()).build();
     }
+
+    /*@GET
+    @Path("{spaceId}/request-access")
+    @Produces(MediaType.APPLICATION_JSON)
+    public GenericDataRepresentation getRequestAccess(@PathParam("spaceId") String spaceId) {
+        SpaceModel space = getSpaceById(spaceId);
+
+        return new GenericDataRepresentation<>(
+                space.getRequestAccess(RequestStatusType.PENDING).stream()
+                .map(f -> modelToRepresentation.toRepresentation(f))
+                .collect(Collectors.toList())
+        );
+    }
+
+    @PUT
+    @Path("{spaceId}/request-access/{requestId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateAccessSpacae(
+            @PathParam("spaceId") String spaceId,
+            @PathParam("requestId") String requestId,
+            final RequestAccessSpaceToRepresentation representation) {
+        SpaceModel space = getSpaceById(spaceId);
+
+        RequestAccessSpaceToRepresentation.Data data = representation.getData();
+        RequestAccessSpaceToRepresentation.Attributes attributes = data.getAttributes();
+
+
+        RequestAccessToSpaceModel requestAccess = space.addRequestAccess(RequestAccessScope.valueOf(attributes.getScope()), attributes.getMessage());
+
+        RequestAccessSpaceToRepresentation.Data createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(requestAccess);
+        return Response.status(Response.Status.CREATED).entity(createdRequestAccessRepresentation.toRequestAccessSpaceToRepresentation()).build();
+    }*/
 }

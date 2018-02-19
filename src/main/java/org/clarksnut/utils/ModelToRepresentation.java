@@ -52,8 +52,8 @@ public class ModelToRepresentation {
         attributes.setUpdatedAt(model.getUpdatedAt());
 
         attributes.setFavoriteSpaces(model.getFavoriteSpaces());
-        attributes.setOwnedSpaces(model.getOwnedSpaces().stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
-        attributes.setCollaboratedSpaces(model.getCollaboratedSpaces().stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet()));
+        attributes.setOwnedSpaces(model.getOwnedSpaces().stream().map(SpaceModel::getId).collect(Collectors.toSet()));
+        attributes.setCollaboratedSpaces(model.getCollaboratedSpaces().stream().map(SpaceModel::getId).collect(Collectors.toSet()));
 
         attributes.setDefaultLanguage(model.getDefaultLanguage());
 
