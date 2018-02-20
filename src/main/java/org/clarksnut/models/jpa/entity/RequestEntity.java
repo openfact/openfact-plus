@@ -4,8 +4,8 @@ import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
-import org.clarksnut.models.RequestAccessScope;
-import org.clarksnut.models.RequestStatusType;
+import org.clarksnut.models.RequestScope;
+import org.clarksnut.models.RequestStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,12 +13,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "cl_request_access_to_space")
+@Table(name = "cl_request")
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getRequestAccesstoSpaceById", query = "select r from RequestAccessToSpaceEntity r where r.id =:id")
+        @NamedQuery(name = "getRequestsBySpaceIdAndStatus", query = "select r from RequestEntity r inner join r.space s where s.id =:spaceId and r.status =:status"),
+        @NamedQuery(name = "getRequestsBySpaceOwnerAndStatus", query = "select r from RequestEntity r inner join r.space s inner join s.collaborators c where c.user.id =:userId and c.role =:role and r.status =:status")
 })
-public class RequestAccessToSpaceEntity implements CreatableEntity, UpdatableEntity, Serializable {
+public class RequestEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
@@ -32,17 +33,22 @@ public class RequestAccessToSpaceEntity implements CreatableEntity, UpdatableEnt
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private RequestStatusType status;
+    private RequestStatus status;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "scope")
-    private RequestAccessScope scope;
+    private RequestScope scope;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "space_id", foreignKey = @ForeignKey)
     private SpaceEntity space;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey)
+    private UserEntity user;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -70,19 +76,19 @@ public class RequestAccessToSpaceEntity implements CreatableEntity, UpdatableEnt
         this.message = message;
     }
 
-    public RequestStatusType getStatus() {
+    public RequestStatus getStatus() {
         return status;
     }
 
-    public void setStatus(RequestStatusType status) {
+    public void setStatus(RequestStatus status) {
         this.status = status;
     }
 
-    public RequestAccessScope getScope() {
+    public RequestScope getScope() {
         return scope;
     }
 
-    public void setScope(RequestAccessScope scope) {
+    public void setScope(RequestScope scope) {
         this.scope = scope;
     }
 
@@ -110,5 +116,13 @@ public class RequestAccessToSpaceEntity implements CreatableEntity, UpdatableEnt
 
     public SpaceEntity getSpace() {
         return space;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }

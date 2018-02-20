@@ -47,7 +47,7 @@ public class UserService {
         String kcUsername = accessToken.getPreferredUsername();
 
         // Get user from DB
-        UserModel user = this.userProvider.getUserByIdentityID(kcUserID);
+        UserModel user = this.userProvider.getUserByUsername(kcUsername);
         if (user == null) {
             user = this.userProvider.addUser(kcUserID, "kc", kcUsername);
         }

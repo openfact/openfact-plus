@@ -3,8 +3,6 @@ package org.clarksnut.managers;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentProvider;
 import org.clarksnut.documents.DocumentVersionModel;
-import org.clarksnut.documents.ImportedDocumentProvider;
-import org.clarksnut.files.FileProvider;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.exceptions.ForbiddenExceptionModel;

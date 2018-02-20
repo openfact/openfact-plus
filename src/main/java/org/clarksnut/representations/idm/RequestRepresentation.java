@@ -2,32 +2,32 @@ package org.clarksnut.representations.idm;
 
 import java.util.Date;
 
-public class RequestAccessSpaceToRepresentation {
+public class RequestRepresentation {
 
-    private RequestAccessSpaceToRepresentation.Data data;
+    private RequestRepresentation.Data data;
 
-    public RequestAccessSpaceToRepresentation() {
+    public RequestRepresentation() {
     }
 
-    public RequestAccessSpaceToRepresentation(RequestAccessSpaceToRepresentation.Data data) {
+    public RequestRepresentation(RequestRepresentation.Data data) {
         this.data = data;
     }
 
-    public RequestAccessSpaceToRepresentation.Data getData() {
+    public RequestRepresentation.Data getData() {
         return data;
     }
 
-    public void setData(RequestAccessSpaceToRepresentation.Data data) {
+    public void setData(RequestRepresentation.Data data) {
         this.data = data;
     }
 
     public static class Data {
         private String id;
         private String type;
-        private RequestAccessSpaceToRepresentation.Attributes attributes;
+        private RequestRepresentation.Attributes attributes;
 
-        public RequestAccessSpaceToRepresentation toRequestAccessSpaceToRepresentation() {
-            return new RequestAccessSpaceToRepresentation(this);
+        public RequestRepresentation toRequestAccessSpaceToRepresentation() {
+            return new RequestRepresentation(this);
         }
 
         public String getId() {
@@ -46,20 +46,22 @@ public class RequestAccessSpaceToRepresentation {
             this.type = type;
         }
 
-        public RequestAccessSpaceToRepresentation.Attributes getAttributes() {
+        public RequestRepresentation.Attributes getAttributes() {
             return attributes;
         }
 
-        public void setAttributes(RequestAccessSpaceToRepresentation.Attributes attributes) {
+        public void setAttributes(RequestRepresentation.Attributes attributes) {
             this.attributes = attributes;
         }
     }
 
     public static class Attributes {
+        private String space;
+        private String user;
+
         private String message;
         private String status;
         private String scope;
-
 
         private Date createdAt;
         private Date updatedAt;
@@ -102,6 +104,22 @@ public class RequestAccessSpaceToRepresentation {
 
         public void setScope(String scope) {
             this.scope = scope;
+        }
+
+        public String getSpace() {
+            return space;
+        }
+
+        public void setSpace(String space) {
+            this.space = space;
+        }
+
+        public String getUser() {
+            return user;
+        }
+
+        public void setUser(String user) {
+            this.user = user;
         }
     }
 

@@ -1,6 +1,6 @@
 package org.clarksnut.models;
 
-public enum RequestStatusType {
+public enum RequestStatus {
 
     PENDING,
     ACCEPTED,

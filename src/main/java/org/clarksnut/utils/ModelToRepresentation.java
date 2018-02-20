@@ -173,22 +173,18 @@ public class ModelToRepresentation {
         return rep;
     }
 
-//    public SpaceRepresentation toRepresentation(SharedSpaceModel model) {
-//        SpaceRepresentation rep = toRepresentation(model.getSpace(), false);
-//        rep.setPermissions(model.getPermissions().stream().getUblMessages(PermissionType::getName).collect(Collectors.toList()));
-//        return rep;
-//    }
-
-    public RequestAccessSpaceToRepresentation.Data toRepresentation(RequestAccessToSpaceModel model) {
-        RequestAccessSpaceToRepresentation.Data rep = new RequestAccessSpaceToRepresentation.Data();
+    public RequestRepresentation.Data toRepresentation(RequestModel model) {
+        RequestRepresentation.Data rep = new RequestRepresentation.Data();
 
         rep.setId(model.getId());
         rep.setType(ModelType.REQUEST_ACCESS_TO_SPACE.getAlias());
 
         // Attributes
-        RequestAccessSpaceToRepresentation.Attributes attributes = new RequestAccessSpaceToRepresentation.Attributes();
+        RequestRepresentation.Attributes attributes = new RequestRepresentation.Attributes();
         rep.setAttributes(attributes);
 
+        attributes.setSpace(model.getSpace().getId());
+        attributes.setUser(model.getUser().getIdentityID()); // WARNING: REMOVE IDENTITY ID
         attributes.setScope(model.getScope().toString());
         attributes.setMessage(model.getMessage());
         attributes.setStatus(model.getStatus().toString());
@@ -197,16 +193,5 @@ public class ModelToRepresentation {
 
         return rep;
     }
-
-//    public RepositoryRepresentation toRepresentation(UserRepositoryModel model) {
-//        RepositoryRepresentation rep = new RepositoryRepresentation();
-//
-//        rep.setId(model.getId());
-//        rep.setType(model.getType().getName());
-//        rep.setEmail(model.getEmail());
-//        rep.setLasTimeSynchronized(model.getLastTimeSynchronized());
-//
-//        return rep;
-//    }
 
 }

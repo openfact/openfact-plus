@@ -1,7 +1,10 @@
 package org.clarksnut.services.resources;
 
 import org.clarksnut.models.*;
-import org.clarksnut.representations.idm.*;
+import org.clarksnut.representations.idm.GenericDataRepresentation;
+import org.clarksnut.representations.idm.SpaceRepresentation;
+import org.clarksnut.representations.idm.TypedGenericDataRepresentation;
+import org.clarksnut.representations.idm.UserRepresentation;
 import org.clarksnut.services.ErrorResponse;
 import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.services.resources.utils.PATCH;
@@ -35,6 +38,9 @@ public class SpacesService {
     private UserProvider userProvider;
 
     @Inject
+    private RequestProvider requestProvider;
+
+    @Inject
     private ModelToRepresentation modelToRepresentation;
 
     private SpaceModel getSpaceById(String spaceId) {
@@ -43,6 +49,14 @@ public class SpacesService {
             throw new NotFoundException();
         }
         return space;
+    }
+
+    private RequestModel getRequestById(String requestId) {
+        RequestModel request = requestProvider.getRequest(requestId);
+        if (request == null) {
+            throw new NotFoundException();
+        }
+        return request;
     }
 
     @GET
@@ -217,49 +231,4 @@ public class SpacesService {
         return Response.ok().build();
     }
 
-    @POST
-    @Path("{spaceId}/request-access")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response requestAccessToSpace(@PathParam("spaceId") String spaceId, final RequestAccessSpaceToRepresentation representation) {
-        RequestAccessSpaceToRepresentation.Data data = representation.getData();
-        RequestAccessSpaceToRepresentation.Attributes attributes = data.getAttributes();
-
-        SpaceModel space = getSpaceById(spaceId);
-        RequestAccessToSpaceModel requestAccess = space.addRequestAccess(RequestAccessScope.valueOf(attributes.getScope()), attributes.getMessage());
-
-        RequestAccessSpaceToRepresentation.Data createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(requestAccess);
-        return Response.status(Response.Status.CREATED).entity(createdRequestAccessRepresentation.toRequestAccessSpaceToRepresentation()).build();
-    }
-
-    /*@GET
-    @Path("{spaceId}/request-access")
-    @Produces(MediaType.APPLICATION_JSON)
-    public GenericDataRepresentation getRequestAccess(@PathParam("spaceId") String spaceId) {
-        SpaceModel space = getSpaceById(spaceId);
-
-        return new GenericDataRepresentation<>(
-                space.getRequestAccess(RequestStatusType.PENDING).stream()
-                .map(f -> modelToRepresentation.toRepresentation(f))
-                .collect(Collectors.toList())
-        );
-    }
-
-    @PUT
-    @Path("{spaceId}/request-access/{requestId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateAccessSpacae(
-            @PathParam("spaceId") String spaceId,
-            @PathParam("requestId") String requestId,
-            final RequestAccessSpaceToRepresentation representation) {
-        SpaceModel space = getSpaceById(spaceId);
-
-        RequestAccessSpaceToRepresentation.Data data = representation.getData();
-        RequestAccessSpaceToRepresentation.Attributes attributes = data.getAttributes();
-
-
-        RequestAccessToSpaceModel requestAccess = space.addRequestAccess(RequestAccessScope.valueOf(attributes.getScope()), attributes.getMessage());
-
-        RequestAccessSpaceToRepresentation.Data createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(requestAccess);
-        return Response.status(Response.Status.CREATED).entity(createdRequestAccessRepresentation.toRequestAccessSpaceToRepresentation()).build();
-    }*/
 }

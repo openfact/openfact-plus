@@ -1,9 +1,10 @@
 package org.clarksnut.models.jpa;
 
 import org.clarksnut.common.jpa.JpaModel;
-import org.clarksnut.models.*;
+import org.clarksnut.models.PermissionType;
+import org.clarksnut.models.SpaceModel;
+import org.clarksnut.models.UserModel;
 import org.clarksnut.models.jpa.entity.CollaboratorEntity;
-import org.clarksnut.models.jpa.entity.RequestAccessToSpaceEntity;
 import org.clarksnut.models.jpa.entity.SpaceEntity;
 import org.clarksnut.models.jpa.entity.UserEntity;
 
@@ -12,7 +13,6 @@ import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
@@ -125,6 +125,7 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
         UserEntity userEntity = UserAdapter.toEntity(user, em);
 
         CollaboratorEntity entity = new CollaboratorEntity(userEntity, space);
+        entity.setRole(PermissionType.COLLABORATOR);
         em.persist(entity);
 
         // Cache
@@ -139,19 +140,6 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
         if (entity == null) return false;
         em.remove(entity);
         return true;
-    }
-
-    @Override
-    public RequestAccessToSpaceModel addRequestAccess(RequestAccessScope scope, String message) {
-        RequestAccessToSpaceEntity entity = new RequestAccessToSpaceEntity();
-        entity.setId(UUID.randomUUID().toString());
-        entity.setScope(scope);
-        entity.setMessage(message);
-        entity.setStatus(RequestStatusType.PENDING);
-        entity.setSpace(space);
-
-        em.persist(entity);
-        return new RequestAccessToSpaceAdapter(em, entity);
     }
 
     @Override
