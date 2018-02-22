@@ -1,6 +1,7 @@
 package org.clarksnut.documents;
 
 public enum ImportedDocumentStatus {
+    PENDING,
     IMPORTED,
     ALREADY_IMPORTED,
     NOT_IMPORTED_DUE_TO_UNSUPPORTED_DOCUMENT_TYPE,

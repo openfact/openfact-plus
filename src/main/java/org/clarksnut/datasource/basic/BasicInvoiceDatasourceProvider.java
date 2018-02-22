@@ -6,6 +6,7 @@ import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.basic.beans.LineBean;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 
 import java.math.BigDecimal;
@@ -27,10 +28,15 @@ public class BasicInvoiceDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file)  {
-        InvoiceType invoiceType = UBL21Reader.invoice().read(file.getDocument());
+    public Datasource getDatasource(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
+        InvoiceType invoiceType = null;
+        try {
+            invoiceType = UBL21Reader.invoice().read(file.getDocument());
+        } catch (Exception e) {
+            // Nothing to do
+        }
         if (invoiceType == null) {
-            return null;
+            throw new ImpossibleToUnmarshallException("Could not unmarshall to:" + InvoiceType.class.getName());
         }
 
         BasicInvoiceDatasource bean = new BasicInvoiceDatasource();

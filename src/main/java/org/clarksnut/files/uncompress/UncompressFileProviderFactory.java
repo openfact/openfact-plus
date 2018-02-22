@@ -27,11 +27,7 @@ public class UncompressFileProviderFactory {
     }
 
     public UncompressFileProvider getUncompressFileProvider(String fileExtension) {
-        UncompressFileProvider provider = providers.get(fileExtension);
-        if (provider == null) {
-            return providers.get("*");
-        }
-        return provider;
+        return providers.get(fileExtension);
     }
 
 }

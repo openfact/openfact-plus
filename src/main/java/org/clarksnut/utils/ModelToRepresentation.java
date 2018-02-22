@@ -144,7 +144,7 @@ public class ModelToRepresentation {
         attributes.setId(model.getId());
         attributes.setType(model.getType());
         attributes.setAssignedId(model.getAssignedId());
-        attributes.setSupplierAssignedId(model.getSupplierAssignedId());
+        attributes.setSupplierAssignedId(model.getSupplier().getAssignedId());
 
         attributes.setIssueDate(documentCurrentVersion.getIssueDate());
         attributes.setCurrency(documentCurrentVersion.getCurrency());

@@ -6,6 +6,7 @@ import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.basic.beans.LineBean;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 
 import java.math.BigDecimal;
@@ -28,10 +29,15 @@ public class BasicCreditNoteDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file)  {
-        CreditNoteType creditNoteType = UBL21Reader.creditNote().read(file.getDocument());
+    public Datasource getDatasource(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
+        CreditNoteType creditNoteType = null;
+        try {
+            creditNoteType = UBL21Reader.creditNote().read(file.getDocument());
+        } catch (Exception e) {
+            // Nothing to do
+        }
         if (creditNoteType == null) {
-            return null;
+            throw new ImpossibleToUnmarshallException("Could not unmarshall to:" + CreditNoteType.class.getName());
         }
 
         BasicCreditNoteDatasource bean = new BasicCreditNoteDatasource();

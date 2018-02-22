@@ -1,9 +1,14 @@
 package org.clarksnut.files.uncompress;
 
+import org.clarksnut.files.FileModel;
+import org.clarksnut.files.uncompress.exceptions.NotReadableCompressFileException;
+
+import java.util.List;
+
 public interface UncompressFileProvider {
 
     String getFileExtensionSupported();
 
-    UncompressedFileModel uncompress(String filename, byte[] bytes);
+    List<FileModel> uncompress(FileModel file) throws NotReadableCompressFileException;
 
 }

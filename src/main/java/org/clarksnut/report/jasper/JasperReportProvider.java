@@ -14,10 +14,8 @@ import org.clarksnut.datasource.DatasourceFactory;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.documents.DocumentModel;
 import org.clarksnut.documents.DocumentVersionModel;
-import org.clarksnut.files.FlyWeightFileModel;
-import org.clarksnut.files.FlyWeightXmlFileModel;
-import org.clarksnut.files.FlyWeightXmlUBLFileModel;
-import org.clarksnut.files.XmlUBLFileModel;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
+import org.clarksnut.files.*;
 import org.clarksnut.report.*;
 import org.clarksnut.report.exceptions.ReportException;
 import org.jboss.logging.Logger;
@@ -61,13 +59,18 @@ public class JasperReportProvider implements ReportTemplateProvider {
             String themeType = document.getType().toLowerCase();
             ReportTheme theme = themeProvider.getTheme(themeName, themeType);
 
-            XmlUBLFileModel file = new FlyWeightXmlUBLFileModel(
-                    new FlyWeightXmlFileModel(
-                            new FlyWeightFileModel(document.getCurrentVersion().getImportedDocument().getFile())
+            XmlUBLFileModel ublFile = new FlyWeightXmlUBLFileModel(
+                    new BasicXmlUBLFileModel(
+                            new FlyWeightXmlFileModel(
+                                    new BasicXmlFileModel(
+                                            new FlyWeightFileModel(document.getCurrentVersion().getImportedDocument().getFile())
+                                    )
+                            )
                     )
             );
+
             DatasourceProvider datasourceProvider = DatasourceFactory.getInstance().getDatasourceProvider(theme.getDatasource());
-            Object bean = datasourceProvider.getDatasource(file);
+            Object bean = datasourceProvider.getDatasource(ublFile);
 
             Map<String, Object> beanMap = toMap(bean, "bean");
             Map<String, Object> modelMap = toMap(toModelBean(document), "model");
@@ -82,6 +85,8 @@ public class JasperReportProvider implements ReportTemplateProvider {
             throw new ReportException("Failed to process jasper report", e);
         } catch (IllegalAccessException e) {
             throw new ReportException("Failed to map fields jasper report", e);
+        } catch (ImpossibleToUnmarshallException e) {
+            throw new ReportException(e.getMessage(), e);
         }
     }
 
@@ -119,7 +124,7 @@ public class JasperReportProvider implements ReportTemplateProvider {
 
         bean.setType(document.getType());
         bean.setAssignedId(document.getAssignedId());
-        bean.setSupplierAssignedId(document.getSupplierAssignedId());
+        bean.setSupplierAssignedId(document.getSupplier().getAssignedId());
 
         bean.setAmount(currentVersion.getAmount());
         bean.setTax(currentVersion.getTax());

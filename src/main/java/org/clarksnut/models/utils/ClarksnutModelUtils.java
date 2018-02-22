@@ -33,7 +33,7 @@ public class ClarksnutModelUtils {
         return getDocumentType(ClarksnutModelUtils.toDocument(bytes));
     }
 
-    public static String getDocumentType(Document document) throws Exception {
+    public static String getDocumentType(Document document) {
         Element documentElement = document.getDocumentElement();
         return documentElement.getTagName();
     }

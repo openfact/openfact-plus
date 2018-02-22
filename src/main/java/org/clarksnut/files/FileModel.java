@@ -6,8 +6,7 @@ public interface FileModel {
 
     String getFilename();
 
-    /**
-     * @return file value on bytes
-     */
-    byte[] getFileAsBytes() ;
+    byte[] getFile();
+
+    long getChecksum();
 }

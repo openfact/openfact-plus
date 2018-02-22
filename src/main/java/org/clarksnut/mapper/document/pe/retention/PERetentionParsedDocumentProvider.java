@@ -1,13 +1,12 @@
 package org.clarksnut.mapper.document.pe.retention;
 
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapperProvider;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.jboss.logging.Logger;
 import org.openfact.retention.RetentionType;
-
-import javax.xml.bind.JAXBException;
 
 public class PERetentionParsedDocumentProvider implements DocumentMapperProvider {
 
@@ -24,12 +23,12 @@ public class PERetentionParsedDocumentProvider implements DocumentMapperProvider
     }
 
     @Override
-    public DocumentMapped map(XmlUBLFileModel file) {
+    public DocumentMapped map(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
         RetentionType retentionType;
         try {
             retentionType = ClarksnutModelUtils.unmarshall(file.getDocument(), RetentionType.class);
-        } catch (JAXBException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ImpossibleToUnmarshallException("Could not marshall to:" + RetentionType.class.getName());
         }
 
         return new DocumentMapped() {

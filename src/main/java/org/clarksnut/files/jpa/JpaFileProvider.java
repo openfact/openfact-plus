@@ -1,6 +1,7 @@
 package org.clarksnut.files.jpa;
 
 import org.clarksnut.files.FileModel;
+import org.clarksnut.files.FileModelUtils;
 import org.clarksnut.files.FileProvider;
 
 import javax.ejb.Stateless;
@@ -15,13 +16,14 @@ public class JpaFileProvider implements FileProvider {
     private EntityManager em;
 
     @Override
-    public FileModel addFile(String filename, byte[] file)  {
+    public FileModel addFile(String filename, byte[] file) {
         String id = UUID.randomUUID().toString();
 
         FileEntity entity = new FileEntity();
         entity.setId(id);
         entity.setFilename(filename);
         entity.setFile(file);
+        entity.setChecksum(FileModelUtils.getChecksum(file));
 
         em.persist(entity);
         return new FileAdapter(em, entity);
@@ -35,7 +37,7 @@ public class JpaFileProvider implements FileProvider {
     }
 
     @Override
-    public boolean removeFile(FileModel file)  {
+    public boolean removeFile(FileModel file) {
         FileEntity entity = em.find(FileEntity.class, file.getId());
         if (entity == null) return false;
         em.remove(entity);

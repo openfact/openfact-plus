@@ -10,17 +10,15 @@ import org.clarksnut.files.jpa.FileAdapter;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ImportedDocumentAdapter implements ImportedDocumentModel, JpaModel<ImportedDocumentEntity> {
 
     private final EntityManager em;
-    private final ImportedDocumentEntity document;
+    private final ImportedDocumentEntity importedDocument;
 
-    public ImportedDocumentAdapter(EntityManager em, ImportedDocumentEntity document) {
+    public ImportedDocumentAdapter(EntityManager em, ImportedDocumentEntity importedDocument) {
         this.em = em;
-        this.document = document;
+        this.importedDocument = importedDocument;
     }
 
     public static ImportedDocumentEntity toEntity(ImportedDocumentModel model, EntityManager em) {
@@ -32,73 +30,42 @@ public class ImportedDocumentAdapter implements ImportedDocumentModel, JpaModel<
 
     @Override
     public ImportedDocumentEntity getEntity() {
-        return document;
+        return importedDocument;
     }
 
     @Override
     public String getId() {
-        return document.getId();
+        return importedDocument.getId();
     }
 
     @Override
     public DocumentProviderType getProvider() {
-        return document.getProvider();
-    }
-
-    @Override
-    public boolean isCompressed() {
-        return document.isCompressed();
+        return importedDocument.getProvider();
     }
 
     @Override
     public FileModel getFile() {
-        return new FileAdapter(em, document.getFile());
+        return new FileAdapter(em, importedDocument.getFile());
     }
 
     @Override
     public ImportedDocumentStatus getStatus() {
-        return document.getStatus();
+        return importedDocument.getStatus();
     }
 
     @Override
     public void setStatus(ImportedDocumentStatus status) {
-        document.setStatus(status);
+        importedDocument.setStatus(status);
     }
 
     @Override
     public Date getCreatedAt() {
-        return document.getCreatedAt();
+        return importedDocument.getCreatedAt();
     }
 
     @Override
     public Date getUpdatedAt() {
-        return document.getUpdatedAt();
-    }
-
-    @Override
-    public ImportedDocumentModel getParent() {
-        ImportedDocumentEntity parent = document.getParent();
-        if (parent != null) {
-            return new ImportedDocumentAdapter(em, parent);
-        }
-        return null;
-    }
-
-    @Override
-    public Set<ImportedDocumentModel> getChildren() {
-        return document.getChildren().stream()
-                .map(f -> new ImportedDocumentAdapter(em, f))
-                .collect(Collectors.toSet());
-    }
-
-    @Override
-    public String getDocumentReferenceId(String id) {
-        return document.getDocumentReferenceId();
-    }
-
-    @Override
-    public void setDocumentReferenceId(String documentReferenceId) {
-        document.setDocumentReferenceId(documentReferenceId);
+        return importedDocument.getUpdatedAt();
     }
 
 }

@@ -6,6 +6,7 @@ import oasis.names.specification.ubl.schema.xsd.debitnote_21.DebitNoteType;
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.basic.beans.LineBean;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 
 import java.math.BigDecimal;
@@ -28,10 +29,15 @@ public class BasicDebitNoteDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file)  {
-        DebitNoteType debitNoteType = UBL21Reader.debitNote().read(file.getDocument());
+    public Datasource getDatasource(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
+        DebitNoteType debitNoteType = null;
+        try {
+            debitNoteType = UBL21Reader.debitNote().read(file.getDocument());
+        } catch (Exception e) {
+            // Nothing to do
+        }
         if (debitNoteType == null) {
-            return null;
+            throw new ImpossibleToUnmarshallException("Could not unmarshall to:" + DebitNoteType.class.getName());
         }
 
         BasicDebitNoteDatasource bean = new BasicDebitNoteDatasource();

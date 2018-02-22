@@ -2,6 +2,7 @@ package org.clarksnut.services.resources;
 
 import jodd.io.ZipBuilder;
 import org.clarksnut.documents.*;
+import org.clarksnut.documents.exceptions.IsNotXmlOrCompressedFileDocumentException;
 import org.clarksnut.files.FileModel;
 import org.clarksnut.files.uncompress.exceptions.NotReadableCompressFileException;
 import org.clarksnut.managers.DocumentManager;
@@ -266,8 +267,10 @@ public class DocumentsService {
                 importedDocumentManager.importDocument(inputStream, fileName, DocumentProviderType.USER_COLLECTOR);
             } catch (IOException e) {
                 throw new ErrorResponseException("Could not read file", Response.Status.INTERNAL_SERVER_ERROR);
+            } catch (IsNotXmlOrCompressedFileDocumentException e) {
+                throw new ErrorResponseException("File should be .xml or compressed e.x. .zip, .tag.gz, .rar", Response.Status.BAD_REQUEST);
             } catch (NotReadableCompressFileException e) {
-                throw new ErrorResponseException("Could not read file, corrupted file", Response.Status.BAD_REQUEST);
+                throw new ErrorResponseException("Could not uncompress file, corrupted file", Response.Status.BAD_REQUEST);
             }
 
             // Return result
@@ -377,7 +380,7 @@ public class DocumentsService {
                 .forEach(document -> {
                     FileModel file = document.getCurrentVersion().getImportedDocument().getFile();
                     try {
-                        zipInMemory.add(file.getFileAsBytes()).path(document.getAssignedId()).save();
+                        zipInMemory.add(file.getFile()).path(document.getAssignedId()).save();
                     } catch (IOException e) {
                         logger.error("Could not add file to zip", e);
                     }
@@ -452,7 +455,7 @@ public class DocumentsService {
 
         FileModel file = document.getCurrentVersion().getImportedDocument().getFile();
 
-        byte[] reportBytes = file.getFileAsBytes();
+        byte[] reportBytes = file.getFile();
 
         Response.ResponseBuilder response = Response.ok(reportBytes);
         response.header("Content-Disposition", "attachment; filename=\"" + document.getAssignedId() + ".xml\"");

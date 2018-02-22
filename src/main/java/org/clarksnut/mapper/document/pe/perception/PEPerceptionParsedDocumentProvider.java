@@ -1,13 +1,12 @@
 package org.clarksnut.mapper.document.pe.perception;
 
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapperProvider;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.jboss.logging.Logger;
 import org.openfact.perception.PerceptionType;
-
-import javax.xml.bind.JAXBException;
 
 public class PEPerceptionParsedDocumentProvider implements DocumentMapperProvider {
 
@@ -24,12 +23,12 @@ public class PEPerceptionParsedDocumentProvider implements DocumentMapperProvide
     }
 
     @Override
-    public DocumentMapped map(XmlUBLFileModel file) {
+    public DocumentMapped map(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
         PerceptionType perceptionType;
         try {
             perceptionType = ClarksnutModelUtils.unmarshall(file.getDocument(), PerceptionType.class);
-        } catch (JAXBException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ImpossibleToUnmarshallException("Could not marshall to:" + PerceptionType.class.getName());
         }
 
         return new DocumentMapped() {

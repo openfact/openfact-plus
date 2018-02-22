@@ -8,13 +8,13 @@ import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.PerceptionLineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoRegimenPercepcion;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.openfact.perception.PerceptionType;
 import org.openfact.perception.SUNATPerceptionDocumentReferenceType;
 
-import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +31,8 @@ public class PeruPerceptionDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file)  {
+    public Datasource getDatasource(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
         PerceptionType perceptionType = read(file);
-        if (perceptionType == null) {
-            return null;
-        }
 
         PeruPerceptionDatasource bean = new PeruPerceptionDatasource();
 
@@ -100,11 +97,11 @@ public class PeruPerceptionDatasourceProvider implements DatasourceProvider {
         return bean;
     }
 
-    private PerceptionType read(XmlFileModel file)  {
+    private PerceptionType read(XmlFileModel file) throws ImpossibleToUnmarshallException {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), PerceptionType.class);
-        } catch (JAXBException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ImpossibleToUnmarshallException("Could not unmarshall to:" + PerceptionType.class.getName());
         }
     }
 

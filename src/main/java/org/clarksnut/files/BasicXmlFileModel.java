@@ -1,14 +1,19 @@
 package org.clarksnut.files;
 
+import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.w3c.dom.Document;
 
-public class FlyWeightXmlFileModel implements XmlFileModel {
+public class BasicXmlFileModel implements XmlFileModel {
 
-    protected final XmlFileModel file;
-    protected Document document;
+    protected final FileModel file;
 
-    public FlyWeightXmlFileModel(XmlFileModel file) {
+    public BasicXmlFileModel(FileModel file) {
         this.file = file;
+    }
+
+    @Override
+    public Document getDocument() throws Exception {
+        return ClarksnutModelUtils.toDocument(file.getFile());
     }
 
     @Override
@@ -30,13 +35,4 @@ public class FlyWeightXmlFileModel implements XmlFileModel {
     public long getChecksum() {
         return file.getChecksum();
     }
-
-    @Override
-    public Document getDocument() throws Exception {
-        if (document == null) {
-            this.document = file.getDocument();
-        }
-        return document;
-    }
-
 }

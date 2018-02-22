@@ -9,11 +9,11 @@ import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.LineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 
-import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,11 +31,8 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file)  {
+    public Datasource getDatasource(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
         InvoiceType invoiceType = read(file);
-        if (invoiceType == null) {
-            return null;
-        }
 
         PeruInvoiceDatasource bean = new PeruInvoiceDatasource();
 
@@ -106,11 +103,11 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
         return bean;
     }
 
-    private InvoiceType read(XmlFileModel file)  {
+    private InvoiceType read(XmlFileModel file) throws ImpossibleToUnmarshallException {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), InvoiceType.class);
-        } catch (JAXBException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ImpossibleToUnmarshallException("Could not unmarshall to:" + InvoiceType.class.getName());
         }
     }
 

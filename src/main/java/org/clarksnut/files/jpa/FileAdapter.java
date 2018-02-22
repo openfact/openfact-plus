@@ -38,7 +38,12 @@ public class FileAdapter implements FileModel, JpaModel<FileEntity> {
     }
 
     @Override
-    public byte[] getFileAsBytes()  {
+    public long getChecksum() {
+        return file.getChecksum();
+    }
+
+    @Override
+    public byte[] getFile()  {
         return file.getFile();
     }
 

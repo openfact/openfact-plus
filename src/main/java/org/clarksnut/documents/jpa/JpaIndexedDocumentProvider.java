@@ -29,7 +29,7 @@ public class JpaIndexedDocumentProvider {
         entity.setId(document.getId());
         entity.setType(document.getType());
         entity.setAssignedId(document.getAssignedId());
-        entity.setSupplierAssignedId(document.getSupplierAssignedId());
+        entity.setSupplierAssignedId(document.getSupplier().getAssignedId());
 
 
         entity.setIssueDate(documentVersionEntity.getIssueDate());

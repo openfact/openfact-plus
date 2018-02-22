@@ -4,6 +4,7 @@ import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
+import org.clarksnut.models.jpa.entity.SpaceEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,11 +15,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "cl_document", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"type", "assigned_id", "supplier_assigned_id"})
+        @UniqueConstraint(columnNames = {"type", "assigned_id", "supplier_id"})
 })
 @NamedQueries({
         @NamedQuery(name = "getAllDocuments", query = "select d from DocumentEntity d"),
-        @NamedQuery(name = "getDocumentByTypeAssignedIdAndSupplierAssignedId", query = "select d from DocumentEntity d where d.type = :type and d.assignedId = :assignedId and d.supplierAssignedId = :supplierAssignedId")
+        @NamedQuery(name = "getDocumentByTypeAssignedIdAndSupplierId", query = "select d from DocumentEntity d inner join d.supplier s where d.type = :type and d.assignedId = :assignedId and s.id =:supplierId")
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 public class DocumentEntity implements CreatableEntity, UpdatableEntity, Serializable {
@@ -32,13 +33,18 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "type")
     private String type;
 
-    @NotNull(message = "supplierAssignedId should not be null")
-    @Column(name = "supplier_assigned_id")
-    private String supplierAssignedId;
-
     @NotNull(message = "assignedId should not be null")
     @Column(name = "assigned_id")
     private String assignedId;
+
+    @NotNull(message = "supplier should not be null")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_id", foreignKey = @ForeignKey)
+    private SpaceEntity supplier;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", foreignKey = @ForeignKey)
+    private SpaceEntity customer;
 
     @OneToOne(mappedBy = "document", fetch = FetchType.LAZY)
     private IndexedDocumentEntity indexedDocument;
@@ -72,20 +78,36 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.type = type;
     }
 
-    public String getSupplierAssignedId() {
-        return supplierAssignedId;
-    }
-
-    public void setSupplierAssignedId(String supplierAssignedId) {
-        this.supplierAssignedId = supplierAssignedId;
-    }
-
     public String getAssignedId() {
         return assignedId;
     }
 
     public void setAssignedId(String assignedId) {
         this.assignedId = assignedId;
+    }
+
+    public SpaceEntity getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(SpaceEntity supplier) {
+        this.supplier = supplier;
+    }
+
+    public SpaceEntity getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(SpaceEntity customer) {
+        this.customer = customer;
+    }
+
+    public IndexedDocumentEntity getIndexedDocument() {
+        return indexedDocument;
+    }
+
+    public void setIndexedDocument(IndexedDocumentEntity indexedDocument) {
+        this.indexedDocument = indexedDocument;
     }
 
     public List<DocumentVersionEntity> getVersions() {
@@ -112,14 +134,6 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Override
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public IndexedDocumentEntity getIndexedDocument() {
-        return indexedDocument;
-    }
-
-    public void setIndexedDocument(IndexedDocumentEntity indexedDocument) {
-        this.indexedDocument = indexedDocument;
     }
 }
 

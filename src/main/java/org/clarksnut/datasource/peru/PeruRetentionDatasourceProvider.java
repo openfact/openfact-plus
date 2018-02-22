@@ -8,13 +8,13 @@ import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.RetentionLineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoRegimenRetencion;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.openfact.retention.RetentionType;
 import org.openfact.retention.SUNATRetentionDocumentReferenceType;
 
-import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +31,8 @@ public class PeruRetentionDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file)  {
+    public Datasource getDatasource(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
         RetentionType retentionType = read(file);
-        if (retentionType == null) {
-            return null;
-        }
 
         PeruRetentionDatasource bean = new PeruRetentionDatasource();
 
@@ -100,11 +97,11 @@ public class PeruRetentionDatasourceProvider implements DatasourceProvider {
         return bean;
     }
 
-    private RetentionType read(XmlFileModel file)  {
+    private RetentionType read(XmlFileModel file) throws ImpossibleToUnmarshallException {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), RetentionType.class);
-        } catch (JAXBException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ImpossibleToUnmarshallException("Could not unmarshall to:" + RetentionType.class.getName());
         }
     }
 

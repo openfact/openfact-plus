@@ -4,17 +4,21 @@ import org.clarksnut.files.uncompress.exceptions.NotReadableCompressFileExceptio
 
 import java.util.List;
 
-public class BasicCompressedFileModel implements CompressedFileModel {
+public class FlyWeightCompressedFileModel implements CompressedFileModel {
 
-    private final FileModel file;
+    private final CompressedFileModel file;
+    private List<FileModel> children;
 
-    public BasicCompressedFileModel(FileModel file) {
+    public FlyWeightCompressedFileModel(CompressedFileModel file) {
         this.file = file;
     }
 
     @Override
     public List<FileModel> getChildren() throws NotReadableCompressFileException {
-        return FileModelUtils.uncompress(file);
+        if (children == null) {
+            children = FileModelUtils.uncompress(file);
+        }
+        return children;
     }
 
     @Override

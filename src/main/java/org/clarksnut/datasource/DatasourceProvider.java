@@ -1,5 +1,6 @@
 package org.clarksnut.datasource;
 
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 
 public interface DatasourceProvider {
@@ -8,6 +9,6 @@ public interface DatasourceProvider {
 
     boolean isInternal();
 
-    Datasource getDatasource(XmlUBLFileModel file);
+    Datasource getDatasource(XmlUBLFileModel file) throws ImpossibleToUnmarshallException;
 
 }

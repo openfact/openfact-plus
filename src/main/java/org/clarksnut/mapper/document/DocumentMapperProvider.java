@@ -1,5 +1,6 @@
 package org.clarksnut.mapper.document;
 
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 
 public interface DocumentMapperProvider {
@@ -8,6 +9,6 @@ public interface DocumentMapperProvider {
 
     String getSupportedDocumentType();
 
-    DocumentMapped map(XmlUBLFileModel file);
+    DocumentMapped map(XmlUBLFileModel file) throws ImpossibleToUnmarshallException;
 
 }

@@ -2,6 +2,7 @@ package org.clarksnut.mapper.document.basic.creditnote;
 
 import com.helger.ubl21.UBL21Reader;
 import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapperProvider;
@@ -22,21 +23,27 @@ public class BasicCreditNoteMapperProvider implements DocumentMapperProvider {
     }
 
     @Override
-    public DocumentMapped map(XmlUBLFileModel file) {
-        CreditNoteType creditNoteType = UBL21Reader.creditNote().read(file.getDocument());
+    public DocumentMapped map(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
+        CreditNoteType creditNoteType = null;
+        try {
+            creditNoteType = UBL21Reader.creditNote().read(file.getDocument());
+        } catch (Exception e) {
+            // Nothing to do
+        }
         if (creditNoteType == null) {
-            return null;
+            throw new ImpossibleToUnmarshallException("Could not marshall to:" + CreditNoteType.class.getName());
         }
 
+        final CreditNoteType type = creditNoteType;
         return new DocumentMapped() {
             @Override
             public DocumentBean getBean() {
-                return new BasicCreditNoteBeanAdapter(creditNoteType);
+                return new BasicCreditNoteBeanAdapter(type);
             }
 
             @Override
             public Object getType() {
-                return creditNoteType;
+                return type;
             }
         };
     }

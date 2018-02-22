@@ -13,11 +13,11 @@ import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.LineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoNotaCredito;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 
-import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +35,7 @@ public class PeruCreditNoteDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file)  {
+    public Datasource getDatasource(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
         CreditNoteType creditNoteType = read(file);
         if (creditNoteType == null) {
             return null;
@@ -106,11 +106,11 @@ public class PeruCreditNoteDatasourceProvider implements DatasourceProvider {
         return bean;
     }
 
-    private CreditNoteType read(XmlFileModel file)  {
+    private CreditNoteType read(XmlFileModel file) throws ImpossibleToUnmarshallException {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), CreditNoteType.class);
-        } catch (JAXBException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ImpossibleToUnmarshallException("Could not unmarshall to:" + CreditNoteType.class.getName());
         }
     }
 

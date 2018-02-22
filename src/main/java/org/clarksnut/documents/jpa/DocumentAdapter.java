@@ -6,6 +6,9 @@ import org.clarksnut.documents.DocumentVersionModel;
 import org.clarksnut.documents.IndexedDocumentModel;
 import org.clarksnut.documents.jpa.entity.DocumentEntity;
 import org.clarksnut.documents.jpa.entity.DocumentVersionEntity;
+import org.clarksnut.models.SpaceModel;
+import org.clarksnut.models.jpa.SpaceAdapter;
+import org.clarksnut.models.jpa.entity.SpaceEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -51,8 +54,15 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public String getSupplierAssignedId() {
-        return entity.getSupplierAssignedId();
+    public SpaceModel getSupplier() {
+        return new SpaceAdapter(em, entity.getSupplier());
+    }
+
+    @Override
+    public SpaceModel getCustomer() {
+        SpaceEntity customer = entity.getCustomer();
+        if (customer == null) return null;
+        return new SpaceAdapter(em, customer);
     }
 
     @Override

@@ -5,13 +5,13 @@ import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.VoidedLineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.VoidedDocumentsLineType;
 import sunat.names.specification.ubl.peru.schema.xsd.voideddocuments_1.VoidedDocumentsType;
 
-import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +28,8 @@ public class PeruVoidedDocumentsDatasourceProvider implements DatasourceProvider
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file)  {
+    public Datasource getDatasource(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
         VoidedDocumentsType voidedDocumentsType = read(file);
-        if (file == null) {
-            return null;
-        }
 
         PeruVoidedDocumentsDatasource bean = new PeruVoidedDocumentsDatasource();
 
@@ -63,11 +60,11 @@ public class PeruVoidedDocumentsDatasourceProvider implements DatasourceProvider
         return bean;
     }
 
-    private VoidedDocumentsType read(XmlFileModel file)  {
+    private VoidedDocumentsType read(XmlFileModel file) throws ImpossibleToUnmarshallException {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), VoidedDocumentsType.class);
-        } catch (JAXBException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ImpossibleToUnmarshallException("Could not unmarshall to:" + VoidedDocumentsType.class.getName());
         }
     }
 

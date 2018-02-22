@@ -2,6 +2,7 @@ package org.clarksnut.mapper.document.basic.invoice;
 
 import com.helger.ubl21.UBL21Reader;
 import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapperProvider;
@@ -22,21 +23,27 @@ public class BasicInvoiceParsedDocumentProvider implements DocumentMapperProvide
     }
 
     @Override
-    public DocumentMapped map(XmlUBLFileModel file) {
-        InvoiceType invoiceType = UBL21Reader.invoice().read(file.getDocument());
+    public DocumentMapped map(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
+        InvoiceType invoiceType = null;
+        try {
+            invoiceType = UBL21Reader.invoice().read(file.getDocument());
+        } catch (Exception e) {
+            // Nothing to do
+        }
         if (invoiceType == null) {
-            return null;
+            throw new ImpossibleToUnmarshallException("Could not marshall to:" + InvoiceType.class.getName());
         }
 
+        final InvoiceType type = invoiceType;
         return new DocumentMapped() {
             @Override
             public DocumentBean getBean() {
-                return new BasicInvoiceBeanAdapter(invoiceType);
+                return new BasicInvoiceBeanAdapter(type);
             }
 
             @Override
             public Object getType() {
-                return invoiceType;
+                return type;
             }
         };
     }

@@ -1,11 +1,19 @@
 package org.clarksnut.files.jpa;
 
+import org.clarksnut.documents.jpa.entity.ImportedDocumentEntity;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "cl_file")
-public class FileEntity {
+@NamedQueries({
+        @NamedQuery(name = "removeFileByImportedDocumentId", query = "delete from FileEntity f where f in (select f from FileEntity f inner join f.importedDocuments d where d.id=:importedDocumentId)")
+})
+public class FileEntity implements Serializable {
 
     @Id
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
@@ -16,10 +24,17 @@ public class FileEntity {
     @Column(name = "filename")
     private String filename;
 
+    @NotNull
+    @Column(name = "checksum")
+    private long checksum;
+
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "file")
     private byte[] file;
+
+    @OneToMany(mappedBy = "file", fetch = FetchType.LAZY)
+    private List<ImportedDocumentEntity> importedDocuments = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -29,19 +44,35 @@ public class FileEntity {
         this.id = id;
     }
 
-    public void setFile(byte[] file) {
-        this.file = file;
-    }
-
-    public byte[] getFile() {
-        return file;
+    public String getFilename() {
+        return filename;
     }
 
     public void setFilename(String filename) {
         this.filename = filename;
     }
 
-    public String getFilename() {
-        return filename;
+    public long getChecksum() {
+        return checksum;
+    }
+
+    public void setChecksum(long checksum) {
+        this.checksum = checksum;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public List<ImportedDocumentEntity> getImportedDocuments() {
+        return importedDocuments;
+    }
+
+    public void setImportedDocuments(List<ImportedDocumentEntity> importedDocuments) {
+        this.importedDocuments = importedDocuments;
     }
 }

@@ -3,8 +3,9 @@ package org.clarksnut.documents.jpa;
 import org.clarksnut.documents.DocumentProviderType;
 import org.clarksnut.documents.ImportedDocumentModel;
 import org.clarksnut.documents.ImportedDocumentProvider;
+import org.clarksnut.documents.ImportedDocumentStatus;
 import org.clarksnut.documents.jpa.entity.ImportedDocumentEntity;
-import org.clarksnut.files.CompressedFileModel;
+import org.clarksnut.files.FileModel;
 import org.clarksnut.files.jpa.FileAdapter;
 import org.jboss.logging.Logger;
 
@@ -22,30 +23,14 @@ public class JpaImportedDocumentProvider implements ImportedDocumentProvider {
     private EntityManager em;
 
     @Override
-    public ImportedDocumentModel importDocument(CompressedFileModel file, DocumentProviderType provider) {
-
-        ImportedDocumentEntity importedParentDocumentEntity = new ImportedDocumentEntity();
-        importedParentDocumentEntity.setId(UUID.randomUUID().toString());
-        importedParentDocumentEntity.setFile(FileAdapter.toEntity(file, em));
-        importedParentDocumentEntity.setProvider(provider);
-        importedParentDocumentEntity.setCompressed(file.isCompressed());
-        em.persist(importedParentDocumentEntity);
-
-        if (file.isCompressed()) {
-            file.getChildrenIfExists().forEach(fileEntry -> {
-                ImportedDocumentEntity importedChildDocumentEntity = new ImportedDocumentEntity();
-                importedChildDocumentEntity.setId(UUID.randomUUID().toString());
-                importedChildDocumentEntity.setFile(FileAdapter.toEntity(fileEntry, em));
-                importedChildDocumentEntity.setProvider(provider);
-                importedChildDocumentEntity.setParent(importedChildDocumentEntity);
-                em.persist(importedChildDocumentEntity);
-
-                // Temporal Cache
-                importedParentDocumentEntity.getChildren().add(importedChildDocumentEntity);
-            });
-        }
-
-        return new ImportedDocumentAdapter(em, importedParentDocumentEntity);
+    public ImportedDocumentModel importDocument(FileModel file, DocumentProviderType provider) {
+        ImportedDocumentEntity entity = new ImportedDocumentEntity();
+        entity.setId(UUID.randomUUID().toString());
+        entity.setProvider(provider);
+        entity.setStatus(ImportedDocumentStatus.PENDING);
+        entity.setFile(FileAdapter.toEntity(file, em));
+        em.persist(entity);
+        return new ImportedDocumentAdapter(em, entity);
     }
 
     @Override
@@ -56,11 +41,13 @@ public class JpaImportedDocumentProvider implements ImportedDocumentProvider {
     }
 
     @Override
-    public boolean removeImportedDocument(ImportedDocumentModel document) {
-        ImportedDocumentEntity entity = em.find(ImportedDocumentEntity.class, document.getId());
-        if (entity == null) return false;
-        em.remove(entity);
-
+    public boolean removeImportedDocument(ImportedDocumentModel importedDocument) {
+        em.createNamedQuery("removeFileByImportedDocumentId")
+                .setParameter("importedDocumentId", importedDocument.getId())
+                .executeUpdate();
+        em.createNamedQuery("removeImportedDocumentById")
+                .setParameter("importedDocumentId", importedDocument.getId())
+                .executeUpdate();
         return true;
     }
 

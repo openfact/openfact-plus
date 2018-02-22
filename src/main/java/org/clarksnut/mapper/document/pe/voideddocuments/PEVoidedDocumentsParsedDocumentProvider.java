@@ -1,13 +1,12 @@
 package org.clarksnut.mapper.document.pe.voideddocuments;
 
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapperProvider;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.jboss.logging.Logger;
 import sunat.names.specification.ubl.peru.schema.xsd.voideddocuments_1.VoidedDocumentsType;
-
-import javax.xml.bind.JAXBException;
 
 public class PEVoidedDocumentsParsedDocumentProvider implements DocumentMapperProvider {
 
@@ -24,12 +23,12 @@ public class PEVoidedDocumentsParsedDocumentProvider implements DocumentMapperPr
     }
 
     @Override
-    public DocumentMapped map(XmlUBLFileModel file) {
+    public DocumentMapped map(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
         VoidedDocumentsType voidedDocumentsType;
         try {
             voidedDocumentsType = ClarksnutModelUtils.unmarshall(file.getDocument(), VoidedDocumentsType.class);
-        } catch (JAXBException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ImpossibleToUnmarshallException("Could not marshall to:" + VoidedDocumentsType.class.getName());
         }
 
         return new DocumentMapped() {

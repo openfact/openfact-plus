@@ -2,28 +2,39 @@ package org.clarksnut.files;
 
 public class FlyWeightFileModel implements FileModel {
 
-    protected final FileModel model;
-    protected byte[] bytes;
+    protected final FileModel file;
 
-    public FlyWeightFileModel(FileModel fileModel) {
-        this.model = fileModel;
+    protected byte[] fileValue;
+    protected Long fileChecksum;
+
+    public FlyWeightFileModel(FileModel file) {
+        this.file = file;
     }
 
     @Override
     public String getId() {
-        return this.model.getId();
+        return file.getId();
     }
 
     @Override
     public String getFilename() {
-        return model.getFilename();
+        return file.getFilename();
     }
 
     @Override
-    public byte[] getFileAsBytes() {
-        if (bytes == null) {
-            this.bytes = this.model.getFileAsBytes();
+    public byte[] getFile() {
+        if (fileValue == null) {
+            fileValue = file.getFile();
         }
-        return this.bytes;
+        return fileValue;
     }
+
+    @Override
+    public long getChecksum() {
+        if (fileChecksum == null) {
+            fileChecksum = file.getChecksum();
+        }
+        return fileChecksum;
+    }
+
 }

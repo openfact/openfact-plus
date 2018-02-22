@@ -7,19 +7,16 @@ import org.clarksnut.common.jpa.UpdatedAtListener;
 import org.clarksnut.documents.DocumentProviderType;
 import org.clarksnut.documents.ImportedDocumentStatus;
 import org.clarksnut.files.jpa.FileEntity;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "cl_imported_document")
 @NamedQueries({
-        @NamedQuery(name = "getAllUnsupportedDocuments", query = "select d from DocumentEntity d")
+        @NamedQuery(name = "removeImportedDocumentById", query = "delete from ImportedDocumentEntity i where i.id =:importedDocumentId")
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 public class ImportedDocumentEntity implements CreatableEntity, UpdatableEntity, Serializable {
@@ -30,10 +27,6 @@ public class ImportedDocumentEntity implements CreatableEntity, UpdatableEntity,
     private String id;
 
     @NotNull
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    @Column(name = "compressed")
-    private boolean compressed;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private ImportedDocumentStatus status;
@@ -43,20 +36,13 @@ public class ImportedDocumentEntity implements CreatableEntity, UpdatableEntity,
     @Column(name = "provider")
     private DocumentProviderType provider;
 
-    @Column(name = "document_reference_id")
-    private String documentReferenceId;
+    @OneToOne(mappedBy = "importedDocument", fetch = FetchType.LAZY)
+    private DocumentVersionEntity documentVersion;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id", foreignKey = @ForeignKey)
     private FileEntity file;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id", foreignKey = @ForeignKey)
-    private ImportedDocumentEntity parent;
-
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    private List<ImportedDocumentEntity> children = new ArrayList<>();
 
     @NotNull(message = "createdAt should not be null")
     @Temporal(TemporalType.TIMESTAMP)
@@ -76,12 +62,36 @@ public class ImportedDocumentEntity implements CreatableEntity, UpdatableEntity,
         this.id = id;
     }
 
+    public ImportedDocumentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ImportedDocumentStatus status) {
+        this.status = status;
+    }
+
     public DocumentProviderType getProvider() {
         return provider;
     }
 
     public void setProvider(DocumentProviderType provider) {
         this.provider = provider;
+    }
+
+    public DocumentVersionEntity getDocumentVersion() {
+        return documentVersion;
+    }
+
+    public void setDocumentVersion(DocumentVersionEntity documentVersion) {
+        this.documentVersion = documentVersion;
+    }
+
+    public FileEntity getFile() {
+        return file;
+    }
+
+    public void setFile(FileEntity file) {
+        this.file = file;
     }
 
     public Date getCreatedAt() {
@@ -100,54 +110,6 @@ public class ImportedDocumentEntity implements CreatableEntity, UpdatableEntity,
     @Override
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public void setParent(ImportedDocumentEntity parent) {
-        this.parent = parent;
-    }
-
-    public ImportedDocumentEntity getParent() {
-        return parent;
-    }
-
-    public boolean isCompressed() {
-        return compressed;
-    }
-
-    public void setCompressed(boolean compressed) {
-        this.compressed = compressed;
-    }
-
-    public ImportedDocumentStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ImportedDocumentStatus status) {
-        this.status = status;
-    }
-
-    public FileEntity getFile() {
-        return file;
-    }
-
-    public void setFile(FileEntity file) {
-        this.file = file;
-    }
-
-    public List<ImportedDocumentEntity> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<ImportedDocumentEntity> children) {
-        this.children = children;
-    }
-
-    public String getDocumentReferenceId() {
-        return documentReferenceId;
-    }
-
-    public void setDocumentReferenceId(String documentReferenceId) {
-        this.documentReferenceId = documentReferenceId;
     }
 }
 

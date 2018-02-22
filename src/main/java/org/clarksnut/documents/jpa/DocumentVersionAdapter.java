@@ -50,7 +50,7 @@ public class DocumentVersionAdapter implements DocumentVersionModel, JpaModel<Do
 
     @Override
     public ImportedDocumentModel getImportedDocument() {
-        return new ImportedDocumentAdapter( em, documentVersion.getImportedFile());
+        return new ImportedDocumentAdapter( em, documentVersion.getImportedDocument());
     }
 
     @Override

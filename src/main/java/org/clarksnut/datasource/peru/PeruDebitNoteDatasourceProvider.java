@@ -13,11 +13,11 @@ import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.LineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoNotaDebito;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 
-import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,11 +35,8 @@ public class PeruDebitNoteDatasourceProvider implements DatasourceProvider {
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file)  {
+    public Datasource getDatasource(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
         DebitNoteType debitNoteType = read(file);
-        if (debitNoteType == null) {
-            return null;
-        }
 
         PeruDebitNoteDatasource bean = new PeruDebitNoteDatasource();
        
@@ -106,11 +103,11 @@ public class PeruDebitNoteDatasourceProvider implements DatasourceProvider {
         return bean;
     }
 
-    private DebitNoteType read(XmlFileModel file)  {
+    private DebitNoteType read(XmlFileModel file) throws ImpossibleToUnmarshallException {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), DebitNoteType.class);
-        } catch (JAXBException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ImpossibleToUnmarshallException("Could not unmarshall to:" + DebitNoteType.class.getName());
         }
     }
 

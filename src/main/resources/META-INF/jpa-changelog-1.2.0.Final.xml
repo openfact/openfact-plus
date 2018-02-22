@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="carlosthe19916@gmail.com" id="1.0.0.Final">
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-1">
         <createTable tableName="cl_collaborator">
             <column name="role" type="VARCHAR(255)"/>
             <column name="space_id" type="VARCHAR(36)">
@@ -12,16 +13,21 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-2">
         <createTable tableName="cl_document">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
             <column name="assigned_id" type="VARCHAR(255)"/>
             <column name="created_at" type="TIMESTAMP"/>
-            <column name="supplier_assigned_id" type="VARCHAR(255)"/>
             <column name="type" type="VARCHAR(255)"/>
             <column name="updated_at" type="TIMESTAMP"/>
+            <column name="customer_id" type="VARCHAR(36)"/>
+            <column name="supplier_id" type="VARCHAR(36)"/>
         </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-3">
         <createTable tableName="cl_document_version">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -43,28 +49,32 @@
             <column name="tax" type="FLOAT"/>
             <column name="updated_at" type="TIMESTAMP"/>
             <column name="document_id" type="VARCHAR(36)"/>
-            <column name="imported_file_id" type="VARCHAR(36)"/>
+            <column name="imported_document_id" type="VARCHAR(36)"/>
         </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-4">
         <createTable tableName="cl_file">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
+            <column name="checksum" type="BIGINT"/>
             <column name="file" type="BLOB"/>
             <column name="filename" type="VARCHAR(255)"/>
         </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-5">
         <createTable tableName="cl_imported_document">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
-            <column name="compressed" type="INT"/>
             <column name="created_at" type="TIMESTAMP"/>
-            <column name="document_reference_id" type="VARCHAR(255)"/>
             <column name="provider" type="VARCHAR(255)"/>
             <column name="status" type="VARCHAR(255)"/>
             <column name="updated_at" type="TIMESTAMP"/>
             <column name="file_id" type="VARCHAR(36)"/>
-            <column name="parent_id" type="VARCHAR(36)"/>
         </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-6">
         <createTable tableName="cl_indexed_document">
             <column name="amount" type="FLOAT"/>
             <column name="assigned_id" type="VARCHAR(255)"/>
@@ -88,7 +98,9 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createTable tableName="cl_request_access_to_space">
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-7">
+        <createTable tableName="cl_request">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
@@ -98,7 +110,10 @@
             <column name="status" type="VARCHAR(255)"/>
             <column name="updated_at" type="TIMESTAMP"/>
             <column name="space_id" type="VARCHAR(36)"/>
+            <column name="user_id" type="VARCHAR(36)"/>
         </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-8">
         <createTable tableName="cl_space">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -110,19 +125,8 @@
             <column name="updated_at" type="TIMESTAMP"/>
             <column name="version" type="INT"/>
         </createTable>
-        <createTable tableName="cl_space_request">
-            <column name="id" type="VARCHAR(36)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="created_at" type="TIMESTAMP"/>
-            <column name="file_id" type="VARCHAR(255)"/>
-            <column name="message" type="VARCHAR(255)"/>
-            <column name="status" type="VARCHAR(255)"/>
-            <column name="type" type="VARCHAR(255)"/>
-            <column name="updated_at" type="TIMESTAMP"/>
-            <column name="space_id" type="VARCHAR(36)"/>
-            <column name="user_id" type="VARCHAR(36)"/>
-        </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-9">
         <createTable tableName="cl_user">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -143,105 +147,170 @@
             <column name="username" type="VARCHAR(255)"/>
             <column name="version" type="INT"/>
         </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-10">
         <createTable tableName="cl_user_context_information">
             <column name="value" type="VARCHAR(4096)"/>
             <column name="user_id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-11">
         <createTable tableName="favorite_spaces">
             <column name="user_id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
             <column name="value" type="VARCHAR(255)"/>
         </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-12">
         <createTable tableName="user_checks">
             <column name="indexed_document_id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
             <column name="value" type="VARCHAR(255)"/>
         </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-13">
         <createTable tableName="user_starts">
             <column name="indexed_document_id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
             <column name="value" type="VARCHAR(255)"/>
         </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-14">
         <createTable tableName="user_views">
             <column name="indexed_document_id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
             <column name="value" type="VARCHAR(255)"/>
         </createTable>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-15">
         <addPrimaryKey columnNames="space_id, user_id" constraintName="cl_collaboratorPK" tableName="cl_collaborator"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-16">
         <addPrimaryKey columnNames="id" constraintName="cl_documentPK" tableName="cl_document"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-17">
         <addPrimaryKey columnNames="id" constraintName="cl_document_versionPK" tableName="cl_document_version"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-18">
         <addPrimaryKey columnNames="id" constraintName="cl_filePK" tableName="cl_file"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-19">
         <addPrimaryKey columnNames="id" constraintName="cl_imported_documentPK" tableName="cl_imported_document"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-20">
         <addPrimaryKey columnNames="document_id" constraintName="cl_indexed_documentPK"
                        tableName="cl_indexed_document"/>
-        <addPrimaryKey columnNames="id" constraintName="cl_request_access_to_spacePK"
-                       tableName="cl_request_access_to_space"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-21">
+        <addPrimaryKey columnNames="id" constraintName="cl_requestPK" tableName="cl_request"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-22">
         <addPrimaryKey columnNames="id" constraintName="cl_spacePK" tableName="cl_space"/>
-        <addPrimaryKey columnNames="id" constraintName="cl_space_requestPK" tableName="cl_space_request"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-23">
         <addPrimaryKey columnNames="id" constraintName="cl_userPK" tableName="cl_user"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-24">
         <addPrimaryKey columnNames="user_id" constraintName="cl_user_context_informationPK"
                        tableName="cl_user_context_information"/>
-        <addUniqueConstraint columnNames="type, assigned_id, supplier_assigned_id"
-                             constraintName="UK1g8cna9wmjf7rvym5de8otj5j" tableName="cl_document"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-25">
+        <addUniqueConstraint columnNames="type, assigned_id, supplier_id" constraintName="UKa0dvpc932055h4f40508fl3uu"
+                             tableName="cl_document"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-26">
         <addUniqueConstraint columnNames="identity_id" constraintName="UKj02cpo2pptija0ujdlickuyoa"
                              tableName="cl_user"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-27">
         <addUniqueConstraint columnNames="username" constraintName="UKo2u1kvk0249ki7q84ggorljc6" tableName="cl_user"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-28">
         <addUniqueConstraint columnNames="assigned_id" constraintName="UKsdrlysemmnh3bs7q5rky8bbq2"
                              tableName="cl_space"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-29">
         <addForeignKeyConstraint baseColumnNames="indexed_document_id" baseTableName="user_starts"
                                  constraintName="FK31rohf0jae8p3ffuhrwsmakxv" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="document_id"
                                  referencedTableName="cl_indexed_document"/>
-        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="cl_imported_document"
-                                 constraintName="FK3qfsmvtb26txm30dyp7kfa3k1" deferrable="false"
-                                 initiallyDeferred="false" referencedColumnNames="id"
-                                 referencedTableName="cl_imported_document"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-30">
+        <addForeignKeyConstraint baseColumnNames="customer_id" baseTableName="cl_document"
+                                 constraintName="FK706x5twxo57gekwohhqqbhwqp" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_space"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-31">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="cl_request"
+                                 constraintName="FK895blhlaeni7aui0msi384qa8" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_user"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-32">
         <addForeignKeyConstraint baseColumnNames="document_id" baseTableName="cl_indexed_document"
                                  constraintName="FK89cc3y431vkg4qd0ewoav4df1" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="id"
                                  referencedTableName="cl_document"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-33">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="favorite_spaces"
                                  constraintName="FK8r5h03fqx6pli9928pdfuxgiw" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_user"/>
-        <addForeignKeyConstraint baseColumnNames="space_id" baseTableName="cl_space_request"
-                                 constraintName="FK8slx4ns7i5x5yms8im8b2gm0r" deferrable="false"
-                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_space"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-34">
         <addForeignKeyConstraint baseColumnNames="indexed_document_id" baseTableName="user_views"
                                  constraintName="FK999mmamvxtn7gem8ceilahgcg" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="document_id"
                                  referencedTableName="cl_indexed_document"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-35">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="cl_collaborator"
                                  constraintName="FKa1et8kcht137s1ugxy5o29bwa" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_user"/>
-        <addForeignKeyConstraint baseColumnNames="imported_file_id" baseTableName="cl_document_version"
-                                 constraintName="FKagkul26ksp2fi6onbxw44gm10" deferrable="false"
-                                 initiallyDeferred="false" referencedColumnNames="id"
-                                 referencedTableName="cl_imported_document"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-36">
+        <addForeignKeyConstraint baseColumnNames="supplier_id" baseTableName="cl_document"
+                                 constraintName="FKbfwm8r68hd00m0s7t6rnu22ru" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_space"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-37">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="cl_user_context_information"
                                  constraintName="FKcdhipdn9t07i0a27comed0y10" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_user"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-38">
+        <addForeignKeyConstraint baseColumnNames="space_id" baseTableName="cl_request"
+                                 constraintName="FKj13h6esgslepp53yqggtc47ve" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_space"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-39">
         <addForeignKeyConstraint baseColumnNames="indexed_document_id" baseTableName="user_checks"
                                  constraintName="FKmbji60adxx9k8ae2qvshvanxs" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="document_id"
                                  referencedTableName="cl_indexed_document"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-40">
+        <addForeignKeyConstraint baseColumnNames="imported_document_id" baseTableName="cl_document_version"
+                                 constraintName="FKp3yu95xfvlsdayiuhjqg5ipog" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="cl_imported_document"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-41">
         <addForeignKeyConstraint baseColumnNames="file_id" baseTableName="cl_imported_document"
                                  constraintName="FKradvm1a0nxiw43dnhj1lq4kho" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_file"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-42">
         <addForeignKeyConstraint baseColumnNames="space_id" baseTableName="cl_collaborator"
                                  constraintName="FKrp82c2i571lmhouy8orvurueb" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_space"/>
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="cl_space_request"
-                                 constraintName="FKru92bm3s6fb9h1m10jn2gyt3v" deferrable="false"
-                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_user"/>
-        <addForeignKeyConstraint baseColumnNames="space_id" baseTableName="cl_request_access_to_space"
-                                 constraintName="FKsbbyh4c4f0h6uh8whhddilax5" deferrable="false"
-                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_space"/>
+    </changeSet>
+    <changeSet author="carlosthe19916 (generated)" id="1519317792308-43">
         <addForeignKeyConstraint baseColumnNames="document_id" baseTableName="cl_document_version"
                                  constraintName="FKsdhniwfe4777yxgjeqeu1f9t3" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="id"

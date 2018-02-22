@@ -1,13 +1,12 @@
 package org.clarksnut.mapper.document.pe.invoice;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapperProvider;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.jboss.logging.Logger;
-
-import javax.xml.bind.JAXBException;
 
 public class PEInvoiceParsedDocumentProvider implements DocumentMapperProvider {
 
@@ -24,12 +23,12 @@ public class PEInvoiceParsedDocumentProvider implements DocumentMapperProvider {
     }
 
     @Override
-    public DocumentMapped map(XmlUBLFileModel file) {
+    public DocumentMapped map(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
         InvoiceType invoiceType;
         try {
             invoiceType = ClarksnutModelUtils.unmarshall(file.getDocument(), InvoiceType.class);
-        } catch (JAXBException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ImpossibleToUnmarshallException("Could not marshall to:" + InvoiceType.class.getName());
         }
 
         return new DocumentMapped() {

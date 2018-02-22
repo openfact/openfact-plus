@@ -1,13 +1,12 @@
 package org.clarksnut.mapper.document.pe.creditnote;
 
 import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapperProvider;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.jboss.logging.Logger;
-
-import javax.xml.bind.JAXBException;
 
 public class PECreditNoteParsedDocumentProvider implements DocumentMapperProvider {
 
@@ -24,12 +23,12 @@ public class PECreditNoteParsedDocumentProvider implements DocumentMapperProvide
     }
 
     @Override
-    public DocumentMapped map(XmlUBLFileModel file) {
+    public DocumentMapped map(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
         CreditNoteType creditNoteType;
         try {
             creditNoteType = ClarksnutModelUtils.unmarshall(file.getDocument(), CreditNoteType.class);
-        } catch (JAXBException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ImpossibleToUnmarshallException("Could not marshall to:" + CreditNoteType.class.getName());
         }
 
         return new DocumentMapped() {

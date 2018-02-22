@@ -1,5 +1,7 @@
 package org.clarksnut.documents;
 
+import org.clarksnut.models.SpaceModel;
+
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +10,9 @@ public interface DocumentModel {
     String getId();
     String getType();
     String getAssignedId();
-    String getSupplierAssignedId();
+
+    SpaceModel getSupplier();
+    SpaceModel getCustomer();
 
     List<DocumentVersionModel> getVersions();
     DocumentVersionModel getCurrentVersion();
@@ -19,10 +23,6 @@ public interface DocumentModel {
     Date getUpdatedAt();
 
     interface DocumentCreationEvent {
-        String getDocumentType();
-
-        Object getJaxb();
-
         DocumentModel getCreatedDocument();
     }
 

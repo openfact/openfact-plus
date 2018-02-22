@@ -9,13 +9,13 @@ import org.clarksnut.datasource.peru.beans.InformacionAdicionalBean;
 import org.clarksnut.datasource.peru.beans.SummaryLineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
 import org.clarksnut.datasource.peru.types.TipoPagoResumen;
+import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import sunat.names.specification.ubl.peru.schema.xsd.summarydocuments_1.SummaryDocumentsType;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.SummaryDocumentsLineType;
 
-import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +32,8 @@ public class PeruSummaryDocumentsDatasourceProvider implements DatasourceProvide
     }
 
     @Override
-    public Datasource getDatasource(XmlUBLFileModel file)  {
+    public Datasource getDatasource(XmlUBLFileModel file) throws ImpossibleToUnmarshallException {
         SummaryDocumentsType summaryDocumentsType = read(file);
-        if (summaryDocumentsType == null) {
-            return null;
-        }
 
         PeruSummaryDocumentsDatasource bean = new PeruSummaryDocumentsDatasource();
 
@@ -98,11 +95,11 @@ public class PeruSummaryDocumentsDatasourceProvider implements DatasourceProvide
         return bean;
     }
 
-    private SummaryDocumentsType read(XmlFileModel file)  {
+    private SummaryDocumentsType read(XmlFileModel file) throws ImpossibleToUnmarshallException {
         try {
             return ClarksnutModelUtils.unmarshall(file.getDocument(), SummaryDocumentsType.class);
-        } catch (JAXBException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ImpossibleToUnmarshallException("Could not unmarshall to:" + SummaryDocumentsType.class.getName());
         }
     }
 

@@ -36,9 +36,9 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
     private DocumentEntity document;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "imported_file_id", foreignKey = @ForeignKey)
-    private ImportedDocumentEntity importedFile;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "imported_document_id", foreignKey = @ForeignKey)
+    private ImportedDocumentEntity importedDocument;
 
     @Column(name = "currency")
     private String currency;
@@ -94,6 +94,7 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
     @Column(name = "updated_at")
     private Date updatedAt;
 
+
     public String getId() {
         return id;
     }
@@ -118,12 +119,12 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
         this.document = document;
     }
 
-    public ImportedDocumentEntity getImportedFile() {
-        return importedFile;
+    public ImportedDocumentEntity getImportedDocument() {
+        return importedDocument;
     }
 
-    public void setImportedFile(ImportedDocumentEntity importedFile) {
-        this.importedFile = importedFile;
+    public void setImportedDocument(ImportedDocumentEntity importedFile) {
+        this.importedDocument = importedFile;
     }
 
     public String getCurrency() {
@@ -132,6 +133,30 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public Date getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(Date issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public Float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Float amount) {
+        this.amount = amount;
+    }
+
+    public Float getTax() {
+        return tax;
+    }
+
+    public void setTax(Float tax) {
+        this.tax = tax;
     }
 
     public String getSupplierName() {
@@ -204,30 +229,6 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
 
     public void setCustomerCountry(String customerCountry) {
         this.customerCountry = customerCountry;
-    }
-
-    public Date getIssueDate() {
-        return issueDate;
-    }
-
-    public void setIssueDate(Date issueDate) {
-        this.issueDate = issueDate;
-    }
-
-    public Float getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Float amount) {
-        this.amount = amount;
-    }
-
-    public Float getTax() {
-        return tax;
-    }
-
-    public void setTax(Float tax) {
-        this.tax = tax;
     }
 
     public Date getCreatedAt() {
