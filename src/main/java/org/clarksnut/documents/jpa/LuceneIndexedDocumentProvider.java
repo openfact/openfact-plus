@@ -17,6 +17,10 @@ import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.BooleanJunction;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.hibernate.search.query.dsl.sort.SortFieldContext;
+import org.hibernate.search.query.engine.spi.FacetManager;
+import org.hibernate.search.query.facet.Facet;
+import org.hibernate.search.query.facet.FacetSortOrder;
+import org.hibernate.search.query.facet.FacetingRequest;
 import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
@@ -118,8 +122,41 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
             fullTextQuery.setMaxResults(query.getLimit());
         }
 
+        // Faceting
+        FacetingRequest typeFacet = queryBuilder.facet()
+                .name("typeFacet")
+                .onField("type")
+                .discrete()
+                .orderedBy(FacetSortOrder.COUNT_DESC)
+                .includeZeroCounts(false)
+                .createFacetingRequest();
+        FacetingRequest currencyFacet = queryBuilder.facet()
+                .name("currencyFacet")
+                .onField("currency")
+                .discrete()
+                .orderedBy(FacetSortOrder.COUNT_DESC)
+                .includeZeroCounts(false)
+                .createFacetingRequest();
+        FacetingRequest amountFacet = queryBuilder.facet()
+                .name("amountFacet")
+                .onField("amount_face")
+                .range()
+                .below(1_000)
+                .from(1_001).to(10_000)
+                .above(10_000).excludeLimit()
+                .createFacetingRequest();
+
+        FacetManager facetManager = fullTextQuery.getFacetManager();
+        facetManager.enableFaceting(typeFacet);
+        facetManager.enableFaceting(currencyFacet);
+        facetManager.enableFaceting(amountFacet);
+
         // Result
         List<IndexedDocumentEntity> resultList = fullTextQuery.getResultList();
+        List<Facet> typeFacetResult = facetManager.getFacets("typeFacet");
+        List<Facet> currencyFacetResult = facetManager.getFacets("currencyFacet");
+        List<Facet> amountFacetResult = facetManager.getFacets("amountFacet");
+
         List<IndexedDocumentModel> items = resultList.stream()
                 .map(f -> new IndexedDocumentAdapter(em, f))
                 .collect(Collectors.toList());

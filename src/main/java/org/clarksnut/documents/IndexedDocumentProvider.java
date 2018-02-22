@@ -3,6 +3,8 @@ package org.clarksnut.documents;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
 
+import java.util.Set;
+
 public interface IndexedDocumentProvider {
 
     /**
@@ -15,5 +17,4 @@ public interface IndexedDocumentProvider {
      * @return list of documents
      */
     SearchResultModel<IndexedDocumentModel> getDocumentsUser(UserModel user, IndexedDocumentQueryModel query, SpaceModel... space);
-
 }
