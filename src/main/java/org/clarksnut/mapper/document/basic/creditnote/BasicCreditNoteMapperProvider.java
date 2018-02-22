@@ -2,7 +2,7 @@ package org.clarksnut.mapper.document.basic.creditnote;
 
 import com.helger.ubl21.UBL21Reader;
 import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
-import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
+import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapperProvider;

@@ -1,15 +1,12 @@
 package org.clarksnut.services.resources;
 
 import jodd.io.ZipBuilder;
-import org.clarksnut.documents.*;
-import org.clarksnut.documents.exceptions.IsNotXmlOrCompressedFileDocumentException;
+import org.clarksnut.models.*;
+import org.clarksnut.models.exceptions.IsNotXmlOrCompressedFileDocumentException;
 import org.clarksnut.files.FileModel;
 import org.clarksnut.files.uncompress.exceptions.NotReadableCompressFileException;
 import org.clarksnut.managers.DocumentManager;
 import org.clarksnut.managers.ImportedDocumentManager;
-import org.clarksnut.models.SpaceModel;
-import org.clarksnut.models.UserModel;
-import org.clarksnut.models.UserProvider;
 import org.clarksnut.models.exceptions.ForbiddenExceptionModel;
 import org.clarksnut.query.RangeQuery;
 import org.clarksnut.query.TermQuery;

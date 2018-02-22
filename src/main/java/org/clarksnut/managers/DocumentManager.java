@@ -1,12 +1,12 @@
 package org.clarksnut.managers;
 
-import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.documents.DocumentProvider;
-import org.clarksnut.documents.ImportedDocumentModel;
-import org.clarksnut.documents.exceptions.AlreadyImportedDocumentException;
-import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
-import org.clarksnut.documents.exceptions.IsNotUBLDocumentException;
-import org.clarksnut.documents.exceptions.UnsupportedDocumentTypeException;
+import org.clarksnut.models.DocumentModel;
+import org.clarksnut.models.DocumentProvider;
+import org.clarksnut.models.ImportedDocumentModel;
+import org.clarksnut.models.exceptions.AlreadyImportedDocumentException;
+import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
+import org.clarksnut.models.exceptions.IsNotUBLDocumentException;
+import org.clarksnut.models.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.files.*;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapped.DocumentBean;

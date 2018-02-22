@@ -1,8 +1,8 @@
 package org.clarksnut.utils;
 
-import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.documents.DocumentVersionModel;
-import org.clarksnut.documents.IndexedDocumentModel;
+import org.clarksnut.models.DocumentModel;
+import org.clarksnut.models.DocumentVersionModel;
+import org.clarksnut.models.IndexedDocumentModel;
 import org.clarksnut.models.*;
 import org.clarksnut.representations.idm.*;
 import org.clarksnut.services.resources.DocumentsService;

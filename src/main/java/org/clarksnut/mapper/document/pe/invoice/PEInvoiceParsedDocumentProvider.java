@@ -1,7 +1,7 @@
 package org.clarksnut.mapper.document.pe.invoice;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
-import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
+import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapperProvider;

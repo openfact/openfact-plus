@@ -1,6 +1,6 @@
 package org.clarksnut.mapper.document;
 
-import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
+import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 
 public interface DocumentMapperProvider {

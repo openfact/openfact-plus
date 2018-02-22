@@ -21,9 +21,9 @@
             <!--Hibernate search-->
             <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>
 
-            <property name="hibernate.search.lucene.analysis_definition_provider" value="org.clarksnut.documents.jpa.config.ClarksnutLuceneAnalyzerProvider"/>
-            <property name="hibernate.search.model_mapping" value="org.clarksnut.documents.jpa.config.DocumentSearchMappingFactory"/>
-            <property name="hibernate.search.elasticsearch.analysis_definition_provider" value="org.clarksnut.documents.jpa.config.ClarksnutESAnalyzerProvider"/>
+            <property name="hibernate.search.lucene.analysis_definition_provider" value="org.clarksnut.models.jpa.config.ClarksnutLuceneAnalyzerProvider"/>
+            <property name="hibernate.search.model_mapping" value="org.clarksnut.models.jpa.config.DocumentSearchMappingFactory"/>
+            <property name="hibernate.search.elasticsearch.analysis_definition_provider" value="org.clarksnut.models.jpa.config.ClarksnutESAnalyzerProvider"/>
 
             <property name="hibernate.search.default.indexmanager" value="directory-based"/>
         </properties>

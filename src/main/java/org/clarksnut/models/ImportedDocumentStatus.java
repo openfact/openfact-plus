@@ -1,0 +1,10 @@
+package org.clarksnut.models;
+
+public enum ImportedDocumentStatus {
+    PENDING,
+    IMPORTED,
+    ALREADY_IMPORTED,
+    NOT_IMPORTED_DUE_TO_UNSUPPORTED_DOCUMENT_TYPE,
+    NOT_IMPORTED_DUE_TO_SUPPORTED_BUT_UNREADABLE_DOCUMENT;
+
+}

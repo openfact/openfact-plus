@@ -1,6 +1,6 @@
 package org.clarksnut.files.jpa;
 
-import org.clarksnut.documents.jpa.entity.ImportedDocumentEntity;
+import org.clarksnut.models.jpa.entity.ImportedDocumentEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

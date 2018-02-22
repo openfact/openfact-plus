@@ -2,7 +2,7 @@ package org.clarksnut.mapper.document.basic.invoice;
 
 import com.helger.ubl21.UBL21Reader;
 import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
-import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
+import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapperProvider;

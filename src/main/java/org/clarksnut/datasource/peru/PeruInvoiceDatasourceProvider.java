@@ -9,7 +9,7 @@ import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.peru.beans.BeanUtils;
 import org.clarksnut.datasource.peru.beans.LineBean;
 import org.clarksnut.datasource.peru.types.TipoDocumento;
-import org.clarksnut.documents.exceptions.ImpossibleToUnmarshallException;
+import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlFileModel;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.models.utils.ClarksnutModelUtils;

@@ -1,6 +1,6 @@
 package org.clarksnut.report;
 
-import org.clarksnut.documents.DocumentModel;
+import org.clarksnut.models.DocumentModel;
 
 public interface DataSourceProvider {
 

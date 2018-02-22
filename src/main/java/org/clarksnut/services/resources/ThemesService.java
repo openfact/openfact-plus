@@ -1,8 +1,8 @@
 package org.clarksnut.services.resources;
 
 import org.apache.commons.io.IOUtils;
-import org.clarksnut.documents.DocumentModel;
-import org.clarksnut.documents.DocumentProvider;
+import org.clarksnut.models.DocumentModel;
+import org.clarksnut.models.DocumentProvider;
 import org.clarksnut.report.ReportTemplateProvider;
 import org.clarksnut.report.ReportTheme;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
