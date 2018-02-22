@@ -79,7 +79,7 @@ public class DocumentManager {
         String supplierAssignedId = bean.getSupplierAssignedId();
         SpaceModel supplier = spaceProvider.getByAssignedId(supplierAssignedId);
         if (supplier == null) {
-            spaceProvider.addSpace(supplierAssignedId, supplierAssignedId);
+            supplier = spaceProvider.addSpace(supplierAssignedId, supplierAssignedId);
         }
 
         // Customer
@@ -88,7 +88,7 @@ public class DocumentManager {
         if (customerAssignedId != null) {
             customer = spaceProvider.getByAssignedId(customerAssignedId);
             if (customer == null) {
-                spaceProvider.addSpace(customerAssignedId, customerAssignedId);
+                customer = spaceProvider.addSpace(customerAssignedId, customerAssignedId);
             }
         }
 
