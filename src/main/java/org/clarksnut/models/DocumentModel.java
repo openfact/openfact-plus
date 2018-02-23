@@ -8,12 +8,11 @@ public interface DocumentModel {
     String getId();
     String getType();
     String getAssignedId();
+    String getSupplierAssignedId();
+    String getCustomerAssignedId();
 
-    SpaceModel getSupplier();
-    SpaceModel getCustomer();
-
-    List<DocumentVersionModel> getVersions();
     DocumentVersionModel getCurrentVersion();
+    List<DocumentVersionModel> getVersions();
 
     IndexedDocumentModel getIndexedDocument();
 

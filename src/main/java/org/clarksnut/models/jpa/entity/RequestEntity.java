@@ -4,7 +4,7 @@ import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
-import org.clarksnut.models.RequestScope;
+import org.clarksnut.models.PermissionType;
 import org.clarksnut.models.RequestStatus;
 
 import javax.persistence.*;
@@ -37,8 +37,8 @@ public class RequestEntity implements CreatableEntity, UpdatableEntity, Serializ
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "scope")
-    private RequestScope scope;
+    @Column(name = "permission")
+    private PermissionType permission;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -84,12 +84,12 @@ public class RequestEntity implements CreatableEntity, UpdatableEntity, Serializ
         this.status = status;
     }
 
-    public RequestScope getScope() {
-        return scope;
+    public PermissionType getPermission() {
+        return permission;
     }
 
-    public void setScope(RequestScope scope) {
-        this.scope = scope;
+    public void setPermission(PermissionType scope) {
+        this.permission = scope;
     }
 
     public Date getCreatedAt() {

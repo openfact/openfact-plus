@@ -53,15 +53,13 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public SpaceModel getSupplier() {
-        return new SpaceAdapter(em, entity.getSupplier());
+    public String getSupplierAssignedId() {
+        return entity.getSupplierAssignedId();
     }
 
     @Override
-    public SpaceModel getCustomer() {
-        SpaceEntity customer = entity.getCustomer();
-        if (customer == null) return null;
-        return new SpaceAdapter(em, customer);
+    public String getCustomerAssignedId() {
+        return entity.getCustomerAssignedId();
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.clarksnut.files.FileModel;
 import org.clarksnut.files.uncompress.exceptions.NotReadableCompressFileException;
 import org.clarksnut.managers.DocumentManager;
 import org.clarksnut.managers.ImportedDocumentManager;
-import org.clarksnut.models.exceptions.ForbiddenExceptionModel;
+import org.clarksnut.models.exceptions.ModelForbiddenException;
 import org.clarksnut.query.RangeQuery;
 import org.clarksnut.query.TermQuery;
 import org.clarksnut.query.TermsQuery;
@@ -68,7 +68,7 @@ public class DocumentsService {
     @Inject
     private IndexedDocumentProvider indexedDocumentProvider;
 
-    private DocumentModel getDocumentById(UserModel user, String documentId) throws ForbiddenExceptionModel {
+    private DocumentModel getDocumentById(UserModel user, String documentId) throws ModelForbiddenException {
         DocumentModel document = documentManager.getDocumentById(user, documentId);
         if (document == null) {
             throw new NotFoundException();
@@ -219,7 +219,7 @@ public class DocumentsService {
         }
 
         SpaceModel[] spaces = selectedSpaces.values().toArray(new SpaceModel[selectedSpaces.size()]);
-        SearchResultModel<IndexedDocumentModel> result = indexedDocumentProvider.getDocumentsUser(user, builder.build(), spaces);
+        SearchResultModel<IndexedDocumentModel> result = indexedDocumentProvider.getDocumentsUser(builder.build(), spaces);
 
         // Meta
         Map<String, Object> meta = new HashMap<>();
@@ -297,7 +297,7 @@ public class DocumentsService {
         DocumentModel document;
         try {
             document = getDocumentById(user, documentId);
-        } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+        } catch (ModelForbiddenException forbiddenExceptionModel) {
             throw new ForbiddenException("User not allowed to access this document");
         }
 
@@ -314,7 +314,7 @@ public class DocumentsService {
         DocumentModel document;
         try {
             document = getDocumentById(user, documentId);
-        } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+        } catch (ModelForbiddenException forbiddenExceptionModel) {
             throw new ForbiddenException("User not allowed to access this document");
         }
 
@@ -337,7 +337,7 @@ public class DocumentsService {
             DocumentModel document = null;
             try {
                 document = getDocumentById(user, documentRepresentation.getId());
-            } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+            } catch (ModelForbiddenException forbiddenExceptionModel) {
                 throw new ForbiddenException("User not allowed to access this document");
             }
             updateDocument(documentRepresentation.getAttributes(), user, document);
@@ -370,7 +370,7 @@ public class DocumentsService {
                 .map(documentId -> {
                     try {
                         return getDocumentById(user, documentId);
-                    } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+                    } catch (ModelForbiddenException forbiddenExceptionModel) {
                         throw new ForbiddenException("User not allowed to access this document");
                     }
                 })
@@ -408,7 +408,7 @@ public class DocumentsService {
                 .map(documentId -> {
                     try {
                         return getDocumentById(user, documentId);
-                    } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+                    } catch (ModelForbiddenException forbiddenExceptionModel) {
                         throw new ForbiddenException("User not allowed to access this document");
                     }
                 })
@@ -446,7 +446,7 @@ public class DocumentsService {
         DocumentModel document;
         try {
             document = getDocumentById(user, documentId);
-        } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+        } catch (ModelForbiddenException forbiddenExceptionModel) {
             throw new ForbiddenException("User not allowed to access this document");
         }
 
@@ -470,7 +470,7 @@ public class DocumentsService {
         DocumentModel document = null;
         try {
             document = getDocumentById(user, documentId);
-        } catch (ForbiddenExceptionModel forbiddenExceptionModel) {
+        } catch (ModelForbiddenException forbiddenExceptionModel) {
             throw new ForbiddenException("User not allowed to access this document");
         }
 

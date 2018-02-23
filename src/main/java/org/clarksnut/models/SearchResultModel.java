@@ -8,4 +8,6 @@ public interface SearchResultModel<T> {
 
     int getTotalResults();
 
+    List<FacetModel> getFacets();
+
 }

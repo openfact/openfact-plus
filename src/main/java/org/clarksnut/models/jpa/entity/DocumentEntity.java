@@ -14,11 +14,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "cl_document", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"type", "assigned_id", "supplier_id"})
+        @UniqueConstraint(columnNames = {"type", "assigned_id", "supplier_assigned_id"})
 })
 @NamedQueries({
         @NamedQuery(name = "getAllDocuments", query = "select d from DocumentEntity d"),
-        @NamedQuery(name = "getDocumentByTypeAssignedIdAndSupplierId", query = "select d from DocumentEntity d inner join d.supplier s where d.type = :type and d.assignedId = :assignedId and s.id =:supplierId")
+        @NamedQuery(name = "getDocumentByTypeAssignedIdAndSupplierAssignedId", query = "select d from DocumentEntity d where d.type = :type and d.assignedId = :assignedId and d.supplierAssignedId =:supplierAssignedId")
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 public class DocumentEntity implements CreatableEntity, UpdatableEntity, Serializable {
@@ -36,14 +36,12 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "assigned_id")
     private String assignedId;
 
-    @NotNull(message = "supplier should not be null")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id", foreignKey = @ForeignKey)
-    private SpaceEntity supplier;
+    @NotNull(message = "supplier assigned id should not be null")
+    @Column(name = "supplier_assigned_id")
+    private String supplierAssignedId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", foreignKey = @ForeignKey)
-    private SpaceEntity customer;
+    @Column(name = "customer_assigned_id")
+    private String customerAssignedId;
 
     @OneToOne(mappedBy = "document", fetch = FetchType.LAZY)
     private IndexedDocumentEntity indexedDocument;
@@ -85,20 +83,12 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.assignedId = assignedId;
     }
 
-    public SpaceEntity getSupplier() {
-        return supplier;
+    public String getSupplierAssignedId() {
+        return supplierAssignedId;
     }
 
-    public void setSupplier(SpaceEntity supplier) {
-        this.supplier = supplier;
-    }
-
-    public SpaceEntity getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(SpaceEntity customer) {
-        this.customer = customer;
+    public void setSupplierAssignedId(String supplierAssignedId) {
+        this.supplierAssignedId = supplierAssignedId;
     }
 
     public IndexedDocumentEntity getIndexedDocument() {
@@ -133,6 +123,14 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Override
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getCustomerAssignedId() {
+        return customerAssignedId;
+    }
+
+    public void setCustomerAssignedId(String customerAssignedId) {
+        this.customerAssignedId = customerAssignedId;
     }
 }
 

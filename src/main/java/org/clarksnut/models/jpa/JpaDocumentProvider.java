@@ -49,7 +49,6 @@ public class JpaDocumentProvider implements DocumentProvider {
         entity.setSupplierCountry(bean.getSupplierCountry());
 
         entity.setCustomerName(bean.getCustomerName());
-        entity.setCustomerAssignedId(bean.getCustomerAssignedId());
         entity.setCustomerStreetAddress(bean.getCustomerStreetAddress());
         entity.setCustomerCity(bean.getCustomerCity());
         entity.setCustomerCountry(bean.getCustomerCountry());
@@ -58,21 +57,16 @@ public class JpaDocumentProvider implements DocumentProvider {
     }
 
     @Override
-    public DocumentModel addDocument(String documentType,
-                                     ImportedDocumentModel importedDocument,
-                                     DocumentBean bean,
-                                     SpaceModel supplier,
-                                     SpaceModel customer) throws AlreadyImportedDocumentException {
-        DocumentModel document = getDocument(documentType, bean.getAssignedId(), supplier);
+    public DocumentModel addDocument(String supplierAssignedId, String customerAssignedId, String documentType, ImportedDocumentModel importedDocument, DocumentBean bean)
+            throws AlreadyImportedDocumentException {
+        DocumentModel document = getDocument(documentType, bean.getAssignedId(), supplierAssignedId);
         if (document == null) {
             DocumentEntity documentEntity = new DocumentEntity();
             documentEntity.setId(UUID.randomUUID().toString());
             documentEntity.setType(documentType);
             documentEntity.setAssignedId(bean.getAssignedId());
-            documentEntity.setSupplier(SpaceAdapter.toEntity(supplier, em));
-            if (customer != null) {
-                documentEntity.setCustomer(SpaceAdapter.toEntity(customer, em));
-            }
+            documentEntity.setSupplierAssignedId(supplierAssignedId);
+            documentEntity.setCustomerAssignedId(customerAssignedId);
             em.persist(documentEntity);
 
             DocumentVersionEntity documentVersionEntity = toDocumentVersionEntity(bean);
@@ -89,7 +83,7 @@ public class JpaDocumentProvider implements DocumentProvider {
             creationEvent.fire(() -> documentCreated);
         } else {
             long currentChecksum = document.getCurrentVersion().getImportedDocument().getFile().getChecksum();
-            if (currentChecksum == importedDocument.getFile().getChecksum()) {
+            if (currentChecksum != importedDocument.getFile().getChecksum()) {
                 DocumentVersionEntity documentVersionEntity = toDocumentVersionEntity(bean);
                 documentVersionEntity.setId(UUID.randomUUID().toString());
                 documentVersionEntity.setCurrentVersion(false);
@@ -114,11 +108,11 @@ public class JpaDocumentProvider implements DocumentProvider {
     }
 
     @Override
-    public DocumentModel getDocument(String type, String assignedId, SpaceModel supplier) {
-        TypedQuery<DocumentEntity> typedQuery = em.createNamedQuery("getDocumentByTypeAssignedIdAndSupplierId", DocumentEntity.class);
+    public DocumentModel getDocument(String type, String assignedId, String supplierAssignedId) {
+        TypedQuery<DocumentEntity> typedQuery = em.createNamedQuery("getDocumentByTypeAssignedIdAndSupplierAssignedId", DocumentEntity.class);
         typedQuery.setParameter("type", type);
         typedQuery.setParameter("assignedId", assignedId);
-        typedQuery.setParameter("supplierId", supplier.getId());
+        typedQuery.setParameter("supplierAssignedId", supplierAssignedId);
 
         List<DocumentEntity> resultList = typedQuery.getResultList();
         if (resultList.size() == 1) {

@@ -125,14 +125,14 @@ public class SpaceRepresentation {
     }
 
     public static class Relationships {
-        private List<OwnedBy> ownedBy;
+        private OwnedBy ownedBy;
         private Collaborators collaborators;
 
-        public List<OwnedBy> getOwnedBy() {
+        public OwnedBy getOwnedBy() {
             return ownedBy;
         }
 
-        public void setOwnedBy(List<OwnedBy> ownedBy) {
+        public void setOwnedBy(OwnedBy ownedBy) {
             this.ownedBy = ownedBy;
         }
 

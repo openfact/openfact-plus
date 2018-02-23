@@ -18,10 +18,10 @@ public class JpaRequestProvider implements RequestProvider {
     private EntityManager em;
 
     @Override
-    public RequestModel addRequest(SpaceModel space, UserModel user, RequestScope scope, String message) {
+    public RequestModel addRequest(SpaceModel space, UserModel user, PermissionType permission, String message) {
         RequestEntity entity = new RequestEntity();
         entity.setId(UUID.randomUUID().toString());
-        entity.setScope(scope);
+        entity.setPermission(permission);
         entity.setMessage(message);
         entity.setStatus(RequestStatus.PENDING);
         entity.setSpace(SpaceAdapter.toEntity(space, em));

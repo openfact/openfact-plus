@@ -1,7 +1,5 @@
 package org.clarksnut.models;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import java.util.Date;
 import java.util.Set;
 
@@ -11,8 +9,6 @@ public interface UserModel {
     String FULL_NAME = "fullName";
 
     String getId();
-
-    String getIdentityID();
 
     String getProviderType();
 
@@ -46,10 +42,6 @@ public interface UserModel {
 
     void setUrl(String url);
 
-    String getEmailTheme();
-
-    void setEmailTheme(String emailTheme);
-
     String getDefaultLanguage();
 
     void setDefaultLanguage(String language);
@@ -68,5 +60,4 @@ public interface UserModel {
 
     void setFavoriteSpaces(Set<String> spaces);
 
-    void setContextInformation(JsonNode contextInformation);
 }

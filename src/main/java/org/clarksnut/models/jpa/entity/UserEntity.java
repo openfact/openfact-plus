@@ -16,17 +16,14 @@ import java.util.Set;
 
 @Entity
 @Table(name = "cl_user", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username"),
-        @UniqueConstraint(columnNames = "identity_id")
+        @UniqueConstraint(columnNames = "username")
 }, indexes = {
-        @Index(columnList = "username", unique = true),
-        @Index(columnList = "identity_id", unique = true)
+        @Index(columnList = "username", unique = true)
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username"),
-        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username"),
-        @NamedQuery(name = "getUserByIdentityID", query = "select u from UserEntity u where u.identityID = :identityID")
+        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username")
 })
 public class UserEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
@@ -34,10 +31,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Access(AccessType.PROPERTY)// Relationships often fetch id, but not entity.  This avoids an extra SQL
     @Column(name = "id", length = 36)
     private String id;
-
-    @NotNull
-    @Column(name = "identity_id")
-    private String identityID;
 
     @NotNull
     @Column(name = "provider_type")
@@ -71,9 +64,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "url")
     private String url;
 
-    @Column(name = "email_theme")
-    private String emailTheme;
-
     @Column(name = "default_language")
     private String defaultLanguage;
 
@@ -94,9 +84,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<CollaboratorEntity> collaboratedSpaces = new HashSet<>();
-
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private UserContextInformationEntity contextInformation;
 
     @ElementCollection
     @Column(name = "value")
@@ -126,14 +113,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getIdentityID() {
-        return identityID;
-    }
-
-    public void setIdentityID(String identityID) {
-        this.identityID = identityID;
     }
 
     public String getProviderType() {
@@ -226,14 +205,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.registrationCompleted = registrationCompleted;
     }
 
-    public void setContextInformation(UserContextInformationEntity contextInformation) {
-        this.contextInformation = contextInformation;
-    }
-
-    public UserContextInformationEntity getContextInformation() {
-        return contextInformation;
-    }
-
     public int getVersion() {
         return version;
     }
@@ -256,14 +227,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     public void setFavoriteSpaces(Set<String> favoriteSpaces) {
         this.favoriteSpaces = favoriteSpaces;
-    }
-
-    public String getEmailTheme() {
-        return emailTheme;
-    }
-
-    public void setEmailTheme(String emailTheme) {
-        this.emailTheme = emailTheme;
     }
 
     public String getDefaultLanguage() {

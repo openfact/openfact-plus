@@ -22,7 +22,7 @@ public class ModelToRepresentation {
     public UserRepresentation.Data toRepresentation(UserModel model, UriInfo uriInfo) {
         UserRepresentation.Data rep = new UserRepresentation.Data();
 
-        rep.setId(model.getIdentityID());
+        rep.setId(model.getId());
         rep.setType(ModelType.IDENTITIES.getAlias());
 
         // Links
@@ -30,7 +30,7 @@ public class ModelToRepresentation {
         URI self = uriInfo.getBaseUriBuilder()
                 .path(UsersService.class)
                 .path(UsersService.class, "getUser")
-                .build(model.getIdentityID());
+                .build(model.getId());
         links.setSelf(self.toString());
 
         rep.setLinks(links);
@@ -38,7 +38,6 @@ public class ModelToRepresentation {
         // Attributes
         UserAttributesRepresentation attributes = new UserAttributesRepresentation();
         attributes.setUserID(model.getId());
-        attributes.setIdentityID(model.getIdentityID());
         attributes.setProviderType(model.getProviderType());
         attributes.setUsername(model.getUsername());
         attributes.setFullName(model.getFullName());
@@ -79,28 +78,26 @@ public class ModelToRepresentation {
 
         // Relationships
         SpaceRepresentation.Relationships relationships = new SpaceRepresentation.Relationships();
-        List<SpaceRepresentation.OwnedBy> owners = new ArrayList<>();
-        relationships.setOwnedBy(owners);
         rep.setRelationships(relationships);
 
-        for (UserModel user : model.getOwners()) {
-            UserRepresentation.Data userData = new UserRepresentation.Data();
-            userData.setId(user.getIdentityID());
-            userData.setType(ModelType.IDENTITIES.getAlias());
-            userData.setScope(PermissionType.OWNER.toString());
+        // Owner
+        UserModel ownerUser = model.getOwner();
+        UserRepresentation.Data userData = new UserRepresentation.Data();
+        userData.setId(ownerUser.getId());
+        userData.setType(ModelType.IDENTITIES.getAlias());
+        userData.setScope(PermissionType.OWNER.toString());
 
-            SpaceRepresentation.OwnedBy ownedBy = new SpaceRepresentation.OwnedBy();
-            ownedBy.setData(userData); // save
+        SpaceRepresentation.OwnedBy ownedBy = new SpaceRepresentation.OwnedBy();
+        ownedBy.setData(userData); // save
 
-            GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
-            ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
-                    .path(UsersService.class)
-                    .path(UsersService.class, "getUser")
-                    .build(user.getIdentityID()).toString());
-            ownedBy.setLinks(ownedLinks); // save
+        GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
+        ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
+                .path(UsersService.class)
+                .path(UsersService.class, "getUser")
+                .build(ownerUser.getId()).toString());
+        ownedBy.setLinks(ownedLinks); // save
 
-            owners.add(ownedBy);
-        }
+        relationships.setOwnedBy(ownedBy);
 
         // Attributes
         SpaceRepresentation.Attributes attributes = new SpaceRepresentation.Attributes();
@@ -144,7 +141,8 @@ public class ModelToRepresentation {
         attributes.setId(model.getId());
         attributes.setType(model.getType());
         attributes.setAssignedId(model.getAssignedId());
-        attributes.setSupplierAssignedId(model.getSupplier().getAssignedId());
+        attributes.setSupplierAssignedId(model.getSupplierAssignedId());
+        attributes.setCustomerAssignedId(model.getCustomerAssignedId());
 
         attributes.setIssueDate(documentCurrentVersion.getIssueDate());
         attributes.setCurrency(documentCurrentVersion.getCurrency());
@@ -155,7 +153,6 @@ public class ModelToRepresentation {
         attributes.setSupplierStreetAddress(documentCurrentVersion.getSupplierStreetAddress());
         attributes.setSupplierCity(documentCurrentVersion.getSupplierCity());
         attributes.setSupplierCountry(documentCurrentVersion.getSupplierCountry());
-        attributes.setCustomerAssignedId(documentCurrentVersion.getCustomerAssignedId());
         attributes.setCustomerName(documentCurrentVersion.getCustomerName());
         attributes.setCustomerStreetAddress(documentCurrentVersion.getCustomerStreetAddress());
         attributes.setCustomerCity(documentCurrentVersion.getCustomerCity());
@@ -177,15 +174,15 @@ public class ModelToRepresentation {
         RequestRepresentation.Data rep = new RequestRepresentation.Data();
 
         rep.setId(model.getId());
-        rep.setType(ModelType.REQUEST_ACCESS_TO_SPACE.getAlias());
+        rep.setType(ModelType.REQUEST_ACCESS.getAlias());
 
         // Attributes
         RequestRepresentation.Attributes attributes = new RequestRepresentation.Attributes();
         rep.setAttributes(attributes);
 
         attributes.setSpace(model.getSpace().getId());
-        attributes.setUser(model.getUser().getIdentityID()); // WARNING: REMOVE IDENTITY ID
-        attributes.setScope(model.getScope().toString());
+        attributes.setUser(model.getUser().getId()); // WARNING: REMOVE IDENTITY ID
+        attributes.setScope(model.getPermission().toString());
         attributes.setMessage(model.getMessage());
         attributes.setStatus(model.getStatus().toString());
         attributes.setCreatedAt(model.getCreatedAt());

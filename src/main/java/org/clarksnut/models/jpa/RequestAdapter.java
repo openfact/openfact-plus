@@ -41,8 +41,8 @@ public class RequestAdapter implements RequestModel, JpaModel<RequestEntity> {
     }
 
     @Override
-    public RequestScope getScope() {
-        return request.getScope();
+    public PermissionType getPermission() {
+        return request.getPermission();
     }
 
     @Override

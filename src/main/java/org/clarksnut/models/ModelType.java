@@ -12,7 +12,7 @@ public enum ModelType {
 
     THEMES("themes"),
 
-    REQUEST_ACCESS_TO_SPACE("request-access"),;
+    REQUEST_ACCESS("request-access"),;
 
     private String alias;
 

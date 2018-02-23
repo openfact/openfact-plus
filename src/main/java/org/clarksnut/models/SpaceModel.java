@@ -12,21 +12,21 @@ public interface SpaceModel {
     String getId();
     String getAssignedId();
 
-    void addOwner(UserModel user);
-    Set<UserModel> getOwners();
-
     String getName();
     void setName(String name);
 
     String getDescription();
     void setDescription(String description);
 
-    Date getCreatedAt();
-    Date getUpdatedAt();
+    UserModel getOwner();
+    boolean setOwner(UserModel user);
 
     List<UserModel> getCollaborators();
     List<UserModel> getCollaborators(int offset, int limit);
-
     void addCollaborators(UserModel user);
     boolean removeCollaborators(UserModel user);
+
+    Date getCreatedAt();
+    Date getUpdatedAt();
+
 }

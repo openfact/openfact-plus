@@ -29,7 +29,8 @@ public class JpaIndexedDocumentProvider {
         entity.setId(document.getId());
         entity.setType(document.getType());
         entity.setAssignedId(document.getAssignedId());
-        entity.setSupplierAssignedId(document.getSupplier().getAssignedId());
+        entity.setSupplierAssignedId(document.getSupplierAssignedId());
+        entity.setCustomerAssignedId(document.getCustomerAssignedId());
 
 
         entity.setIssueDate(documentVersionEntity.getIssueDate());
@@ -40,7 +41,6 @@ public class JpaIndexedDocumentProvider {
         entity.setSupplierStreetAddress(documentVersionEntity.getSupplierStreetAddress());
         entity.setSupplierCity(documentVersionEntity.getSupplierCity());
         entity.setSupplierCountry(documentVersionEntity.getSupplierCountry());
-        entity.setCustomerAssignedId(documentVersionEntity.getCustomerAssignedId());
         entity.setCustomerName(documentVersionEntity.getCustomerName());
         entity.setCustomerStreetAddress(documentVersionEntity.getCustomerStreetAddress());
         entity.setCustomerCity(documentVersionEntity.getCustomerCity());

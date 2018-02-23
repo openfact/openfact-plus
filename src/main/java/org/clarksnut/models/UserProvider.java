@@ -5,12 +5,11 @@ import java.util.List;
 public interface UserProvider {
 
     /**
-     * @param identityID   a unique identity string that the user generate
      * @param providerType provider of identityID
      * @param username     username of the user
      * @return user created
      */
-    UserModel addUser(String identityID, String providerType, String username);
+    UserModel addUser(String username, String providerType);
 
     /**
      * @param id auto generated unique identity
@@ -23,12 +22,6 @@ public interface UserProvider {
      * @return user, in case is not found return null
      */
     UserModel getUserByUsername(String username);
-
-    /**
-     * @param identityID a unique identity string that the user generate
-     * @return user, in case is not found return null
-     */
-    UserModel getUserByIdentityID(String identityID);
 
     /**
      * @param query query to apply on search operation

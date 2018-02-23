@@ -5,7 +5,7 @@ import java.util.Date;
 public interface RequestModel {
     String getId();
     String getMessage();
-    RequestScope getScope();
+    PermissionType getPermission();
 
     RequestStatus getStatus();
     void setStatus(RequestStatus status);

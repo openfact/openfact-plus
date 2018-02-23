@@ -99,11 +99,6 @@ public class DocumentVersionAdapter implements DocumentVersionModel, JpaModel<Do
     }
 
     @Override
-    public String getCustomerAssignedId() {
-        return documentVersion.getCustomerAssignedId();
-    }
-
-    @Override
     public String getCustomerStreetAddress() {
         return documentVersion.getCustomerStreetAddress();
     }

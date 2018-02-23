@@ -85,8 +85,8 @@ public class SpacesService {
         SpaceRepresentation.Attributes attributes = data.getAttributes();
         SpaceRepresentation.Relationships relationships = data.getRelationships();
 
-        List<SpaceRepresentation.OwnedBy> ownedBy = relationships.getOwnedBy();
-        Set<UserModel> owners = ownedBy.stream().map(r -> userProvider.getUserByIdentityID(r.getData().getId())).collect(Collectors.toSet());
+        SpaceRepresentation.OwnedBy ownedBy = relationships.getOwnedBy();
+        UserModel owner = userProvider.getUser(ownedBy.getData().getId());;
 
         // Create space
         SpaceModel space = spaceProvider.getByAssignedId(attributes.getAssignedId());
@@ -94,10 +94,7 @@ public class SpacesService {
             throw new ErrorResponseException("Space already exists", Response.Status.CONFLICT);
         }
 
-        space = spaceProvider.addSpace(attributes.getAssignedId(), attributes.getName());
-        for (UserModel user : owners) {
-            space.addOwner(user);
-        }
+        space = spaceProvider.addSpace(owner, attributes.getAssignedId(), attributes.getName());
         space.setDescription(attributes.getDescription());
 
         SpaceRepresentation.Data createdSpaceRepresentation = modelToRepresentation.toRepresentation(space, uriInfo);
@@ -211,15 +208,15 @@ public class SpacesService {
     }
 
     @DELETE
-    @Path("{spaceId}/collaborators/{identityID}")
+    @Path("{spaceId}/collaborators/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeSpaceCollaborators(
             @PathParam("spaceId") String spaceId,
-            @PathParam("identityID") String identityID) throws ErrorResponseException {
+            @PathParam("userId") String userId) throws ErrorResponseException {
         SpaceModel space = getSpaceById(spaceId);
-        UserModel user = userProvider.getUserByIdentityID(identityID);
+        UserModel user = userProvider.getUser(userId);
 
-        if (space.getOwners().contains(user)) {
+        if (space.getOwner().equals(user)) {
             return ErrorResponse.error("Could not delete the owner", Response.Status.BAD_REQUEST);
         }
 

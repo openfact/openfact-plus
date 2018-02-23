@@ -16,12 +16,11 @@ public interface DocumentVersionModel {
     Float getTax();
 
     String getSupplierName();
-    String getSupplierStreetAddress();
     String getSupplierCity();
+    String getSupplierStreetAddress();
     String getSupplierCountry();
 
     String getCustomerName();
-    String getCustomerAssignedId();
     String getCustomerCity();
     String getCustomerStreetAddress();
     String getCustomerCountry();

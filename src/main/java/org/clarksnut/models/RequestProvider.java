@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface RequestProvider {
 
-    RequestModel addRequest(SpaceModel space, UserModel user, RequestScope scope, String message);
+    RequestModel addRequest(SpaceModel space, UserModel user, PermissionType permission, String message);
 
     RequestModel getRequest(String id);
 

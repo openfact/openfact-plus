@@ -48,12 +48,29 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
     }
 
     @Override
-    public void addOwner(UserModel user) {
+    public UserModel getOwner() {
+        TypedQuery<CollaboratorEntity> query = em.createNamedQuery("getCollaboratorsBySpaceIdAndRole", CollaboratorEntity.class);
+        query.setParameter("spaceId", space.getId());
+        query.setParameter("role", PermissionType.OWNER);
+        List<CollaboratorEntity> resultList = query.getResultList();
+        if (resultList.isEmpty()) return null;
+        if (resultList.size() > 1) throw new IllegalStateException("More than one owner found");
+        return new UserAdapter(em, resultList.get(0).getUser());
+    }
+
+    @Override
+    public boolean setOwner(UserModel user) {
+        em.createNamedQuery("deleteCollaboratorsBySpaceIdAndRole")
+                .setParameter("spaceId", space.getId())
+                .setParameter("role", PermissionType.OWNER)
+                .executeUpdate();
+
         CollaboratorEntity entity = new CollaboratorEntity();
         entity.setRole(PermissionType.OWNER);
         entity.setSpace(space);
         entity.setUser(UserAdapter.toEntity(user, em));
         em.persist(entity);
+        return true;
     }
 
     @Override
@@ -74,18 +91,6 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
     @Override
     public void setDescription(String description) {
         space.setDescription(description);
-    }
-
-    @Override
-    public Set<UserModel> getOwners() {
-        TypedQuery<CollaboratorEntity> query = em.createNamedQuery("getCollaboratorsBySpaceIdAndRole", CollaboratorEntity.class);
-        query.setParameter("spaceId", space.getId());
-        query.setParameter("role", PermissionType.OWNER);
-
-        return query.getResultList().stream()
-                .map(CollaboratorEntity::getUser)
-                .map(user -> new UserAdapter(em, user))
-                .collect(Collectors.toSet());
     }
 
     @Override

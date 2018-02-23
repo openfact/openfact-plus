@@ -82,6 +82,7 @@ public class DocumentRepresentation {
         private String type;
         private String assignedId;
         private String supplierAssignedId;
+        private String customerAssignedId;
 
         private Date issueDate;
         private String currency;
@@ -93,7 +94,6 @@ public class DocumentRepresentation {
         private String supplierCity;
         private String supplierCountry;
         private String customerName;
-        private String customerAssignedId;
         private String customerStreetAddress;
         private String customerCity;
         private String customerCountry;

@@ -25,10 +25,6 @@ import java.util.UUID;
 
 public class ClarksnutModelUtils {
 
-    public static String generateId() {
-        return UUID.randomUUID().toString();
-    }
-
     public static String getDocumentType(byte[] bytes) throws Exception {
         return getDocumentType(ClarksnutModelUtils.toDocument(bytes));
     }

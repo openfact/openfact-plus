@@ -124,7 +124,8 @@ public class JasperReportProvider implements ReportTemplateProvider {
 
         bean.setType(document.getType());
         bean.setAssignedId(document.getAssignedId());
-        bean.setSupplierAssignedId(document.getSupplier().getAssignedId());
+        bean.setSupplierAssignedId(document.getSupplierAssignedId());
+        bean.setCustomerAssignedId(document.getCustomerAssignedId());
 
         bean.setAmount(currentVersion.getAmount());
         bean.setTax(currentVersion.getTax());
@@ -132,7 +133,6 @@ public class JasperReportProvider implements ReportTemplateProvider {
         bean.setIssueDate(currentVersion.getIssueDate());
         bean.setSupplierName(currentVersion.getSupplierName());
         bean.setCustomerName(currentVersion.getCustomerName());
-        bean.setCustomerAssignedId(currentVersion.getCustomerAssignedId());
 
         bean.setSupplierStreetAddress(currentVersion.getSupplierStreetAddress());
         bean.setSupplierCity(currentVersion.getSupplierCity());

@@ -52,8 +52,8 @@ public class UsersService {
         return user;
     }
 
-    private UserModel getUserByIdentityID(String identityID) {
-        UserModel user = userProvider.getUserByIdentityID(identityID);
+    private UserModel getUserById(String id) {
+        UserModel user = userProvider.getUser(id);
         if (user == null) {
             throw new NotFoundException();
         }
@@ -61,10 +61,10 @@ public class UsersService {
     }
 
     @GET
-    @Path("{identityID}")
+    @Path("{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public UserRepresentation getUser(@PathParam("identityID") String identityID) {
-        UserModel user = getUserByIdentityID(identityID);
+    public UserRepresentation getUser(@PathParam("userId") String userId) {
+        UserModel user = getUserById(userId);
         return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
     }
 

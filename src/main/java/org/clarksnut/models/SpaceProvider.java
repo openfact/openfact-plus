@@ -9,7 +9,7 @@ public interface SpaceProvider {
      * @param name       name of the space
      * @return created space
      */
-    SpaceModel addSpace(String assignedId, String name);
+    SpaceModel addSpace(UserModel user, String assignedId, String name);
 
     /**
      * Find space by id

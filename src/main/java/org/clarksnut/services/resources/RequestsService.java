@@ -76,7 +76,7 @@ public class RequestsService {
         RequestRepresentation.Attributes attributes = data.getAttributes();
         SpaceModel space = getSpaceById(attributes.getSpace());
 
-        RequestModel request = requestProvider.addRequest(space, user, RequestScope.valueOf(attributes.getScope().toUpperCase()), attributes.getMessage());
+        RequestModel request = requestProvider.addRequest(space, user, PermissionType.valueOf(attributes.getScope().toUpperCase()), attributes.getMessage());
         RequestRepresentation.Data createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(request);
         return Response.status(Response.Status.CREATED).entity(createdRequestAccessRepresentation.toRequestAccessSpaceToRepresentation()).build();
     }

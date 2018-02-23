@@ -15,7 +15,7 @@ import org.clarksnut.mapper.document.DocumentMapperProviderFactory;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.SpaceProvider;
 import org.clarksnut.models.UserModel;
-import org.clarksnut.models.exceptions.ForbiddenExceptionModel;
+import org.clarksnut.models.exceptions.ModelForbiddenException;
 import org.jboss.logging.Logger;
 import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
@@ -23,6 +23,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Stateless
 public class DocumentManager {
@@ -39,15 +40,15 @@ public class DocumentManager {
     @ConfigurationValue("clarksnut.document.mapper.default")
     private Optional<String> defaultDocumentMapper;
 
-    public DocumentModel getDocumentById(UserModel user, String documentId) throws ForbiddenExceptionModel {
+    public DocumentModel getDocumentById(UserModel user, String documentId) throws ModelForbiddenException {
         DocumentModel document = documentProvider.getDocument(documentId);
         if (document == null) return null;
 
-        Set<SpaceModel> permittedSpaces = user.getAllPermitedSpaces();
-        if (permittedSpaces.contains(document.getSupplier()) || permittedSpaces.contains(document.getCustomer())) {
+        Set<String> permittedSpaceAssignedIds = user.getAllPermitedSpaces().stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet());
+        if (permittedSpaceAssignedIds.contains(document.getSupplierAssignedId()) || permittedSpaceAssignedIds.contains(document.getCustomerAssignedId())) {
             return document;
         } else {
-            throw new ForbiddenExceptionModel();
+            throw new ModelForbiddenException();
         }
     }
 
@@ -75,25 +76,8 @@ public class DocumentManager {
         DocumentMapped map = mapDocument(documentType, ublFile);
         DocumentBean bean = map.getBean();
 
-        // Supplier
-        String supplierAssignedId = bean.getSupplierAssignedId();
-        SpaceModel supplier = spaceProvider.getByAssignedId(supplierAssignedId);
-        if (supplier == null) {
-            supplier = spaceProvider.addSpace(supplierAssignedId, supplierAssignedId);
-        }
-
-        // Customer
-        String customerAssignedId = bean.getCustomerAssignedId();
-        SpaceModel customer = null;
-        if (customerAssignedId != null) {
-            customer = spaceProvider.getByAssignedId(customerAssignedId);
-            if (customer == null) {
-                customer = spaceProvider.addSpace(customerAssignedId, customerAssignedId);
-            }
-        }
-
         // Add document
-        return documentProvider.addDocument(documentType, importedDocument, bean, supplier, customer);
+        return documentProvider.addDocument(bean.getSupplierAssignedId(), bean.getCustomerAssignedId(), documentType, importedDocument, bean);
     }
 
     private DocumentMapped mapDocument(String documentType, XmlUBLFileModel ublFile) throws UnsupportedDocumentTypeException, ImpossibleToUnmarshallException {

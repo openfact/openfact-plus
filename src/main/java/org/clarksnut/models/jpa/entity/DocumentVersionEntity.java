@@ -40,6 +40,10 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
     @JoinColumn(name = "imported_document_id", foreignKey = @ForeignKey)
     private ImportedDocumentEntity importedDocument;
 
+    /**
+     *
+     * **/
+
     @Column(name = "currency")
     private String currency;
 
@@ -72,9 +76,6 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
     @Column(name = "customer_name")
     private String customerName;
 
-    @Column(name = "customer_assigned_id")
-    private String customerAssignedId;
-
     @Column(name = "customer_street_address")
     private String customerStreetAddress;
 
@@ -83,6 +84,10 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
 
     @Column(name = "customer_country")
     private String customerCountry;
+
+    /**
+     *
+     * **/
 
     @NotNull(message = "createdAt should not be null")
     @Temporal(TemporalType.TIMESTAMP)
@@ -197,14 +202,6 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
-    }
-
-    public String getCustomerAssignedId() {
-        return customerAssignedId;
-    }
-
-    public void setCustomerAssignedId(String customerAssignedId) {
-        this.customerAssignedId = customerAssignedId;
     }
 
     public String getCustomerStreetAddress() {

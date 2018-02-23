@@ -9,9 +9,6 @@ public class UserAttributesRepresentation {
     // The id of the corresponding User
     private String userID;
 
-    // The id of the corresponding Identity
-    private String identityID;
-
     // The date of creation of the user
 
     private Date createdAt;
@@ -63,14 +60,6 @@ public class UserAttributesRepresentation {
 
     public void setUserID(String userID) {
         this.userID = userID;
-    }
-
-    public String getIdentityID() {
-        return identityID;
-    }
-
-    public void setIdentityID(String identityID) {
-        this.identityID = identityID;
     }
 
     public Date getCreatedAt() {

@@ -1,12 +1,10 @@
 package org.clarksnut.models.jpa;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.models.PermissionType;
 import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.jpa.entity.CollaboratorEntity;
-import org.clarksnut.models.jpa.entity.UserContextInformationEntity;
 import org.clarksnut.models.jpa.entity.UserEntity;
 
 import javax.persistence.EntityManager;
@@ -41,11 +39,6 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public String getId() {
         return user.getId();
-    }
-
-    @Override
-    public String getIdentityID() {
-        return user.getIdentityID();
     }
 
     @Override
@@ -106,16 +99,6 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public void setUrl(String url) {
         user.setUrl(url);
-    }
-
-    @Override
-    public String getEmailTheme() {
-        return user.getEmailTheme();
-    }
-
-    @Override
-    public void setEmailTheme(String emailTheme) {
-        user.setEmailTheme(emailTheme);
     }
 
     @Override
@@ -191,21 +174,6 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
                 .map(CollaboratorEntity::getSpace)
                 .map(space -> new SpaceAdapter(em, space))
                 .collect(Collectors.toSet());
-    }
-
-    @Override
-    public void setContextInformation(JsonNode json) {
-        UserContextInformationEntity contextInformationEntity = user.getContextInformation();
-        if (contextInformationEntity == null) {
-            contextInformationEntity = new UserContextInformationEntity();
-            contextInformationEntity.setValue(json.textValue());
-            contextInformationEntity.setUser(user);
-            em.persist(contextInformationEntity);
-        } else {
-            contextInformationEntity.setValue(json.textValue());
-            em.merge(contextInformationEntity);
-            em.flush();
-        }
     }
 
     @Override

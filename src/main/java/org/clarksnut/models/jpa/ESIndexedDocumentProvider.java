@@ -1,14 +1,9 @@
 package org.clarksnut.models.jpa;
 
 import org.apache.lucene.search.Sort;
-import org.clarksnut.models.IndexedDocumentModel;
-import org.clarksnut.models.IndexedDocumentProvider;
-import org.clarksnut.models.IndexedDocumentQueryModel;
-import org.clarksnut.models.SearchResultModel;
+import org.clarksnut.models.*;
 import org.clarksnut.models.jpa.IndexedManagerType.Type;
 import org.clarksnut.models.jpa.entity.IndexedDocumentEntity;
-import org.clarksnut.models.SpaceModel;
-import org.clarksnut.models.UserModel;
 import org.clarksnut.query.Query;
 import org.clarksnut.query.es.ESQueryParser;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -25,9 +20,11 @@ import org.jboss.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Stateless
 @IndexedManagerType(type = Type.ELASTICSEARCH)
@@ -38,15 +35,9 @@ public class ESIndexedDocumentProvider extends AbstractIndexedDocumentProvider i
     @PersistenceContext
     private EntityManager em;
 
-    public String getQuery(UserModel user, IndexedDocumentQueryModel query, SpaceModel... space) {
+    public String getQuery(IndexedDocumentQueryModel query, SpaceModel... space) {
         if (query.getFilters().isEmpty()) {
             throw new IllegalStateException("Invalid query, at least one query should be requested");
-        }
-
-        // Space query
-        Set<String> userPermittedSpaceIds = getUserPermittedSpaces(user, space);
-        if (userPermittedSpaceIds.isEmpty()) {
-            return null;
         }
 
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
@@ -54,9 +45,10 @@ public class ESIndexedDocumentProvider extends AbstractIndexedDocumentProvider i
             boolQueryBuilder.filter(ESQueryParser.toQueryBuilder(q, new DocumentFieldMapper()));
         }
 
+        String spaceAssignedIds = Stream.of(space).map(SpaceModel::getAssignedId).collect(Collectors.joining(" "));
         DocumentFieldMapper fieldMapper = new DocumentFieldMapper();
-        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID), userPermittedSpaceIds));
-        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID), userPermittedSpaceIds));
+        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID), spaceAssignedIds));
+        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID), spaceAssignedIds));
         boolQueryBuilder.minimumShouldMatch(1);
         return boolQueryBuilder.toString();
     }
@@ -67,8 +59,8 @@ public class ESIndexedDocumentProvider extends AbstractIndexedDocumentProvider i
     }
 
     @Override
-    public SearchResultModel<IndexedDocumentModel> getDocumentsUser(UserModel user, IndexedDocumentQueryModel query, SpaceModel... space) {
-        String esQuery = getQuery(user, query, space);
+    public SearchResultModel<IndexedDocumentModel> getDocumentsUser(IndexedDocumentQueryModel query, SpaceModel... space) {
+        String esQuery = getQuery(query, space);
 
         // No results
         if (esQuery == null) {
@@ -121,6 +113,11 @@ public class ESIndexedDocumentProvider extends AbstractIndexedDocumentProvider i
             @Override
             public int getTotalResults() {
                 return fullTextQuery.getResultSize();
+            }
+
+            @Override
+            public List<FacetModel> getFacets() {
+                return Collections.emptyList();
             }
         };
     }

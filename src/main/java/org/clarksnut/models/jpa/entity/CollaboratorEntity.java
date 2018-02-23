@@ -18,6 +18,7 @@ import java.io.Serializable;
         @NamedQuery(name = "getCollaboratorsByUserIdAndRole", query = "select c from CollaboratorEntity c inner join c.user u where u.id = :userId and c.role in :role"),
         @NamedQuery(name = "countCollaboratorsByUserIdAndRole", query = "select count(c) from CollaboratorEntity c inner join c.user u where u.id = :userId and c.role in :role"),
         @NamedQuery(name = "deleteCollaboratorsBySpaceId", query = "delete from CollaboratorEntity c where c.space.id = :spaceId"),
+        @NamedQuery(name = "deleteCollaboratorsBySpaceIdAndRole", query = "delete from CollaboratorEntity c where c.space.id = :spaceId and c.role =:role"),
 })
 public class CollaboratorEntity implements Serializable {
 

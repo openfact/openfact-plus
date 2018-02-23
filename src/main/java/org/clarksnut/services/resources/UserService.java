@@ -42,14 +42,12 @@ public class UserService {
     public UserRepresentation getCurrentUser(@Context final HttpServletRequest httpServletRequest) {
         KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
         AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
-
-        String kcUserID = principal.getName();
         String kcUsername = accessToken.getPreferredUsername();
 
         // Get user from DB
         UserModel user = this.userProvider.getUserByUsername(kcUsername);
         if (user == null) {
-            user = this.userProvider.addUser(kcUserID, "kc", kcUsername);
+            user = this.userProvider.addUser(kcUsername, "kc");
         }
         mergeKeycloakUser(user, accessToken);
 

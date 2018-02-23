@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -33,15 +34,20 @@ public class JpaSpaceProvider implements SpaceProvider {
     private EntityManager em;
 
     @Override
-    public SpaceModel addSpace(String assignedId, String name) {
-        SpaceEntity entity = new SpaceEntity();
-        entity.setId(ClarksnutModelUtils.generateId());
-        entity.setAssignedId(assignedId);
-        entity.setName(name);
-        em.persist(entity);
-        em.flush();
+    public SpaceModel addSpace(UserModel user, String assignedId, String name) {
+        SpaceEntity spaceEntity = new SpaceEntity();
+        spaceEntity.setId(UUID.randomUUID().toString());
+        spaceEntity.setAssignedId(assignedId);
+        spaceEntity.setName(name);
+        em.persist(spaceEntity);
 
-        return new SpaceAdapter(em, entity);
+        CollaboratorEntity collaboratorEntity = new CollaboratorEntity();
+        collaboratorEntity.setRole(PermissionType.OWNER);
+        collaboratorEntity.setSpace(spaceEntity);
+        collaboratorEntity.setUser(UserAdapter.toEntity(user, em));
+        em.persist(collaboratorEntity);
+
+        return new SpaceAdapter(em, spaceEntity);
     }
 
     @Override
