@@ -4,7 +4,6 @@ import org.clarksnut.models.QueryModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.models.jpa.entity.UserEntity;
-import org.clarksnut.models.utils.ClarksnutModelUtils;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

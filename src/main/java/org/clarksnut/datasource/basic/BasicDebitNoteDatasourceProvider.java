@@ -6,8 +6,8 @@ import oasis.names.specification.ubl.schema.xsd.debitnote_21.DebitNoteType;
 import org.clarksnut.datasource.Datasource;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.datasource.basic.beans.LineBean;
-import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
+import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

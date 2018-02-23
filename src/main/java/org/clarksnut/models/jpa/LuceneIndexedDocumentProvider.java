@@ -32,6 +32,18 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
 
     private static final Logger logger = Logger.getLogger(LuceneIndexedDocumentProvider.class);
 
+    private static final Function<Facet, FacetModel> toFacetModel = (facet) -> new FacetModel() {
+        @Override
+        public String getValue() {
+            return facet.getValue();
+        }
+
+        @Override
+        public int getCount() {
+            return facet.getCount();
+        }
+    };
+
     @PersistenceContext
     private EntityManager em;
 
@@ -135,17 +147,24 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
                 .createFacetingRequest();
         FacetingRequest amountFacet = queryBuilder.facet()
                 .name("amountFacet")
-                .onField("amount_face")
+                .onField("amountFacet")
                 .range()
                 .below(1_000)
                 .from(1_001).to(10_000)
                 .above(10_000).excludeLimit()
+                .createFacetingRequest();
+        FacetingRequest issueDateFacet = queryBuilder.facet()
+                .name("issueDateFacet")
+                .onField("issueDateFacet")
+                .range()
+                .below(Calendar.getInstance().getTime())
                 .createFacetingRequest();
 
         FacetManager facetManager = fullTextQuery.getFacetManager();
         facetManager.enableFaceting(typeFacet);
         facetManager.enableFaceting(currencyFacet);
         facetManager.enableFaceting(amountFacet);
+        facetManager.enableFaceting(issueDateFacet);
 
         // Result List
         List<IndexedDocumentEntity> resultList = fullTextQuery.getResultList();
@@ -154,9 +173,13 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
         List<Facet> typeFacetResult = facetManager.getFacets("typeFacet");
         List<Facet> currencyFacetResult = facetManager.getFacets("currencyFacet");
         List<Facet> amountFacetResult = facetManager.getFacets("amountFacet");
+        List<Facet> issueDateFacetResult = facetManager.getFacets("issueDateFacet");
 
         Map<String, List<FacetModel>> resultFacets = new HashMap<>();
-        resultFacets.put(IndexedDocumentModel.TYPE, new ArrayList<>());
+        resultFacets.put(IndexedDocumentModel.TYPE, typeFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
+        resultFacets.put(IndexedDocumentModel.CURRENCY, currencyFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
+        resultFacets.put(IndexedDocumentModel.AMOUNT, amountFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
+        resultFacets.put(IndexedDocumentModel.ISSUE_DATE, issueDateFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
 
         List<IndexedDocumentModel> items = resultList.stream()
                 .map(f -> new IndexedDocumentAdapter(em, f))
@@ -174,9 +197,10 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
             }
 
             @Override
-            public List<FacetModel> getFacets() {
-                return Collections.emptyList();
+            public Map<String, List<FacetModel>> getFacets() {
+                return resultFacets;
             }
         };
     }
+
 }

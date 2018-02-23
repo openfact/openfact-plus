@@ -1,8 +1,5 @@
 package org.clarksnut.utils;
 
-import org.clarksnut.models.DocumentModel;
-import org.clarksnut.models.DocumentVersionModel;
-import org.clarksnut.models.IndexedDocumentModel;
 import org.clarksnut.models.*;
 import org.clarksnut.representations.idm.*;
 import org.clarksnut.services.resources.DocumentsService;
@@ -12,7 +9,6 @@ import org.clarksnut.services.resources.UsersService;
 import javax.ejb.Stateless;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -191,4 +187,11 @@ public class ModelToRepresentation {
         return rep;
     }
 
+    public FacetRepresentation toRepresentation(FacetModel model) {
+        FacetRepresentation rep = new FacetRepresentation();
+
+        rep.setValue(model.getValue());
+        rep.setCount(model.getCount());
+        return rep;
+    }
 }

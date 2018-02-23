@@ -12,4 +12,5 @@ public interface IndexedDocumentProvider {
      * @return list of documents
      */
     SearchResultModel<IndexedDocumentModel> getDocumentsUser(IndexedDocumentQueryModel query, SpaceModel... space);
+
 }

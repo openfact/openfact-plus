@@ -1,7 +1,7 @@
 package org.clarksnut.datasource;
 
-import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
+import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 
 public interface DatasourceProvider {
 

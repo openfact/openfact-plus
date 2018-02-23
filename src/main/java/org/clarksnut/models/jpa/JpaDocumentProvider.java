@@ -1,5 +1,6 @@
 package org.clarksnut.models.jpa;
 
+import org.clarksnut.mapper.document.DocumentMapped.DocumentBean;
 import org.clarksnut.models.DocumentModel;
 import org.clarksnut.models.DocumentModel.DocumentCreationEvent;
 import org.clarksnut.models.DocumentModel.DocumentRemovedEvent;
@@ -8,8 +9,6 @@ import org.clarksnut.models.ImportedDocumentModel;
 import org.clarksnut.models.exceptions.AlreadyImportedDocumentException;
 import org.clarksnut.models.jpa.entity.DocumentEntity;
 import org.clarksnut.models.jpa.entity.DocumentVersionEntity;
-import org.clarksnut.mapper.document.DocumentMapped.DocumentBean;
-import org.clarksnut.models.SpaceModel;
 import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;

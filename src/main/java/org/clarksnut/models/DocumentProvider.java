@@ -1,7 +1,7 @@
 package org.clarksnut.models;
 
-import org.clarksnut.models.exceptions.AlreadyImportedDocumentException;
 import org.clarksnut.mapper.document.DocumentMapped.DocumentBean;
+import org.clarksnut.models.exceptions.AlreadyImportedDocumentException;
 
 public interface DocumentProvider {
 

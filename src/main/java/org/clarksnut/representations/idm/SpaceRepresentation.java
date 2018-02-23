@@ -1,7 +1,6 @@
 package org.clarksnut.representations.idm;
 
 import java.util.Date;
-import java.util.List;
 
 public class SpaceRepresentation {
 

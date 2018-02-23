@@ -6,8 +6,6 @@ import org.clarksnut.models.DocumentVersionModel;
 import org.clarksnut.models.IndexedDocumentModel;
 import org.clarksnut.models.jpa.entity.DocumentEntity;
 import org.clarksnut.models.jpa.entity.DocumentVersionEntity;
-import org.clarksnut.models.SpaceModel;
-import org.clarksnut.models.jpa.entity.SpaceEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

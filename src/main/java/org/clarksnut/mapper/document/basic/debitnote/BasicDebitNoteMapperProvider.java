@@ -2,10 +2,10 @@ package org.clarksnut.mapper.document.basic.debitnote;
 
 import com.helger.ubl21.UBL21Reader;
 import oasis.names.specification.ubl.schema.xsd.debitnote_21.DebitNoteType;
-import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapperProvider;
+import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 import org.jboss.logging.Logger;
 
 public class BasicDebitNoteMapperProvider implements DocumentMapperProvider {

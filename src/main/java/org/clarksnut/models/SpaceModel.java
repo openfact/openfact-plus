@@ -2,7 +2,6 @@ package org.clarksnut.models;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 public interface SpaceModel {
 

@@ -1,12 +1,12 @@
 package org.clarksnut.services.resources;
 
 import jodd.io.ZipBuilder;
-import org.clarksnut.models.*;
-import org.clarksnut.models.exceptions.IsNotXmlOrCompressedFileDocumentException;
 import org.clarksnut.files.FileModel;
 import org.clarksnut.files.uncompress.exceptions.NotReadableCompressFileException;
 import org.clarksnut.managers.DocumentManager;
 import org.clarksnut.managers.ImportedDocumentManager;
+import org.clarksnut.models.*;
+import org.clarksnut.models.exceptions.IsNotXmlOrCompressedFileDocumentException;
 import org.clarksnut.models.exceptions.ModelForbiddenException;
 import org.clarksnut.query.RangeQuery;
 import org.clarksnut.query.TermQuery;
@@ -17,6 +17,7 @@ import org.clarksnut.report.ReportTemplateProvider;
 import org.clarksnut.report.exceptions.ReportException;
 import org.clarksnut.representations.idm.DocumentQueryRepresentation;
 import org.clarksnut.representations.idm.DocumentRepresentation;
+import org.clarksnut.representations.idm.FacetRepresentation;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.services.ErrorResponse;
 import org.clarksnut.services.ErrorResponseException;
@@ -224,6 +225,13 @@ public class DocumentsService {
         // Meta
         Map<String, Object> meta = new HashMap<>();
         meta.put("totalCount", result.getTotalResults());
+
+        // Facets
+        Map<String, List<FacetRepresentation>> facets = new HashMap<>();
+        for (Map.Entry<String, List<FacetModel>> entry : result.getFacets().entrySet()) {
+            facets.put(entry.getKey(), entry.getValue().stream().map(f -> modelToRepresentation.toRepresentation(f)).collect(Collectors.toList()));
+        }
+        meta.put("facets", facets);
 
         // Links
         Map<String, String> links = new HashMap<>();

@@ -1,12 +1,12 @@
 package org.clarksnut.models.jpa;
 
 import org.clarksnut.common.jpa.JpaModel;
+import org.clarksnut.files.FileModel;
+import org.clarksnut.files.jpa.FileAdapter;
 import org.clarksnut.models.DocumentProviderType;
 import org.clarksnut.models.ImportedDocumentModel;
 import org.clarksnut.models.ImportedDocumentStatus;
 import org.clarksnut.models.jpa.entity.ImportedDocumentEntity;
-import org.clarksnut.files.FileModel;
-import org.clarksnut.files.jpa.FileAdapter;
 
 import javax.persistence.EntityManager;
 import java.util.Date;

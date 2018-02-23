@@ -4,9 +4,9 @@ import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
+import org.clarksnut.files.jpa.FileEntity;
 import org.clarksnut.models.DocumentProviderType;
 import org.clarksnut.models.ImportedDocumentStatus;
-import org.clarksnut.files.jpa.FileEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

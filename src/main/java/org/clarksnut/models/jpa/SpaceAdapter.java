@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {

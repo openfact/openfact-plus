@@ -1,6 +1,7 @@
 package org.clarksnut.models;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SearchResultModel<T> {
 
@@ -8,6 +9,6 @@ public interface SearchResultModel<T> {
 
     int getTotalResults();
 
-    List<FacetModel> getFacets();
+    Map<String, List<FacetModel>> getFacets();
 
 }

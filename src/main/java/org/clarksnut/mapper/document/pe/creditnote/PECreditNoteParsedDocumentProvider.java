@@ -1,10 +1,10 @@
 package org.clarksnut.mapper.document.pe.creditnote;
 
 import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
-import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.files.XmlUBLFileModel;
 import org.clarksnut.mapper.document.DocumentMapped;
 import org.clarksnut.mapper.document.DocumentMapperProvider;
+import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.jboss.logging.Logger;
 

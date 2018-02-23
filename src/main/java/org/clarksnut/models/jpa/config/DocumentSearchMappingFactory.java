@@ -40,9 +40,11 @@ public class DocumentSearchMappingFactory {
 
                 .property("amount", ElementType.FIELD)
                 .field().name("amount").analyze(Analyze.NO).sortableField()
-                .field().name("amount_face").analyze(Analyze.NO).facet().encoding(FacetEncodingType.LONG)
+                .field().name("amountFacet").analyze(Analyze.NO).facet().encoding(FacetEncodingType.LONG)
 
-                .property("issueDate", ElementType.FIELD).field().name("issueDate").analyze(Analyze.NO).sortableField().numericField().dateBridge(Resolution.DAY)
+                .property("issueDate", ElementType.FIELD)
+                .field().name("issueDate").analyze(Analyze.NO).sortableField().numericField().dateBridge(Resolution.DAY)
+                .field().name("issueDateFacet").analyze(Analyze.NO).facet().encoding(FacetEncodingType.LONG)
 
                 /*
                 * Relationships */

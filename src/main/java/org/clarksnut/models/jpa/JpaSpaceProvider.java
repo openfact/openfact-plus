@@ -3,7 +3,6 @@ package org.clarksnut.models.jpa;
 import org.clarksnut.models.*;
 import org.clarksnut.models.jpa.entity.CollaboratorEntity;
 import org.clarksnut.models.jpa.entity.SpaceEntity;
-import org.clarksnut.models.utils.ClarksnutModelUtils;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

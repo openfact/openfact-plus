@@ -1,15 +1,15 @@
 package org.clarksnut.managers;
 
 import org.apache.commons.io.IOUtils;
-import org.clarksnut.models.DocumentProviderType;
-import org.clarksnut.models.ImportedDocumentModel;
-import org.clarksnut.models.ImportedDocumentProvider;
-import org.clarksnut.models.ImportedDocumentStatus;
 import org.clarksnut.files.BasicFileModel;
 import org.clarksnut.files.FileModel;
 import org.clarksnut.files.FileModelUtils;
 import org.clarksnut.files.FileProvider;
 import org.clarksnut.files.uncompress.exceptions.NotReadableCompressFileException;
+import org.clarksnut.models.DocumentProviderType;
+import org.clarksnut.models.ImportedDocumentModel;
+import org.clarksnut.models.ImportedDocumentProvider;
+import org.clarksnut.models.ImportedDocumentStatus;
 import org.clarksnut.models.exceptions.*;
 import org.jboss.logging.Logger;
 
