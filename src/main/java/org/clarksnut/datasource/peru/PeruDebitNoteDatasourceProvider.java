@@ -39,7 +39,7 @@ public class PeruDebitNoteDatasourceProvider implements DatasourceProvider {
         DebitNoteType debitNoteType = read(file);
 
         PeruDebitNoteDatasource bean = new PeruDebitNoteDatasource();
-       
+
         bean.setIdAsignado(debitNoteType.getID().getValue());
         TipoNotaDebito.getFromCode(debitNoteType.getDiscrepancyResponse().get(0).getResponseCode().getValue()).ifPresent(c -> bean.setTipoNotaDebito(c.getDenominacion()));
         bean.setMotivoSustento(debitNoteType.getDiscrepancyResponse().get(0).getDescription().get(0).getValue());

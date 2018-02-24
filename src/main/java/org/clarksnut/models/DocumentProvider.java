@@ -3,11 +3,11 @@ package org.clarksnut.models;
 import org.clarksnut.mapper.document.DocumentMapped.DocumentBean;
 import org.clarksnut.models.exceptions.AlreadyImportedDocumentException;
 
+import java.util.List;
+
 public interface DocumentProvider {
 
     DocumentModel addDocument(
-            String supplierAssignedId,
-            String customerAssignedId,
             String documentType,
             ImportedDocumentModel importedDocument,
             DocumentBean bean) throws AlreadyImportedDocumentException;
@@ -25,10 +25,13 @@ public interface DocumentProvider {
      */
     DocumentModel getDocument(String supplierAssignedId, String type, String assignedId);
 
+    List<DocumentModel> getDocuments(String filterText, int limit, SpaceModel... space);
+
+    SearchResultModel<DocumentModel> getDocuments(DocumentQueryModel query, SpaceModel... space);
+
     /**
      * @param document document to be removed
      * @return true if document was removed
      */
     boolean removeDocument(DocumentModel document);
-
 }

@@ -3,8 +3,8 @@ package org.clarksnut.models.jpa;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Sort;
 import org.clarksnut.models.*;
-import org.clarksnut.models.jpa.IndexedManagerType.Type;
-import org.clarksnut.models.jpa.entity.IndexedDocumentEntity;
+import org.clarksnut.models.jpa.entity.DocumentEntity;
+import org.clarksnut.models.jpa.entity.PartyEntity;
 import org.clarksnut.query.es.LuceneQueryParser;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
@@ -27,10 +27,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Stateless
-@IndexedManagerType(type = Type.LUCENE)
-public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvider implements IndexedDocumentProvider {
+@IndexedManagerType(type = IndexedManagerType.Type.LUCENE)
+public class JpaLuceneDocumentProvider extends JpaAbstractDocumentProvider implements DocumentProvider {
 
-    private static final Logger logger = Logger.getLogger(LuceneIndexedDocumentProvider.class);
+    public static final String[] AUTOCOMPLETE_FIELDS = {
+            "assignedId",
+            "supplierName",
+            "customerName"
+    };
+
+    private static final Logger logger = Logger.getLogger(JpaLuceneDocumentProvider.class);
 
     private static final Function<Facet, FacetModel> toFacetModel = (facet) -> new FacetModel() {
         @Override
@@ -47,14 +53,14 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
     @PersistenceContext
     private EntityManager em;
 
-    public org.apache.lucene.search.Query getQuery(IndexedDocumentQueryModel query, QueryBuilder queryBuilder, SpaceModel... space) {
+    public org.apache.lucene.search.Query getQuery(DocumentQueryModel query, QueryBuilder queryBuilder, SpaceModel... space) {
         DocumentFieldMapper fieldMapper = new DocumentFieldMapper();
 
         // Filter Text
         Query filterTextQuery;
         if (query.getFilterText() != null && !query.getFilterText().trim().isEmpty() && !query.getFilterText().trim().equals("*")) {
             filterTextQuery = queryBuilder.keyword()
-                    .onFields(Arrays.stream(IndexedDocumentModel.FILTER_TEXT_FIELDS).map(fieldMapper).toArray(String[]::new))
+                    .onFields(Arrays.stream(DocumentModel.FILTER_TEXT_FIELDS).map(fieldMapper).toArray(String[]::new))
                     .matching(query.getFilterText())
                     .createQuery();
         } else {
@@ -70,8 +76,8 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
 
         String spaceAssignedIds = Stream.of(space).map(SpaceModel::getAssignedId).collect(Collectors.joining(" "));
         Query spaceFilterQuery = queryBuilder.bool()
-                .should(queryBuilder.keyword().onField(fieldMapper.apply(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID)).matching(spaceAssignedIds).createQuery())
-                .should(queryBuilder.keyword().onField(fieldMapper.apply(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID)).matching(spaceAssignedIds).createQuery())
+                .should(queryBuilder.keyword().onField(fieldMapper.apply(DocumentModel.SUPPLIER_ASSIGNED_ID)).matching(spaceAssignedIds).createQuery())
+                .should(queryBuilder.keyword().onField(fieldMapper.apply(DocumentModel.CUSTOMER_ASSIGNED_ID)).matching(spaceAssignedIds).createQuery())
                 .createQuery();
 
         boolQueryBuilder.must(filterTextQuery);
@@ -80,23 +86,41 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
     }
 
     @Override
-    protected EntityManager getEntityManager() {
-        return em;
+    public List<DocumentModel> getDocuments(String filterText, int limit, SpaceModel... space) {
+        if (space == null || space.length == 0) {
+            return Collections.emptyList();
+        }
+
+        FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
+        QueryBuilder queryBuilder = fullTextEm.getSearchFactory().buildQueryBuilder().forEntity(DocumentEntity.class).get();
+
+        Query query = queryBuilder
+                .phrase()
+                .withSlop(2)
+                .onField(AUTOCOMPLETE_FIELDS[0])
+                .andField(AUTOCOMPLETE_FIELDS[1])
+                .andField(AUTOCOMPLETE_FIELDS[2])
+                .boostedTo(5)
+                .sentence(filterText.toLowerCase())
+                .createQuery();
+
+        FullTextQuery fullTextQuery = fullTextEm.createFullTextQuery(query, PartyEntity.class);
+        fullTextQuery.setMaxResults(limit);
+
+        List<DocumentEntity> results = fullTextQuery.getResultList();
+        return results.stream()
+                .map(f -> new DocumentAdapter(em, f))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public IndexedDocumentModel getIndexedDocument(String documentId) {
-        return null;
-    }
-
-    @Override
-    public SearchResultModel<IndexedDocumentModel> getDocumentsUser(IndexedDocumentQueryModel query, SpaceModel... space) {
+    public SearchResultModel<DocumentModel> getDocuments(DocumentQueryModel query, SpaceModel... space) {
         if (space == null || space.length == 0) {
             return new EmptySearchResultAdapter<>();
         }
 
         FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
-        QueryBuilder queryBuilder = fullTextEm.getSearchFactory().buildQueryBuilder().forEntity(IndexedDocumentEntity.class).get();
+        QueryBuilder queryBuilder = fullTextEm.getSearchFactory().buildQueryBuilder().forEntity(DocumentEntity.class).get();
         Query luceneQuery = getQuery(query, queryBuilder, space);
 
         // No results
@@ -116,7 +140,7 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
             }
         }
 
-        FullTextQuery fullTextQuery = fullTextEm.createFullTextQuery(luceneQuery, IndexedDocumentEntity.class);
+        FullTextQuery fullTextQuery = fullTextEm.createFullTextQuery(luceneQuery, DocumentEntity.class);
 
         if (sort != null) {
             fullTextQuery.setSort(sort);
@@ -167,7 +191,7 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
         facetManager.enableFaceting(issueDateFacet);
 
         // Result List
-        List<IndexedDocumentEntity> resultList = fullTextQuery.getResultList();
+        List<DocumentEntity> resultList = fullTextQuery.getResultList();
 
         // Result Facet
         List<Facet> typeFacetResult = facetManager.getFacets("typeFacet");
@@ -176,18 +200,18 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
         List<Facet> issueDateFacetResult = facetManager.getFacets("issueDateFacet");
 
         Map<String, List<FacetModel>> resultFacets = new HashMap<>();
-        resultFacets.put(IndexedDocumentModel.TYPE, typeFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
-        resultFacets.put(IndexedDocumentModel.CURRENCY, currencyFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
-        resultFacets.put(IndexedDocumentModel.AMOUNT, amountFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
-        resultFacets.put(IndexedDocumentModel.ISSUE_DATE, issueDateFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
+        resultFacets.put(DocumentModel.TYPE, typeFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
+        resultFacets.put(DocumentModel.CURRENCY, currencyFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
+        resultFacets.put(DocumentModel.AMOUNT, amountFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
+        resultFacets.put(DocumentModel.ISSUE_DATE, issueDateFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
 
-        List<IndexedDocumentModel> items = resultList.stream()
-                .map(f -> new IndexedDocumentAdapter(em, f))
+        List<DocumentModel> items = resultList.stream()
+                .map(f -> new DocumentAdapter(em, f))
                 .collect(Collectors.toList());
 
-        return new SearchResultModel<IndexedDocumentModel>() {
+        return new SearchResultModel<DocumentModel>() {
             @Override
-            public List<IndexedDocumentModel> getItems() {
+            public List<DocumentModel> getItems() {
                 return items;
             }
 
@@ -202,5 +226,4 @@ public class LuceneIndexedDocumentProvider extends AbstractIndexedDocumentProvid
             }
         };
     }
-
 }

@@ -14,7 +14,6 @@ import org.clarksnut.datasource.DatasourceFactory;
 import org.clarksnut.datasource.DatasourceProvider;
 import org.clarksnut.files.*;
 import org.clarksnut.models.DocumentModel;
-import org.clarksnut.models.DocumentVersionModel;
 import org.clarksnut.models.exceptions.ImpossibleToUnmarshallException;
 import org.clarksnut.report.*;
 import org.clarksnut.report.exceptions.ReportException;
@@ -118,8 +117,6 @@ public class JasperReportProvider implements ReportTemplateProvider {
     }
 
     public ModelBean toModelBean(DocumentModel document) {
-        DocumentVersionModel currentVersion = document.getCurrentVersion();
-
         ModelBean bean = new ModelBean();
 
         bean.setType(document.getType());
@@ -127,20 +124,20 @@ public class JasperReportProvider implements ReportTemplateProvider {
         bean.setSupplierAssignedId(document.getSupplierAssignedId());
         bean.setCustomerAssignedId(document.getCustomerAssignedId());
 
-        bean.setAmount(currentVersion.getAmount());
-        bean.setTax(currentVersion.getTax());
-        bean.setCurrency(currentVersion.getCurrency());
-        bean.setIssueDate(currentVersion.getIssueDate());
-        bean.setSupplierName(currentVersion.getSupplierName());
-        bean.setCustomerName(currentVersion.getCustomerName());
+        bean.setAmount(document.getAmount());
+        bean.setTax(document.getTax());
+        bean.setCurrency(document.getCurrency());
+        bean.setIssueDate(document.getIssueDate());
+        bean.setSupplierName(document.getSupplierName());
+        bean.setCustomerName(document.getCustomerName());
 
-        bean.setSupplierStreetAddress(currentVersion.getSupplierStreetAddress());
-        bean.setSupplierCity(currentVersion.getSupplierCity());
-        bean.setSupplierCountry(currentVersion.getSupplierCountry());
+        bean.setSupplierStreetAddress(document.getSupplierStreetAddress());
+        bean.setSupplierCity(document.getSupplierCity());
+        bean.setSupplierCountry(document.getSupplierCountry());
 
-        bean.setCustomerStreetAddress(currentVersion.getCustomerStreetAddress());
-        bean.setCustomerCity(currentVersion.getCustomerCity());
-        bean.setCustomerCountry(currentVersion.getCustomerCountry());
+        bean.setCustomerStreetAddress(document.getCustomerStreetAddress());
+        bean.setCustomerCity(document.getCustomerCity());
+        bean.setCustomerCountry(document.getCustomerCountry());
 
         bean.setLocation("www.clakrsnut.com");
 

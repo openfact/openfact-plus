@@ -1,6 +1,6 @@
 package org.clarksnut.models.jpa;
 
-import org.clarksnut.models.IndexedDocumentModel;
+import org.clarksnut.models.DocumentModel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,21 +24,21 @@ public class DocumentFieldMapper implements Function<String, String> {
         Map<String, String> map = new HashMap<>();
 
         // Document
-        map.put(IndexedDocumentModel.TYPE, "type");
-        map.put(IndexedDocumentModel.ASSIGNED_ID, "assignedId");
-        map.put(IndexedDocumentModel.CURRENCY, "currency");
-        map.put(IndexedDocumentModel.ISSUE_DATE, "issueDate");
-        map.put(IndexedDocumentModel.AMOUNT, "amount");
-        map.put(IndexedDocumentModel.SUPPLIER_NAME, "supplierName");
-        map.put(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID, "supplierAssignedId");
-        map.put(IndexedDocumentModel.CUSTOMER_NAME, "customerName");
-        map.put(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID, "customerAssignedId");
+        map.put(DocumentModel.TYPE, "type");
+        map.put(DocumentModel.ASSIGNED_ID, "assignedId");
+        map.put(DocumentModel.CURRENCY, "currency");
+        map.put(DocumentModel.ISSUE_DATE, "issueDate");
+        map.put(DocumentModel.AMOUNT, "amount");
+        map.put(DocumentModel.SUPPLIER_NAME, "supplierName");
+        map.put(DocumentModel.SUPPLIER_ASSIGNED_ID, "supplierAssignedId");
+        map.put(DocumentModel.CUSTOMER_NAME, "customerName");
+        map.put(DocumentModel.CUSTOMER_ASSIGNED_ID, "customerAssignedId");
 
         // Document User
-        map.put(IndexedDocumentModel.CHECKED, "starred");
-        map.put(IndexedDocumentModel.VIEWED, "viewed");
-        map.put(IndexedDocumentModel.CHECKED, "checked");
-        map.put(IndexedDocumentModel.TAGS, "tags");
+        map.put(DocumentModel.CHECKED, "starred");
+        map.put(DocumentModel.VIEWED, "viewed");
+        map.put(DocumentModel.CHECKED, "checked");
+        map.put(DocumentModel.TAGS, "tags");
 
         return map;
     }

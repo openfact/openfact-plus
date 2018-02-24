@@ -93,7 +93,7 @@ public class PeruRetentionDatasourceProvider implements DatasourceProvider {
         }
 
         bean.setDetalle(detalle);
-        
+
         return bean;
     }
 

@@ -7,7 +7,7 @@ public class ESQueryParserTest {
 
 //    @Test
 //    public void toQueryBuilderWithNullQueries() throws Exception {
-//        IndexedDocumentQueryModel query = IndexedDocumentQueryModel.builder().build();
+//        DocumentQueryModel query = DocumentQueryModel.builder().build();
 //
 //        boolean exception = false;
 //        try {
@@ -23,7 +23,7 @@ public class ESQueryParserTest {
 //    public void toQueryBuilderWithNotAllowedSpacesByUser() throws Exception {
 //        Mockito.when(user.getAllPermitedSpaces()).thenReturn(new HashSet<>());
 //
-//        IndexedDocumentQueryModel query = IndexedDocumentQueryModel.builder()
+//        DocumentQueryModel query = DocumentQueryModel.builder()
 //                .addFilter(new TermQuery(DocumentModel.CURRENCY, "PEN"))
 //                .build();
 //
@@ -42,7 +42,7 @@ public class ESQueryParserTest {
 //
 //        Mockito.when(user.getAllPermitedSpaces()).thenReturn(permittedSpaces);
 //
-//        IndexedDocumentQueryModel query = IndexedDocumentQueryModel.builder()
+//        DocumentQueryModel query = DocumentQueryModel.builder()
 //                .addFilter(new TermQuery(DocumentModel.CURRENCY, "PEN"))
 //                .build();
 //
@@ -62,7 +62,7 @@ public class ESQueryParserTest {
 //
 //        Mockito.when(user.getAllPermitedSpaces()).thenReturn(permittedSpaces);
 //
-//        IndexedDocumentQueryModel query = IndexedDocumentQueryModel.builder()
+//        DocumentQueryModel query = DocumentQueryModel.builder()
 //                .addFilter(new TermQuery(DocumentModel.CURRENCY, "PEN"))
 //                .build();
 //
@@ -119,7 +119,7 @@ public class ESQueryParserTest {
 //
 //        Mockito.when(user.getAllPermitedSpaces()).thenReturn(permittedSpaces);
 //
-//        IndexedDocumentQueryModel query = IndexedDocumentQueryModel.builder()
+//        DocumentQueryModel query = DocumentQueryModel.builder()
 //                .addUserDocumentFilter(new TermQuery(DocumentUserModel.VIEWED, true))
 //                .build();
 //
@@ -176,7 +176,7 @@ public class ESQueryParserTest {
 //
 //        Mockito.when(user.getAllPermitedSpaces()).thenReturn(permittedSpaces);
 //
-//        IndexedDocumentQueryModel query = IndexedDocumentQueryModel.builder()
+//        DocumentQueryModel query = DocumentQueryModel.builder()
 //                .addFilter(new TermQuery(DocumentModel.TYPE, "Invoice"))
 //                .addUserDocumentFilter(new TermQuery(DocumentUserModel.VIEWED, true))
 //                .build();

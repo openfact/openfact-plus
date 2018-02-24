@@ -3,7 +3,7 @@ package org.clarksnut.models.jpa;
 import org.apache.lucene.search.Sort;
 import org.clarksnut.models.*;
 import org.clarksnut.models.jpa.IndexedManagerType.Type;
-import org.clarksnut.models.jpa.entity.IndexedDocumentEntity;
+import org.clarksnut.models.jpa.entity.DocumentEntity;
 import org.clarksnut.query.Query;
 import org.clarksnut.query.es.ESQueryParser;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -28,14 +28,14 @@ import java.util.stream.Stream;
 
 @Stateless
 @IndexedManagerType(type = Type.ELASTICSEARCH)
-public class ESIndexedDocumentProvider extends AbstractIndexedDocumentProvider implements IndexedDocumentProvider {
+public class JpaESDocumentProvider extends JpaAbstractDocumentProvider implements DocumentProvider {
 
-    private static final Logger logger = Logger.getLogger(ESIndexedDocumentProvider.class);
+    private static final Logger logger = Logger.getLogger(JpaESDocumentProvider.class);
 
     @PersistenceContext
     private EntityManager em;
 
-    public String getQuery(IndexedDocumentQueryModel query, SpaceModel... space) {
+    public String getQuery(DocumentQueryModel query, SpaceModel... space) {
         if (query.getFilters().isEmpty()) {
             throw new IllegalStateException("Invalid query, at least one query should be requested");
         }
@@ -47,19 +47,19 @@ public class ESIndexedDocumentProvider extends AbstractIndexedDocumentProvider i
 
         String spaceAssignedIds = Stream.of(space).map(SpaceModel::getAssignedId).collect(Collectors.joining(" "));
         DocumentFieldMapper fieldMapper = new DocumentFieldMapper();
-        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID), spaceAssignedIds));
-        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID), spaceAssignedIds));
+        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(DocumentModel.SUPPLIER_ASSIGNED_ID), spaceAssignedIds));
+        boolQueryBuilder.should(QueryBuilders.termsQuery(fieldMapper.apply(DocumentModel.CUSTOMER_ASSIGNED_ID), spaceAssignedIds));
         boolQueryBuilder.minimumShouldMatch(1);
         return boolQueryBuilder.toString();
     }
 
     @Override
-    protected EntityManager getEntityManager() {
-        return em;
+    public List<DocumentModel> getDocuments(String filterText, int limit, SpaceModel... space) {
+        return Collections.emptyList();
     }
 
     @Override
-    public SearchResultModel<IndexedDocumentModel> getDocumentsUser(IndexedDocumentQueryModel query, SpaceModel... space) {
+    public SearchResultModel<DocumentModel> getDocuments(DocumentQueryModel query, SpaceModel... space) {
         String esQuery = getQuery(query, space);
 
         // No results
@@ -71,12 +71,12 @@ public class ESIndexedDocumentProvider extends AbstractIndexedDocumentProvider i
         FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
         QueryDescriptor queryDescriptor = ElasticsearchQueries.fromJson("{\"query\":" + esQuery + "}");
 
-        FullTextQuery fullTextQuery = fullTextEm.createFullTextQuery(queryDescriptor, IndexedDocumentEntity.class);
+        FullTextQuery fullTextQuery = fullTextEm.createFullTextQuery(queryDescriptor, DocumentEntity.class);
 
         // Sort
         Sort sort = null;
         if (query.getOrderBy() != null) {
-            QueryBuilder queryBuilder = fullTextEm.getSearchFactory().buildQueryBuilder().forEntity(IndexedDocumentEntity.class).get();
+            QueryBuilder queryBuilder = fullTextEm.getSearchFactory().buildQueryBuilder().forEntity(DocumentEntity.class).get();
 
             SortFieldContext sortFieldContext = queryBuilder.sort().byField(new DocumentFieldMapper().apply(query.getOrderBy()));
             if (query.isAsc()) {
@@ -99,14 +99,14 @@ public class ESIndexedDocumentProvider extends AbstractIndexedDocumentProvider i
         }
 
         // Result
-        List<IndexedDocumentEntity> resultList = fullTextQuery.getResultList();
-        List<IndexedDocumentModel> items = resultList.stream()
-                .map(f -> new IndexedDocumentAdapter(em, f))
+        List<DocumentEntity> resultList = fullTextQuery.getResultList();
+        List<DocumentModel> items = resultList.stream()
+                .map(f -> new DocumentAdapter(em, f))
                 .collect(Collectors.toList());
 
-        return new SearchResultModel<IndexedDocumentModel>() {
+        return new SearchResultModel<DocumentModel>() {
             @Override
-            public List<IndexedDocumentModel> getItems() {
+            public List<DocumentModel> getItems() {
                 return items;
             }
 

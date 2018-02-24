@@ -61,13 +61,13 @@ public class DocumentsService {
     private DocumentManager documentManager;
 
     @Inject
+    private DocumentProvider documentProvider;
+
+    @Inject
     private ModelToRepresentation modelToRepresentation;
 
     @Inject
     private ReportTemplateProvider reportTemplateProvider;
-
-    @Inject
-    private IndexedDocumentProvider indexedDocumentProvider;
 
     private DocumentModel getDocumentById(UserModel user, String documentId) throws ModelForbiddenException {
         DocumentModel document = documentManager.getDocumentById(user, documentId);
@@ -130,27 +130,27 @@ public class DocumentsService {
         // ES
         TermsQuery typeQuery = null;
         if (query.getTypes() != null && !query.getTypes().isEmpty()) {
-            typeQuery = new TermsQuery(IndexedDocumentModel.TYPE, query.getTypes());
+            typeQuery = new TermsQuery(DocumentModel.TYPE, query.getTypes());
         }
 
         TermsQuery currencyQuery = null;
         if (query.getCurrencies() != null && !query.getCurrencies().isEmpty()) {
-            currencyQuery = new TermsQuery(IndexedDocumentModel.CURRENCY, query.getCurrencies());
+            currencyQuery = new TermsQuery(DocumentModel.CURRENCY, query.getCurrencies());
         }
 
         TermsQuery tagSQuery = null;
         if (query.getTags() != null && !query.getTags().isEmpty()) {
-            tagSQuery = new TermsQuery(IndexedDocumentModel.TAGS, query.getTags());
+            tagSQuery = new TermsQuery(DocumentModel.TAGS, query.getTags());
         }
 
         TermQuery starQuery = null;
         if (query.getStarred() != null) {
-            starQuery = new TermQuery(IndexedDocumentModel.STARRED, query.getStarred());
+            starQuery = new TermQuery(DocumentModel.STARRED, query.getStarred());
         }
 
         RangeQuery amountQuery = null;
         if (query.getGreaterThan() != null || query.getLessThan() != null) {
-            amountQuery = new RangeQuery(IndexedDocumentModel.AMOUNT);
+            amountQuery = new RangeQuery(DocumentModel.AMOUNT);
             if (query.getGreaterThan() != null) {
                 amountQuery.gte(query.getGreaterThan());
             }
@@ -161,7 +161,7 @@ public class DocumentsService {
 
         RangeQuery issueDateQuery = null;
         if (query.getAfter() != null || query.getBefore() != null) {
-            issueDateQuery = new RangeQuery(IndexedDocumentModel.ISSUE_DATE);
+            issueDateQuery = new RangeQuery(DocumentModel.ISSUE_DATE);
             if (query.getAfter() != null) {
                 issueDateQuery.gte(query.getAfter());
             }
@@ -174,10 +174,10 @@ public class DocumentsService {
         if (query.getRole() != null) {
             switch (query.getRole()) {
                 case SENDER:
-                    roleQuery = new TermsQuery(IndexedDocumentModel.SUPPLIER_ASSIGNED_ID, selectedSpaces.keySet());
+                    roleQuery = new TermsQuery(DocumentModel.SUPPLIER_ASSIGNED_ID, selectedSpaces.keySet());
                     break;
                 case RECEIVER:
-                    roleQuery = new TermsQuery(IndexedDocumentModel.CUSTOMER_ASSIGNED_ID, selectedSpaces.keySet());
+                    roleQuery = new TermsQuery(DocumentModel.CUSTOMER_ASSIGNED_ID, selectedSpaces.keySet());
                     break;
                 default:
                     throw new IllegalStateException("Invalid role:" + query.getRole());
@@ -186,12 +186,12 @@ public class DocumentsService {
 
         String orderBy;
         if (query.getOrderBy() == null) {
-            orderBy = IndexedDocumentModel.ISSUE_DATE;
+            orderBy = DocumentModel.ISSUE_DATE;
         } else {
             orderBy = Stream.of(query.getOrderBy().split("(?<=[a-z])(?=[A-Z])")).collect(Collectors.joining("_")).toLowerCase();
         }
 
-        IndexedDocumentQueryModel.Builder builder = IndexedDocumentQueryModel.builder()
+        DocumentQueryModel.Builder builder = DocumentQueryModel.builder()
                 .filterText(query.getFilterText())
                 .orderBy(orderBy, query.isAsc())
                 .offset(query.getOffset() != null ? query.getOffset() : 0)
@@ -220,7 +220,7 @@ public class DocumentsService {
         }
 
         SpaceModel[] spaces = selectedSpaces.values().toArray(new SpaceModel[selectedSpaces.size()]);
-        SearchResultModel<IndexedDocumentModel> result = indexedDocumentProvider.getDocumentsUser(builder.build(), spaces);
+        SearchResultModel<DocumentModel> result = documentProvider.getDocuments(builder.build(), spaces);
 
         // Meta
         Map<String, Object> meta = new HashMap<>();
@@ -237,7 +237,7 @@ public class DocumentsService {
         Map<String, String> links = new HashMap<>();
 
         return Response.ok(new GenericDataRepresentation<>(result.getItems().stream()
-                .map(indexedDocument -> modelToRepresentation.toRepresentation(user, indexedDocument.getDocument(), uriInfo))
+                .map(document -> modelToRepresentation.toRepresentation(user, document, uriInfo))
                 .collect(Collectors.toList()), links, meta)).build();
     }
 
@@ -326,8 +326,6 @@ public class DocumentsService {
             throw new ForbiddenException("User not allowed to access this document");
         }
 
-        IndexedDocumentModel indexedDocument = document.getIndexedDocument();
-
         DocumentRepresentation.Data data = documentRepresentation.getData();
         updateDocument(data.getAttributes(), user, document);
 
@@ -353,16 +351,14 @@ public class DocumentsService {
     }
 
     private void updateDocument(DocumentRepresentation.Attributes attributes, UserModel user, DocumentModel document) {
-        IndexedDocumentModel indexedDocument = document.getIndexedDocument();
-
         if (attributes.getViewed() != null && attributes.getViewed()) {
-            indexedDocument.addViewed(user.getId());
+            document.addViewed(user.getId());
         }
         if (attributes.getStarred() != null && attributes.getStarred()) {
-            indexedDocument.addStart(user.getId());
+            document.addStart(user.getId());
         }
         if (attributes.getChecked() != null && attributes.getChecked()) {
-            indexedDocument.addCheck(user.getId());
+            document.addCheck(user.getId());
         }
     }
 

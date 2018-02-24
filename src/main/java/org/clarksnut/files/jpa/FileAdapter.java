@@ -43,7 +43,7 @@ public class FileAdapter implements FileModel, JpaModel<FileEntity> {
     }
 
     @Override
-    public byte[] getFile()  {
+    public byte[] getFile() {
         return file.getFile();
     }
 

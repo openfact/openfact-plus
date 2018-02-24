@@ -68,7 +68,7 @@ public class DocumentManager {
         DocumentBean bean = map.getBean();
 
         // Add document
-        return documentProvider.addDocument(bean.getSupplierAssignedId(), bean.getCustomerAssignedId(), documentType, importedDocument, bean);
+        return documentProvider.addDocument(documentType, importedDocument, bean);
     }
 
     private DocumentMapped mapDocument(String documentType, XmlUBLFileModel ublFile) throws UnsupportedDocumentTypeException, ImpossibleToUnmarshallException {

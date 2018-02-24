@@ -85,7 +85,8 @@ public class SpacesService {
         SpaceRepresentation.Relationships relationships = data.getRelationships();
 
         SpaceRepresentation.OwnedBy ownedBy = relationships.getOwnedBy();
-        UserModel owner = userProvider.getUser(ownedBy.getData().getId());;
+        UserModel owner = userProvider.getUser(ownedBy.getData().getId());
+        ;
 
         // Create space
         SpaceModel space = spaceProvider.getByAssignedId(attributes.getAssignedId());

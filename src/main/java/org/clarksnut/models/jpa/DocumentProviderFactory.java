@@ -1,6 +1,6 @@
 package org.clarksnut.models.jpa;
 
-import org.clarksnut.models.IndexedDocumentProvider;
+import org.clarksnut.models.DocumentProvider;
 import org.clarksnut.models.jpa.IndexedManagerType.Type;
 
 import javax.ejb.Stateless;
@@ -8,11 +8,11 @@ import javax.enterprise.inject.Produces;
 import java.util.Optional;
 
 @Stateless
-public class IndexedDocumentProviderFactory {
+public class DocumentProviderFactory {
 
     @Produces
-    public IndexedDocumentProvider getIndexedDocumentProvider(@IndexedManagerType(type = Type.ELASTICSEARCH) IndexedDocumentProvider es,
-                                                              @IndexedManagerType(type = Type.LUCENE) IndexedDocumentProvider lucene) {
+    public DocumentProvider getIndexedDocumentProvider(@IndexedManagerType(type = Type.ELASTICSEARCH) DocumentProvider es,
+                                                       @IndexedManagerType(type = Type.LUCENE) DocumentProvider lucene) {
         Optional<String> optional = Optional.ofNullable(System.getenv("CN_HIBERNATE_INDEX_MANAGER"));
         String indexManager = optional.orElse("directory-based");
 

@@ -5,7 +5,7 @@ import org.clarksnut.query.SimpleQuery;
 import java.util.HashSet;
 import java.util.Set;
 
-public class IndexedDocumentQueryModel {
+public class DocumentQueryModel {
 
     private final String filterText;
     private final Set<SimpleQuery> filters;
@@ -16,7 +16,7 @@ public class IndexedDocumentQueryModel {
     private final Integer offset;
     private final Integer limit;
 
-    private IndexedDocumentQueryModel(Builder builder) {
+    private DocumentQueryModel(Builder builder) {
         this.filterText = builder.filterText;
         this.filters = builder.filters;
 
@@ -92,8 +92,8 @@ public class IndexedDocumentQueryModel {
             return this;
         }
 
-        public IndexedDocumentQueryModel build() {
-            return new IndexedDocumentQueryModel(this);
+        public DocumentQueryModel build() {
+            return new DocumentQueryModel(this);
         }
 
     }

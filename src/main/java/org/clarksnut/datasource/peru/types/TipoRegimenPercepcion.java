@@ -3,7 +3,7 @@ package org.clarksnut.datasource.peru.types;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public enum  TipoRegimenPercepcion {
+public enum TipoRegimenPercepcion {
 
     PERCEPCION_VENTA_INTERNA("01", "PERCEPCION VENTA INTERNA"),
     PERCEPCION_A_LA_ADQUISICION_DE_COMBUSTIBLE("02", "PERCEPCION A LA ADQUISICION DE COMBUSTIBLE"),

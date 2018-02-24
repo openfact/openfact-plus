@@ -111,8 +111,6 @@ public class ModelToRepresentation {
     public DocumentRepresentation.Data toRepresentation(UserModel user, DocumentModel model, UriInfo uriInfo) {
         DocumentRepresentation.Data rep = new DocumentRepresentation.Data();
 
-        IndexedDocumentModel indexedDocument = model.getIndexedDocument();
-        DocumentVersionModel documentCurrentVersion = model.getCurrentVersion();
         List<DocumentVersionModel> documentVersions = model.getVersions();
 
 
@@ -140,23 +138,23 @@ public class ModelToRepresentation {
         attributes.setSupplierAssignedId(model.getSupplierAssignedId());
         attributes.setCustomerAssignedId(model.getCustomerAssignedId());
 
-        attributes.setIssueDate(documentCurrentVersion.getIssueDate());
-        attributes.setCurrency(documentCurrentVersion.getCurrency());
-        attributes.setAmount(documentCurrentVersion.getAmount());
-        attributes.setTax(documentCurrentVersion.getTax());
+        attributes.setIssueDate(model.getIssueDate());
+        attributes.setCurrency(model.getCurrency());
+        attributes.setAmount(model.getAmount());
+        attributes.setTax(model.getTax());
 
-        attributes.setSupplierName(documentCurrentVersion.getSupplierName());
-        attributes.setSupplierStreetAddress(documentCurrentVersion.getSupplierStreetAddress());
-        attributes.setSupplierCity(documentCurrentVersion.getSupplierCity());
-        attributes.setSupplierCountry(documentCurrentVersion.getSupplierCountry());
-        attributes.setCustomerName(documentCurrentVersion.getCustomerName());
-        attributes.setCustomerStreetAddress(documentCurrentVersion.getCustomerStreetAddress());
-        attributes.setCustomerCity(documentCurrentVersion.getCustomerCity());
-        attributes.setCustomerCountry(documentCurrentVersion.getCustomerCountry());
+        attributes.setSupplierName(model.getSupplierName());
+        attributes.setSupplierStreetAddress(model.getSupplierStreetAddress());
+        attributes.setSupplierCity(model.getSupplierCity());
+        attributes.setSupplierCountry(model.getSupplierCountry());
+        attributes.setCustomerName(model.getCustomerName());
+        attributes.setCustomerStreetAddress(model.getCustomerStreetAddress());
+        attributes.setCustomerCity(model.getCustomerCity());
+        attributes.setCustomerCountry(model.getCustomerCountry());
 
-        attributes.setViewed(indexedDocument.getUserViews().contains(user.getId()));
-        attributes.setStarred(indexedDocument.getUserStars().contains(user.getId()));
-        attributes.setChecked(indexedDocument.getUserChecks().contains(user.getId()));
+        attributes.setViewed(model.getUserViews().contains(user.getId()));
+        attributes.setStarred(model.getUserStars().contains(user.getId()));
+        attributes.setChecked(model.getUserChecks().contains(user.getId()));
 
         attributes.setCreatedAt(model.getCreatedAt());
         attributes.setUpdatedAt(model.getUpdatedAt());

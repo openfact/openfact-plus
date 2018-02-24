@@ -50,67 +50,7 @@ public class DocumentVersionAdapter implements DocumentVersionModel, JpaModel<Do
 
     @Override
     public ImportedDocumentModel getImportedDocument() {
-        return new ImportedDocumentAdapter( em, documentVersion.getImportedDocument());
-    }
-
-    @Override
-    public Float getAmount() {
-        return documentVersion.getAmount();
-    }
-
-    @Override
-    public Float getTax() {
-        return documentVersion.getTax();
-    }
-
-    @Override
-    public String getCurrency() {
-        return documentVersion.getCurrency();
-    }
-
-    @Override
-    public Date getIssueDate() {
-        return documentVersion.getIssueDate();
-    }
-
-    @Override
-    public String getSupplierName() {
-        return documentVersion.getSupplierName();
-    }
-
-    @Override
-    public String getSupplierStreetAddress() {
-        return documentVersion.getSupplierStreetAddress();
-    }
-
-    @Override
-    public String getSupplierCity() {
-        return documentVersion.getSupplierCity();
-    }
-
-    @Override
-    public String getSupplierCountry() {
-        return documentVersion.getSupplierCountry();
-    }
-
-    @Override
-    public String getCustomerName() {
-        return documentVersion.getCustomerName();
-    }
-
-    @Override
-    public String getCustomerStreetAddress() {
-        return documentVersion.getCustomerStreetAddress();
-    }
-
-    @Override
-    public String getCustomerCity() {
-        return documentVersion.getCustomerCity();
-    }
-
-    @Override
-    public String getCustomerCountry() {
-        return documentVersion.getCustomerCountry();
+        return new ImportedDocumentAdapter(em, documentVersion.getImportedDocument());
     }
 
     @Override

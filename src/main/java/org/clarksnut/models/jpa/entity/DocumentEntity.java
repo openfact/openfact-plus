@@ -4,13 +4,13 @@ import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "cl_document", uniqueConstraints = {
@@ -40,11 +40,64 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "supplier_assigned_id")
     private String supplierAssignedId;
 
+    @Column(name = "supplier_name")
+    private String supplierName;
+
+    @Column(name = "supplier_street_address")
+    private String supplierStreetAddress;
+
+    @Column(name = "supplier_city")
+    private String supplierCity;
+
+    @Column(name = "supplier_country")
+    private String supplierCountry;
+
     @Column(name = "customer_assigned_id")
     private String customerAssignedId;
 
-    @OneToOne(mappedBy = "document", fetch = FetchType.LAZY)
-    private IndexedDocumentEntity indexedDocument;
+    @Column(name = "customer_name")
+    private String customerName;
+
+    @Column(name = "customer_street_address")
+    private String customerStreetAddress;
+
+    @Column(name = "customer_city")
+    private String customerCity;
+
+    @Column(name = "customer_country")
+    private String customerCountry;
+
+    @Column(name = "currency")
+    private String currency;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "issue_date")
+    private Date issueDate;
+
+    @Digits(integer = 10, fraction = 4, message = "amount has incorrect number of integer/fraction")
+    @Type(type = "org.hibernate.type.FloatType")
+    @Column(name = "amount")
+    private Float amount;
+
+    @Digits(integer = 10, fraction = 4, message = "tax has incorrect number of integer/fraction")
+    @Type(type = "org.hibernate.type.FloatType")
+    @Column(name = "tax")
+    private Float tax;
+
+    @ElementCollection
+    @Column(name = "value")
+    @CollectionTable(name = "user_starts", joinColumns = {@JoinColumn(name = "document_id")})
+    private Set<String> userStarts = new HashSet<>();
+
+    @ElementCollection
+    @Column(name = "value")
+    @CollectionTable(name = "user_views", joinColumns = {@JoinColumn(name = "document_id")})
+    private Set<String> userViews = new HashSet<>();
+
+    @ElementCollection
+    @Column(name = "value")
+    @CollectionTable(name = "user_checks", joinColumns = {@JoinColumn(name = "document_id")})
+    private Set<String> userChecks = new HashSet<>();
 
     @OneToMany(mappedBy = "document", fetch = FetchType.LAZY)
     private List<DocumentVersionEntity> versions = new ArrayList<>();
@@ -91,12 +144,132 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.supplierAssignedId = supplierAssignedId;
     }
 
-    public IndexedDocumentEntity getIndexedDocument() {
-        return indexedDocument;
+    public String getSupplierName() {
+        return supplierName;
     }
 
-    public void setIndexedDocument(IndexedDocumentEntity indexedDocument) {
-        this.indexedDocument = indexedDocument;
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public String getSupplierStreetAddress() {
+        return supplierStreetAddress;
+    }
+
+    public void setSupplierStreetAddress(String supplierStreetAddress) {
+        this.supplierStreetAddress = supplierStreetAddress;
+    }
+
+    public String getSupplierCity() {
+        return supplierCity;
+    }
+
+    public void setSupplierCity(String supplierCity) {
+        this.supplierCity = supplierCity;
+    }
+
+    public String getSupplierCountry() {
+        return supplierCountry;
+    }
+
+    public void setSupplierCountry(String supplierCountry) {
+        this.supplierCountry = supplierCountry;
+    }
+
+    public String getCustomerAssignedId() {
+        return customerAssignedId;
+    }
+
+    public void setCustomerAssignedId(String customerAssignedId) {
+        this.customerAssignedId = customerAssignedId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerStreetAddress() {
+        return customerStreetAddress;
+    }
+
+    public void setCustomerStreetAddress(String customerStreetAddress) {
+        this.customerStreetAddress = customerStreetAddress;
+    }
+
+    public String getCustomerCity() {
+        return customerCity;
+    }
+
+    public void setCustomerCity(String customerCity) {
+        this.customerCity = customerCity;
+    }
+
+    public String getCustomerCountry() {
+        return customerCountry;
+    }
+
+    public void setCustomerCountry(String customerCountry) {
+        this.customerCountry = customerCountry;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public Date getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(Date issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public Float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Float amount) {
+        this.amount = amount;
+    }
+
+    public Float getTax() {
+        return tax;
+    }
+
+    public void setTax(Float tax) {
+        this.tax = tax;
+    }
+
+    public Set<String> getUserStarts() {
+        return userStarts;
+    }
+
+    public void setUserStarts(Set<String> userStarts) {
+        this.userStarts = userStarts;
+    }
+
+    public Set<String> getUserViews() {
+        return userViews;
+    }
+
+    public void setUserViews(Set<String> userViews) {
+        this.userViews = userViews;
+    }
+
+    public Set<String> getUserChecks() {
+        return userChecks;
+    }
+
+    public void setUserChecks(Set<String> userChecks) {
+        this.userChecks = userChecks;
     }
 
     public List<DocumentVersionEntity> getVersions() {
@@ -123,14 +296,6 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Override
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public String getCustomerAssignedId() {
-        return customerAssignedId;
-    }
-
-    public void setCustomerAssignedId(String customerAssignedId) {
-        this.customerAssignedId = customerAssignedId;
     }
 }
 
