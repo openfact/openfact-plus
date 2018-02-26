@@ -46,7 +46,7 @@ public class DocumentSearchMappingFactory {
                 .field().name("amountFacet").analyze(Analyze.NO).facet().encoding(FacetEncodingType.LONG)
 
                 .property("issueDate", ElementType.FIELD)
-                .field().name("issueDate").analyze(Analyze.NO).sortableField().numericField().dateBridge(Resolution.DAY)
+                .field().name("issueDate").analyze(Analyze.NO).sortableField().numericField().dateBridge(Resolution.MILLISECOND)
                 .field().name("issueDateFacet").analyze(Analyze.NO).facet().encoding(FacetEncodingType.LONG)
 
                 /*

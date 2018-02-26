@@ -351,14 +351,17 @@ public class DocumentsService {
     }
 
     private void updateDocument(DocumentRepresentation.Attributes attributes, UserModel user, DocumentModel document) {
-        if (attributes.getViewed() != null && attributes.getViewed()) {
-            document.addViewed(user.getId());
+        if (attributes.getViewed() != null) {
+            if (attributes.getViewed()) document.addViewed(user.getId());
+            else document.removeViewed(user.getId());
         }
-        if (attributes.getStarred() != null && attributes.getStarred()) {
-            document.addStart(user.getId());
+        if (attributes.getStarred() != null) {
+            if (attributes.getStarred()) document.addStart(user.getId());
+            else document.removeStart(user.getId());
         }
-        if (attributes.getChecked() != null && attributes.getChecked()) {
-            document.addCheck(user.getId());
+        if (attributes.getChecked() != null) {
+            if (attributes.getChecked()) document.addCheck(user.getId());
+            else document.removeCheck(user.getId());
         }
     }
 
