@@ -93,17 +93,7 @@ public class BasicDebitNoteBeanAdapter implements DocumentBean {
 
     @Override
     public String getSupplierName() {
-        SupplierPartyType accountingSupplierParty = type.getAccountingSupplierParty();
-        if (accountingSupplierParty != null) {
-            PartyType party = accountingSupplierParty.getParty();
-            if (party != null) {
-                return party.getPartyLegalEntity().stream()
-                        .map(PartyLegalEntityType::getRegistrationNameValue)
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.joining(", "));
-            }
-        }
-        return null;
+        return BasicUtils.getSupplierName(type.getAccountingSupplierParty());
     }
 
     @Override
@@ -149,17 +139,7 @@ public class BasicDebitNoteBeanAdapter implements DocumentBean {
 
     @Override
     public String getCustomerName() {
-        CustomerPartyType accountingCustomerParty = type.getAccountingCustomerParty();
-        if (accountingCustomerParty != null) {
-            PartyType party = accountingCustomerParty.getParty();
-            if (party != null) {
-                return party.getPartyLegalEntity().stream()
-                        .map(PartyLegalEntityType::getRegistrationNameValue)
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.joining(", "));
-            }
-        }
-        return null;
+        return BasicUtils.getCustomerName(type.getAccountingCustomerParty());
     }
 
     @Override

@@ -82,7 +82,7 @@ public class PERetentionBeanAdapter implements DocumentBean {
             return agentParty.getPartyLegalEntity().stream()
                     .map(PartyLegalEntityType::getRegistrationNameValue)
                     .filter(Objects::nonNull)
-                    .collect(Collectors.joining(", "));
+                    .collect(Collectors.joining(","));
         }
         return null;
     }
@@ -94,7 +94,7 @@ public class PERetentionBeanAdapter implements DocumentBean {
             return agentParty.getPartyIdentification().stream()
                     .map(PartyIdentificationType::getIDValue)
                     .filter(Objects::nonNull)
-                    .collect(Collectors.joining(", "));
+                    .collect(Collectors.joining(","));
         }
         return null;
     }

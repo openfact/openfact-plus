@@ -1,12 +1,56 @@
 package org.clarksnut.mapper.document.pe;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CustomerPartyType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.SupplierPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueTimeType;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PEUtils {
+
+    public static String getSupplierName(SupplierPartyType accountingSupplierParty) {
+        if (accountingSupplierParty != null) {
+            PartyType party = accountingSupplierParty.getParty();
+            if (party != null) {
+                if (!party.getPartyLegalEntity().isEmpty()) {
+                    return party.getPartyLegalEntity().stream()
+                            .map(f -> f.getRegistrationName().getValue())
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.joining(","));
+                } else if (!party.getPartyName().isEmpty()) {
+                    return party.getPartyName().stream()
+                            .map(f -> f.getName().getValue())
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.joining(","));
+                }
+            }
+        }
+        return null;
+    }
+
+    public static String getCustomerName(CustomerPartyType accountingCustomerParty) {
+        if (accountingCustomerParty != null) {
+            PartyType party = accountingCustomerParty.getParty();
+            if (party != null) {
+                if (!party.getPartyLegalEntity().isEmpty()) {
+                    return party.getPartyLegalEntity().stream()
+                            .map(f -> f.getRegistrationName().getValue())
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.joining(","));
+                } else if (!party.getPartyName().isEmpty()) {
+                    return party.getPartyName().stream()
+                            .map(f -> f.getName().getValue())
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.joining(","));
+                }
+            }
+        }
+        return null;
+    }
 
     public static Date toDate(IssueDateType issueDate, Optional<IssueTimeType> issueTimeType) {
         Date date = issueDate.getValue().toGregorianCalendar().getTime();

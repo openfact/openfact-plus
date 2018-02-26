@@ -93,17 +93,7 @@ public class PEDebitNoteBeanAdapter implements DocumentBean {
 
     @Override
     public String getSupplierName() {
-        SupplierPartyType accountingSupplierParty = type.getAccountingSupplierParty();
-        if (accountingSupplierParty != null) {
-            PartyType party = accountingSupplierParty.getParty();
-            if (party != null) {
-                return party.getPartyLegalEntity().stream()
-                        .map(f -> f.getRegistrationName().getValue())
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.joining(", "));
-            }
-        }
-        return null;
+        return PEUtils.getSupplierName(type.getAccountingSupplierParty());
     }
 
     @Override
@@ -149,17 +139,7 @@ public class PEDebitNoteBeanAdapter implements DocumentBean {
 
     @Override
     public String getCustomerName() {
-        CustomerPartyType accountingCustomerParty = type.getAccountingCustomerParty();
-        if (accountingCustomerParty != null) {
-            PartyType party = accountingCustomerParty.getParty();
-            if (party != null) {
-                return party.getPartyLegalEntity().stream()
-                        .map(f -> f.getRegistrationName().getValue())
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.joining(", "));
-            }
-        }
-        return null;
+        return PEUtils.getCustomerName(type.getAccountingCustomerParty());
     }
 
     @Override

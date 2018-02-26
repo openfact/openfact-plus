@@ -60,18 +60,7 @@ public class PEVoidedDocumentsBeanAdapter implements DocumentBean {
 
     @Override
     public String getSupplierName() {
-        SupplierPartyType accountingSupplierParty = type.getAccountingSupplierParty();
-        if (accountingSupplierParty != null) {
-            PartyType party = accountingSupplierParty.getParty();
-            if (party != null) {
-                return party.getPartyLegalEntity().stream()
-                        .map(PartyLegalEntityType::getRegistrationName)
-                        .filter(Objects::nonNull)
-                        .map(NameType::getValue)
-                        .collect(Collectors.joining(", "));
-            }
-        }
-        return null;
+        return PEUtils.getSupplierName(type.getAccountingSupplierParty());
     }
 
     @Override
