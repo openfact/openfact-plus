@@ -62,6 +62,7 @@
         assignedId varchar(255) not null,
         created_at timestamp not null,
         name varchar(255) not null,
+        supplier_customer_assigned_id varchar(255) not null,
         updated_at timestamp not null,
         version integer,
         primary key (id)
@@ -133,74 +134,77 @@
         value varchar(255)
     );
 
-    alter table cl_document 
+    alter table cl_document
        add constraint UK1g8cna9wmjf7rvym5de8otj5j unique (type, assigned_id, supplier_assigned_id);
 
-    alter table cl_party 
-       add constraint UKlbhowa4pjy8y18dto6qn6sw0h unique (assignedId);
+    alter table cl_party
+       add constraint UK_qsn66cs7jft3nmms4n0no3p8j unique (assignedId);
 
-    alter table cl_space 
+    alter table cl_party
+       add constraint UK895ssg8gxbua49mjkjfuirydo unique (assignedId, supplier_customer_assigned_id);
+
+    alter table cl_space
        add constraint UKsdrlysemmnh3bs7q5rky8bbq2 unique (assigned_id);
 
-    alter table cl_user 
+    alter table cl_user
        add constraint UKo2u1kvk0249ki7q84ggorljc6 unique (username);
 
-    alter table cl_collaborator 
-       add constraint FKrp82c2i571lmhouy8orvurueb 
-       foreign key (space_id) 
+    alter table cl_collaborator
+       add constraint FKrp82c2i571lmhouy8orvurueb
+       foreign key (space_id)
        references cl_space;
 
-    alter table cl_collaborator 
-       add constraint FKa1et8kcht137s1ugxy5o29bwa 
-       foreign key (user_id) 
+    alter table cl_collaborator
+       add constraint FKa1et8kcht137s1ugxy5o29bwa
+       foreign key (user_id)
        references cl_user;
 
-    alter table cl_document_version 
-       add constraint FKsdhniwfe4777yxgjeqeu1f9t3 
-       foreign key (document_id) 
+    alter table cl_document_version
+       add constraint FKsdhniwfe4777yxgjeqeu1f9t3
+       foreign key (document_id)
        references cl_document;
 
-    alter table cl_document_version 
-       add constraint FKp3yu95xfvlsdayiuhjqg5ipog 
-       foreign key (imported_document_id) 
+    alter table cl_document_version
+       add constraint FKp3yu95xfvlsdayiuhjqg5ipog
+       foreign key (imported_document_id)
        references cl_imported_document;
 
-    alter table cl_imported_document 
-       add constraint FKradvm1a0nxiw43dnhj1lq4kho 
-       foreign key (file_id) 
+    alter table cl_imported_document
+       add constraint FKradvm1a0nxiw43dnhj1lq4kho
+       foreign key (file_id)
        references cl_file;
 
-    alter table cl_request 
-       add constraint FKj13h6esgslepp53yqggtc47ve 
-       foreign key (space_id) 
+    alter table cl_request
+       add constraint FKj13h6esgslepp53yqggtc47ve
+       foreign key (space_id)
        references cl_space;
 
-    alter table cl_request 
-       add constraint FK895blhlaeni7aui0msi384qa8 
-       foreign key (user_id) 
+    alter table cl_request
+       add constraint FK895blhlaeni7aui0msi384qa8
+       foreign key (user_id)
        references cl_user;
 
-    alter table favorite_spaces 
-       add constraint FK8r5h03fqx6pli9928pdfuxgiw 
-       foreign key (user_id) 
+    alter table favorite_spaces
+       add constraint FK8r5h03fqx6pli9928pdfuxgiw
+       foreign key (user_id)
        references cl_user;
 
-    alter table party_names 
-       add constraint FKexpsenj4kq537hkji9csf7pkh 
-       foreign key (party_id) 
+    alter table party_names
+       add constraint FKexpsenj4kq537hkji9csf7pkh
+       foreign key (party_id)
        references cl_party;
 
-    alter table user_checks 
-       add constraint FKrmuxciolt09o5lrpcs749ie6v 
-       foreign key (document_id) 
+    alter table user_checks
+       add constraint FKrmuxciolt09o5lrpcs749ie6v
+       foreign key (document_id)
        references cl_document;
 
-    alter table user_starts 
-       add constraint FKo1uskfejr4nvf5o7vkeuj1k3t 
-       foreign key (document_id) 
+    alter table user_starts
+       add constraint FKo1uskfejr4nvf5o7vkeuj1k3t
+       foreign key (document_id)
        references cl_document;
 
-    alter table user_views 
-       add constraint FKi71fggatfbea87cnlinjkns7s 
-       foreign key (document_id) 
+    alter table user_views
+       add constraint FKi71fggatfbea87cnlinjkns7s
+       foreign key (document_id)
        references cl_document;

@@ -15,14 +15,12 @@ import java.util.Set;
 
 @Entity
 @Table(name = "cl_party", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "assignedId")
-}, indexes = {
-        @Index(columnList = "assignedId", unique = true)
+        @UniqueConstraint(columnNames = {"assignedId", "supplier_customer_assigned_id"})
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getIndexedPartyById", query = "select d from PartyEntity d where d.id=:partyId"),
-        @NamedQuery(name = "getIndexedPartyByAssignedId", query = "select d from PartyEntity d where d.assignedId=:assignedId")
+        @NamedQuery(name = "getIndexedPartyByAssignedIdAndSupplierCustomerAssignedId", query = "select d from PartyEntity d where d.assignedId=:assignedId and d.supplierCustomerAssignedId=:supplierCustomerAssignedId")
 })
 public class PartyEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
@@ -44,6 +42,10 @@ public class PartyEntity implements CreatableEntity, UpdatableEntity, Serializab
     @Column(name = "value")
     @CollectionTable(name = "party_names", joinColumns = {@JoinColumn(name = "party_id")})
     private Set<String> partyNames = new HashSet<>();
+
+    @NotNull
+    @Column(name = "supplier_customer_assigned_id")
+    private String supplierCustomerAssignedId;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -89,6 +91,14 @@ public class PartyEntity implements CreatableEntity, UpdatableEntity, Serializab
 
     public void setPartyNames(Set<String> partyNames) {
         this.partyNames = partyNames;
+    }
+
+    public String getSupplierCustomerAssignedId() {
+        return supplierCustomerAssignedId;
+    }
+
+    public void setSupplierCustomerAssignedId(String supplierCustomerAssignedId) {
+        this.supplierCustomerAssignedId = supplierCustomerAssignedId;
     }
 
     public Date getCreatedAt() {

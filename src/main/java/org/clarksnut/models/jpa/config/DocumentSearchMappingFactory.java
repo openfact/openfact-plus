@@ -72,7 +72,9 @@ public class DocumentSearchMappingFactory {
                 .property("partyNames", ElementType.FIELD).indexEmbedded()
                 .field().name("partyNames").index(Index.YES).store(Store.YES).analyze(Analyze.YES).analyzer("standardAnalyzer")
                 .field().name("nGramPartyNames").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteNGramAnalyzer")
-                .field().name("edgeNGramPartyNames").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteEdgeAnalyzer");
+                .field().name("edgeNGramPartyNames").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteEdgeAnalyzer")
+
+                .property("supplierCustomerAssignedId", ElementType.FIELD).field().name("supplierCustomerAssignedId");
 
         return mapping;
     }

@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -60,16 +60,31 @@ public class PartyService {
             @QueryParam("q") String query,
             @QueryParam("limit") @DefaultValue("10") int limit,
             @QueryParam("spaceIds") List<String> spaceIds) throws ErrorResponseException {
-        List<PartyModel> parties;
-        if (spaceIds != null && !spaceIds.isEmpty()) {
-            SpaceModel[] spaces = spaceIds.stream().map(f -> spaceProvider.getByAssignedId(f)).toArray(SpaceModel[]::new);
-            parties = partyProvider.getParties(query, limit, spaces);
-        } else {
-            // User context
-            UserModel user = getUser(httpServletRequest);
-            Set<SpaceModel> spaces = user.getAllPermitedSpaces();
-            parties = partyProvider.getParties(query, limit, spaces.toArray(new SpaceModel[spaces.size()]));
+        UserModel user = getUser(httpServletRequest);
+
+        Map<String, SpaceModel> allPermittedSpaces = new HashMap<>();
+        for (SpaceModel space : user.getAllPermitedSpaces()) {
+            allPermittedSpaces.put(space.getId(), space);
         }
+        if (allPermittedSpaces.isEmpty()) {
+            Map<String, Object> meta = new HashMap<>();
+            meta.put("totalCount", 0);
+            return new GenericDataRepresentation<>(new ArrayList<>(), Collections.emptyMap(), meta);
+        }
+
+        Map<String, SpaceModel> selectedSpaces = new HashMap<>();
+        if (spaceIds != null && !spaceIds.isEmpty()) {
+            for (String spaceId : spaceIds) {
+                if (allPermittedSpaces.containsKey(spaceId)) {
+                    selectedSpaces.put(spaceId, allPermittedSpaces.get(spaceId));
+                }
+            }
+        } else {
+            selectedSpaces = allPermittedSpaces;
+        }
+
+        SpaceModel[] spaces = selectedSpaces.values().toArray(new SpaceModel[selectedSpaces.size()]);
+        List<PartyModel> parties = partyProvider.getParties(query, limit, spaces);
 
         return new GenericDataRepresentation<>(parties.stream()
                 .map(party -> modelToRepresentation.toRepresentation(party))

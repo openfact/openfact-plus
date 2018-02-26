@@ -29,18 +29,15 @@ public class JpaPartyObservers {
         DocumentModel document = documentCreationEvent.getCreatedDocument();
         DocumentEntity documentEntity = DocumentAdapter.toEntity(document, em);
 
-        String supplierAssignedId = documentEntity.getSupplierAssignedId();
-        String customerAssignedId = documentEntity.getCustomerAssignedId();
 
-        processParty(supplierAssignedId, documentEntity.getSupplierName());
-
-        if (customerAssignedId != null && !customerAssignedId.trim().isEmpty()) {
-            processParty(customerAssignedId, documentEntity.getCustomerName());
+        processParty(documentEntity.getSupplierAssignedId(), documentEntity.getSupplierAssignedId(), documentEntity.getSupplierName());
+        if (documentEntity.getCustomerAssignedId() != null) {
+            processParty(documentEntity.getCustomerAssignedId(), documentEntity.getCustomerAssignedId(), documentEntity.getCustomerName());
         }
     }
 
-    private void processParty(String assignedId, String partyName) {
-        PartyModel party = partyProvider.getPartyByAssignedId(assignedId);
+    private void processParty(String assignedId, String supplierCustomerAssignedId, String partyName) {
+        PartyModel party = partyProvider.getPartyByAssignedId(assignedId, supplierCustomerAssignedId);
         if (party != null) {
             PartyEntity entity = IndexedPartyAdapter.toEntity(party, em);
 
@@ -56,6 +53,7 @@ public class JpaPartyObservers {
             entity.setAssignedId(assignedId);
             entity.setName(partyName);
             entity.setPartyNames(new HashSet<>(Arrays.asList(partyName.split(" "))));
+            entity.setSupplierCustomerAssignedId(supplierCustomerAssignedId);
             em.persist(entity);
         }
     }
