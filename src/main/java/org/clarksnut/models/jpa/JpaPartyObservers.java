@@ -33,7 +33,10 @@ public class JpaPartyObservers {
         String customerAssignedId = documentEntity.getCustomerAssignedId();
 
         processParty(supplierAssignedId, documentEntity.getSupplierName());
-        processParty(customerAssignedId, documentEntity.getCustomerName());
+
+        if (customerAssignedId != null && !customerAssignedId.trim().isEmpty()) {
+            processParty(customerAssignedId, documentEntity.getCustomerName());
+        }
     }
 
     private void processParty(String assignedId, String partyName) {
@@ -41,7 +44,7 @@ public class JpaPartyObservers {
         if (party != null) {
             PartyEntity entity = IndexedPartyAdapter.toEntity(party, em);
 
-            Set<String> newPartyName = new HashSet<>(Arrays.asList(partyName.split(", ")));
+            Set<String> newPartyName = new HashSet<>(Arrays.asList(partyName.split(" ")));
             if (!entity.getPartyNames().containsAll(newPartyName)) {
                 newPartyName.addAll(entity.getPartyNames());
                 entity.setPartyNames(newPartyName);
@@ -52,7 +55,7 @@ public class JpaPartyObservers {
             entity.setId(UUID.randomUUID().toString());
             entity.setAssignedId(assignedId);
             entity.setName(partyName);
-            entity.setPartyNames(new HashSet<>(Arrays.asList(partyName.split(", "))));
+            entity.setPartyNames(new HashSet<>(Arrays.asList(partyName.split(" "))));
             em.persist(entity);
         }
     }

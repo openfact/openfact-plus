@@ -57,7 +57,6 @@ public class JpaPartyProvider implements PartyProvider {
                 .andField(AUTOCOMPLETE_FIELDS[3])
                 .andField(AUTOCOMPLETE_FIELDS[4])
                 .andField(AUTOCOMPLETE_FIELDS[5])
-                .boostedTo(5)
                 .sentence(filterText.toLowerCase())
                 .createQuery();
 

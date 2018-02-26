@@ -42,10 +42,10 @@ public class JpaImportedDocumentProvider implements ImportedDocumentProvider {
 
     @Override
     public boolean removeImportedDocument(ImportedDocumentModel importedDocument) {
-        em.createNamedQuery("removeFileByImportedDocumentId")
+        em.createNamedQuery("removeImportedDocumentById")
                 .setParameter("importedDocumentId", importedDocument.getId())
                 .executeUpdate();
-        em.createNamedQuery("removeImportedDocumentById")
+        em.createNamedQuery("removeFileByImportedDocumentId")
                 .setParameter("importedDocumentId", importedDocument.getId())
                 .executeUpdate();
         return true;

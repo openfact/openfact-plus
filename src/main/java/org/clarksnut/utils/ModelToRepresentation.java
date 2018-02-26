@@ -185,6 +185,20 @@ public class ModelToRepresentation {
         return rep;
     }
 
+    public PartyRepresentation.Data toRepresentation(PartyModel party) {
+        PartyRepresentation.Data rep = new PartyRepresentation.Data();
+        rep.setId(party.getId());
+        rep.setType(ModelType.PARTIES.getAlias());
+
+        PartyRepresentation.Attributes attributes = new PartyRepresentation.Attributes();
+        rep.setAttributes(attributes);
+
+        attributes.setName(party.getName());
+        attributes.setAssignedId(party.getAssignedId());
+
+        return rep;
+    }
+
     public FacetRepresentation toRepresentation(FacetModel model) {
         FacetRepresentation rep = new FacetRepresentation();
 
@@ -192,4 +206,6 @@ public class ModelToRepresentation {
         rep.setCount(model.getCount());
         return rep;
     }
+
+
 }
