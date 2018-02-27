@@ -1,8 +1,8 @@
 package org.clarksnut.models;
 
-public interface FacetModel {
+public interface FacetModel<T> {
 
-    String getValue();
+    T getValue();
 
     int getCount();
 

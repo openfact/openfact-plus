@@ -113,10 +113,25 @@ public class JpaSpaceProvider implements SpaceProvider {
     }
 
     @Override
-    public List<SpaceModel> getSpaces(QueryModel query) {
-        TypedQuery<SpaceEntity> typedQuery = new JpaCriteria<>(em, SpaceEntity.class, SpaceEntity.class, query, SEARCH_FIELDS, FIELD_MAPPER).buildTypedQuery();
-        return typedQuery.getResultList().stream()
+    public List<SpaceModel> getSpaces(String filterText) {
+        return getSpaces(filterText, -1, -1);
+    }
+
+    @Override
+    public List<SpaceModel> getSpaces(String filterText, int offset, int limit) {
+        TypedQuery<SpaceEntity> query = em.createNamedQuery("searchSpacesByFilterText", SpaceEntity.class);
+        query.setParameter("filterText", "%" + filterText + "%");
+        if (offset != -1) {
+            query.setFirstResult(offset);
+        }
+        if (limit != -1) {
+            query.setMaxResults(limit);
+        }
+
+        return query.getResultList()
+                .stream()
                 .map(f -> new SpaceAdapter(em, f))
                 .collect(Collectors.toList());
     }
+
 }

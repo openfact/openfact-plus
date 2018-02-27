@@ -12,20 +12,19 @@ import org.clarksnut.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Stateless
 @Path("spaces")
 @Consumes(MediaType.APPLICATION_JSON)
-public class SpacesService {
+public class SpacesService extends AbstractResource {
 
     @Context
     private UriInfo uriInfo;
@@ -50,31 +49,41 @@ public class SpacesService {
         return space;
     }
 
-    private RequestModel getRequestById(String requestId) {
-        RequestModel request = requestProvider.getRequest(requestId);
-        if (request == null) {
-            throw new NotFoundException();
-        }
-        return request;
-    }
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public GenericDataRepresentation getSpaces(@QueryParam("q") String filterText,
-                                               @QueryParam("assignedId") String assignedId) {
-        QueryModel.Builder queryBuilder = QueryModel.builder();
+    public GenericDataRepresentation getSpaces(
+            @QueryParam("assignedId") String assignedId,
+            @QueryParam("q") @DefaultValue("*") String searchText,
+            @QueryParam("offset") @DefaultValue("0") int offset,
+            @QueryParam("limit") @DefaultValue("10") int limit,
+            @Context HttpServletRequest httpServletRequest) {
+        UserModel user = getUserSession(httpServletRequest);
 
-        if (filterText != null) {
-            queryBuilder.filterText(filterText);
-        }
         if (assignedId != null) {
-            queryBuilder.addFilter(SpaceModel.ASSIGNED_ID, assignedId);
+            SpaceModel space = spaceProvider.getByAssignedId(assignedId);
+            UserModel spaceOwner = space.getOwner();
+
+            SpaceRepresentation.Data spaceData = modelToRepresentation.toRepresentation(space, uriInfo, user.equals(spaceOwner));
+            return new GenericDataRepresentation<>(Collections.singletonList(spaceData));
         }
 
-        List<SpaceRepresentation.Data> data = spaceProvider.getSpaces(queryBuilder.build()).stream()
-                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
-                .collect(Collectors.toList());
-        return new GenericDataRepresentation<>(data);
+        if (searchText != null) {
+            if (searchText.equals("*")) {
+                searchText = "";
+            }
+
+            List<SpaceRepresentation.Data> spacesData = spaceProvider.getSpaces(searchText, offset, limit)
+                    .stream()
+                    .map(f -> {
+                        UserModel spaceOwner = f.getOwner();
+                        return modelToRepresentation.toRepresentation(f, uriInfo, user.equals(spaceOwner));
+                    })
+                    .collect(Collectors.toList());
+
+            return new GenericDataRepresentation<>(spacesData);
+        }
+
+        throw new BadRequestException();
     }
 
     @POST
@@ -86,34 +95,48 @@ public class SpacesService {
 
         SpaceRepresentation.OwnedBy ownedBy = relationships.getOwnedBy();
         UserModel owner = userProvider.getUser(ownedBy.getData().getId());
-        ;
 
         // Create space
-        SpaceModel space = spaceProvider.getByAssignedId(attributes.getAssignedId());
-        if (space != null) {
+        if (spaceProvider.getByAssignedId(attributes.getAssignedId()) != null) {
             throw new ErrorResponseException("Space already exists", Response.Status.CONFLICT);
         }
 
-        space = spaceProvider.addSpace(owner, attributes.getAssignedId(), attributes.getName());
+        SpaceModel space = spaceProvider.addSpace(owner, attributes.getAssignedId(), attributes.getName());
         space.setDescription(attributes.getDescription());
 
-        SpaceRepresentation.Data createdSpaceRepresentation = modelToRepresentation.toRepresentation(space, uriInfo);
+        SpaceRepresentation.Data createdSpaceRepresentation = modelToRepresentation.toRepresentation(space, uriInfo, true);
         return Response.status(Response.Status.CREATED).entity(createdSpaceRepresentation.toSpaceRepresentation()).build();
     }
 
     @GET
     @Path("{spaceId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public SpaceRepresentation getSpace(@PathParam("spaceId") String spaceId) {
+    public SpaceRepresentation getSpace(
+            @PathParam("spaceId") String spaceId,
+            @Context HttpServletRequest httpServletRequest) {
+        UserModel user = getUserSession(httpServletRequest);
+
         SpaceModel space = getSpaceById(spaceId);
-        return modelToRepresentation.toRepresentation(space, uriInfo).toSpaceRepresentation();
+        UserModel spaceOwner = space.getOwner();
+
+        return modelToRepresentation.toRepresentation(space, uriInfo, user.equals(spaceOwner)).toSpaceRepresentation();
     }
 
-    @PATCH
+    @PUT
     @Path("{spaceId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public SpaceRepresentation updateSpace(@PathParam("spaceId") String spaceId, final SpaceRepresentation spaceRepresentation) {
+    public SpaceRepresentation updateSpace(
+            @PathParam("spaceId") String spaceId,
+            @Context HttpServletRequest httpServletRequest,
+            final SpaceRepresentation spaceRepresentation) {
+        UserModel user = getUserSession(httpServletRequest);
+
         SpaceModel space = getSpaceById(spaceId);
+        UserModel spaceOwner = space.getOwner();
+
+        if (!user.equals(spaceOwner)) {
+            throw new ForbiddenException();
+        }
 
         SpaceRepresentation.Data data = spaceRepresentation.getData();
         SpaceRepresentation.Attributes attributes = data.getAttributes();
@@ -124,14 +147,24 @@ public class SpacesService {
             space.setDescription(attributes.getDescription());
         }
 
-        return modelToRepresentation.toRepresentation(space, uriInfo).toSpaceRepresentation();
+        return modelToRepresentation.toRepresentation(space, uriInfo, true).toSpaceRepresentation();
     }
 
     @DELETE
     @Path("{spaceId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void deleteSpace(@PathParam("spaceId") String spaceId) {
+    public void deleteSpace(
+            @PathParam("spaceId") String spaceId,
+            @Context HttpServletRequest httpServletRequest) {
+        UserModel user = getUserSession(httpServletRequest);
+
         SpaceModel space = getSpaceById(spaceId);
+        UserModel spaceOwner = space.getOwner();
+
+        if (!user.equals(spaceOwner)) {
+            throw new ForbiddenException();
+        }
+
         spaceProvider.removeSpace(space);
     }
 
@@ -140,23 +173,22 @@ public class SpacesService {
     @Produces(MediaType.APPLICATION_JSON)
     public GenericDataRepresentation getSpaceCollaborators(
             @PathParam("spaceId") String spaceId,
-            @QueryParam("page[offset]") Integer offset,
-            @QueryParam("page[limit]") Integer limit) {
-
-        if (offset == null) {
-            offset = 0;
-        }
-        if (limit == null) {
-            limit = 100;
-        }
+            @QueryParam("offset") @DefaultValue("0") int offset,
+            @QueryParam("limit") @DefaultValue("10") int limit,
+            @Context HttpServletRequest httpServletRequest) {
+        UserModel user = getUserSession(httpServletRequest);
 
         SpaceModel space = getSpaceById(spaceId);
+        UserModel spaceOwner = space.getOwner();
+
+        if (!user.equals(spaceOwner)) {
+            throw new ForbiddenException();
+        }
 
         List<UserModel> collaborators = space.getCollaborators(offset, limit + 1);
-
-        // Meta
         int totalCount = space.getCollaborators().size();
 
+        // Metadata
         Map<String, Object> meta = new HashMap<>();
         meta.put("totalCount", totalCount);
 
@@ -166,23 +198,23 @@ public class SpacesService {
                 .path(SpacesService.class)
                 .path(SpacesService.class, "getSpaceCollaborators")
                 .build(spaceId).toString() +
-                "?page[offset]=0" +
-                "&page[limit]=" + limit);
+                "?offset=0" +
+                "&limit=" + limit);
 
         links.put("last", uriInfo.getBaseUriBuilder()
                 .path(SpacesService.class)
                 .path(SpacesService.class, "getSpaceCollaborators")
                 .build(spaceId).toString() +
-                "?page[offset]=" + (totalCount > 0 ? (((totalCount - 1) % limit) * limit) : 0) +
-                "&page[limit]=" + limit);
+                "?offset=" + (totalCount > 0 ? (((totalCount - 1) % limit) * limit) : 0) +
+                "&limit=" + limit);
 
         if (collaborators.size() > limit) {
             links.put("next", uriInfo.getBaseUriBuilder()
                     .path(SpacesService.class)
                     .path(SpacesService.class, "getSpaceCollaborators")
                     .build(spaceId).toString() +
-                    "?page[offset]=" + (offset + limit) +
-                    "&page[limit]=" + limit);
+                    "?offset=" + (offset + limit) +
+                    "&limit=" + limit);
 
             // Remove last item
             collaborators.remove(links.size() - 1);
@@ -198,12 +230,20 @@ public class SpacesService {
     @Produces(MediaType.APPLICATION_JSON)
     public void addSpaceCollaborators(
             @PathParam("spaceId") String spaceId,
+            @Context HttpServletRequest httpServletRequest,
             final TypedGenericDataRepresentation<List<UserRepresentation.Data>> representation) {
+        UserModel user = getUserSession(httpServletRequest);
+
         SpaceModel space = getSpaceById(spaceId);
+        UserModel spaceOwner = space.getOwner();
+
+        if (!user.equals(spaceOwner)) {
+            throw new ForbiddenException();
+        }
 
         for (UserRepresentation.Data data : representation.getData()) {
-            UserModel user = userProvider.getUserByUsername(data.getAttributes().getUsername());
-            space.addCollaborators(user);
+            UserModel collaborator = userProvider.getUserByUsername(data.getAttributes().getUsername());
+            space.addCollaborators(collaborator);
         }
     }
 
@@ -212,19 +252,24 @@ public class SpacesService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeSpaceCollaborators(
             @PathParam("spaceId") String spaceId,
-            @PathParam("userId") String userId) throws ErrorResponseException {
-        SpaceModel space = getSpaceById(spaceId);
-        UserModel user = userProvider.getUser(userId);
+            @PathParam("userId") String userId,
+            @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
+        UserModel user = getUserSession(httpServletRequest);
 
-        if (space.getOwner().equals(user)) {
+        SpaceModel space = getSpaceById(spaceId);
+        UserModel spaceOwner = space.getOwner();
+        List<UserModel> collaborators = space.getCollaborators();
+
+        if (!user.equals(spaceOwner) && !collaborators.contains(user)) {
+            throw new ForbiddenException();
+        }
+
+
+        UserModel collaborator = userProvider.getUser(userId);
+        if (spaceOwner.equals(collaborator)) {
             return ErrorResponse.error("Could not delete the owner", Response.Status.BAD_REQUEST);
         }
-
-        boolean result = space.removeCollaborators(user);
-        if (!result) {
-            throw new InternalServerErrorException();
-        }
-
+        space.removeCollaborators(collaborator);
         return Response.ok().build();
     }
 

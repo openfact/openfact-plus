@@ -25,9 +25,10 @@ public interface DocumentProvider {
      */
     DocumentModel getDocument(String supplierAssignedId, String type, String assignedId);
 
-    List<DocumentModel> getDocuments(String filterText, int limit, SpaceModel... space);
+    List<DocumentModel> getDocuments(String filterText, SpaceModel... space);
+    List<DocumentModel> getDocuments(String filterText, int offset, int limit, SpaceModel... space);
 
-    SearchResultModel<DocumentModel> getDocuments(DocumentQueryModel query, SpaceModel... space);
+    SearchResultModel<DocumentModel> searchDocuments(DocumentQueryModel query, SpaceModel... space);
 
     /**
      * @param document document to be removed

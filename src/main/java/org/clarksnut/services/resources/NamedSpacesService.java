@@ -10,6 +10,7 @@ import org.clarksnut.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Stateless
 @Path("namedspaces")
 @Consumes(MediaType.APPLICATION_JSON)
-public class NamedSpacesService {
+public class NamedSpacesService extends AbstractResource {
 
     @Context
     private UriInfo uriInfo;
@@ -44,8 +45,8 @@ public class NamedSpacesService {
         return user;
     }
 
-    private SpaceModel getSpaceByAssignedID(String assignedID) {
-        SpaceModel space = spaceProvider.getByAssignedId(assignedID);
+    private SpaceModel getSpaceByAssignedId(String assignedId) {
+        SpaceModel space = spaceProvider.getByAssignedId(assignedId);
         if (space == null) {
             throw new NotFoundException();
         }
@@ -57,22 +58,19 @@ public class NamedSpacesService {
     @Produces(MediaType.APPLICATION_JSON)
     public GenericDataRepresentation getSpacesByUser(
             @PathParam("username") String username,
-            @QueryParam("page[offset]") Integer offset,
-            @QueryParam("page[limit]") Integer limit) {
+            @QueryParam("offset") @DefaultValue("0") int offset,
+            @QueryParam("limit") @DefaultValue("10") int limit,
+            @Context final HttpServletRequest httpServletRequest) {
+        UserModel sessionUser = getUserSession(httpServletRequest);
         UserModel user = getUserByUsername(username);
-
-        if (offset == null) {
-            offset = 0;
-        }
-        if (limit == null) {
-            limit = 100;
+        if (!sessionUser.equals(user)) {
+            throw new ForbiddenException();
         }
 
-        List<SpaceModel> spaces = spaceProvider.getSpaces(user, offset, limit + 1);
-
-        // Meta
+        List<SpaceModel> spaces = spaceProvider.getSpaces(user, offset, limit + 1); // +1 for check next
         int totalCount = spaceProvider.countSpaces(user);
 
+        // Metadata
         Map<String, Object> meta = new HashMap<>();
         meta.put("totalCount", totalCount);
 
@@ -82,48 +80,53 @@ public class NamedSpacesService {
                 .path(NamedSpacesService.class)
                 .path(NamedSpacesService.class, "getSpacesByUser")
                 .build(username).toString() +
-                "?page[offset]=0" +
-                "&page[limit]=" + limit);
+                "?offset=0" +
+                "&limit=" + limit);
 
         links.put("last", uriInfo.getBaseUriBuilder()
                 .path(NamedSpacesService.class)
                 .path(NamedSpacesService.class, "getSpacesByUser")
                 .build(username).toString() +
-                "?page[offset]=" + (totalCount > 0 ? (((totalCount - 1) % limit) * limit) : 0) +
-                "&page[limit]=" + limit);
+                "?offset=" + (totalCount > 0 ? (((totalCount - 1) % limit) * limit) : 0) +
+                "&limit=" + limit);
 
         if (spaces.size() > limit) {
             links.put("next", uriInfo.getBaseUriBuilder()
                     .path(NamedSpacesService.class)
                     .path(NamedSpacesService.class, "getSpacesByUser")
                     .build(username).toString() +
-                    "?page[offset]=" + (offset + limit) +
-                    "&page[limit]=" + limit);
+                    "?offset=" + (offset + limit) +
+                    "&limit=" + limit);
 
-            // Remove last item
-            spaces.remove(links.size() - 1);
+            spaces.remove(links.size() - 1); // Remove last item because whe added one element at the beginning
         }
 
         return new GenericDataRepresentation<>(spaces.stream()
-                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
+                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo, false))
                 .collect(Collectors.toList()), links, meta);
     }
 
     @GET
-    @Path("{username}/{assignedID}")
+    @Path("{username}/{spaceAssignedId}")
     @Produces(MediaType.APPLICATION_JSON)
     public SpaceRepresentation getSpaceByUser(
             @PathParam("username") String username,
-            @PathParam("assignedID") String assignedID) {
+            @PathParam("spaceAssignedId") String spaceAssignedId,
+            @Context final HttpServletRequest httpServletRequest) {
+        UserModel sessionUser = getUserSession(httpServletRequest);
         UserModel user = getUserByUsername(username);
-        SpaceModel space = getSpaceByAssignedID(assignedID);
-
-        // TODO check if user has access to space
-        if (space.getOwner().equals(user) || user.getCollaboratedSpaces().contains(space)) {
-            return modelToRepresentation.toRepresentation(space, uriInfo).toSpaceRepresentation();
+        if (!sessionUser.equals(user)) {
+            throw new ForbiddenException();
         }
 
-        throw new BadRequestException();
+        SpaceModel space = getSpaceByAssignedId(spaceAssignedId);
+
+        // Check if user has access to space
+        if (user.getAllPermitedSpaces().contains(space)) {
+            return modelToRepresentation.toRepresentation(space, uriInfo, false).toSpaceRepresentation();
+        } else {
+            throw new ForbiddenException();
+        }
     }
 
 }

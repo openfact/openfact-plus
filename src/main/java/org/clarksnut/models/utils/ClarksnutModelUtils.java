@@ -21,6 +21,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ClarksnutModelUtils {
 
@@ -61,6 +63,34 @@ public class ClarksnutModelUtils {
         Unmarshaller unmarshaller = context.createUnmarshaller();
         JAXBElement<T> jaxbElement = unmarshaller.unmarshal(document, tClass);
         return jaxbElement.getValue();
+    }
+
+    /**
+     * Date
+     */
+
+    public static Date getFirstDateOfPlusNMonth(int n) {
+        Calendar aCalendar = Calendar.getInstance();
+
+        // add -1 month to current month
+        aCalendar.add(Calendar.MONTH, n);
+
+        // set DATE to 1, so first date of previous month
+        aCalendar.set(Calendar.DATE, 1);
+
+        return aCalendar.getTime();
+    }
+
+    public static Date getLastDateOfPlusNMonth(int n) {
+        Calendar aCalendar = Calendar.getInstance();
+
+        // add -1 month to current month
+        aCalendar.add(Calendar.MONTH, n);
+
+        // set actual maximum date of previous month
+        aCalendar.set(Calendar.DATE, aCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+        return aCalendar.getTime();
     }
 
 }

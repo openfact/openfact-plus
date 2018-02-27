@@ -5,6 +5,7 @@ import org.apache.lucene.search.Sort;
 import org.clarksnut.models.*;
 import org.clarksnut.models.jpa.entity.DocumentEntity;
 import org.clarksnut.models.jpa.entity.PartyEntity;
+import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.clarksnut.query.es.LuceneQueryParser;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
@@ -30,25 +31,7 @@ import java.util.stream.Stream;
 @IndexedManagerType(type = IndexedManagerType.Type.LUCENE)
 public class JpaLuceneDocumentProvider extends JpaAbstractDocumentProvider implements DocumentProvider {
 
-    public static final String[] AUTOCOMPLETE_FIELDS = {
-            "assignedId",
-            "supplierName",
-            "customerName"
-    };
-
     private static final Logger logger = Logger.getLogger(JpaLuceneDocumentProvider.class);
-
-    private static final Function<Facet, FacetModel> toFacetModel = (facet) -> new FacetModel() {
-        @Override
-        public String getValue() {
-            return facet.getValue();
-        }
-
-        @Override
-        public int getCount() {
-            return facet.getCount();
-        }
-    };
 
     @PersistenceContext
     private EntityManager em;
@@ -85,8 +68,39 @@ public class JpaLuceneDocumentProvider extends JpaAbstractDocumentProvider imple
         return boolQueryBuilder.createQuery();
     }
 
+    public org.apache.lucene.search.Query getQuery(String filterText, QueryBuilder queryBuilder, SpaceModel... space) {
+        // Filter Text
+        Query filterTextQuery = queryBuilder
+                .phrase()
+                .withSlop(2)
+                .onField("assignedId").boostedTo(5)
+                .andField("nGramAssignedId")
+                .andField("edgeNGramAssignedId")
+                .sentence(filterText.toLowerCase())
+                .createQuery();
+
+
+        // Filters
+        BooleanJunction<BooleanJunction> boolQueryBuilder = queryBuilder.bool();
+
+        String spaceAssignedIds = Stream.of(space).map(SpaceModel::getAssignedId).collect(Collectors.joining(" "));
+        Query spaceFilterQuery = queryBuilder.bool()
+                .should(queryBuilder.keyword().onField("supplierAssignedId").matching(spaceAssignedIds).createQuery())
+                .should(queryBuilder.keyword().onField("customerAssignedId").matching(spaceAssignedIds).createQuery())
+                .createQuery();
+
+        boolQueryBuilder.must(filterTextQuery);
+        boolQueryBuilder.filteredBy(spaceFilterQuery);
+        return boolQueryBuilder.createQuery();
+    }
+
     @Override
-    public List<DocumentModel> getDocuments(String filterText, int limit, SpaceModel... space) {
+    public List<DocumentModel> getDocuments(String filterText, SpaceModel... space) {
+        return getDocuments(filterText, -1, -1, space);
+    }
+
+    @Override
+    public List<DocumentModel> getDocuments(String filterText, int offset, int limit, SpaceModel... space) {
         if (space == null || space.length == 0) {
             return Collections.emptyList();
         }
@@ -94,18 +108,11 @@ public class JpaLuceneDocumentProvider extends JpaAbstractDocumentProvider imple
         FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
         QueryBuilder queryBuilder = fullTextEm.getSearchFactory().buildQueryBuilder().forEntity(DocumentEntity.class).get();
 
-        Query query = queryBuilder
-                .phrase()
-                .withSlop(2)
-                .onField(AUTOCOMPLETE_FIELDS[0])
-                .andField(AUTOCOMPLETE_FIELDS[1])
-                .andField(AUTOCOMPLETE_FIELDS[2])
-                .boostedTo(5)
-                .sentence(filterText.toLowerCase())
-                .createQuery();
+        Query query = getQuery(filterText, queryBuilder, space);
 
-        FullTextQuery fullTextQuery = fullTextEm.createFullTextQuery(query, PartyEntity.class);
-        fullTextQuery.setMaxResults(limit);
+        FullTextQuery fullTextQuery = fullTextEm.createFullTextQuery(query, DocumentEntity.class);
+        if (offset != -1) fullTextQuery.setFirstResult(offset);
+        if (limit != -1) fullTextQuery.setMaxResults(limit);
 
         List<DocumentEntity> results = fullTextQuery.getResultList();
         return results.stream()
@@ -114,7 +121,7 @@ public class JpaLuceneDocumentProvider extends JpaAbstractDocumentProvider imple
     }
 
     @Override
-    public SearchResultModel<DocumentModel> getDocuments(DocumentQueryModel query, SpaceModel... space) {
+    public SearchResultModel<DocumentModel> searchDocuments(DocumentQueryModel query, SpaceModel... space) {
         if (space == null || space.length == 0) {
             return new EmptySearchResultAdapter<>();
         }
@@ -181,7 +188,11 @@ public class JpaLuceneDocumentProvider extends JpaAbstractDocumentProvider imple
                 .name("issueDateFacet")
                 .onField("issueDateFacet")
                 .range()
-                .below(Calendar.getInstance().getTime())
+                .from(ClarksnutModelUtils.getFirstDateOfPlusNMonth(-2))
+                .to(ClarksnutModelUtils.getLastDateOfPlusNMonth(-2))
+                .from(ClarksnutModelUtils.getFirstDateOfPlusNMonth(-1))
+                .to(ClarksnutModelUtils.getLastDateOfPlusNMonth(-1))
+                .above(ClarksnutModelUtils.getFirstDateOfPlusNMonth(0))
                 .createFacetingRequest();
 
         FacetManager facetManager = fullTextQuery.getFacetManager();
@@ -200,10 +211,10 @@ public class JpaLuceneDocumentProvider extends JpaAbstractDocumentProvider imple
         List<Facet> issueDateFacetResult = facetManager.getFacets("issueDateFacet");
 
         Map<String, List<FacetModel>> resultFacets = new HashMap<>();
-        resultFacets.put(DocumentModel.TYPE, typeFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
-        resultFacets.put(DocumentModel.CURRENCY, currencyFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
-        resultFacets.put(DocumentModel.AMOUNT, amountFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
-        resultFacets.put(DocumentModel.ISSUE_DATE, issueDateFacetResult.stream().map(toFacetModel).collect(Collectors.toList()));
+        resultFacets.put(DocumentModel.TYPE, typeFacetResult.stream().map(DiscreteFacetAdapter::new).collect(Collectors.toList()));
+        resultFacets.put(DocumentModel.CURRENCY, currencyFacetResult.stream().map(DiscreteFacetAdapter::new).collect(Collectors.toList()));
+        resultFacets.put(DocumentModel.AMOUNT, amountFacetResult.stream().map(NumericRangeFacetAdapter::new).collect(Collectors.toList()));
+        resultFacets.put(DocumentModel.ISSUE_DATE, issueDateFacetResult.stream().map(DateRangeFacetAdapter::new).collect(Collectors.toList()));
 
         List<DocumentModel> items = resultList.stream()
                 .map(f -> new DocumentAdapter(em, f))

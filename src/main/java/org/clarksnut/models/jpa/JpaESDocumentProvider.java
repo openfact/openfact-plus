@@ -53,13 +53,22 @@ public class JpaESDocumentProvider extends JpaAbstractDocumentProvider implement
         return boolQueryBuilder.toString();
     }
 
-    @Override
-    public List<DocumentModel> getDocuments(String filterText, int limit, SpaceModel... space) {
+    public List<DocumentModel> searchDocuments(String filterText, int limit, SpaceModel... space) {
         return Collections.emptyList();
     }
 
     @Override
-    public SearchResultModel<DocumentModel> getDocuments(DocumentQueryModel query, SpaceModel... space) {
+    public List<DocumentModel> getDocuments(String filterText, SpaceModel... space) {
+        return getDocuments(filterText, -1, -1, space);
+    }
+
+    @Override
+    public List<DocumentModel> getDocuments(String filterText, int offset, int limit, SpaceModel... space) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public SearchResultModel<DocumentModel> searchDocuments(DocumentQueryModel query, SpaceModel... space) {
         String esQuery = getQuery(query, space);
 
         // No results

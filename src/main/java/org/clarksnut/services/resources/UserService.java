@@ -24,7 +24,7 @@ import java.util.Map;
 @Stateless
 @Path("/user")
 @Consumes(MediaType.APPLICATION_JSON)
-public class UserService {
+public class UserService extends AbstractResource {
 
     private static final Logger logger = Logger.getLogger(UserService.class);
 
@@ -48,6 +48,7 @@ public class UserService {
         UserModel user = this.userProvider.getUserByUsername(kcUsername);
         if (user == null) {
             user = this.userProvider.addUser(kcUsername, "kc");
+            logger.info("New User added");
         }
         mergeKeycloakUser(user, accessToken);
 

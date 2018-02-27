@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Stateless
 @Path("/users")
 @Consumes(MediaType.APPLICATION_JSON)
-public class UsersService {
+public class UsersService extends AbstractResource {
 
     private static final Logger logger = Logger.getLogger(UsersService.class);
 
@@ -70,7 +70,7 @@ public class UsersService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public GenericDataRepresentation getUsers(@QueryParam("filter[username]") String username) {
+    public GenericDataRepresentation getUsers(@QueryParam("filterAllowedSpaces[username]") String username) {
         QueryModel.Builder queryBuilder = QueryModel.builder();
 
         if (username != null) {

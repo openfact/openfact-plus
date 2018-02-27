@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Stateless
 @Path("request-access")
 @Consumes(MediaType.APPLICATION_JSON)
-public class RequestsService {
+public class RequestsService extends AbstractResource {
 
     @Context
     private UriInfo uriInfo;
@@ -84,10 +84,7 @@ public class RequestsService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public GenericDataRepresentation getRequestAccess(@Context final HttpServletRequest httpServletRequest) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
-
-        UserModel user = getUserByUsername(accessToken.getPreferredUsername());
+        UserModel user = getUserSession(httpServletRequest);
 
         return new GenericDataRepresentation<>(
                 requestProvider.getRequests(user, RequestStatus.PENDING)
@@ -100,7 +97,7 @@ public class RequestsService {
     @PUT
     @Path("/{requestId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateAccessSpacae(
+    public Response updateAccessSpace(
             @PathParam("requestId") String requestId,
             final RequestRepresentation representation) {
         RequestModel request = getRequestById(requestId);

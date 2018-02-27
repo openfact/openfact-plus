@@ -2,17 +2,8 @@ package org.clarksnut.representations.idm;
 
 public class FacetRepresentation {
 
-    private String value;
-
     private int count;
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
+    private Object value;
 
     public int getCount() {
         return count;
@@ -20,5 +11,13 @@ public class FacetRepresentation {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
     }
 }

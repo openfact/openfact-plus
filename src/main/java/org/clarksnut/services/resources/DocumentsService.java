@@ -1,13 +1,10 @@
 package org.clarksnut.services.resources;
 
-import jodd.io.ZipBuilder;
 import org.clarksnut.files.FileModel;
 import org.clarksnut.files.uncompress.exceptions.NotReadableCompressFileException;
-import org.clarksnut.managers.DocumentManager;
 import org.clarksnut.managers.ImportedDocumentManager;
 import org.clarksnut.models.*;
 import org.clarksnut.models.exceptions.IsNotXmlOrCompressedFileDocumentException;
-import org.clarksnut.models.exceptions.ModelForbiddenException;
 import org.clarksnut.query.RangeQuery;
 import org.clarksnut.query.TermQuery;
 import org.clarksnut.query.TermsQuery;
@@ -21,14 +18,10 @@ import org.clarksnut.representations.idm.FacetRepresentation;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.services.ErrorResponse;
 import org.clarksnut.services.ErrorResponseException;
-import org.clarksnut.services.resources.utils.PATCH;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.representations.AccessToken;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -37,14 +30,12 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Stateless
 @Path("/documents")
-public class DocumentsService {
+public class DocumentsService extends AbstractResource {
 
     private static final Logger logger = Logger.getLogger(DocumentsService.class);
 
@@ -52,13 +43,7 @@ public class DocumentsService {
     private UriInfo uriInfo;
 
     @Inject
-    private UserProvider userProvider;
-
-    @Inject
     private ImportedDocumentManager importedDocumentManager;
-
-    @Inject
-    private DocumentManager documentManager;
 
     @Inject
     private DocumentProvider documentProvider;
@@ -69,133 +54,115 @@ public class DocumentsService {
     @Inject
     private ReportTemplateProvider reportTemplateProvider;
 
-    private DocumentModel getDocumentById(UserModel user, String documentId) throws ModelForbiddenException {
-        DocumentModel document = documentManager.getDocumentById(user, documentId);
+    private DocumentModel getDocumentById(UserModel user, String documentId) {
+        DocumentModel document = documentProvider.getDocument(documentId);
         if (document == null) {
             throw new NotFoundException();
         }
         return document;
     }
 
-    private UserModel getUser(HttpServletRequest httpServletRequest) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
-        String username = accessToken.getPreferredUsername();
-
-        UserModel user = userProvider.getUserByUsername(username);
-        if (user == null) {
-            throw new NotFoundException();
-        }
-        return user;
-    }
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDocuments(@Context HttpServletRequest httpServletRequest,
-                                 @QueryParam("q") String q) throws ErrorResponseException {
-        // User context
-        UserModel user = getUser(httpServletRequest);
+    public GenericDataRepresentation getDocuments(
+            @QueryParam("q") String searchText,
+            @QueryParam("offset") @DefaultValue("0") int offset,
+            @QueryParam("limit") @DefaultValue("10") int limit,
+            @QueryParam("space") List<String> spaceIds,
+            @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
+        UserModel sessionUser = getUserSession(httpServletRequest);
+        Set<SpaceModel> spaces = filterAllowedSpaces(sessionUser, spaceIds);
 
-        // Query
-        DocumentQueryRepresentation query;
-        try {
-            query = new DocumentQueryRepresentation(q);
-        } catch (ParseException e) {
-            return ErrorResponse.error("Bad query request", Response.Status.BAD_REQUEST);
-        }
+        List<DocumentRepresentation.Data> documents = documentProvider
+                .getDocuments(searchText, offset, limit, spaces.toArray(new SpaceModel[spaces.size()]))
+                .stream()
+                .map(document -> modelToRepresentation.toRepresentation(sessionUser, document, uriInfo))
+                .collect(Collectors.toList());
+
+        return new GenericDataRepresentation<>(documents);
+    }
+
+    @POST
+    @Path("/search")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchDocuments(
+            DocumentQueryRepresentation query,
+            @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
+        UserModel sessionUser = getUserSession(httpServletRequest);
+
+        DocumentQueryRepresentation.Data queryData = query.getData();
+        DocumentQueryRepresentation.Attributes queryAttributes = queryData.getAttributes();
+        Set<SpaceModel> spaces = filterAllowedSpaces(sessionUser, queryData.getAttributes().getSpaces());
 
 
-        Map<String, SpaceModel> allPermittedSpaces = new HashMap<>();
-        for (SpaceModel space : user.getAllPermitedSpaces()) {
-            allPermittedSpaces.put(space.getId(), space);
-        }
-        if (allPermittedSpaces.isEmpty()) {
-            Map<String, Object> meta = new HashMap<>();
-            meta.put("totalCount", 0);
-            return Response.ok(new GenericDataRepresentation<>(new ArrayList<>(), Collections.emptyMap(), meta)).build();
-        }
-
-
-        Map<String, SpaceModel> selectedSpaces = new HashMap<>();
-        if (query.getSpaces() != null && !query.getSpaces().isEmpty()) {
-            for (String spaceId : query.getSpaces()) {
-                if (allPermittedSpaces.containsKey(spaceId)) {
-                    selectedSpaces.put(spaceId, allPermittedSpaces.get(spaceId));
-                }
-            }
-        } else {
-            selectedSpaces = allPermittedSpaces;
-        }
-
-        // ES
+        // Search query
         TermsQuery typeQuery = null;
-        if (query.getTypes() != null && !query.getTypes().isEmpty()) {
-            typeQuery = new TermsQuery(DocumentModel.TYPE, query.getTypes());
+        if (queryAttributes.getTypes() != null && !queryAttributes.getTypes().isEmpty()) {
+            typeQuery = new TermsQuery(DocumentModel.TYPE, queryAttributes.getTypes());
         }
 
         TermsQuery currencyQuery = null;
-        if (query.getCurrencies() != null && !query.getCurrencies().isEmpty()) {
-            currencyQuery = new TermsQuery(DocumentModel.CURRENCY, query.getCurrencies());
+        if (queryAttributes.getCurrencies() != null && !queryAttributes.getCurrencies().isEmpty()) {
+            currencyQuery = new TermsQuery(DocumentModel.CURRENCY, queryAttributes.getCurrencies());
         }
 
         TermsQuery tagSQuery = null;
-        if (query.getTags() != null && !query.getTags().isEmpty()) {
-            tagSQuery = new TermsQuery(DocumentModel.TAGS, query.getTags());
+        if (queryAttributes.getTags() != null && !queryAttributes.getTags().isEmpty()) {
+            tagSQuery = new TermsQuery(DocumentModel.TAGS, queryAttributes.getTags());
         }
 
         TermQuery starQuery = null;
-        if (query.getStarred() != null) {
-            starQuery = new TermQuery(DocumentModel.STARRED, query.getStarred());
+        if (queryAttributes.getStarred() != null) {
+            starQuery = new TermQuery(DocumentModel.STARRED, queryAttributes.getStarred());
         }
 
         RangeQuery amountQuery = null;
-        if (query.getGreaterThan() != null || query.getLessThan() != null) {
+        if (queryAttributes.getGreaterThan() != null || queryAttributes.getLessThan() != null) {
             amountQuery = new RangeQuery(DocumentModel.AMOUNT);
-            if (query.getGreaterThan() != null) {
-                amountQuery.gte(query.getGreaterThan());
+            if (queryAttributes.getGreaterThan() != null) {
+                amountQuery.gte(queryAttributes.getGreaterThan());
             }
-            if (query.getLessThan() != null) {
-                amountQuery.lte(query.getLessThan());
+            if (queryAttributes.getLessThan() != null) {
+                amountQuery.lte(queryAttributes.getLessThan());
             }
         }
 
         RangeQuery issueDateQuery = null;
-        if (query.getAfter() != null || query.getBefore() != null) {
+        if (queryAttributes.getAfter() != null || queryAttributes.getBefore() != null) {
             issueDateQuery = new RangeQuery(DocumentModel.ISSUE_DATE);
-            if (query.getAfter() != null) {
-                issueDateQuery.gte(query.getAfter());
+            if (queryAttributes.getAfter() != null) {
+                issueDateQuery.gte(queryAttributes.getAfter());
             }
-            if (query.getBefore() != null) {
-                issueDateQuery.lte(query.getBefore());
+            if (queryAttributes.getBefore() != null) {
+                issueDateQuery.lte(queryAttributes.getBefore());
             }
         }
 
         TermsQuery roleQuery = null;
-        if (query.getRole() != null) {
-            switch (query.getRole()) {
+        if (queryAttributes.getRole() != null) {
+            List<String> spaceIds = spaces.stream().map(SpaceModel::getAssignedId).collect(Collectors.toList());
+            switch (queryAttributes.getRole()) {
                 case SENDER:
-                    roleQuery = new TermsQuery(DocumentModel.SUPPLIER_ASSIGNED_ID, selectedSpaces.keySet());
+                    roleQuery = new TermsQuery(DocumentModel.SUPPLIER_ASSIGNED_ID, spaceIds);
                     break;
                 case RECEIVER:
-                    roleQuery = new TermsQuery(DocumentModel.CUSTOMER_ASSIGNED_ID, selectedSpaces.keySet());
+                    roleQuery = new TermsQuery(DocumentModel.CUSTOMER_ASSIGNED_ID, spaceIds);
                     break;
                 default:
-                    throw new IllegalStateException("Invalid role:" + query.getRole());
+                    throw new IllegalStateException("Invalid role:" + queryAttributes.getRole());
             }
         }
 
-        String orderBy;
-        if (query.getOrderBy() == null) {
+        String orderBy = queryAttributes.getOrderBy();
+        if (queryAttributes.getOrderBy() == null) {
             orderBy = DocumentModel.ISSUE_DATE;
-        } else {
-            orderBy = Stream.of(query.getOrderBy().split("(?<=[a-z])(?=[A-Z])")).collect(Collectors.joining("_")).toLowerCase();
         }
 
         DocumentQueryModel.Builder builder = DocumentQueryModel.builder()
-                .filterText(query.getFilterText())
-                .orderBy(orderBy, query.isAsc())
-                .offset(query.getOffset() != null ? query.getOffset() : 0)
-                .limit(query.getLimit() != null ? query.getLimit() : 10);
+                .filterText(queryAttributes.getFilterText())
+                .orderBy(orderBy, queryAttributes.isAsc())
+                .offset(queryAttributes.getOffset() != null ? queryAttributes.getOffset() : 0)
+                .limit(queryAttributes.getLimit() != null ? queryAttributes.getLimit() : 10);
 
         if (typeQuery != null) {
             builder.addFilter(typeQuery);
@@ -219,8 +186,7 @@ public class DocumentsService {
             builder.addFilter(roleQuery);
         }
 
-        SpaceModel[] spaces = selectedSpaces.values().toArray(new SpaceModel[selectedSpaces.size()]);
-        SearchResultModel<DocumentModel> result = documentProvider.getDocuments(builder.build(), spaces);
+        SearchResultModel<DocumentModel> result = documentProvider.searchDocuments(builder.build(), spaces.toArray(new SpaceModel[spaces.size()]));
 
         // Meta
         Map<String, Object> meta = new HashMap<>();
@@ -237,13 +203,10 @@ public class DocumentsService {
         Map<String, String> links = new HashMap<>();
 
         return Response.ok(new GenericDataRepresentation<>(result.getItems().stream()
-                .map(document -> modelToRepresentation.toRepresentation(user, document, uriInfo))
+                .map(document -> modelToRepresentation.toRepresentation(sessionUser, document, uriInfo))
                 .collect(Collectors.toList()), links, meta)).build();
     }
 
-    /**
-     * @return javax.ws.rs.core.Response including document persisted information
-     */
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
@@ -270,6 +233,7 @@ public class DocumentsService {
             // Save document
             try {
                 importedDocumentManager.importDocument(inputStream, fileName, DocumentProviderType.USER_COLLECTOR);
+                logger.debug("Document has been imported");
             } catch (IOException e) {
                 throw new ErrorResponseException("Could not read file", Response.Status.INTERNAL_SERVER_ERROR);
             } catch (IsNotXmlOrCompressedFileDocumentException e) {
@@ -299,56 +263,36 @@ public class DocumentsService {
     @GET
     @Path("{documentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public DocumentRepresentation getDocument(@Context final HttpServletRequest httpServletRequest,
-                                              @PathParam("documentId") String documentId) {
-        UserModel user = getUser(httpServletRequest);
-        DocumentModel document;
-        try {
-            document = getDocumentById(user, documentId);
-        } catch (ModelForbiddenException forbiddenExceptionModel) {
-            throw new ForbiddenException("User not allowed to access this document");
+    public DocumentRepresentation getDocument(
+            @Context final HttpServletRequest httpServletRequest,
+            @PathParam("documentId") String documentId) {
+        UserModel sessionUser = getUserSession(httpServletRequest);
+        DocumentModel document = getDocumentById(sessionUser, documentId);
+        if (isUserAllowedToViewDocument(sessionUser, document)) {
+            return modelToRepresentation.toRepresentation(sessionUser, document, uriInfo).toSpaceRepresentation();
+        } else {
+            throw new ForbiddenException();
         }
-
-        return modelToRepresentation.toRepresentation(user, document, uriInfo).toSpaceRepresentation();
     }
 
-    @PATCH
+    @PUT
     @Path("{documentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public DocumentRepresentation updateDocument(@Context final HttpServletRequest httpServletRequest,
-                                                 @PathParam("documentId") String documentId,
-                                                 DocumentRepresentation documentRepresentation) {
-        UserModel user = getUser(httpServletRequest);
-        DocumentModel document;
-        try {
-            document = getDocumentById(user, documentId);
-        } catch (ModelForbiddenException forbiddenExceptionModel) {
-            throw new ForbiddenException("User not allowed to access this document");
+    public DocumentRepresentation updateDocument(
+            @Context final HttpServletRequest httpServletRequest,
+            @PathParam("documentId") String documentId,
+            DocumentRepresentation documentRepresentation) {
+        UserModel sessionUser = getUserSession(httpServletRequest);
+        DocumentModel document = getDocumentById(sessionUser, documentId);
+        if (!isUserAllowedToViewDocument(sessionUser, document)) {
+            throw new ForbiddenException();
         }
 
         DocumentRepresentation.Data data = documentRepresentation.getData();
-        updateDocument(data.getAttributes(), user, document);
-
-        return modelToRepresentation.toRepresentation(user, document, uriInfo).toSpaceRepresentation();
+        updateDocument(data.getAttributes(), sessionUser, document);
+        return modelToRepresentation.toRepresentation(sessionUser, document, uriInfo).toSpaceRepresentation();
     }
 
-    @PATCH
-    @Path("massive")
-    @Produces(MediaType.APPLICATION_JSON)
-    public void updateDocuments(@Context final HttpServletRequest httpServletRequest,
-                                GenericDataRepresentation<List<DocumentRepresentation.Data>> representation) {
-        UserModel user = getUser(httpServletRequest);
-
-        representation.getData().forEach(documentRepresentation -> {
-            DocumentModel document = null;
-            try {
-                document = getDocumentById(user, documentRepresentation.getId());
-            } catch (ModelForbiddenException forbiddenExceptionModel) {
-                throw new ForbiddenException("User not allowed to access this document");
-            }
-            updateDocument(documentRepresentation.getAttributes(), user, document);
-        });
-    }
 
     private void updateDocument(DocumentRepresentation.Attributes attributes, UserModel user, DocumentModel document) {
         if (attributes.getViewed() != null) {
@@ -366,99 +310,18 @@ public class DocumentsService {
     }
 
     @GET
-    @Path("/massive/download")
-    @Produces("application/zip")
-    public Response downloadDocuments(@Context final HttpServletRequest httpServletRequest,
-                                      @QueryParam("documents") List<String> documentsId) {
-        UserModel user = getUser(httpServletRequest);
-
-        ZipBuilder zipInMemory = ZipBuilder.createZipInMemory();
-        documentsId.stream()
-                .map(documentId -> {
-                    try {
-                        return getDocumentById(user, documentId);
-                    } catch (ModelForbiddenException forbiddenExceptionModel) {
-                        throw new ForbiddenException("User not allowed to access this document");
-                    }
-                })
-                .forEach(document -> {
-                    FileModel file = document.getCurrentVersion().getImportedDocument().getFile();
-                    try {
-                        zipInMemory.add(file.getFile()).path(document.getAssignedId()).save();
-                    } catch (IOException e) {
-                        logger.error("Could not add file to zip", e);
-                    }
-                });
-
-        byte[] zip = zipInMemory.toBytes();
-
-        Response.ResponseBuilder response = Response.ok(zip);
-        response.header("Content-Disposition", "attachment; filename=\"" + "files" + ".zip\"");
-        return response.build();
-    }
-
-    @GET
-    @Path("/massive/print")
-    @Produces("application/zip")
-    public Response printDocuments(
-            @Context final HttpServletRequest httpServletRequest,
-            @QueryParam("documents") List<String> documentsId,
-            @QueryParam("theme") String theme,
-            @QueryParam("format") @DefaultValue("PDF") String format
-    ) {
-        UserModel user = getUser(httpServletRequest);
-
-        //
-        ExportFormat exportFormat = ExportFormat.valueOf(format.toUpperCase());
-
-        Set<DocumentModel> documents = documentsId.stream()
-                .map(documentId -> {
-                    try {
-                        return getDocumentById(user, documentId);
-                    } catch (ModelForbiddenException forbiddenExceptionModel) {
-                        throw new ForbiddenException("User not allowed to access this document");
-                    }
-                })
-                .collect(Collectors.toSet());
-
-        ReportTemplateConfiguration reportConfig = ReportTemplateConfiguration.builder()
-                .themeName(theme)
-                .locale(user.getDefaultLanguage() != null ? new Locale(user.getDefaultLanguage()) : Locale.ENGLISH)
-                .build();
-
-        ZipBuilder zipInMemory = ZipBuilder.createZipInMemory();
-        for (DocumentModel document : documents) {
-            try {
-                byte[] bytes = reportTemplateProvider.getReport(reportConfig, document, exportFormat);
-                zipInMemory.add(bytes).path(document.getAssignedId() + "." + exportFormat.getExtension()).save();
-            } catch (ReportException e) {
-                logger.error("Could not generate a report", e);
-            } catch (IOException e) {
-                logger.error("Could not add file to zip", e);
-            }
-        }
-        byte[] zip = zipInMemory.toBytes();
-
-        Response.ResponseBuilder response = Response.ok(zip);
-        response.header("Content-Disposition", "attachment; filename=\"" + "file" + ".zip\"");
-        return response.build();
-    }
-
-    @GET
     @Path("/{documentId}/download")
     @Produces("application/xml")
-    public Response getXml(@Context final HttpServletRequest httpServletRequest,
-                           @PathParam("documentId") String documentId) {
-        UserModel user = getUser(httpServletRequest);
-        DocumentModel document;
-        try {
-            document = getDocumentById(user, documentId);
-        } catch (ModelForbiddenException forbiddenExceptionModel) {
-            throw new ForbiddenException("User not allowed to access this document");
+    public Response getXml(
+            @Context final HttpServletRequest httpServletRequest,
+            @PathParam("documentId") String documentId) {
+        UserModel sessionUser = getUserSession(httpServletRequest);
+        DocumentModel document = getDocumentById(sessionUser, documentId);
+        if (!isUserAllowedToViewDocument(sessionUser, document)) {
+            throw new ForbiddenException();
         }
 
         FileModel file = document.getCurrentVersion().getImportedDocument().getFile();
-
         byte[] reportBytes = file.getFile();
 
         Response.ResponseBuilder response = Response.ok(reportBytes);
@@ -473,19 +336,17 @@ public class DocumentsService {
             @PathParam("documentId") String documentId,
             @QueryParam("theme") String theme,
             @QueryParam("format") @DefaultValue("PDF") String format) {
-        UserModel user = getUser(httpServletRequest);
-        DocumentModel document = null;
-        try {
-            document = getDocumentById(user, documentId);
-        } catch (ModelForbiddenException forbiddenExceptionModel) {
-            throw new ForbiddenException("User not allowed to access this document");
+        UserModel sessionUser = getUserSession(httpServletRequest);
+        DocumentModel document = getDocumentById(sessionUser, documentId);
+        if (!isUserAllowedToViewDocument(sessionUser, document)) {
+            throw new ForbiddenException();
         }
 
-        //
+
         ExportFormat exportFormat = ExportFormat.valueOf(format.toUpperCase());
         ReportTemplateConfiguration reportConfig = ReportTemplateConfiguration.builder()
                 .themeName(theme)
-                .locale(user.getDefaultLanguage() != null ? new Locale(user.getDefaultLanguage()) : Locale.ENGLISH)
+                .locale(sessionUser.getDefaultLanguage() != null ? new Locale(sessionUser.getDefaultLanguage()) : Locale.ENGLISH)
                 .build();
 
         byte[] reportBytes;

@@ -39,7 +39,10 @@ public class DocumentSearchMappingFactory {
 
                 /*
                  * Additional information */
-                .property("assignedId", ElementType.FIELD).field().name("assignedId").analyze(Analyze.NO).sortableField()
+                .property("assignedId", ElementType.FIELD)
+                .field().name("assignedId").analyze(Analyze.NO).sortableField()
+                .field().name("nGramAssignedId").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteNGramAnalyzer")
+                .field().name("edgeNGramAssignedId").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteEdgeAnalyzer")
 
                 .property("amount", ElementType.FIELD)
                 .field().name("amount").analyze(Analyze.NO).sortableField()

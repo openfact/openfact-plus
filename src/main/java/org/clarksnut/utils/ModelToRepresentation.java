@@ -56,7 +56,7 @@ public class ModelToRepresentation {
         return rep;
     }
 
-    public SpaceRepresentation.Data toRepresentation(SpaceModel model, UriInfo uriInfo) {
+    public SpaceRepresentation.Data toRepresentation(SpaceModel model, UriInfo uriInfo, boolean fullInfo) {
         SpaceRepresentation.Data rep = new SpaceRepresentation.Data();
 
         rep.setId(model.getId());
@@ -64,36 +64,38 @@ public class ModelToRepresentation {
 
         // Links
         GenericLinksRepresentation links = new GenericLinksRepresentation();
+        rep.setLinks(links);
+
         URI self = uriInfo.getBaseUriBuilder()
                 .path(SpacesService.class)
                 .path(SpacesService.class, "getSpace")
                 .build(model.getId());
         links.setSelf(self.toString());
 
-        rep.setLinks(links);
-
         // Relationships
         SpaceRepresentation.Relationships relationships = new SpaceRepresentation.Relationships();
         rep.setRelationships(relationships);
 
-        // Owner
+        // Relationships Owner
         UserModel ownerUser = model.getOwner();
-        UserRepresentation.Data userData = new UserRepresentation.Data();
-        userData.setId(ownerUser.getId());
-        userData.setType(ModelType.IDENTITIES.getAlias());
-        userData.setScope(PermissionType.OWNER.toString());
 
         SpaceRepresentation.OwnedBy ownedBy = new SpaceRepresentation.OwnedBy();
-        ownedBy.setData(userData); // save
+        relationships.setOwnedBy(ownedBy);
+
+        UserRepresentation.Data ownerData = new UserRepresentation.Data();
+        ownedBy.setData(ownerData);
+
+        ownerData.setId(ownerUser.getId());
+        ownerData.setType(ModelType.IDENTITIES.getAlias());
+        ownerData.setScope(PermissionType.OWNER.toString());
 
         GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
+        ownedBy.setLinks(ownedLinks);
+
         ownedLinks.setSelf(uriInfo.getBaseUriBuilder()
                 .path(UsersService.class)
                 .path(UsersService.class, "getUser")
                 .build(ownerUser.getId()).toString());
-        ownedBy.setLinks(ownedLinks); // save
-
-        relationships.setOwnedBy(ownedBy);
 
         // Attributes
         SpaceRepresentation.Attributes attributes = new SpaceRepresentation.Attributes();
@@ -101,9 +103,12 @@ public class ModelToRepresentation {
 
         attributes.setName(model.getName());
         attributes.setAssignedId(model.getAssignedId());
-        attributes.setDescription(model.getDescription());
-        attributes.setCreatedAt(model.getCreatedAt());
-        attributes.setUpdatedAt(model.getUpdatedAt());
+
+        if (fullInfo) {
+            attributes.setDescription(model.getDescription());
+            attributes.setCreatedAt(model.getCreatedAt());
+            attributes.setUpdatedAt(model.getUpdatedAt());
+        }
 
         return rep;
     }
