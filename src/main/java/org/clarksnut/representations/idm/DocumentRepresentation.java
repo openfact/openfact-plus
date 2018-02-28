@@ -294,18 +294,18 @@ public class DocumentRepresentation {
 
     public static class DocumentRelationships {
         @JsonProperty("owned-by")
-        private OwnedBy ownedBy;
+        private DocumentOwnedBy ownedBy;
 
-        public OwnedBy getOwnedBy() {
+        public DocumentOwnedBy getOwnedBy() {
             return ownedBy;
         }
 
-        public void setOwnedBy(OwnedBy ownedBy) {
+        public void setOwnedBy(DocumentOwnedBy ownedBy) {
             this.ownedBy = ownedBy;
         }
     }
 
-    public static class OwnedBy {
+    public static class DocumentOwnedBy {
         private List<SpaceRepresentation.SpaceData> data;
 
         public List<SpaceRepresentation.SpaceData> getData() {
