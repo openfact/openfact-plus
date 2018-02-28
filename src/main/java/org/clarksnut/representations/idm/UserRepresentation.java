@@ -4,24 +4,24 @@ import java.util.Date;
 
 public class UserRepresentation {
 
-    private Data data;
+    private UserData data;
 
     public UserRepresentation() {
     }
 
-    public UserRepresentation(Data data) {
+    public UserRepresentation(UserData data) {
         this.data = data;
     }
 
-    public Data getData() {
+    public UserData getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(UserData data) {
         this.data = data;
     }
 
-    public static class Data {
+    public static class UserData {
         private String id;
         private String type;
         private UserAttributesRepresentation attributes;

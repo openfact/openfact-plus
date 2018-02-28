@@ -52,7 +52,7 @@ public class ProfileSpacesService extends AbstractResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Get Spaces of user", notes = "This will search owned and collaborated spaces. [user] role required")
-    public GenericDataRepresentation<List<SpaceRepresentation.Data>> getUserSpaces(
+    public GenericDataRepresentation<List<SpaceRepresentation.SpaceData>> getUserSpaces(
             @ApiParam(value = "Role", allowableValues = "owner, collaborator") @QueryParam("role") @DefaultValue("owner") String role,
             @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
         UserModel sessionUser = getUserSession(httpServletRequest);
@@ -70,7 +70,7 @@ public class ProfileSpacesService extends AbstractResource {
                 throw new ErrorResponseException("Invalid Role", Response.Status.BAD_REQUEST);
         }
 
-        List<SpaceRepresentation.Data> spacesData = spaces.stream()
+        List<SpaceRepresentation.SpaceData> spacesData = spaces.stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo, true))
                 .collect(Collectors.toList());
         return new GenericDataRepresentation<>(spacesData);
@@ -113,8 +113,8 @@ public class ProfileSpacesService extends AbstractResource {
             throw new ForbiddenException();
         }
 
-        SpaceRepresentation.Data data = spaceRepresentation.getData();
-        SpaceRepresentation.Attributes attributes = data.getAttributes();
+        SpaceRepresentation.SpaceData data = spaceRepresentation.getData();
+        SpaceRepresentation.SpaceAttributes attributes = data.getAttributes();
         if (attributes.getName() != null) {
             space.setName(attributes.getName());
         }
@@ -147,8 +147,8 @@ public class ProfileSpacesService extends AbstractResource {
     @GET
     @Path("{spaceId}/collaborators")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Get Space Collaborators", notes = "Accessed just by the owner, the owner is identified by current token. [user] role required")
-    public GenericDataRepresentation<List<UserRepresentation.Data>> getSpaceCollaborators(
+    @ApiOperation(value = "Get Space SpaceCollaborators", notes = "Accessed just by the owner, the owner is identified by current token. [user] role required")
+    public GenericDataRepresentation<List<UserRepresentation.UserData>> getSpaceCollaborators(
             @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
             @ApiParam(value = "First result") @QueryParam("offset") @DefaultValue("0") int offset,
             @ApiParam(value = "Max results") @QueryParam("limit") @DefaultValue("10") int limit,
@@ -205,11 +205,11 @@ public class ProfileSpacesService extends AbstractResource {
     @POST
     @Path("{spaceId}/collaborators")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Add Space Collaborators", notes = "Accessed just by the owner, the owner is identified by current token. [user] role required")
+    @ApiOperation(value = "Add Space SpaceCollaborators", notes = "Accessed just by the owner, the owner is identified by current token. [user] role required")
     public void addSpaceCollaborators(
             @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
             @Context HttpServletRequest httpServletRequest,
-            final TypedGenericDataRepresentation<List<UserRepresentation.Data>> representation) throws ErrorResponseException {
+            final TypedGenericDataRepresentation<List<UserRepresentation.UserData>> representation) throws ErrorResponseException {
         UserModel sessionUser = getUserSession(httpServletRequest);
 
         SpaceModel space = getSpaceById(spaceId);
@@ -220,7 +220,7 @@ public class ProfileSpacesService extends AbstractResource {
             throw new ForbiddenException();
         }
 
-        for (UserRepresentation.Data data : representation.getData()) {
+        for (UserRepresentation.UserData data : representation.getData()) {
             UserModel newCollaborator = userProvider.getUserByUsername(data.getAttributes().getUsername());
             if (!currentCollaborators.contains(newCollaborator)) {
                 space.addCollaborators(newCollaborator);
@@ -233,7 +233,7 @@ public class ProfileSpacesService extends AbstractResource {
     @DELETE
     @Path("{spaceId}/collaborators/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Remove Space Collaborators", notes = "Accessed just by the owner, the owner is identified by current token. [user] role required")
+    @ApiOperation(value = "Remove Space SpaceCollaborators", notes = "Accessed just by the owner, the owner is identified by current token. [user] role required")
     public Response removeSpaceCollaborators(
             @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
             @ApiParam(value = "User Id") @PathParam("userId") String userId,

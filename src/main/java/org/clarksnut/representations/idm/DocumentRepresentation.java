@@ -306,13 +306,13 @@ public class DocumentRepresentation {
     }
 
     public static class OwnedBy {
-        private List<SpaceRepresentation.Data> data;
+        private List<SpaceRepresentation.SpaceData> data;
 
-        public List<SpaceRepresentation.Data> getData() {
+        public List<SpaceRepresentation.SpaceData> getData() {
             return data;
         }
 
-        public void setData(List<SpaceRepresentation.Data> data) {
+        public void setData(List<SpaceRepresentation.SpaceData> data) {
             this.data = data;
         }
 

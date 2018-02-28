@@ -94,8 +94,8 @@ public class DocumentsService extends AbstractResource {
             @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
         UserModel sessionUser = getUserSession(httpServletRequest);
 
-        DocumentQueryRepresentation.Data queryData = query.getData();
-        DocumentQueryRepresentation.Attributes queryAttributes = queryData.getAttributes();
+        DocumentQueryRepresentation.DocumentQueryData queryData = query.getData();
+        DocumentQueryRepresentation.DocumentQueryAttributes queryAttributes = queryData.getAttributes();
         Set<SpaceModel> spaces = filterAllowedSpaces(sessionUser, queryData.getAttributes().getSpaces());
 
 

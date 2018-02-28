@@ -6,13 +6,8 @@ import io.swagger.annotations.ApiParam;
 import org.clarksnut.models.*;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.SpaceRepresentation;
-import org.clarksnut.representations.idm.TypedGenericDataRepresentation;
-import org.clarksnut.representations.idm.UserRepresentation;
-import org.clarksnut.services.ErrorResponse;
 import org.clarksnut.services.ErrorResponseException;
-import org.clarksnut.services.resources.utils.PATCH;
 import org.clarksnut.utils.ModelToRepresentation;
-import org.wildfly.swarm.swagger.SwaggerConfig;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -52,11 +47,11 @@ public class SpacesService extends AbstractResource {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Create Space", notes = "This will create a space. [user] role required")
     public Response createSpace(final SpaceRepresentation spaceRepresentation) throws ErrorResponseException {
-        SpaceRepresentation.Data data = spaceRepresentation.getData();
-        SpaceRepresentation.Attributes attributes = data.getAttributes();
-        SpaceRepresentation.Relationships relationships = data.getRelationships();
+        SpaceRepresentation.SpaceData data = spaceRepresentation.getData();
+        SpaceRepresentation.SpaceAttributes attributes = data.getAttributes();
+        SpaceRepresentation.SpaceRelationships relationships = data.getRelationships();
 
-        SpaceRepresentation.OwnedBy ownedBy = relationships.getOwnedBy();
+        SpaceRepresentation.SpaceOwnedBy ownedBy = relationships.getOwnedBy();
         UserModel owner = userProvider.getUser(ownedBy.getData().getId());
 
         // Create space
@@ -67,14 +62,14 @@ public class SpacesService extends AbstractResource {
         SpaceModel space = spaceProvider.addSpace(owner, attributes.getAssignedId(), attributes.getName());
         space.setDescription(attributes.getDescription());
 
-        SpaceRepresentation.Data createdSpaceRepresentation = modelToRepresentation.toRepresentation(space, uriInfo, true);
+        SpaceRepresentation.SpaceData createdSpaceRepresentation = modelToRepresentation.toRepresentation(space, uriInfo, true);
         return Response.status(Response.Status.CREATED).entity(createdSpaceRepresentation.toSpaceRepresentation()).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Get Spaces", notes = "This will search spaces. [view-spaces] role required")
-    public GenericDataRepresentation<List<SpaceRepresentation.Data>> getSpaces(
+    public GenericDataRepresentation<List<SpaceRepresentation.SpaceData>> getSpaces(
             @ApiParam(value = "Space Assigned Id") @QueryParam("assignedId") String assignedId,
             @ApiParam(value = "Full text search value") @QueryParam("q") @DefaultValue("*") String searchText,
             @ApiParam(value = "First result") @QueryParam("offset") @DefaultValue("0") int offset,
@@ -83,7 +78,7 @@ public class SpacesService extends AbstractResource {
         if (assignedId != null) {
             SpaceModel space = spaceProvider.getByAssignedId(assignedId);
 
-            SpaceRepresentation.Data spaceData = modelToRepresentation.toRepresentation(space, uriInfo, false);
+            SpaceRepresentation.SpaceData spaceData = modelToRepresentation.toRepresentation(space, uriInfo, false);
             return new GenericDataRepresentation<>(Collections.singletonList(spaceData));
         }
 
@@ -93,7 +88,7 @@ public class SpacesService extends AbstractResource {
             }
         }
 
-        List<SpaceRepresentation.Data> spacesData = spaceProvider.getSpaces(searchText, offset, limit).stream()
+        List<SpaceRepresentation.SpaceData> spacesData = spaceProvider.getSpaces(searchText, offset, limit).stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo, false))
                 .collect(Collectors.toList());
         return new GenericDataRepresentation<>(spacesData);

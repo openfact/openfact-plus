@@ -6,22 +6,16 @@ import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.UserRepresentation;
-import org.clarksnut.services.resources.utils.PATCH;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.representations.AccessToken;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -53,7 +47,7 @@ public class UsersService extends AbstractResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Get Users", notes = "This will search users. [view-users] role required")
-    public GenericDataRepresentation<List<UserRepresentation.Data>> getUsers(
+    public GenericDataRepresentation<List<UserRepresentation.UserData>> getUsers(
             @ApiParam(value = "Username") @QueryParam("username") String username) {
         QueryModel.Builder queryBuilder = QueryModel.builder();
 
@@ -61,7 +55,7 @@ public class UsersService extends AbstractResource {
             queryBuilder.addFilter(UserModel.USERNAME, username);
         }
 
-        List<UserRepresentation.Data> data = userProvider.getUsers(queryBuilder.build())
+        List<UserRepresentation.UserData> data = userProvider.getUsers(queryBuilder.build())
                 .stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo, false))
                 .collect(Collectors.toList());

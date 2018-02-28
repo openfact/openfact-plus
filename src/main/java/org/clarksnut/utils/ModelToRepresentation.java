@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 @Stateless
 public class ModelToRepresentation {
 
-    public UserRepresentation.Data toRepresentation(UserModel model, UriInfo uriInfo, boolean fullInfo) {
-        UserRepresentation.Data rep = new UserRepresentation.Data();
+    public UserRepresentation.UserData toRepresentation(UserModel model, UriInfo uriInfo, boolean fullInfo) {
+        UserRepresentation.UserData rep = new UserRepresentation.UserData();
 
         rep.setId(model.getId());
         rep.setType(ModelType.IDENTITIES.getAlias());
@@ -55,8 +55,8 @@ public class ModelToRepresentation {
         return rep;
     }
 
-    public SpaceRepresentation.Data toRepresentation(SpaceModel model, UriInfo uriInfo, boolean fullInfo) {
-        SpaceRepresentation.Data rep = new SpaceRepresentation.Data();
+    public SpaceRepresentation.SpaceData toRepresentation(SpaceModel model, UriInfo uriInfo, boolean fullInfo) {
+        SpaceRepresentation.SpaceData rep = new SpaceRepresentation.SpaceData();
 
         rep.setId(model.getId());
         rep.setType(ModelType.SPACES.getAlias());
@@ -72,16 +72,16 @@ public class ModelToRepresentation {
         links.setSelf(self.toString());
 
         // Relationships
-        SpaceRepresentation.Relationships relationships = new SpaceRepresentation.Relationships();
+        SpaceRepresentation.SpaceRelationships relationships = new SpaceRepresentation.SpaceRelationships();
         rep.setRelationships(relationships);
 
         // Relationships Owner
         UserModel ownerUser = model.getOwner();
 
-        SpaceRepresentation.OwnedBy ownedBy = new SpaceRepresentation.OwnedBy();
+        SpaceRepresentation.SpaceOwnedBy ownedBy = new SpaceRepresentation.SpaceOwnedBy();
         relationships.setOwnedBy(ownedBy);
 
-        UserRepresentation.Data ownerData = new UserRepresentation.Data();
+        UserRepresentation.UserData ownerData = new UserRepresentation.UserData();
         ownedBy.setData(ownerData);
 
         ownerData.setId(ownerUser.getId());
@@ -96,7 +96,7 @@ public class ModelToRepresentation {
                 .build(ownerUser.getId()).toString());
 
         // Attributes
-        SpaceRepresentation.Attributes attributes = new SpaceRepresentation.Attributes();
+        SpaceRepresentation.SpaceAttributes attributes = new SpaceRepresentation.SpaceAttributes();
         rep.setAttributes(attributes);
 
         attributes.setName(model.getName());
@@ -167,14 +167,14 @@ public class ModelToRepresentation {
         return rep;
     }
 
-    public RequestRepresentation.Data toRepresentation(RequestModel model) {
-        RequestRepresentation.Data rep = new RequestRepresentation.Data();
+    public RequestRepresentation.RequestData toRepresentation(RequestModel model) {
+        RequestRepresentation.RequestData rep = new RequestRepresentation.RequestData();
 
         rep.setId(model.getId());
         rep.setType(ModelType.REQUEST_ACCESS.getAlias());
 
         // Attributes
-        RequestRepresentation.Attributes attributes = new RequestRepresentation.Attributes();
+        RequestRepresentation.RequestAttributes attributes = new RequestRepresentation.RequestAttributes();
         rep.setAttributes(attributes);
 
         attributes.setSpace(model.getSpace().getId());
@@ -188,12 +188,12 @@ public class ModelToRepresentation {
         return rep;
     }
 
-    public PartyRepresentation.Data toRepresentation(PartyModel party) {
-        PartyRepresentation.Data rep = new PartyRepresentation.Data();
+    public PartyRepresentation.PartyData toRepresentation(PartyModel party) {
+        PartyRepresentation.PartyData rep = new PartyRepresentation.PartyData();
         rep.setId(party.getId());
         rep.setType(ModelType.PARTIES.getAlias());
 
-        PartyRepresentation.Attributes attributes = new PartyRepresentation.Attributes();
+        PartyRepresentation.PartyAttributes attributes = new PartyRepresentation.PartyAttributes();
         rep.setAttributes(attributes);
 
         attributes.setName(party.getName());

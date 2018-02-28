@@ -9,26 +9,26 @@ public class DocumentQueryRepresentation {
         SENDER, RECEIVER
     }
 
-    private Data data;
+    private DocumentQueryData data;
 
     public DocumentQueryRepresentation() {
     }
 
-    public DocumentQueryRepresentation(DocumentQueryRepresentation.Data data) {
+    public DocumentQueryRepresentation(DocumentQueryData data) {
         this.data = data;
     }
 
-    public DocumentQueryRepresentation.Data getData() {
+    public DocumentQueryData getData() {
         return data;
     }
 
-    public void setData(DocumentQueryRepresentation.Data data) {
+    public void setData(DocumentQueryData data) {
         this.data = data;
     }
 
-    public static class Data {
+    public static class DocumentQueryData {
         private String type;
-        private DocumentQueryRepresentation.Attributes attributes;
+        private DocumentQueryAttributes attributes;
 
         public String getType() {
             return type;
@@ -38,16 +38,16 @@ public class DocumentQueryRepresentation {
             this.type = type;
         }
 
-        public DocumentQueryRepresentation.Attributes getAttributes() {
+        public DocumentQueryAttributes getAttributes() {
             return attributes;
         }
 
-        public void setAttributes(DocumentQueryRepresentation.Attributes attributes) {
+        public void setAttributes(DocumentQueryAttributes attributes) {
             this.attributes = attributes;
         }
     }
 
-    public static class Attributes {
+    public static class DocumentQueryAttributes {
         private SpaceRole role;
         private String filterText;
 

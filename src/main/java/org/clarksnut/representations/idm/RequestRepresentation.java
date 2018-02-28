@@ -4,27 +4,27 @@ import java.util.Date;
 
 public class RequestRepresentation {
 
-    private RequestRepresentation.Data data;
+    private RequestData data;
 
     public RequestRepresentation() {
     }
 
-    public RequestRepresentation(RequestRepresentation.Data data) {
+    public RequestRepresentation(RequestData data) {
         this.data = data;
     }
 
-    public RequestRepresentation.Data getData() {
+    public RequestData getData() {
         return data;
     }
 
-    public void setData(RequestRepresentation.Data data) {
+    public void setData(RequestData data) {
         this.data = data;
     }
 
-    public static class Data {
+    public static class RequestData {
         private String id;
         private String type;
-        private RequestRepresentation.Attributes attributes;
+        private RequestAttributes attributes;
 
         public RequestRepresentation toRequestAccessSpaceToRepresentation() {
             return new RequestRepresentation(this);
@@ -46,16 +46,16 @@ public class RequestRepresentation {
             this.type = type;
         }
 
-        public RequestRepresentation.Attributes getAttributes() {
+        public RequestAttributes getAttributes() {
             return attributes;
         }
 
-        public void setAttributes(RequestRepresentation.Attributes attributes) {
+        public void setAttributes(RequestAttributes attributes) {
             this.attributes = attributes;
         }
     }
 
-    public static class Attributes {
+    public static class RequestAttributes {
         private String space;
         private String user;
 

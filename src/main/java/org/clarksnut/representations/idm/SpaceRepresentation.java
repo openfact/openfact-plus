@@ -4,28 +4,28 @@ import java.util.Date;
 
 public class SpaceRepresentation {
 
-    private Data data;
+    private SpaceData data;
 
     public SpaceRepresentation() {
     }
 
-    public SpaceRepresentation(Data data) {
+    public SpaceRepresentation(SpaceData data) {
         this.data = data;
     }
 
-    public Data getData() {
+    public SpaceData getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(SpaceData data) {
         this.data = data;
     }
 
-    public static class Data {
+    public static class SpaceData {
         private String id;
         private String type;
-        private Attributes attributes;
-        private Relationships relationships;
+        private SpaceAttributes attributes;
+        private SpaceRelationships relationships;
         private GenericLinksRepresentation links;
 
         public SpaceRepresentation toSpaceRepresentation() {
@@ -48,19 +48,19 @@ public class SpaceRepresentation {
             this.type = type;
         }
 
-        public Attributes getAttributes() {
+        public SpaceAttributes getAttributes() {
             return attributes;
         }
 
-        public void setAttributes(Attributes attributes) {
+        public void setAttributes(SpaceAttributes attributes) {
             this.attributes = attributes;
         }
 
-        public Relationships getRelationships() {
+        public SpaceRelationships getRelationships() {
             return relationships;
         }
 
-        public void setRelationships(Relationships relationships) {
+        public void setRelationships(SpaceRelationships relationships) {
             this.relationships = relationships;
         }
 
@@ -73,7 +73,7 @@ public class SpaceRepresentation {
         }
     }
 
-    public static class Attributes {
+    public static class SpaceAttributes {
         private String name;
         private String assignedId;
         private String description;
@@ -123,36 +123,36 @@ public class SpaceRepresentation {
         }
     }
 
-    public static class Relationships {
-        private OwnedBy ownedBy;
-        private Collaborators collaborators;
+    public static class SpaceRelationships {
+        private SpaceOwnedBy ownedBy;
+        private SpaceCollaborators collaborators;
 
-        public OwnedBy getOwnedBy() {
+        public SpaceOwnedBy getOwnedBy() {
             return ownedBy;
         }
 
-        public void setOwnedBy(OwnedBy ownedBy) {
+        public void setOwnedBy(SpaceOwnedBy ownedBy) {
             this.ownedBy = ownedBy;
         }
 
-        public Collaborators getCollaborators() {
+        public SpaceCollaborators getCollaborators() {
             return collaborators;
         }
 
-        public void setCollaborators(Collaborators collaborators) {
+        public void setCollaborators(SpaceCollaborators collaborators) {
             this.collaborators = collaborators;
         }
     }
 
-    public static class OwnedBy {
-        private UserRepresentation.Data data;
+    public static class SpaceOwnedBy {
+        private UserRepresentation.UserData data;
         private GenericLinksRepresentation links;
 
-        public UserRepresentation.Data getData() {
+        public UserRepresentation.UserData getData() {
             return data;
         }
 
-        public void setData(UserRepresentation.Data data) {
+        public void setData(UserRepresentation.UserData data) {
             this.data = data;
         }
 
@@ -165,7 +165,7 @@ public class SpaceRepresentation {
         }
     }
 
-    public static class Collaborators {
+    public static class SpaceCollaborators {
         private GenericLinksRepresentation links;
 
         public GenericLinksRepresentation getLinks() {

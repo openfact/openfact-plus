@@ -75,18 +75,18 @@ public class RequestsService extends AbstractResource {
         AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
         UserModel user = getUserByUsername(accessToken.getPreferredUsername());
 
-        RequestRepresentation.Data data = representation.getData();
-        RequestRepresentation.Attributes attributes = data.getAttributes();
+        RequestRepresentation.RequestData data = representation.getData();
+        RequestRepresentation.RequestAttributes attributes = data.getAttributes();
         SpaceModel space = getSpaceById(attributes.getSpace());
 
         RequestModel request = requestProvider.addRequest(space, user, PermissionType.valueOf(attributes.getScope().toUpperCase()), attributes.getMessage());
-        RequestRepresentation.Data createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(request);
+        RequestRepresentation.RequestData createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(request);
         return Response.status(Response.Status.CREATED).entity(createdRequestAccessRepresentation.toRequestAccessSpaceToRepresentation()).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public GenericDataRepresentation<List<RequestRepresentation.Data>> getRequestAccess(@Context final HttpServletRequest httpServletRequest) {
+    public GenericDataRepresentation<List<RequestRepresentation.RequestData>> getRequestAccess(@Context final HttpServletRequest httpServletRequest) {
         UserModel user = getUserSession(httpServletRequest);
 
         return new GenericDataRepresentation<>(
@@ -105,8 +105,8 @@ public class RequestsService extends AbstractResource {
             final RequestRepresentation representation) {
         RequestModel request = getRequestById(requestId);
 
-        RequestRepresentation.Data data = representation.getData();
-        RequestRepresentation.Attributes attributes = data.getAttributes();
+        RequestRepresentation.RequestData data = representation.getData();
+        RequestRepresentation.RequestAttributes attributes = data.getAttributes();
 
         SpaceModel space = getSpaceById(attributes.getSpace());
 
@@ -124,7 +124,7 @@ public class RequestsService extends AbstractResource {
             }
         }
 
-        RequestRepresentation.Data createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(request);
+        RequestRepresentation.RequestData createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(request);
         return Response.status(Response.Status.OK).entity(createdRequestAccessRepresentation.toRequestAccessSpaceToRepresentation()).build();
     }
 }

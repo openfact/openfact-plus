@@ -2,27 +2,27 @@ package org.clarksnut.representations.idm;
 
 public class PartyRepresentation {
 
-    private Data data;
+    private PartyData data;
 
     public PartyRepresentation() {
     }
 
-    public PartyRepresentation(Data data) {
+    public PartyRepresentation(PartyData data) {
         this.data = data;
     }
 
-    public Data getData() {
+    public PartyData getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(PartyData data) {
         this.data = data;
     }
 
-    public static class Data {
+    public static class PartyData {
         private String id;
         private String type;
-        private Attributes attributes;
+        private PartyAttributes attributes;
 
         public PartyRepresentation toSpaceRepresentation() {
             return new PartyRepresentation(this);
@@ -44,17 +44,17 @@ public class PartyRepresentation {
             this.type = type;
         }
 
-        public Attributes getAttributes() {
+        public PartyAttributes getAttributes() {
             return attributes;
         }
 
-        public void setAttributes(Attributes attributes) {
+        public void setAttributes(PartyAttributes attributes) {
             this.attributes = attributes;
         }
 
     }
 
-    public static class Attributes {
+    public static class PartyAttributes {
         private String assignedId;
         private String name;
 

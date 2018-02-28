@@ -9,9 +9,6 @@ import org.clarksnut.representations.idm.PartyRepresentation;
 import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.representations.AccessToken;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -19,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,7 +39,7 @@ public class PartyService extends AbstractResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Get parties", notes = "This will search parties on allowed spaces and current user")
-    public GenericDataRepresentation<List<PartyRepresentation.Data>> getParties(
+    public GenericDataRepresentation<List<PartyRepresentation.PartyData>> getParties(
             @ApiParam(value = "Search text") @QueryParam("q") String searchText,
             @ApiParam(value = "First result") @QueryParam("offset") @DefaultValue("0") int offset,
             @ApiParam(value = "Max result") @QueryParam("limit") @DefaultValue("10") int limit,
@@ -52,7 +48,7 @@ public class PartyService extends AbstractResource {
         UserModel user = getUserSession(httpServletRequest);
         Set<SpaceModel> spaces = filterAllowedSpaces(user, spaceIds);
 
-        List<PartyRepresentation.Data> parties = partyProvider.getParties(searchText, limit, spaces.toArray(new SpaceModel[spaces.size()]))
+        List<PartyRepresentation.PartyData> parties = partyProvider.getParties(searchText, limit, spaces.toArray(new SpaceModel[spaces.size()]))
                 .stream()
                 .map(party -> modelToRepresentation.toRepresentation(party))
                 .collect(Collectors.toList());
