@@ -1,5 +1,6 @@
 package org.clarksnut.services.resources;
 
+import io.swagger.annotations.*;
 import org.clarksnut.models.QueryModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
@@ -25,8 +26,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless
-@Path("/users")
+@Path("/api/users")
 @Consumes(MediaType.APPLICATION_JSON)
+@Api(value = "Users", consumes = "application/json")
 public class UsersService extends AbstractResource {
 
     private static final Logger logger = Logger.getLogger(UsersService.class);
@@ -40,37 +42,20 @@ public class UsersService extends AbstractResource {
     @Inject
     private ModelToRepresentation modelToRepresentation;
 
-    private UserModel getUser(HttpServletRequest httpServletRequest) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
-        String username = accessToken.getPreferredUsername();
-
-        UserModel user = userProvider.getUserByUsername(username);
-        if (user == null) {
-            throw new NotFoundException();
-        }
-        return user;
-    }
-
     private UserModel getUserById(String id) {
         UserModel user = userProvider.getUser(id);
         if (user == null) {
+            logger.error("User with id=" + id + "not found");
             throw new NotFoundException();
         }
         return user;
     }
 
     @GET
-    @Path("{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public UserRepresentation getUser(@PathParam("userId") String userId) {
-        UserModel user = getUserById(userId);
-        return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public GenericDataRepresentation getUsers(@QueryParam("filterAllowedSpaces[username]") String username) {
+    @ApiOperation(value = "Get Users", notes = "This will search users. [view-users] role required")
+    public GenericDataRepresentation<List<UserRepresentation.Data>> getUsers(
+            @ApiParam(value = "Username") @QueryParam("username") String username) {
         QueryModel.Builder queryBuilder = QueryModel.builder();
 
         if (username != null) {
@@ -79,53 +64,19 @@ public class UsersService extends AbstractResource {
 
         List<UserRepresentation.Data> data = userProvider.getUsers(queryBuilder.build())
                 .stream()
-                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo))
+                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo, false))
                 .collect(Collectors.toList());
         return new GenericDataRepresentation<>(data);
     }
 
-    @PATCH
+    @GET
+    @Path("/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public UserRepresentation currentUser(@Context final HttpServletRequest httpServletRequest, final UserRepresentation userRepresentation) {
-        UserModel user = getUser(httpServletRequest);
-        UserAttributesRepresentation userAttributesRepresentation = userRepresentation.getData().getAttributes();
-
-        if (userAttributesRepresentation != null) {
-            // Is registration completed
-            Boolean registrationCompleted = userAttributesRepresentation.getRegistrationCompleted();
-            if (registrationCompleted != null) {
-                user.setRegistrationCompleted(registrationCompleted);
-            }
-
-            // Favorite Spaces
-            Set<String> favoriteSpaces = userAttributesRepresentation.getFavoriteSpaces();
-            if (favoriteSpaces != null && !favoriteSpaces.isEmpty()) {
-                user.setFavoriteSpaces(favoriteSpaces);
-            }
-
-            // Profile
-            if (userAttributesRepresentation.getFullName() != null) {
-                user.setFullName(userAttributesRepresentation.getFullName());
-            }
-            if (userAttributesRepresentation.getCompany() != null) {
-                user.setCompany(userAttributesRepresentation.getCompany());
-            }
-            if (userAttributesRepresentation.getImageURL() != null) {
-                user.setImageURL(userAttributesRepresentation.getImageURL());
-            }
-            if (userAttributesRepresentation.getUrl() != null) {
-                user.setUrl(userAttributesRepresentation.getUrl());
-            }
-            if (userAttributesRepresentation.getBio() != null) {
-                user.setBio(userAttributesRepresentation.getBio());
-            }
-
-            if (userAttributesRepresentation.getDefaultLanguage() != null) {
-                user.setDefaultLanguage(userAttributesRepresentation.getDefaultLanguage());
-            }
-        }
-
-        return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
+    @ApiOperation(value = "Get User", notes = "This will return the requested user. [view-users] role required")
+    public UserRepresentation getUser(
+            @ApiParam(value = "User Id") @PathParam("userId") String userId) {
+        UserModel user = getUserById(userId);
+        return modelToRepresentation.toRepresentation(user, uriInfo, false).toUserRepresentation();
     }
 
 }

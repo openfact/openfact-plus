@@ -22,7 +22,6 @@ public class UserRepresentation {
     public static class Data {
         private String id;
         private String type;
-        private String scope;
         private UserAttributesRepresentation attributes;
         private GenericLinksRepresentation links;
 
@@ -62,13 +61,6 @@ public class UserRepresentation {
             this.links = links;
         }
 
-        public String getScope() {
-            return scope;
-        }
-
-        public void setScope(String scope) {
-            this.scope = scope;
-        }
     }
 
 }

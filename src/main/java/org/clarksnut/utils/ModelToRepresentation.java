@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Stateless
 public class ModelToRepresentation {
 
-    public UserRepresentation.Data toRepresentation(UserModel model, UriInfo uriInfo) {
+    public UserRepresentation.Data toRepresentation(UserModel model, UriInfo uriInfo, boolean fullInfo) {
         UserRepresentation.Data rep = new UserRepresentation.Data();
 
         rep.setId(model.getId());
@@ -34,23 +34,22 @@ public class ModelToRepresentation {
         // Attributes
         UserAttributesRepresentation attributes = new UserAttributesRepresentation();
         attributes.setUserID(model.getId());
-        attributes.setProviderType(model.getProviderType());
         attributes.setUsername(model.getUsername());
         attributes.setFullName(model.getFullName());
-        attributes.setRegistrationCompleted(model.isRegistrationCompleted());
         attributes.setBio(model.getBio());
         attributes.setEmail(model.getEmail());
         attributes.setCompany(model.getCompany());
         attributes.setImageURL(model.getImageURL());
         attributes.setUrl(model.getUrl());
-        attributes.setCreatedAt(model.getCreatedAt());
-        attributes.setUpdatedAt(model.getUpdatedAt());
 
-        attributes.setFavoriteSpaces(model.getFavoriteSpaces());
-        attributes.setOwnedSpaces(model.getOwnedSpaces().stream().map(SpaceModel::getId).collect(Collectors.toSet()));
-        attributes.setCollaboratedSpaces(model.getCollaboratedSpaces().stream().map(SpaceModel::getId).collect(Collectors.toSet()));
+        if (fullInfo) {
+            attributes.setProviderType(model.getProviderType());
+            attributes.setDefaultLanguage(model.getDefaultLanguage());
+            attributes.setRegistrationCompleted(model.isRegistrationCompleted());
 
-        attributes.setDefaultLanguage(model.getDefaultLanguage());
+            attributes.setCreatedAt(model.getCreatedAt());
+            attributes.setUpdatedAt(model.getUpdatedAt());
+        }
 
         rep.setAttributes(attributes);
         return rep;
@@ -87,7 +86,6 @@ public class ModelToRepresentation {
 
         ownerData.setId(ownerUser.getId());
         ownerData.setType(ModelType.IDENTITIES.getAlias());
-        ownerData.setScope(PermissionType.OWNER.toString());
 
         GenericLinksRepresentation ownedLinks = new GenericLinksRepresentation();
         ownedBy.setLinks(ownedLinks);

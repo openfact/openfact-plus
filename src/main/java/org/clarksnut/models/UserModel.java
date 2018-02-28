@@ -54,7 +54,7 @@ public interface UserModel {
 
     Set<SpaceModel> getCollaboratedSpaces();
 
-    Set<SpaceModel> getAllPermitedSpaces();
+    Set<SpaceModel> getAllPermittedSpaces();
 
     Set<String> getFavoriteSpaces();
 

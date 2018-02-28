@@ -1,5 +1,8 @@
 package org.clarksnut.services.resources;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.clarksnut.files.FileModel;
 import org.clarksnut.files.uncompress.exceptions.NotReadableCompressFileException;
 import org.clarksnut.managers.ImportedDocumentManager;
@@ -12,10 +15,7 @@ import org.clarksnut.report.ExportFormat;
 import org.clarksnut.report.ReportTemplateConfiguration;
 import org.clarksnut.report.ReportTemplateProvider;
 import org.clarksnut.report.exceptions.ReportException;
-import org.clarksnut.representations.idm.DocumentQueryRepresentation;
-import org.clarksnut.representations.idm.DocumentRepresentation;
-import org.clarksnut.representations.idm.FacetRepresentation;
-import org.clarksnut.representations.idm.GenericDataRepresentation;
+import org.clarksnut.representations.idm.*;
 import org.clarksnut.services.ErrorResponse;
 import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.utils.ModelToRepresentation;
@@ -34,7 +34,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Stateless
-@Path("/documents")
+@Path("/api/documents")
+@Consumes(MediaType.APPLICATION_JSON)
+@Api(value = "Documents", consumes = "application/json")
 public class DocumentsService extends AbstractResource {
 
     private static final Logger logger = Logger.getLogger(DocumentsService.class);
@@ -64,11 +66,12 @@ public class DocumentsService extends AbstractResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public GenericDataRepresentation getDocuments(
-            @QueryParam("q") String searchText,
-            @QueryParam("offset") @DefaultValue("0") int offset,
-            @QueryParam("limit") @DefaultValue("10") int limit,
-            @QueryParam("space") List<String> spaceIds,
+    @ApiOperation(value = "Get Documents", notes = "This will search just on Owned and Collaborated Spaces")
+    public GenericDataRepresentation<List<DocumentRepresentation.Data>> getDocuments(
+            @ApiParam(value = "A text for filter results") @QueryParam("q") String searchText,
+            @ApiParam(value = "The first position of array results") @QueryParam("offset") @DefaultValue("0") int offset,
+            @ApiParam(value = "The max number of results") @QueryParam("limit") @DefaultValue("10") int limit,
+            @ApiParam(value = "List of space ids to search in. If null or empty all allowed spaces of user will be used") @QueryParam("space") List<String> spaceIds,
             @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
         UserModel sessionUser = getUserSession(httpServletRequest);
         Set<SpaceModel> spaces = filterAllowedSpaces(sessionUser, spaceIds);
@@ -85,7 +88,8 @@ public class DocumentsService extends AbstractResource {
     @POST
     @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response searchDocuments(
+    @ApiOperation(value = "Search Document", notes = "This will search document in advanced mode")
+    public GenericDataRepresentation<List<DocumentRepresentation.Data>> searchDocuments(
             DocumentQueryRepresentation query,
             @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
         UserModel sessionUser = getUserSession(httpServletRequest);
@@ -202,14 +206,15 @@ public class DocumentsService extends AbstractResource {
         // Links
         Map<String, String> links = new HashMap<>();
 
-        return Response.ok(new GenericDataRepresentation<>(result.getItems().stream()
+        return new GenericDataRepresentation<>(result.getItems().stream()
                 .map(document -> modelToRepresentation.toRepresentation(sessionUser, document, uriInfo))
-                .collect(Collectors.toList()), links, meta)).build();
+                .collect(Collectors.toList()), links, meta);
     }
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Import Document", notes = "This will import xml or compressed files")
     public Response importDocument(final MultipartFormDataInput multipartFormDataInput) throws ErrorResponseException {
         Map<String, List<InputPart>> formParts = multipartFormDataInput.getFormDataMap();
         List<InputPart> inputParts = formParts.get("file");
@@ -263,9 +268,10 @@ public class DocumentsService extends AbstractResource {
     @GET
     @Path("{documentId}")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Get Document", notes = "This will return a document")
     public DocumentRepresentation getDocument(
-            @Context final HttpServletRequest httpServletRequest,
-            @PathParam("documentId") String documentId) {
+            @ApiParam(value = "Document Id") @PathParam("documentId") String documentId,
+            @Context final HttpServletRequest httpServletRequest) {
         UserModel sessionUser = getUserSession(httpServletRequest);
         DocumentModel document = getDocumentById(sessionUser, documentId);
         if (isUserAllowedToViewDocument(sessionUser, document)) {
@@ -278,9 +284,10 @@ public class DocumentsService extends AbstractResource {
     @PUT
     @Path("{documentId}")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Update Document", notes = "This will update the document just for current user")
     public DocumentRepresentation updateDocument(
+            @ApiParam(value = "Document Id") @PathParam("documentId") String documentId,
             @Context final HttpServletRequest httpServletRequest,
-            @PathParam("documentId") String documentId,
             DocumentRepresentation documentRepresentation) {
         UserModel sessionUser = getUserSession(httpServletRequest);
         DocumentModel document = getDocumentById(sessionUser, documentId);
@@ -312,9 +319,10 @@ public class DocumentsService extends AbstractResource {
     @GET
     @Path("/{documentId}/download")
     @Produces("application/xml")
+    @ApiOperation(value = "Download Document", notes = "This will download the document")
     public Response getXml(
-            @Context final HttpServletRequest httpServletRequest,
-            @PathParam("documentId") String documentId) {
+            @ApiParam(value = "Document Id") @PathParam("documentId") String documentId,
+            @Context final HttpServletRequest httpServletRequest) {
         UserModel sessionUser = getUserSession(httpServletRequest);
         DocumentModel document = getDocumentById(sessionUser, documentId);
         if (!isUserAllowedToViewDocument(sessionUser, document)) {
@@ -331,11 +339,12 @@ public class DocumentsService extends AbstractResource {
 
     @GET
     @Path("/{documentId}/print")
+    @ApiOperation(value = "Print Document", notes = "This will print the document")
     public Response printDocument(
             @Context final HttpServletRequest httpServletRequest,
-            @PathParam("documentId") String documentId,
-            @QueryParam("theme") String theme,
-            @QueryParam("format") @DefaultValue("PDF") String format) {
+            @ApiParam(value = "Document Id") @PathParam("documentId") String documentId,
+            @ApiParam(value = "Theme") @QueryParam("theme") String theme,
+            @ApiParam(value = "format", allowableValues = "pdf, html") @QueryParam("format") @DefaultValue("pdf") String format) {
         UserModel sessionUser = getUserSession(httpServletRequest);
         DocumentModel document = getDocumentById(sessionUser, documentId);
         if (!isUserAllowedToViewDocument(sessionUser, document)) {

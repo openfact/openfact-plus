@@ -21,7 +21,7 @@ public class ESQueryParserTest {
 //
 //    @Test
 //    public void toQueryBuilderWithNotAllowedSpacesByUser() throws Exception {
-//        Mockito.when(user.getAllPermitedSpaces()).thenReturn(new HashSet<>());
+//        Mockito.when(user.getAllPermittedSpaces()).thenReturn(new HashSet<>());
 //
 //        DocumentQueryModel query = DocumentQueryModel.builder()
 //                .addFilter(new TermQuery(DocumentModel.CURRENCY, "PEN"))
@@ -29,7 +29,7 @@ public class ESQueryParserTest {
 //
 //        String esQuery = ESQueryParser.toQueryBuilder(user, query);
 //
-//        Mockito.verify(user, Mockito.atLeastOnce()).getAllPermitedSpaces();
+//        Mockito.verify(user, Mockito.atLeastOnce()).getAllPermittedSpaces();
 //        assertThat(esQuery).isNull();
 //    }
 //
@@ -40,7 +40,7 @@ public class ESQueryParserTest {
 //        permittedSpaces.add(new MockSpaceModel("10467793549"));
 //        permittedSpaces.add(new MockSpaceModel("123456789"));
 //
-//        Mockito.when(user.getAllPermitedSpaces()).thenReturn(permittedSpaces);
+//        Mockito.when(user.getAllPermittedSpaces()).thenReturn(permittedSpaces);
 //
 //        DocumentQueryModel query = DocumentQueryModel.builder()
 //                .addFilter(new TermQuery(DocumentModel.CURRENCY, "PEN"))
@@ -49,7 +49,7 @@ public class ESQueryParserTest {
 //        ESQueryParser parser = new ESQueryParser();
 //        String esQuery = ESQueryParser.toQueryBuilder(user, query, new MockSpaceModel("00000000"));
 //
-//        Mockito.verify(user, Mockito.atLeastOnce()).getAllPermitedSpaces();
+//        Mockito.verify(user, Mockito.atLeastOnce()).getAllPermittedSpaces();
 //        assertThat(esQuery).isNull();
 //    }
 //
@@ -60,7 +60,7 @@ public class ESQueryParserTest {
 //        permittedSpaces.add(new MockSpaceModel("10467793549"));
 //        permittedSpaces.add(new MockSpaceModel("123456789"));
 //
-//        Mockito.when(user.getAllPermitedSpaces()).thenReturn(permittedSpaces);
+//        Mockito.when(user.getAllPermittedSpaces()).thenReturn(permittedSpaces);
 //
 //        DocumentQueryModel query = DocumentQueryModel.builder()
 //                .addFilter(new TermQuery(DocumentModel.CURRENCY, "PEN"))
@@ -69,7 +69,7 @@ public class ESQueryParserTest {
 //        ESQueryParser parser = new ESQueryParser();
 //        String esQuery = ESQueryParser.toQueryBuilder(user, query, new MockSpaceModel("46779354"));
 //
-//        Mockito.verify(user, Mockito.atLeastOnce()).getAllPermitedSpaces();
+//        Mockito.verify(user, Mockito.atLeastOnce()).getAllPermittedSpaces();
 //        assertThat(esQuery).isNotNull();
 //
 //        assertThat(esQuery).isEqualTo("{\n" +
@@ -117,7 +117,7 @@ public class ESQueryParserTest {
 //        permittedSpaces.add(new MockSpaceModel("10467793549"));
 //        permittedSpaces.add(new MockSpaceModel("123456789"));
 //
-//        Mockito.when(user.getAllPermitedSpaces()).thenReturn(permittedSpaces);
+//        Mockito.when(user.getAllPermittedSpaces()).thenReturn(permittedSpaces);
 //
 //        DocumentQueryModel query = DocumentQueryModel.builder()
 //                .addUserDocumentFilter(new TermQuery(DocumentUserModel.VIEWED, true))
@@ -126,7 +126,7 @@ public class ESQueryParserTest {
 //        ESQueryParser parser = new ESQueryParser();
 //        String esQuery = ESQueryParser.toQueryBuilder(user, query, new MockSpaceModel("46779354"));
 //
-//        Mockito.verify(user, Mockito.atLeastOnce()).getAllPermitedSpaces();
+//        Mockito.verify(user, Mockito.atLeastOnce()).getAllPermittedSpaces();
 //        assertThat(esQuery).isNotNull();
 //
 //        assertThat(esQuery).isEqualTo("{\n" +
@@ -174,7 +174,7 @@ public class ESQueryParserTest {
 //        permittedSpaces.add(new MockSpaceModel("10467793549"));
 //        permittedSpaces.add(new MockSpaceModel("123456789"));
 //
-//        Mockito.when(user.getAllPermitedSpaces()).thenReturn(permittedSpaces);
+//        Mockito.when(user.getAllPermittedSpaces()).thenReturn(permittedSpaces);
 //
 //        DocumentQueryModel query = DocumentQueryModel.builder()
 //                .addFilter(new TermQuery(DocumentModel.TYPE, "Invoice"))
@@ -184,7 +184,7 @@ public class ESQueryParserTest {
 //        ESQueryParser parser = new ESQueryParser();
 //        String esQuery = ESQueryParser.toQueryBuilder(user, query, new MockSpaceModel("46779354"));
 //
-//        Mockito.verify(user, Mockito.atLeastOnce()).getAllPermitedSpaces();
+//        Mockito.verify(user, Mockito.atLeastOnce()).getAllPermittedSpaces();
 //        assertThat(esQuery).isNotNull();
 //
 //        assertThat(esQuery).isEqualTo("{\n" +

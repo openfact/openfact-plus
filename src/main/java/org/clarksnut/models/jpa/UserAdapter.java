@@ -166,7 +166,7 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     }
 
     @Override
-    public Set<SpaceModel> getAllPermitedSpaces() {
+    public Set<SpaceModel> getAllPermittedSpaces() {
         TypedQuery<CollaboratorEntity> query = em.createNamedQuery("getCollaboratorsByUserId", CollaboratorEntity.class);
         query.setParameter("userId", user.getId());
 

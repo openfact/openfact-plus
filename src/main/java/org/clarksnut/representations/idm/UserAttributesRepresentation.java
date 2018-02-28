@@ -9,14 +9,6 @@ public class UserAttributesRepresentation {
     // The id of the corresponding User
     private String userID;
 
-    // The date of creation of the user
-
-    private Date createdAt;
-
-    // The date of update of the user
-
-    private Date updatedAt;
-
     // The user's full name
     private String fullName;
 
@@ -44,15 +36,15 @@ public class UserAttributesRepresentation {
     // The IDP provided this identity
     private String providerType;
 
-    private List<SpaceRepresentation> spaces;
-
-    private String refreshToken;
-
-    private Set<String> favoriteSpaces;
-    private Set<String> ownedSpaces;
-    private Set<String> collaboratedSpaces;
-
     private String defaultLanguage;
+
+    // The date of creation of the user
+
+    private Date createdAt;
+
+    // The date of update of the user
+
+    private Date updatedAt;
 
     public String getUserID() {
         return userID;
@@ -148,46 +140,6 @@ public class UserAttributesRepresentation {
 
     public void setProviderType(String providerType) {
         this.providerType = providerType;
-    }
-
-    public List<SpaceRepresentation> getSpaces() {
-        return spaces;
-    }
-
-    public void setSpaces(List<SpaceRepresentation> spaces) {
-        this.spaces = spaces;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
-    public Set<String> getFavoriteSpaces() {
-        return favoriteSpaces;
-    }
-
-    public void setFavoriteSpaces(Set<String> favoriteSpaces) {
-        this.favoriteSpaces = favoriteSpaces;
-    }
-
-    public Set<String> getOwnedSpaces() {
-        return ownedSpaces;
-    }
-
-    public void setOwnedSpaces(Set<String> ownedSpaces) {
-        this.ownedSpaces = ownedSpaces;
-    }
-
-    public Set<String> getCollaboratedSpaces() {
-        return collaboratedSpaces;
-    }
-
-    public void setCollaboratedSpaces(Set<String> collaboratedSpaces) {
-        this.collaboratedSpaces = collaboratedSpaces;
     }
 
     public String getDefaultLanguage() {

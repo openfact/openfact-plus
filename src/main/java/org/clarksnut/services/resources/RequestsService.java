@@ -1,5 +1,6 @@
 package org.clarksnut.services.resources;
 
+import io.swagger.annotations.Api;
 import org.clarksnut.models.*;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.RequestRepresentation;
@@ -17,11 +18,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Stateless
 @Path("request-access")
 @Consumes(MediaType.APPLICATION_JSON)
+@Api(value = "Space Request Access", consumes = "application/json")
 public class RequestsService extends AbstractResource {
 
     @Context
@@ -83,7 +86,7 @@ public class RequestsService extends AbstractResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public GenericDataRepresentation getRequestAccess(@Context final HttpServletRequest httpServletRequest) {
+    public GenericDataRepresentation<List<RequestRepresentation.Data>> getRequestAccess(@Context final HttpServletRequest httpServletRequest) {
         UserModel user = getUserSession(httpServletRequest);
 
         return new GenericDataRepresentation<>(

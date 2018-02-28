@@ -1,5 +1,7 @@
 package org.clarksnut.services.resources;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.clarksnut.models.*;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.PartyRepresentation;
@@ -22,7 +24,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Stateless
-@Path("/parties")
+@Path("/api/parties")
+@Api(value = "Parties", consumes = "application/json")
 public class PartyService extends AbstractResource {
 
     private static final Logger logger = Logger.getLogger(PartyService.class);
@@ -38,7 +41,8 @@ public class PartyService extends AbstractResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public GenericDataRepresentation getParties(
+    @ApiOperation(value = "Get parties", notes = "This will search parties on allowed spaces")
+    public GenericDataRepresentation<List<PartyRepresentation.Data>> getParties(
             @QueryParam("q") String searchText,
             @QueryParam("offset") @DefaultValue("0") int offset,
             @QueryParam("limit") @DefaultValue("10") int limit,

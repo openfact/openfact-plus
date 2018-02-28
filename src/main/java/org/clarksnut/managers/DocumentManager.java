@@ -35,7 +35,7 @@ public class DocumentManager {
         DocumentModel document = documentProvider.getDocument(documentId);
         if (document == null) return null;
 
-        Set<String> permittedSpaceAssignedIds = user.getAllPermitedSpaces().stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet());
+        Set<String> permittedSpaceAssignedIds = user.getAllPermittedSpaces().stream().map(SpaceModel::getAssignedId).collect(Collectors.toSet());
         if (permittedSpaceAssignedIds.contains(document.getSupplierAssignedId()) || permittedSpaceAssignedIds.contains(document.getCustomerAssignedId())) {
             return document;
         } else {

@@ -8,24 +8,88 @@
 
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>Collector Resources</web-resource-name>
-            <url-pattern>/api/documents/*</url-pattern>
-            <http-method>POST</http-method>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>collector</role-name>
-            <role-name>user</role-name>
-            <role-name>admin</role-name>
-        </auth-constraint>
-    </security-constraint>
-    <security-constraint>
-        <web-resource-collection>
             <web-resource-name>API Resources</web-resource-name>
             <url-pattern>/api/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>user</role-name>
             <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!--Profile-->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Profile</web-resource-name>
+            <url-pattern>/api/profile/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!--Users-->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Users API</web-resource-name>
+            <url-pattern>/api/users/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>view-user</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!--Spaces-->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Spaces POST</web-resource-name>
+            <url-pattern>/api/spaces</url-pattern>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Spaces POST</web-resource-name>
+            <url-pattern>/api/spaces</url-pattern>
+            <http-method-omission>POST</http-method-omission>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>view-spaces</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Spaces API</web-resource-name>
+            <url-pattern>/api/spaces/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>view-spaces</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!--Documents-->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Collector Resources</web-resource-name>
+            <url-pattern>/api/documents/*</url-pattern>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+            <role-name>collector</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Collector Resources</web-resource-name>
+            <url-pattern>/api/documents/*</url-pattern>
+            <http-method-omission>POST</http-method-omission>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
         </auth-constraint>
     </security-constraint>
 
@@ -38,6 +102,12 @@
     </security-role>
     <security-role>
         <role-name>user</role-name>
+    </security-role>
+    <security-role>
+        <role-name>view-user</role-name>
+    </security-role>
+    <security-role>
+        <role-name>view-spaces</role-name>
     </security-role>
     <security-role>
         <role-name>admin</role-name>
