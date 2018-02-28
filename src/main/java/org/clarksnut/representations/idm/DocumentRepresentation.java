@@ -8,28 +8,28 @@ import java.util.Set;
 
 public class DocumentRepresentation {
 
-    private Data data;
+    private DocumentData data;
 
     public DocumentRepresentation() {
     }
 
-    public DocumentRepresentation(Data data) {
+    public DocumentRepresentation(DocumentData data) {
         this.data = data;
     }
 
-    public Data getData() {
+    public DocumentData getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(DocumentData data) {
         this.data = data;
     }
 
-    public static class Data {
+    public static class DocumentData {
         private String id;
         private String type;
-        private Attributes attributes;
-        private Relationships relationships;
+        private DocumentAttributes attributes;
+        private DocumentRelationships relationships;
         private DocumentLink links;
 
         public DocumentRepresentation toSpaceRepresentation() {
@@ -52,19 +52,19 @@ public class DocumentRepresentation {
             this.type = type;
         }
 
-        public Attributes getAttributes() {
+        public DocumentAttributes getAttributes() {
             return attributes;
         }
 
-        public void setAttributes(Attributes attributes) {
+        public void setAttributes(DocumentAttributes attributes) {
             this.attributes = attributes;
         }
 
-        public Relationships getRelationships() {
+        public DocumentRelationships getRelationships() {
             return relationships;
         }
 
-        public void setRelationships(Relationships relationships) {
+        public void setRelationships(DocumentRelationships relationships) {
             this.relationships = relationships;
         }
 
@@ -77,7 +77,7 @@ public class DocumentRepresentation {
         }
     }
 
-    public static class Attributes {
+    public static class DocumentAttributes {
         private String id;
         private String type;
         private String assignedId;
@@ -292,7 +292,7 @@ public class DocumentRepresentation {
         }
     }
 
-    public static class Relationships {
+    public static class DocumentRelationships {
         @JsonProperty("owned-by")
         private OwnedBy ownedBy;
 
@@ -307,7 +307,6 @@ public class DocumentRepresentation {
 
     public static class OwnedBy {
         private List<SpaceRepresentation.Data> data;
-//        private GenericLinksRepresentation links;
 
         public List<SpaceRepresentation.Data> getData() {
             return data;
@@ -317,13 +316,6 @@ public class DocumentRepresentation {
             this.data = data;
         }
 
-//        public GenericLinksRepresentation getLinks() {
-//            return links;
-//        }
-//
-//        public void setLinks(GenericLinksRepresentation links) {
-//            this.links = links;
-//        }
     }
 
     public static class DocumentLink {

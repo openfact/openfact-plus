@@ -67,7 +67,7 @@ public class DocumentsService extends AbstractResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Get Documents", notes = "This will search just on Owned and Collaborated Spaces")
-    public GenericDataRepresentation<List<DocumentRepresentation.Data>> getDocuments(
+    public GenericDataRepresentation<List<DocumentRepresentation.DocumentData>> getDocuments(
             @ApiParam(value = "A text for filter results") @QueryParam("q") String searchText,
             @ApiParam(value = "The first position of array results") @QueryParam("offset") @DefaultValue("0") int offset,
             @ApiParam(value = "The max number of results") @QueryParam("limit") @DefaultValue("10") int limit,
@@ -76,7 +76,7 @@ public class DocumentsService extends AbstractResource {
         UserModel sessionUser = getUserSession(httpServletRequest);
         Set<SpaceModel> spaces = filterAllowedSpaces(sessionUser, spaceIds);
 
-        List<DocumentRepresentation.Data> documents = documentProvider
+        List<DocumentRepresentation.DocumentData> documents = documentProvider
                 .getDocuments(searchText, offset, limit, spaces.toArray(new SpaceModel[spaces.size()]))
                 .stream()
                 .map(document -> modelToRepresentation.toRepresentation(sessionUser, document, uriInfo))
@@ -89,7 +89,7 @@ public class DocumentsService extends AbstractResource {
     @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Search Document", notes = "This will search document in advanced mode")
-    public GenericDataRepresentation<List<DocumentRepresentation.Data>> searchDocuments(
+    public GenericDataRepresentation<List<DocumentRepresentation.DocumentData>> searchDocuments(
             DocumentQueryRepresentation query,
             @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
         UserModel sessionUser = getUserSession(httpServletRequest);
@@ -295,13 +295,13 @@ public class DocumentsService extends AbstractResource {
             throw new ForbiddenException();
         }
 
-        DocumentRepresentation.Data data = documentRepresentation.getData();
+        DocumentRepresentation.DocumentData data = documentRepresentation.getData();
         updateDocument(data.getAttributes(), sessionUser, document);
         return modelToRepresentation.toRepresentation(sessionUser, document, uriInfo).toSpaceRepresentation();
     }
 
 
-    private void updateDocument(DocumentRepresentation.Attributes attributes, UserModel user, DocumentModel document) {
+    private void updateDocument(DocumentRepresentation.DocumentAttributes attributes, UserModel user, DocumentModel document) {
         if (attributes.getViewed() != null) {
             if (attributes.getViewed()) document.addViewed(user.getId());
             else document.removeViewed(user.getId());

@@ -111,8 +111,8 @@ public class ModelToRepresentation {
         return rep;
     }
 
-    public DocumentRepresentation.Data toRepresentation(UserModel user, DocumentModel model, UriInfo uriInfo) {
-        DocumentRepresentation.Data rep = new DocumentRepresentation.Data();
+    public DocumentRepresentation.DocumentData toRepresentation(UserModel user, DocumentModel model, UriInfo uriInfo) {
+        DocumentRepresentation.DocumentData rep = new DocumentRepresentation.DocumentData();
 
         List<DocumentVersionModel> documentVersions = model.getVersions();
 
@@ -132,7 +132,7 @@ public class ModelToRepresentation {
         rep.setLinks(links);
 
         // Attributes
-        DocumentRepresentation.Attributes attributes = new DocumentRepresentation.Attributes();
+        DocumentRepresentation.DocumentAttributes attributes = new DocumentRepresentation.DocumentAttributes();
         rep.setAttributes(attributes);
 
         attributes.setId(model.getId());

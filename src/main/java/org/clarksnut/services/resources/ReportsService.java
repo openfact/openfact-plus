@@ -6,7 +6,7 @@ public class ReportsService {
 //    @Path("massive")
 //    @Produces(MediaType.APPLICATION_JSON)
 //    public void updateDocuments(@Context final HttpServletRequest httpServletRequest,
-//                                GenericDataRepresentation<List<DocumentRepresentation.Data>> representation) {
+//                                GenericDataRepresentation<List<DocumentRepresentation.DocumentData>> representation) {
 //        UserModel user = getUser(httpServletRequest);
 //
 //        representation.getData().forEach(documentRepresentation -> {
