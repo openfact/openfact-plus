@@ -4,7 +4,6 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Sort;
 import org.clarksnut.models.*;
 import org.clarksnut.models.jpa.entity.DocumentEntity;
-import org.clarksnut.models.jpa.entity.PartyEntity;
 import org.clarksnut.models.utils.ClarksnutModelUtils;
 import org.clarksnut.query.es.LuceneQueryParser;
 import org.hibernate.search.jpa.FullTextEntityManager;
@@ -23,7 +22,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

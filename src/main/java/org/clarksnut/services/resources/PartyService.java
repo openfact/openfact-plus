@@ -3,7 +3,9 @@ package org.clarksnut.services.resources;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.clarksnut.models.*;
+import org.clarksnut.models.PartyProvider;
+import org.clarksnut.models.SpaceModel;
+import org.clarksnut.models.UserModel;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.PartyRepresentation;
 import org.clarksnut.services.ErrorResponseException;
@@ -17,7 +19,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless

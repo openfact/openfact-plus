@@ -1,9 +1,10 @@
 package org.clarksnut.models.jpa;
 
 import org.apache.lucene.search.Query;
-import org.clarksnut.models.*;
+import org.clarksnut.models.PartyModel;
+import org.clarksnut.models.PartyProvider;
+import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.jpa.entity.PartyEntity;
-import org.clarksnut.query.es.LuceneQueryParser;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
@@ -14,7 +15,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;

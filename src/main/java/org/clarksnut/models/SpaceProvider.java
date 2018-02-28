@@ -44,8 +44,10 @@ public interface SpaceProvider {
      * @return spaces owned by user
      */
     List<SpaceModel> getSpaces(UserModel user, int offset, int limit, PermissionType... role);
+
     int countSpaces(UserModel user, PermissionType... role);
 
     List<SpaceModel> getSpaces(String filterText);
+
     List<SpaceModel> getSpaces(String filterText, int offset, int limit);
 }

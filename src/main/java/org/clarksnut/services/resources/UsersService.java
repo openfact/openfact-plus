@@ -1,6 +1,8 @@
 package org.clarksnut.services.resources;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.clarksnut.models.QueryModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;

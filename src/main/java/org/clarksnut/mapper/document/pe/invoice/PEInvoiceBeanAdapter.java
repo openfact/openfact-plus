@@ -8,9 +8,7 @@ import org.clarksnut.mapper.document.pe.PEUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class PEInvoiceBeanAdapter implements DocumentBean {
 

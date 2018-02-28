@@ -11,7 +11,8 @@ import org.keycloak.representations.AccessToken;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.ForbiddenException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class AbstractResource {

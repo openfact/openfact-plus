@@ -1,6 +1,7 @@
 package org.clarksnut.services.resources;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.representations.idm.UserRepresentation;
@@ -18,7 +19,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import java.util.Map;
-import java.util.Set;
 
 @Stateless
 @Path("/api/profile")

@@ -1,18 +1,14 @@
 package org.clarksnut.mapper.document.pe.voideddocuments;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyLegalEntityType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.SupplierPartyType;
 import org.clarksnut.mapper.document.DocumentMapped.DocumentBean;
 import org.clarksnut.mapper.document.pe.PEUtils;
 import sunat.names.specification.ubl.peru.schema.xsd.voideddocuments_1.VoidedDocumentsType;
-import un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.NameType;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class PEVoidedDocumentsBeanAdapter implements DocumentBean {
 
