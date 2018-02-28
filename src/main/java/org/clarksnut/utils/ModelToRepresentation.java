@@ -32,7 +32,7 @@ public class ModelToRepresentation {
         rep.setLinks(links);
 
         // Attributes
-        UserAttributesRepresentation attributes = new UserAttributesRepresentation();
+        UserRepresentation.UserAttributesRepresentation attributes = new UserRepresentation.UserAttributesRepresentation();
         attributes.setUserID(model.getId());
         attributes.setUsername(model.getUsername());
         attributes.setFullName(model.getFullName());

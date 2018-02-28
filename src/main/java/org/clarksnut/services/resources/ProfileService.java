@@ -3,7 +3,6 @@ package org.clarksnut.services.resources;
 import io.swagger.annotations.*;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
-import org.clarksnut.representations.idm.UserAttributesRepresentation;
 import org.clarksnut.representations.idm.UserRepresentation;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
@@ -62,7 +61,7 @@ public class ProfileService extends AbstractResource {
             @Context final HttpServletRequest httpServletRequest,
             final UserRepresentation userRepresentation) {
         UserModel sessionUser = getUserSession(httpServletRequest);
-        UserAttributesRepresentation userAttributesRepresentation = userRepresentation.getData().getAttributes();
+        UserRepresentation.UserAttributesRepresentation userAttributesRepresentation = userRepresentation.getData().getAttributes();
 
         if (userAttributesRepresentation != null) {
             // Is registration completed

@@ -5,7 +5,6 @@ import org.clarksnut.models.QueryModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
-import org.clarksnut.representations.idm.UserAttributesRepresentation;
 import org.clarksnut.representations.idm.UserRepresentation;
 import org.clarksnut.services.resources.utils.PATCH;
 import org.clarksnut.utils.ModelToRepresentation;

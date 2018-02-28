@@ -15,7 +15,7 @@ public class ExtProfileRepresentation {
     public static class Data {
 
         private String type;
-        private UserAttributesRepresentation attributes;
+        private UserRepresentation.UserAttributesRepresentation attributes;
 
         public String getType() {
             return type;
@@ -25,11 +25,11 @@ public class ExtProfileRepresentation {
             this.type = type;
         }
 
-        public UserAttributesRepresentation getAttributes() {
+        public UserRepresentation.UserAttributesRepresentation getAttributes() {
             return attributes;
         }
 
-        public void setAttributes(UserAttributesRepresentation attributes) {
+        public void setAttributes(UserRepresentation.UserAttributesRepresentation attributes) {
             this.attributes = attributes;
         }
     }
