@@ -70,6 +70,17 @@
         </auth-constraint>
     </security-constraint>
 
+    <!--Namespaces-->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Namespaces</web-resource-name>
+            <url-pattern>/api/namespaces/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+
     <!--Documents-->
     <security-constraint>
         <web-resource-collection>
@@ -87,6 +98,17 @@
             <web-resource-name>Collector Resources</web-resource-name>
             <url-pattern>/api/documents/*</url-pattern>
             <http-method-omission>POST</http-method-omission>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!--Request access-->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Request access</web-resource-name>
+            <url-pattern>/api/request-access/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>user</role-name>

@@ -7,6 +7,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -39,21 +41,14 @@ public class JpaRequestProvider implements RequestProvider {
     }
 
     @Override
-    public List<RequestModel> getRequests(UserModel user, RequestStatus status) {
-        TypedQuery<RequestEntity> query = em.createNamedQuery("getRequestsBySpaceOwnerAndStatus", RequestEntity.class);
-        query.setParameter("userId", user.getId());
-        query.setParameter("role", PermissionType.OWNER);
-        query.setParameter("status", status);
-        return query.getResultList().stream()
-                .map(f -> new RequestAdapter(em, f))
-                .collect(Collectors.toList());
-    }
+    public List<RequestModel> getRequests(RequestStatus status, SpaceModel... space) {
+        if (space == null || space.length == 0) {
+            return Collections.emptyList();
+        }
 
-    @Override
-    public List<RequestModel> getRequests(SpaceModel space, RequestStatus status) {
-        TypedQuery<RequestEntity> query = em.createNamedQuery("getRequestsBySpaceIdAndStatus", RequestEntity.class);
-        query.setParameter("spaceId", space.getId());
+        TypedQuery<RequestEntity> query = em.createNamedQuery("getRequestsByStatusAndSpaces", RequestEntity.class);
         query.setParameter("status", status);
+        query.setParameter("spaces", Arrays.asList(space));
         return query.getResultList().stream()
                 .map(f -> new RequestAdapter(em, f))
                 .collect(Collectors.toList());

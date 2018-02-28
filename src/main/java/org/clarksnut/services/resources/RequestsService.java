@@ -1,14 +1,13 @@
 package org.clarksnut.services.resources;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.clarksnut.models.*;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.RequestRepresentation;
 import org.clarksnut.services.ErrorResponse;
 import org.clarksnut.utils.ModelToRepresentation;
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.representations.AccessToken;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -19,12 +18,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless
 @Path("request-access")
 @Consumes(MediaType.APPLICATION_JSON)
-@Api(value = "Space Request Access", consumes = "application/json")
+@Api(value = "Request Access", consumes = "application/json")
 public class RequestsService extends AbstractResource {
 
     @Context
@@ -58,8 +58,8 @@ public class RequestsService extends AbstractResource {
         return request;
     }
 
-    private UserModel getUserByUsername(String username) {
-        UserModel user = userProvider.getUserByUsername(username);
+    private UserModel getUserById(String userId) {
+        UserModel user = userProvider.getUser(userId);
         if (user == null) {
             throw new NotFoundException();
         }
@@ -68,47 +68,59 @@ public class RequestsService extends AbstractResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Request access", notes = "This will request access to space. [user] role required")
     public Response requestAccessToSpace(
             @Context final HttpServletRequest httpServletRequest,
             final RequestRepresentation representation) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
-        UserModel user = getUserByUsername(accessToken.getPreferredUsername());
-
         RequestRepresentation.RequestData data = representation.getData();
         RequestRepresentation.RequestAttributes attributes = data.getAttributes();
-        SpaceModel space = getSpaceById(attributes.getSpace());
 
-        RequestModel request = requestProvider.addRequest(space, user, PermissionType.valueOf(attributes.getScope().toUpperCase()), attributes.getMessage());
+        SpaceModel space = getSpaceById(attributes.getSpace());
+        UserModel user = getUserById(attributes.getUser());
+        PermissionType permissionType = PermissionType.valueOf(attributes.getScope().toUpperCase());
+        String message = attributes.getMessage();
+
+        RequestModel request = requestProvider.addRequest(space, user, permissionType, message);
         RequestRepresentation.RequestData createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(request);
         return Response.status(Response.Status.CREATED).entity(createdRequestAccessRepresentation.toRequestAccessSpaceToRepresentation()).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public GenericDataRepresentation<List<RequestRepresentation.RequestData>> getRequestAccess(@Context final HttpServletRequest httpServletRequest) {
-        UserModel user = getUserSession(httpServletRequest);
+    @ApiOperation(value = "Get Request accesses", notes = "This will return all requests on current user. [user] role required")
+    public GenericDataRepresentation<List<RequestRepresentation.RequestData>> getRequestAccess(
+            @ApiParam(value = "Space Ids") @QueryParam("space") List<String> spaceIds,
+            @ApiParam(value = "Status", allowableValues = "pending, accepted, rejected") @DefaultValue("pending") @QueryParam("status") String status,
+            @Context final HttpServletRequest httpServletRequest) {
+        UserModel sessionUser = getUserSession(httpServletRequest);
+        Set<SpaceModel> spaces = filterAllowedSpaces(sessionUser, spaceIds);
+        RequestStatus requestStatus = RequestStatus.valueOf(status.toUpperCase());
 
-        return new GenericDataRepresentation<>(
-                requestProvider.getRequests(user, RequestStatus.PENDING)
-                        .stream()
-                        .map(f -> modelToRepresentation.toRepresentation(f))
-                        .collect(Collectors.toList())
-        );
+        List<RequestRepresentation.RequestData> requests = requestProvider.getRequests(requestStatus, spaces.toArray(new SpaceModel[spaces.size()]))
+                .stream()
+                .map(f -> modelToRepresentation.toRepresentation(f))
+                .collect(Collectors.toList());
+        return new GenericDataRepresentation<>(requests);
     }
 
     @PUT
     @Path("/{requestId}")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Update request", notes = "This will accept or reject requests. [user] role required")
     public Response updateAccessSpace(
-            @PathParam("requestId") String requestId,
+            @ApiParam(value = "Request Id") @PathParam("requestId") String requestId,
+            @Context final HttpServletRequest httpServletRequest,
             final RequestRepresentation representation) {
         RequestModel request = getRequestById(requestId);
+        SpaceModel space = request.getSpace();
+
+        UserModel sessionUser = getUserSession(httpServletRequest);
+        if (!sessionUser.getOwnedSpaces().contains(space)) {
+            throw new ForbiddenException();
+        }
 
         RequestRepresentation.RequestData data = representation.getData();
         RequestRepresentation.RequestAttributes attributes = data.getAttributes();
-
-        SpaceModel space = getSpaceById(attributes.getSpace());
 
         if (attributes.getStatus() != null) {
             RequestStatus requestStatus = RequestStatus.valueOf(attributes.getStatus().toUpperCase());

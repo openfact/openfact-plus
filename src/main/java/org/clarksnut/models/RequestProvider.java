@@ -8,7 +8,5 @@ public interface RequestProvider {
 
     RequestModel getRequest(String id);
 
-    List<RequestModel> getRequests(UserModel user, RequestStatus status);
-
-    List<RequestModel> getRequests(SpaceModel space, RequestStatus status);
+    List<RequestModel> getRequests(RequestStatus status, SpaceModel... space);
 }

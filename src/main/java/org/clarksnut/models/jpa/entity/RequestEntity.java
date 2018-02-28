@@ -16,8 +16,7 @@ import java.util.Date;
 @Table(name = "cl_request")
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getRequestsBySpaceIdAndStatus", query = "select r from RequestEntity r inner join r.space s where s.id =:spaceId and r.status =:status"),
-        @NamedQuery(name = "getRequestsBySpaceOwnerAndStatus", query = "select r from RequestEntity r inner join r.space s inner join s.collaborators c where c.user.id =:userId and c.role =:role and r.status =:status")
+        @NamedQuery(name = "getRequestsByStatusAndSpaces", query = "select r from RequestEntity r inner join r.space s where r.status =:status and r.space in :spaces")
 })
 public class RequestEntity implements CreatableEntity, UpdatableEntity, Serializable {
 

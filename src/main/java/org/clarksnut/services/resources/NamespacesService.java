@@ -27,10 +27,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless
-@Path("/api/profile/spaces")
+@Path("/api/namespaces")
 @Consumes(MediaType.APPLICATION_JSON)
-@Api(value = "Profile Spaces", consumes = "application/json")
-public class ProfileSpacesService extends AbstractResource {
+@Api(value = "Namespaces", consumes = "application/json")
+public class NamespacesService extends AbstractResource {
 
     @Context
     private UriInfo uriInfo;
@@ -175,23 +175,23 @@ public class ProfileSpacesService extends AbstractResource {
         // Links
         Map<String, String> links = new HashMap<>();
         links.put("first", uriInfo.getBaseUriBuilder()
-                .path(ProfileSpacesService.class)
-                .path(ProfileSpacesService.class, "getSpaceCollaborators")
+                .path(NamespacesService.class)
+                .path(NamespacesService.class, "getSpaceCollaborators")
                 .build(spaceId).toString() +
                 "?offset=0" +
                 "&limit=" + limit);
 
         links.put("last", uriInfo.getBaseUriBuilder()
-                .path(ProfileSpacesService.class)
-                .path(ProfileSpacesService.class, "getSpaceCollaborators")
+                .path(NamespacesService.class)
+                .path(NamespacesService.class, "getSpaceCollaborators")
                 .build(spaceId).toString() +
                 "?offset=" + (totalCount > 0 ? (((totalCount - 1) % limit) * limit) : 0) +
                 "&limit=" + limit);
 
         if (collaborators.size() > limit) {
             links.put("next", uriInfo.getBaseUriBuilder()
-                    .path(ProfileSpacesService.class)
-                    .path(ProfileSpacesService.class, "getSpaceCollaborators")
+                    .path(NamespacesService.class)
+                    .path(NamespacesService.class, "getSpaceCollaborators")
                     .build(spaceId).toString() +
                     "?offset=" + (offset + limit) +
                     "&limit=" + limit);
