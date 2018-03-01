@@ -6,6 +6,7 @@
 
     <module-name>clarksnut</module-name>
 
+    <!--Admin-->
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>API Resources</web-resource-name>
