@@ -17,6 +17,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,17 +53,22 @@ public class UsersService extends AbstractResource {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Get Users", notes = "This will search users. [view-users] role required")
     public GenericDataRepresentation<List<UserRepresentation.UserData>> getUsers(
-            @ApiParam(value = "Username") @QueryParam("username") String username) {
-        QueryModel.Builder queryBuilder = QueryModel.builder();
-
+            @ApiParam(value = "Username") @QueryParam("username") String username,
+            @ApiParam(value = "Filter Text") @QueryParam("filterText") @DefaultValue("") String filterText) {
+        List<UserRepresentation.UserData> data;
         if (username != null) {
-            queryBuilder.addFilter(UserModel.USERNAME, username);
+            UserModel user = userProvider.getUserByUsername(username);
+            if (user != null) {
+                data = Collections.singletonList(modelToRepresentation.toRepresentation(user, uriInfo, false));
+            } else {
+                data = Collections.emptyList();
+            }
+        } else {
+            data = userProvider.getUsers(filterText).stream()
+                    .map(f -> modelToRepresentation.toRepresentation(f, uriInfo, false))
+                    .collect(Collectors.toList());
         }
 
-        List<UserRepresentation.UserData> data = userProvider.getUsers(queryBuilder.build())
-                .stream()
-                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo, false))
-                .collect(Collectors.toList());
         return new GenericDataRepresentation<>(data);
     }
 

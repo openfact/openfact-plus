@@ -68,4 +68,13 @@ public class JpaUserProvider implements UserProvider {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<UserModel> getUsers(String filterText) {
+        TypedQuery<UserEntity> query = em.createNamedQuery("searchUsersByFilterText", UserEntity.class);
+        query.setParameter("filterText", "%" + filterText + "%");
+        return query.getResultList().stream()
+                .map(f -> new UserAdapter(em, f))
+                .collect(Collectors.toList());
+    }
+
 }

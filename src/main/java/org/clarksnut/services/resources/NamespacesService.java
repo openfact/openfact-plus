@@ -60,7 +60,7 @@ public class NamespacesService extends AbstractResource {
             @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
         UserModel sessionUser = getUserSession(httpServletRequest);
 
-        Set<SpaceModel> spaces = null;
+        Set<SpaceModel> spaces;
         PermissionType permissionType = PermissionType.valueOf(role.toUpperCase());
         switch (permissionType) {
             case OWNER:

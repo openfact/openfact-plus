@@ -27,5 +27,8 @@ public interface UserProvider {
      * @param query query to apply on search operation
      * @return all users after apply query
      */
+    @Deprecated
     List<UserModel> getUsers(QueryModel query);
+
+    List<UserModel> getUsers(String filterText);
 }

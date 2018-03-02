@@ -23,7 +23,8 @@ import java.util.Set;
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username"),
-        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username")
+        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username"),
+        @NamedQuery(name = "searchUsersByFilterText", query = "select u from UserEntity u where u.username like :filterText or u.fullName like :filterText or u.email like :filterText")
 })
 public class UserEntity implements CreatableEntity, UpdatableEntity, Serializable {
 

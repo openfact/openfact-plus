@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless
-@Path("request-access")
+@Path("/api/request-access")
 @Consumes(MediaType.APPLICATION_JSON)
 @Api(value = "Request Access", consumes = "application/json")
 public class RequestsService extends AbstractResource {
