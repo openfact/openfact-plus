@@ -1,0 +1,50 @@
+{
+  "realm": "clarksnut",
+  "enabled": true,
+  "sslRequired": "external",
+  "requiredCredentials": [
+    "password"
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "user",
+        "description": "User privileges"
+      },
+      {
+        "name": "admin",
+        "description": "Administrator privileges"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "clarksnut-html5-client",
+      "enabled": true,
+      "adminUrl": "/clarksnut-html5-client",
+      "baseUrl": "/clarksnut-html5-client",
+      "publicClient": true,
+      "consentRequired": true,
+      "fullScopeAllowed": true,
+      "redirectUris": [
+        "/clarksnut-html5-client/*"
+      ],
+      "webOrigins": [
+        "http://localhost:8080"
+      ]
+    },
+    {
+      "clientId": "clarksnut-restful-api",
+      "secret": "secret",
+      "enabled": true,
+      "baseUrl": "/clarksnut-restful-api",
+      "authorizationServicesEnabled": true,
+      "redirectUris": [
+        "/clarksnut-restful-api/*"
+      ],
+      "webOrigins": [
+        "http://localhost:8080"
+      ]
+    }
+  ]
+}

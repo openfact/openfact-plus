@@ -44,7 +44,7 @@
       "logic": "POSITIVE",
       "decisionStrategy": "UNANIMOUS",
       "config": {
-        "code": "var context = $evaluation.getContext();\nvar identity = context.getIdentity();\nvar permission = $evaluation.getPermission();\n\nif (permission.getResource() && permission.getResource().owner == identity.id) {\n    $evaluation.grant();\n}"
+        "code": "var context = $evaluation.getContext();\nvar identity = context.getIdentity();\nvar permission = $evaluation.getPermission();\n\nif (permission.getResource() && permission.getResource().getOwner() == identity.getId()) {\n    $evaluation.grant();\n}"
       }
     },
     {
