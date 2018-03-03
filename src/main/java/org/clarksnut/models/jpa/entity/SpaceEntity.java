@@ -43,6 +43,9 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
     @Column(name = "description")
     private String description;
 
+    @Column(name = "external_id")
+    private String externalId;
+
     @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
     private Set<CollaboratorEntity> collaborators = new HashSet<>();
 
@@ -59,6 +62,9 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
     @Version
     @Column(name = "version")
     private int version;
+
+    public SpaceEntity() {
+    }
 
     public String getId() {
         return id;
@@ -141,4 +147,11 @@ public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializab
         return getId().hashCode();
     }
 
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
 }

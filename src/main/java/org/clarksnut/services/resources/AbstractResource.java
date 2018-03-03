@@ -76,7 +76,7 @@ public abstract class AbstractResource {
         }
     }
 
-    protected void createSpaceProtectedResource(SpaceModel space, UserModel owner, HttpServletRequest request) {
+    protected void createProtectedResource(SpaceModel space, UserModel owner, HttpServletRequest request) {
         try {
             Set<ScopeRepresentation> scopes = new HashSet<>();
 

@@ -10,13 +10,6 @@ import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.SpaceRepresentation;
 import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.utils.ModelToRepresentation;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.authorization.client.AuthzClient;
-import org.keycloak.authorization.client.ClientAuthorizationContext;
-import org.keycloak.authorization.client.representation.RegistrationResponse;
-import org.keycloak.authorization.client.representation.ResourceRepresentation;
-import org.keycloak.authorization.client.representation.ScopeRepresentation;
-import org.keycloak.authorization.client.resource.ProtectionResource;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -27,9 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -79,7 +70,7 @@ public class SpacesService extends AbstractResource {
         try {
             newSpace = spaceProvider.addSpace(owner, attributes.getAssignedId(), attributes.getName());
             newSpace.setDescription(attributes.getDescription());
-            createSpaceProtectedResource(newSpace, owner, request);
+            createProtectedResource(newSpace, owner, request);
         } catch (Throwable e) {
             if (newSpace != null) {
                 getAuthzClient(request).protection().resource().delete(newSpace.getExternalId());
@@ -100,7 +91,7 @@ public class SpacesService extends AbstractResource {
         SpaceModel space = getSpaceById(spaceId);
 
         try {
-            deleteSpaceProtectedResource(space, request);
+            deleteProtectedResource(space, request);
             spaceProvider.removeSpace(space);
         } catch (Exception e) {
             throw new RuntimeException("Could not delete album.", e);

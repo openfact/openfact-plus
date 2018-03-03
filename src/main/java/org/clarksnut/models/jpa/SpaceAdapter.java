@@ -103,6 +103,16 @@ public class SpaceAdapter implements SpaceModel, JpaModel<SpaceEntity> {
     }
 
     @Override
+    public String getExternalId() {
+        return space.getExternalId();
+    }
+
+    @Override
+    public void setExternalId(String externalId) {
+        space.setExternalId(externalId);
+    }
+
+    @Override
     public List<UserModel> getCollaborators() {
         return space.getCollaborators().stream()
                 .map(CollaboratorEntity::getUser)
