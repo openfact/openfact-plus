@@ -4,6 +4,41 @@
   "auth-server-url": "${sso.auth.server.url:http://localhost:8081/auth}",
   "ssl-required": "external",
   "resource": "${sso.clientId:clarksnut-restful-api}",
+  "credentials": {
+    "secret": "${sso.clientSecret}"
+  },
   "use-resource-role-mappings": true,
-  "enable-cors": true
+  "enable-cors": true,
+  "policy-enforcer": {
+    "enforcement-mode": "PERMISSIVE",
+    "user-managed-access": {},
+    "paths": [
+      {
+        "path": "/api/profile"
+      },
+      {
+        "path": "/api/users/*",
+        "methods": [
+          {
+            "method": "GET",
+            "scopes": [
+              "urn:clarksnut.com:scopes:user:view"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "User Resource",
+        "path": "/api/users/{id}",
+        "methods": [
+          {
+            "method": "PUT",
+            "scopes": [
+              "user:manage"
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

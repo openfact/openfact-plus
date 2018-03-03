@@ -4,5 +4,8 @@
         <exclusions>
             <module name="org.javassist"/>
         </exclusions>
+        <dependencies>
+            <module name="org.keycloak.keycloak-authz-client" services="import"/>
+        </dependencies>
     </deployment>
 </jboss-deployment-structure>

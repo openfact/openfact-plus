@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Stateless
 @Path("/api/request-access")
 @Consumes(MediaType.APPLICATION_JSON)
-@Api(value = "Request Access", consumes = "application/json")
+@Api(value = "Request Access", description = "Request Access REST API", consumes = "application/json")
 public class RequestsService extends AbstractResource {
 
     @Context
@@ -68,10 +68,11 @@ public class RequestsService extends AbstractResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Request access", notes = "This will request access to space. [user] role required")
+    @ApiOperation(value = "Request access")
     public Response requestAccessToSpace(
             @Context final HttpServletRequest httpServletRequest,
-            final RequestRepresentation representation) {
+            final RequestRepresentation representation
+    ) {
         RequestRepresentation.RequestData data = representation.getData();
         RequestRepresentation.RequestAttributes attributes = data.getAttributes();
 
@@ -87,11 +88,12 @@ public class RequestsService extends AbstractResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Get Request accesses", notes = "This will return all requests on current user. [user] role required")
+    @ApiOperation(value = "Get Request accesses")
     public GenericDataRepresentation<List<RequestRepresentation.RequestData>> getRequestAccess(
             @ApiParam(value = "Space Ids") @QueryParam("space") List<String> spaceIds,
             @ApiParam(value = "Status", allowableValues = "pending, accepted, rejected") @DefaultValue("pending") @QueryParam("status") String status,
-            @Context final HttpServletRequest httpServletRequest) {
+            @Context final HttpServletRequest httpServletRequest
+    ) {
         UserModel sessionUser = getUserSession(httpServletRequest);
         Set<SpaceModel> spaces = filterAllowedSpaces(sessionUser, spaceIds);
         RequestStatus requestStatus = RequestStatus.valueOf(status.toUpperCase());
@@ -106,11 +108,12 @@ public class RequestsService extends AbstractResource {
     @PUT
     @Path("/{requestId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Update request", notes = "This will accept or reject requests. [user] role required")
+    @ApiOperation(value = "Update request")
     public Response updateAccessSpace(
             @ApiParam(value = "Request Id") @PathParam("requestId") String requestId,
             @Context final HttpServletRequest httpServletRequest,
-            final RequestRepresentation representation) {
+            final RequestRepresentation representation
+    ) {
         RequestModel request = getRequestById(requestId);
         SpaceModel space = request.getSpace();
 

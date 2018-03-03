@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 @Stateless
 @Path("/api/documents")
 @Consumes(MediaType.APPLICATION_JSON)
-@Api(value = "Documents", consumes = "application/json")
+@Api(value = "Documents", description = "Document REST API", consumes = "application/json")
 public class DocumentsService extends AbstractResource {
 
     private static final Logger logger = Logger.getLogger(DocumentsService.class);
@@ -69,18 +69,19 @@ public class DocumentsService extends AbstractResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Get Documents", notes = "This will search just on Owned and Collaborated Spaces")
+    @ApiOperation(value = "Return List of Documents", notes = "Search on allowed user (session) spaces")
     public GenericDataRepresentation<List<DocumentRepresentation.DocumentData>> getDocuments(
-            @ApiParam(value = "A text for filter results") @QueryParam("q") String searchText,
-            @ApiParam(value = "The first position of array results") @QueryParam("offset") @DefaultValue("0") int offset,
-            @ApiParam(value = "The max number of results") @QueryParam("limit") @DefaultValue("10") int limit,
-            @ApiParam(value = "List of space ids to search in. If null or empty all allowed spaces of user will be used") @QueryParam("space") List<String> spaceIds,
-            @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
+            @ApiParam(value = "Filter text") @QueryParam("filterText") String filterText,
+            @ApiParam(value = "First result") @QueryParam("offset") @DefaultValue("0") int offset,
+            @ApiParam(value = "Maz results") @QueryParam("limit") @DefaultValue("10") int limit,
+            @ApiParam(value = "Space Ids") @QueryParam("space") List<String> spaceIds,
+            @Context HttpServletRequest httpServletRequest
+    ) throws ErrorResponseException {
         UserModel sessionUser = getUserSession(httpServletRequest);
         Set<SpaceModel> spaces = filterAllowedSpaces(sessionUser, spaceIds);
 
         List<DocumentRepresentation.DocumentData> documents = documentProvider
-                .getDocuments(searchText, offset, limit, spaces.toArray(new SpaceModel[spaces.size()]))
+                .getDocuments(filterText, offset, limit, spaces.toArray(new SpaceModel[spaces.size()]))
                 .stream()
                 .map(document -> modelToRepresentation.toRepresentation(sessionUser, document, uriInfo))
                 .collect(Collectors.toList());
@@ -91,10 +92,11 @@ public class DocumentsService extends AbstractResource {
     @POST
     @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Search Document", notes = "This will search document in advanced mode")
+    @ApiOperation(value = "Search Document", notes = "Search on allowed user (session) spaces")
     public GenericDataRepresentation<List<DocumentRepresentation.DocumentData>> searchDocuments(
             DocumentQueryRepresentation query,
-            @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
+            @Context HttpServletRequest httpServletRequest
+    ) throws ErrorResponseException {
         UserModel sessionUser = getUserSession(httpServletRequest);
 
         DocumentQueryRepresentation.DocumentQueryData queryData = query.getData();
@@ -271,10 +273,11 @@ public class DocumentsService extends AbstractResource {
     @GET
     @Path("{documentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Get Document", notes = "This will return a document")
+    @ApiOperation(value = "Return one Document", notes = "User need to have access to the Space owner of the document")
     public DocumentRepresentation getDocument(
             @ApiParam(value = "Document Id") @PathParam("documentId") String documentId,
-            @Context final HttpServletRequest httpServletRequest) {
+            @Context final HttpServletRequest httpServletRequest
+    ) {
         UserModel sessionUser = getUserSession(httpServletRequest);
         DocumentModel document = getDocumentById(sessionUser, documentId);
         if (isUserAllowedToViewDocument(sessionUser, document)) {
@@ -287,11 +290,12 @@ public class DocumentsService extends AbstractResource {
     @PUT
     @Path("{documentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Update Document", notes = "This will update the document just for current user")
+    @ApiOperation(value = "Update a Document", notes = "User need to have access to the Space owner of the document")
     public DocumentRepresentation updateDocument(
             @ApiParam(value = "Document Id") @PathParam("documentId") String documentId,
             @Context final HttpServletRequest httpServletRequest,
-            DocumentRepresentation documentRepresentation) {
+            DocumentRepresentation documentRepresentation
+    ) {
         UserModel sessionUser = getUserSession(httpServletRequest);
         DocumentModel document = getDocumentById(sessionUser, documentId);
         if (!isUserAllowedToViewDocument(sessionUser, document)) {
@@ -322,10 +326,11 @@ public class DocumentsService extends AbstractResource {
     @GET
     @Path("/{documentId}/download")
     @Produces("application/xml")
-    @ApiOperation(value = "Download Document", notes = "This will download the document")
-    public Response getXml(
+    @ApiOperation(value = "Download Document", notes = "User need to have access to the Space owner of the document")
+    public Response downloadXml(
             @ApiParam(value = "Document Id") @PathParam("documentId") String documentId,
-            @Context final HttpServletRequest httpServletRequest) {
+            @Context final HttpServletRequest httpServletRequest
+    ) {
         UserModel sessionUser = getUserSession(httpServletRequest);
         DocumentModel document = getDocumentById(sessionUser, documentId);
         if (!isUserAllowedToViewDocument(sessionUser, document)) {
@@ -342,12 +347,13 @@ public class DocumentsService extends AbstractResource {
 
     @GET
     @Path("/{documentId}/print")
-    @ApiOperation(value = "Print Document", notes = "This will print the document")
-    public Response printDocument(
+    @ApiOperation(value = "Print Document", notes = "User need to have access to the Space owner of the document")
+    public Response downloadPdf(
             @Context final HttpServletRequest httpServletRequest,
             @ApiParam(value = "Document Id") @PathParam("documentId") String documentId,
             @ApiParam(value = "Theme") @QueryParam("theme") String theme,
-            @ApiParam(value = "format", allowableValues = "pdf, html") @QueryParam("format") @DefaultValue("pdf") String format) {
+            @ApiParam(value = "format", allowableValues = "pdf, html") @QueryParam("format") @DefaultValue("pdf") String format
+    ) {
         UserModel sessionUser = getUserSession(httpServletRequest);
         DocumentModel document = getDocumentById(sessionUser, documentId);
         if (!isUserAllowedToViewDocument(sessionUser, document)) {

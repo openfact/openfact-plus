@@ -27,22 +27,30 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless
-@Path("/api/namespaces")
+@Path("/api/namedspaces")
 @Consumes(MediaType.APPLICATION_JSON)
-@Api(value = "Namespaces", consumes = "application/json")
-public class NamespacesService extends AbstractResource {
+@Api(value = "Named Spaces", description = "NamedSpaces REST API", consumes = "application/json")
+public class NamedSpacesService extends AbstractResource {
 
     @Context
     private UriInfo uriInfo;
 
     @Inject
-    private SpaceProvider spaceProvider;
-
-    @Inject
     private UserProvider userProvider;
 
     @Inject
+    private SpaceProvider spaceProvider;
+
+    @Inject
     private ModelToRepresentation modelToRepresentation;
+
+    private UserModel getUserById(String userId) {
+        UserModel user = userProvider.getUser(userId);
+        if (user == null) {
+            throw new NotFoundException();
+        }
+        return user;
+    }
 
     private SpaceModel getSpaceById(String spaceId) {
         SpaceModel space = spaceProvider.getSpace(spaceId);
@@ -53,66 +61,129 @@ public class NamespacesService extends AbstractResource {
     }
 
     @GET
+    @Path("/{userId}/spaces")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Get Spaces of user", notes = "This will search owned and collaborated spaces. [user] role required")
+    @ApiOperation(value = "Return allowed Spaces of User")
     public GenericDataRepresentation<List<SpaceRepresentation.SpaceData>> getUserSpaces(
+            @ApiParam(value = "User Id", allowableValues = "me, userId") @PathParam("userId") String userId,
             @ApiParam(value = "Role", allowableValues = "owner, collaborator") @QueryParam("role") @DefaultValue("owner") String role,
-            @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
-        UserModel sessionUser = getUserSession(httpServletRequest);
+            @ApiParam(value = "First result") @QueryParam("offset") @DefaultValue("0") int offset,
+            @ApiParam(value = "Max results") @QueryParam("limit") @DefaultValue("10") int limit,
+            @Context final HttpServletRequest httpServletRequest
+    ) throws ErrorResponseException {
+        UserModel user;
+        if (userId.equals("me")) {
+            user = getUserSession(httpServletRequest);
+        } else {
+            throw new ErrorResponseException("Error", Response.Status.NOT_IMPLEMENTED);
+        }
 
-        Set<SpaceModel> spaces;
+
+        int totalCount;
+        List<SpaceModel> spaces;
+
+        // Search
         PermissionType permissionType = PermissionType.valueOf(role.toUpperCase());
         switch (permissionType) {
             case OWNER:
-                spaces = sessionUser.getOwnedSpaces();
+                spaces = user.getOwnedSpaces(offset, limit + 1);
+                totalCount = user.getOwnedSpaces().size();
                 break;
             case COLLABORATOR:
-                spaces = sessionUser.getCollaboratedSpaces();
+                spaces = user.getCollaboratedSpaces(offset, limit + 1);
+                totalCount = user.getCollaboratedSpaces().size();
                 break;
             default:
                 throw new ErrorResponseException("Invalid Role", Response.Status.BAD_REQUEST);
         }
 
+        // Metadata
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("totalCount", totalCount);
+
+        // Links
+        Map<String, String> links = new HashMap<>();
+        links.put("first", uriInfo.getBaseUriBuilder()
+                .path(NamedSpacesService.class)
+                .path(NamedSpacesService.class, "getUserSpaces")
+                .build(userId).toString() +
+                "?role=" + role +
+                "?offset=0" +
+                "&limit=" + limit);
+
+        links.put("last", uriInfo.getBaseUriBuilder()
+                .path(NamedSpacesService.class)
+                .path(NamedSpacesService.class, "getUserSpaces")
+                .build(userId).toString() +
+                "?role=" + role +
+                "?offset=" + (totalCount > 0 ? (((totalCount - 1) % limit) * limit) : 0) +
+                "&limit=" + limit);
+
+        if (spaces.size() > limit) {
+            links.put("next", uriInfo.getBaseUriBuilder()
+                    .path(NamedSpacesService.class)
+                    .path(NamedSpacesService.class, "getUserSpaces")
+                    .build(userId).toString() +
+                    "?role=" + role +
+                    "?offset=" + (offset + limit) +
+                    "&limit=" + limit);
+
+            // Remove last item
+            spaces.remove(spaces.size() - 1);
+        }
+
+
         List<SpaceRepresentation.SpaceData> spacesData = spaces.stream()
                 .map(f -> modelToRepresentation.toRepresentation(f, uriInfo, true))
                 .collect(Collectors.toList());
-        return new GenericDataRepresentation<>(spacesData);
+        return new GenericDataRepresentation<>(spacesData, links, meta);
     }
 
     @GET
-    @Path("{spaceId}")
+    @Path("/{userId}/spaces/{spaceId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Get Space", notes = "This will get a space, just the owner will be allowed. [user] role required")
+    @ApiOperation(value = "Return one Space")
     public SpaceRepresentation getUserSpace(
+            @ApiParam(value = "User Id", allowableValues = "me, userId") @PathParam("userId") String userId,
             @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
-            @Context HttpServletRequest httpServletRequest) {
-        UserModel sessionUser = getUserSession(httpServletRequest);
+            @Context final HttpServletRequest httpServletRequest
+    ) throws ErrorResponseException {
+        UserModel user;
+        if (userId.equals("me")) {
+            user = getUserSession(httpServletRequest);
+        } else {
+            throw new ErrorResponseException("Error", Response.Status.NOT_IMPLEMENTED);
+        }
 
         SpaceModel space = getSpaceById(spaceId);
-        UserModel spaceOwner = space.getOwner();
-
-        if (!sessionUser.equals(spaceOwner)) {
+        if (!user.getAllPermittedSpaces().contains(space)) {
             throw new ForbiddenException();
         }
 
         return modelToRepresentation.toRepresentation(space, uriInfo, true).toSpaceRepresentation();
     }
 
-
     @PUT
-    @Path("{spaceId}")
+    @Path("/{userId}/spaces/{spaceId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Update space", notes = "Accessed just by the owner, the owner is identified by current token. [user] role required")
+    @ApiOperation(value = "Update space")
     public SpaceRepresentation updateUserSpace(
+            @ApiParam(value = "User Id", allowableValues = "me, userId") @PathParam("userId") String userId,
             @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
             @Context HttpServletRequest httpServletRequest,
-            final SpaceRepresentation spaceRepresentation) {
-        UserModel sessionUser = getUserSession(httpServletRequest);
+            final SpaceRepresentation spaceRepresentation
+    ) throws ErrorResponseException {
+        UserModel user;
+        if (userId.equals("me")) {
+            user = getUserSession(httpServletRequest);
+        } else {
+            throw new ErrorResponseException("Error", Response.Status.NOT_IMPLEMENTED);
+        }
 
         SpaceModel space = getSpaceById(spaceId);
         UserModel spaceOwner = space.getOwner();
 
-        if (!sessionUser.equals(spaceOwner)) {
+        if (!user.equals(spaceOwner)) {
             throw new ForbiddenException();
         }
 
@@ -131,10 +202,11 @@ public class NamespacesService extends AbstractResource {
     @DELETE
     @Path("{spaceId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Delete space", notes = "Accessed just by the owner, the owner is identified by current token. [user] role required")
+    @ApiOperation(value = "Delete space")
     public void deleteUserSpace(
             @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
-            @Context HttpServletRequest httpServletRequest) {
+            @Context HttpServletRequest httpServletRequest
+    ) {
         UserModel sessionUser = getUserSession(httpServletRequest);
 
         SpaceModel space = getSpaceById(spaceId);
@@ -150,12 +222,13 @@ public class NamespacesService extends AbstractResource {
     @GET
     @Path("{spaceId}/collaborators")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Get Space SpaceCollaborators", notes = "Accessed just by the owner, the owner is identified by current token. [user] role required")
+    @ApiOperation(value = "Return list of Collaborators")
     public GenericDataRepresentation<List<UserRepresentation.UserData>> getSpaceCollaborators(
             @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
             @ApiParam(value = "First result") @QueryParam("offset") @DefaultValue("0") int offset,
             @ApiParam(value = "Max results") @QueryParam("limit") @DefaultValue("10") int limit,
-            @Context HttpServletRequest httpServletRequest) {
+            @Context HttpServletRequest httpServletRequest
+    ) {
         UserModel user = getUserSession(httpServletRequest);
 
         SpaceModel space = getSpaceById(spaceId);
@@ -175,29 +248,29 @@ public class NamespacesService extends AbstractResource {
         // Links
         Map<String, String> links = new HashMap<>();
         links.put("first", uriInfo.getBaseUriBuilder()
-                .path(NamespacesService.class)
-                .path(NamespacesService.class, "getSpaceCollaborators")
+                .path(SpacesService.class)
+                .path(SpacesService.class, "getSpaceCollaborators")
                 .build(spaceId).toString() +
                 "?offset=0" +
                 "&limit=" + limit);
 
         links.put("last", uriInfo.getBaseUriBuilder()
-                .path(NamespacesService.class)
-                .path(NamespacesService.class, "getSpaceCollaborators")
+                .path(SpacesService.class)
+                .path(SpacesService.class, "getSpaceCollaborators")
                 .build(spaceId).toString() +
                 "?offset=" + (totalCount > 0 ? (((totalCount - 1) % limit) * limit) : 0) +
                 "&limit=" + limit);
 
         if (collaborators.size() > limit) {
             links.put("next", uriInfo.getBaseUriBuilder()
-                    .path(NamespacesService.class)
-                    .path(NamespacesService.class, "getSpaceCollaborators")
+                    .path(SpacesService.class)
+                    .path(SpacesService.class, "getSpaceCollaborators")
                     .build(spaceId).toString() +
                     "?offset=" + (offset + limit) +
                     "&limit=" + limit);
 
             // Remove last item
-            collaborators.remove(links.size() - 1);
+            collaborators.remove(collaborators.size() - 1);
         }
 
         return new GenericDataRepresentation<>(collaborators.stream()
@@ -208,11 +281,12 @@ public class NamespacesService extends AbstractResource {
     @POST
     @Path("{spaceId}/collaborators")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Add Space SpaceCollaborators", notes = "Accessed just by the owner, the owner is identified by current token. [user] role required")
+    @ApiOperation(value = "Add new Collaborator", notes = "[user] role required")
     public void addSpaceCollaborators(
             @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
             @Context HttpServletRequest httpServletRequest,
-            final TypedGenericDataRepresentation<List<UserRepresentation.UserData>> representation) throws ErrorResponseException {
+            final TypedGenericDataRepresentation<List<UserRepresentation.UserData>> representation
+    ) throws ErrorResponseException {
         UserModel sessionUser = getUserSession(httpServletRequest);
 
         SpaceModel space = getSpaceById(spaceId);
@@ -236,11 +310,12 @@ public class NamespacesService extends AbstractResource {
     @DELETE
     @Path("{spaceId}/collaborators/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Remove Space SpaceCollaborators", notes = "Accessed just by the owner, the owner is identified by current token. [user] role required")
+    @ApiOperation(value = "Remove Collaborator")
     public Response removeSpaceCollaborators(
             @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
             @ApiParam(value = "User Id") @PathParam("userId") String userId,
-            @Context HttpServletRequest httpServletRequest) throws ErrorResponseException {
+            @Context HttpServletRequest httpServletRequest
+    ) throws ErrorResponseException {
         UserModel sessionUser = getUserSession(httpServletRequest);
 
         SpaceModel space = getSpaceById(spaceId);

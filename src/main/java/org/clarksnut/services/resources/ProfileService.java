@@ -2,6 +2,7 @@ package org.clarksnut.services.resources;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.representations.idm.UserRepresentation;
@@ -18,13 +19,17 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import java.security.Principal;
 import java.util.Map;
 
 @Stateless
 @Path("/api/profile")
 @Consumes(MediaType.APPLICATION_JSON)
-@Api(value = "Profile", consumes = "application/json")
+@Api(value = "Profile", description = "Profile REST API", consumes = "application/json")
 public class ProfileService extends AbstractResource {
+
+    private static final String PROFILE_VIEW = "urn:clarksnut.com:scopes:profile:view";
+    private static final String PROFILE_EDIT = "urn:clarksnut.com:scopes:profile:edit";
 
     private static final Logger logger = Logger.getLogger(ProfileService.class);
 
@@ -39,63 +44,39 @@ public class ProfileService extends AbstractResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Return User Profile", notes = "This will return the profile associated to the current token. [user] role required")
-    public UserRepresentation getCurrentUser(@Context final HttpServletRequest httpServletRequest) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) httpServletRequest.getUserPrincipal();
-        AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
+    @ApiOperation(value = "Return User Profile")
+    public UserRepresentation getCurrentUser(
+            @Context final HttpServletRequest request
+    ) {
+        Principal userPrincipal = request.getUserPrincipal();
+        KeycloakPrincipal<KeycloakSecurityContext> kcPrincipal = (KeycloakPrincipal<KeycloakSecurityContext>) userPrincipal;
+        AccessToken accessToken = kcPrincipal.getKeycloakSecurityContext().getToken();
         String username = accessToken.getPreferredUsername();
+        String providerIdentityId = userPrincipal.getName();
 
         UserModel user = this.userProvider.getUserByUsername(username);
         if (user == null) {
-            user = this.userProvider.addUser(username, "kc");
-            logger.info("New User added");
+            // Authz
+            try {
+                user = this.userProvider.addUser(username, "kc", providerIdentityId);
+                createUserProtectedResource(user, request);
+            } catch (Throwable e) {
+                if (user != null) {
+                    getAuthzClient(request).protection().resource().delete(user.getExternalId());
+                }
+            }
+
+            logger.debug("New User added, username:" + username);
         }
-        mergeUserInfo(user, accessToken);
+
+        mergeUserInfo(user, request);
         return modelToRepresentation.toRepresentation(user, uriInfo, true).toUserRepresentation();
     }
 
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Update User Profile", notes = "This will update the profile associated to the current token. [user] role required")
-    public UserRepresentation currentUser(
-            @Context final HttpServletRequest httpServletRequest,
-            final UserRepresentation userRepresentation) {
-        UserModel sessionUser = getUserSession(httpServletRequest);
-        UserRepresentation.UserAttributesRepresentation userAttributesRepresentation = userRepresentation.getData().getAttributes();
+    private void mergeUserInfo(UserModel user, HttpServletRequest request) {
+        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) request.getUserPrincipal();
+        AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
 
-        if (userAttributesRepresentation != null) {
-            // Is registration completed
-            Boolean registrationCompleted = userAttributesRepresentation.getRegistrationCompleted();
-            if (registrationCompleted != null) {
-                sessionUser.setRegistrationCompleted(registrationCompleted);
-            }
-
-            // Profile
-            if (userAttributesRepresentation.getFullName() != null) {
-                sessionUser.setFullName(userAttributesRepresentation.getFullName());
-            }
-            if (userAttributesRepresentation.getCompany() != null) {
-                sessionUser.setCompany(userAttributesRepresentation.getCompany());
-            }
-            if (userAttributesRepresentation.getImageURL() != null) {
-                sessionUser.setImageURL(userAttributesRepresentation.getImageURL());
-            }
-            if (userAttributesRepresentation.getUrl() != null) {
-                sessionUser.setUrl(userAttributesRepresentation.getUrl());
-            }
-            if (userAttributesRepresentation.getBio() != null) {
-                sessionUser.setBio(userAttributesRepresentation.getBio());
-            }
-
-            if (userAttributesRepresentation.getDefaultLanguage() != null) {
-                sessionUser.setDefaultLanguage(userAttributesRepresentation.getDefaultLanguage());
-            }
-        }
-
-        return modelToRepresentation.toRepresentation(sessionUser, uriInfo, true).toUserRepresentation();
-    }
-
-    private void mergeUserInfo(UserModel user, AccessToken accessToken) {
         if (accessToken.getEmail() != null && !accessToken.getEmail().equals(user.getEmail())) {
             user.setEmail(accessToken.getEmail());
         }

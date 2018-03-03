@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -142,38 +143,60 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     }
 
     @Override
-    public Set<SpaceModel> getOwnedSpaces() {
+    public List<SpaceModel> getOwnedSpaces() {
+        return getOwnedSpaces(-1, -1);
+    }
+
+    @Override
+    public List<SpaceModel> getOwnedSpaces(int offset, int limit) {
         TypedQuery<CollaboratorEntity> query = em.createNamedQuery("getCollaboratorsByUserIdAndRole", CollaboratorEntity.class);
         query.setParameter("userId", user.getId());
         query.setParameter("role", PermissionType.OWNER);
+        if (offset != -1) {
+            query.setFirstResult(offset);
+        }
+        if (limit != -1) {
+            query.setMaxResults(limit);
+        }
 
         return query.getResultList().stream()
                 .map(CollaboratorEntity::getSpace)
                 .map(space -> new SpaceAdapter(em, space))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Set<SpaceModel> getCollaboratedSpaces() {
+    public List<SpaceModel> getCollaboratedSpaces() {
+        return getCollaboratedSpaces(-1, -1);
+    }
+
+    @Override
+    public List<SpaceModel> getCollaboratedSpaces(int offset, int limit) {
         TypedQuery<CollaboratorEntity> query = em.createNamedQuery("getCollaboratorsByUserIdAndRole", CollaboratorEntity.class);
         query.setParameter("userId", user.getId());
         query.setParameter("role", PermissionType.COLLABORATOR);
+        if (offset != -1) {
+            query.setFirstResult(offset);
+        }
+        if (limit != -1) {
+            query.setMaxResults(limit);
+        }
 
         return query.getResultList().stream()
                 .map(CollaboratorEntity::getSpace)
                 .map(space -> new SpaceAdapter(em, space))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Set<SpaceModel> getAllPermittedSpaces() {
+    public List<SpaceModel> getAllPermittedSpaces() {
         TypedQuery<CollaboratorEntity> query = em.createNamedQuery("getCollaboratorsByUserId", CollaboratorEntity.class);
         query.setParameter("userId", user.getId());
 
         return query.getResultList().stream()
                 .map(CollaboratorEntity::getSpace)
                 .map(space -> new SpaceAdapter(em, space))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override

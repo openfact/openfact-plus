@@ -9,7 +9,7 @@ public interface UserProvider {
      * @param username     username of the user
      * @return user created
      */
-    UserModel addUser(String username, String providerType);
+    UserModel addUser(String username, String providerType, String identityId);
 
     /**
      * @param id auto generated unique identity
@@ -31,4 +31,5 @@ public interface UserProvider {
     List<UserModel> getUsers(QueryModel query);
 
     List<UserModel> getUsers(String filterText);
+    List<UserModel> getUsers(String filterText, int offset, int limit);
 }
