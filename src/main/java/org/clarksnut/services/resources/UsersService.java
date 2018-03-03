@@ -3,11 +3,10 @@ package org.clarksnut.services.resources;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.clarksnut.models.*;
+import org.clarksnut.models.UserModel;
+import org.clarksnut.models.UserProvider;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
-import org.clarksnut.representations.idm.SpaceRepresentation;
 import org.clarksnut.representations.idm.UserRepresentation;
-import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
 
@@ -17,9 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -88,44 +87,45 @@ public class UsersService extends AbstractResource {
     }
 
     @PUT
+    @Path("/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Update User Profile")
     public UserRepresentation currentUser(
-            @Context final HttpServletRequest request,
+            @ApiParam(value = "User Id") @PathParam("userId") String userId,
             final UserRepresentation userRepresentation
     ) {
-        UserModel sessionUser = getUserSession(request);
+        UserModel user = getUserById(userId);
         UserRepresentation.UserAttributesRepresentation userAttributesRepresentation = userRepresentation.getData().getAttributes();
 
         if (userAttributesRepresentation != null) {
             // Is registration completed
             Boolean registrationCompleted = userAttributesRepresentation.getRegistrationCompleted();
             if (registrationCompleted != null) {
-                sessionUser.setRegistrationCompleted(registrationCompleted);
+                user.setRegistrationCompleted(registrationCompleted);
             }
 
             // Profile
             if (userAttributesRepresentation.getFullName() != null) {
-                sessionUser.setFullName(userAttributesRepresentation.getFullName());
+                user.setFullName(userAttributesRepresentation.getFullName());
             }
             if (userAttributesRepresentation.getCompany() != null) {
-                sessionUser.setCompany(userAttributesRepresentation.getCompany());
+                user.setCompany(userAttributesRepresentation.getCompany());
             }
             if (userAttributesRepresentation.getImageURL() != null) {
-                sessionUser.setImageURL(userAttributesRepresentation.getImageURL());
+                user.setImageURL(userAttributesRepresentation.getImageURL());
             }
             if (userAttributesRepresentation.getUrl() != null) {
-                sessionUser.setUrl(userAttributesRepresentation.getUrl());
+                user.setUrl(userAttributesRepresentation.getUrl());
             }
             if (userAttributesRepresentation.getBio() != null) {
-                sessionUser.setBio(userAttributesRepresentation.getBio());
+                user.setBio(userAttributesRepresentation.getBio());
             }
 
             if (userAttributesRepresentation.getDefaultLanguage() != null) {
-                sessionUser.setDefaultLanguage(userAttributesRepresentation.getDefaultLanguage());
+                user.setDefaultLanguage(userAttributesRepresentation.getDefaultLanguage());
             }
         }
 
-        return modelToRepresentation.toRepresentation(sessionUser, uriInfo, true).toUserRepresentation();
+        return modelToRepresentation.toRepresentation(user, uriInfo, true).toUserRepresentation();
     }
 }

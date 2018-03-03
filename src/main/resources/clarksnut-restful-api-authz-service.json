@@ -24,6 +24,32 @@
           "name": "user:manage"
         }
       ]
+    },
+    {
+      "name": "Space Resource",
+      "uri": "/api/spaces",
+      "type": "http://clarksnut.com/spaces",
+      "scopes": [
+        {
+          "name": "space:view"
+        },
+        {
+          "name": "space:manage"
+        }
+      ]
+    },
+    {
+      "name": "Document Resource",
+      "uri": "/api/documents",
+      "type": "http://clarksnut.com/documents",
+      "scopes": [
+        {
+          "name": "document:view"
+        },
+        {
+          "name": "document:manage"
+        }
+      ]
     }
   ],
   "policies": [
@@ -79,6 +105,39 @@
         "scopes": "[\"user:manage\"]",
         "applyPolicies": "[\"Only Owner Policy\"]"
       }
+    },
+    {
+      "name": "View Space Permission",
+      "description": "Defines who is allowed to view an space",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "scopes": "[\"space:view\"]",
+        "applyPolicies": "[\"Any User Policy\"]"
+      }
+    },
+    {
+      "name": "Manage Space Permission",
+      "description": "Defines who is allowed to manage an space",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "scopes": "[\"space:manage\"]",
+        "applyPolicies": "[\"Only Owner Policy\"]"
+      }
+    },
+    {
+      "name": "View Document Permission",
+      "description": "Defines who is allowed to view a document",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "scopes": "[\"space:view\"]",
+        "applyPolicies": "[\"Any User Policy\"]"
+      }
     }
   ],
   "scopes": [
@@ -90,6 +149,12 @@
     },
     {
       "name": "user:manage"
+    },
+    {
+      "name": "space:view"
+    },
+    {
+      "name": "space:manage"
     }
   ]
 }

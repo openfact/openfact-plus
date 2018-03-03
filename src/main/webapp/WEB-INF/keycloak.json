@@ -38,6 +38,35 @@
             ]
           }
         ]
+      },
+      {
+        "path": "/api/spaces/*",
+        "methods": [
+          {
+            "method": "GET",
+            "scopes": [
+              "urn:clarksnut.com:scopes:space:view"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Space Resource",
+        "path": "/api/spaces/{id}",
+        "methods": [
+          {
+            "method": "PUT",
+            "scopes": [
+              "space:manage"
+            ]
+          },
+          {
+            "method": "DELETE",
+            "scopes": [
+              "space:manage"
+            ]
+          }
+        ]
       }
     ]
   }

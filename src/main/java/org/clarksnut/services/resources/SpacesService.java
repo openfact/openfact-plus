@@ -8,15 +8,11 @@ import org.clarksnut.models.SpaceProvider;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.SpaceRepresentation;
+import org.clarksnut.representations.idm.TypedGenericDataRepresentation;
+import org.clarksnut.representations.idm.UserRepresentation;
+import org.clarksnut.services.ErrorResponse;
 import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.utils.ModelToRepresentation;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.authorization.client.AuthzClient;
-import org.keycloak.authorization.client.ClientAuthorizationContext;
-import org.keycloak.authorization.client.representation.RegistrationResponse;
-import org.keycloak.authorization.client.representation.ResourceRepresentation;
-import org.keycloak.authorization.client.representation.ScopeRepresentation;
-import org.keycloak.authorization.client.resource.ProtectionResource;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -27,9 +23,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -53,6 +49,37 @@ public class SpacesService extends AbstractResource {
             throw new NotFoundException();
         }
         return space;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Return list of Spaces")
+    public GenericDataRepresentation<List<SpaceRepresentation.SpaceData>> getSpaces(
+            @ApiParam(value = "Space Assigned Id") @QueryParam("assignedId") String assignedId,
+            @ApiParam(value = "Filter Text") @QueryParam("filterText") @DefaultValue("") String filterText,
+            @ApiParam(value = "First result") @QueryParam("offset") @DefaultValue("0") int offset,
+            @ApiParam(value = "Max results") @QueryParam("limit") @DefaultValue("10") int limit
+    ) {
+        if (assignedId != null) {
+            SpaceModel space = spaceProvider.getByAssignedId(assignedId);
+            if (space == null) {
+                return new GenericDataRepresentation<>(Collections.emptyList());
+            } else {
+                SpaceRepresentation.SpaceData spaceData = modelToRepresentation.toRepresentation(space, uriInfo, false);
+                return new GenericDataRepresentation<>(Collections.singletonList(spaceData));
+            }
+        }
+
+        if (filterText != null) {
+            if (filterText.equals("*")) {
+                filterText = "";
+            }
+        }
+
+        List<SpaceRepresentation.SpaceData> spacesData = spaceProvider.getSpaces(filterText, offset, limit).stream()
+                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo, false))
+                .collect(Collectors.toList());
+        return new GenericDataRepresentation<>(spacesData);
     }
 
     @POST
@@ -91,6 +118,39 @@ public class SpacesService extends AbstractResource {
         return Response.status(Response.Status.CREATED).entity(createdSpaceRepresentation.toSpaceRepresentation()).build();
     }
 
+    @GET
+    @Path("{spaceId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Return one Space")
+    public SpaceRepresentation getSpace(
+            @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId
+    ) {
+        SpaceModel space = getSpaceById(spaceId);
+        return modelToRepresentation.toRepresentation(space, uriInfo, false).toSpaceRepresentation();
+    }
+
+    @PUT
+    @Path("/spaces/{spaceId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Update space")
+    public SpaceRepresentation updateSpace(
+            @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
+            final SpaceRepresentation spaceRepresentation
+    ) throws ErrorResponseException {
+        SpaceModel space = getSpaceById(spaceId);
+
+        SpaceRepresentation.SpaceData data = spaceRepresentation.getData();
+        SpaceRepresentation.SpaceAttributes attributes = data.getAttributes();
+        if (attributes.getName() != null) {
+            space.setName(attributes.getName());
+        }
+        if (attributes.getDescription() != null) {
+            space.setDescription(attributes.getDescription());
+        }
+
+        return modelToRepresentation.toRepresentation(space, uriInfo, true).toSpaceRepresentation();
+    }
+
     @DELETE
     @Path("/{spaceId}")
     public Response deleteSpace(
@@ -110,45 +170,94 @@ public class SpacesService extends AbstractResource {
     }
 
     @GET
-    @Path("{spaceId}")
+    @Path("{spaceId}/collaborators")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Return one Space")
-    public SpaceRepresentation getSpace(
-            @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId
-    ) {
-        SpaceModel space = getSpaceById(spaceId);
-        return modelToRepresentation.toRepresentation(space, uriInfo, false).toSpaceRepresentation();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Return list of Spaces")
-    public GenericDataRepresentation<List<SpaceRepresentation.SpaceData>> getSpaces(
-            @ApiParam(value = "Space Assigned Id") @QueryParam("assignedId") String assignedId,
-            @ApiParam(value = "Filter Text") @QueryParam("filterText") @DefaultValue("") String filterText,
+    @ApiOperation(value = "Return list of Collaborators")
+    public GenericDataRepresentation<List<UserRepresentation.UserData>> getSpaceCollaborators(
+            @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
             @ApiParam(value = "First result") @QueryParam("offset") @DefaultValue("0") int offset,
             @ApiParam(value = "Max results") @QueryParam("limit") @DefaultValue("10") int limit
     ) {
-        if (assignedId != null) {
-            SpaceModel space = spaceProvider.getByAssignedId(assignedId);
-            if (space == null) {
-                return new GenericDataRepresentation<>(Collections.emptyList());
+        SpaceModel space = getSpaceById(spaceId);
+
+        List<UserModel> collaborators = space.getCollaborators(offset, limit + 1);
+        int totalCount = space.getCollaborators().size();
+
+        // Metadata
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("totalCount", totalCount);
+
+        // Links
+        Map<String, String> links = new HashMap<>();
+        links.put("first", uriInfo.getBaseUriBuilder()
+                .path(SpacesService.class)
+                .path(SpacesService.class, "getSpaceCollaborators")
+                .build(spaceId).toString() +
+                "?offset=0" +
+                "&limit=" + limit);
+
+        links.put("last", uriInfo.getBaseUriBuilder()
+                .path(SpacesService.class)
+                .path(SpacesService.class, "getSpaceCollaborators")
+                .build(spaceId).toString() +
+                "?offset=" + (totalCount > 0 ? (((totalCount - 1) % limit) * limit) : 0) +
+                "&limit=" + limit);
+
+        if (collaborators.size() > limit) {
+            links.put("next", uriInfo.getBaseUriBuilder()
+                    .path(SpacesService.class)
+                    .path(SpacesService.class, "getSpaceCollaborators")
+                    .build(spaceId).toString() +
+                    "?offset=" + (offset + limit) +
+                    "&limit=" + limit);
+
+            // Remove last item
+            collaborators.remove(collaborators.size() - 1);
+        }
+
+        return new GenericDataRepresentation<>(collaborators.stream()
+                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo, true))
+                .collect(Collectors.toList()), links, meta);
+    }
+
+    @POST
+    @Path("{spaceId}/collaborators")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Add new Collaborator", notes = "[user] role required")
+    public void addSpaceCollaborators(
+            @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
+            final TypedGenericDataRepresentation<List<UserRepresentation.UserData>> representation
+    ) throws ErrorResponseException {
+        SpaceModel space = getSpaceById(spaceId);
+        List<UserModel> currentCollaborators = space.getCollaborators();
+
+        for (UserRepresentation.UserData data : representation.getData()) {
+            UserModel newCollaborator = userProvider.getUserByUsername(data.getAttributes().getUsername());
+            if (!currentCollaborators.contains(newCollaborator)) {
+                space.addCollaborators(newCollaborator);
             } else {
-                SpaceRepresentation.SpaceData spaceData = modelToRepresentation.toRepresentation(space, uriInfo, false);
-                return new GenericDataRepresentation<>(Collections.singletonList(spaceData));
+                throw new ErrorResponseException("Collaborator already registered", Response.Status.BAD_REQUEST);
             }
         }
+    }
 
-        if (filterText != null) {
-            if (filterText.equals("*")) {
-                filterText = "";
-            }
+    @DELETE
+    @Path("{spaceId}/collaborators/{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Remove Collaborator")
+    public Response removeSpaceCollaborators(
+            @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
+            @ApiParam(value = "User Id") @PathParam("userId") String userId
+    ) throws ErrorResponseException {
+        SpaceModel space = getSpaceById(spaceId);
+        UserModel spaceOwner = space.getOwner();
+
+        UserModel collaborator = userProvider.getUser(userId);
+        if (spaceOwner.equals(collaborator)) {
+            return ErrorResponse.error("Could not delete the owner", Response.Status.BAD_REQUEST);
         }
-
-        List<SpaceRepresentation.SpaceData> spacesData = spaceProvider.getSpaces(filterText, offset, limit).stream()
-                .map(f -> modelToRepresentation.toRepresentation(f, uriInfo, false))
-                .collect(Collectors.toList());
-        return new GenericDataRepresentation<>(spacesData);
+        space.removeCollaborators(collaborator);
+        return Response.ok().build();
     }
 
 }

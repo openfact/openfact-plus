@@ -97,15 +97,15 @@ public abstract class AbstractResource {
 
     protected void deleteUserProtectedResource(UserModel user, HttpServletRequest request) {
         String uri = "/users/" + user.getId();
-        deleteProtectedResource(uri, request);
+        deleteSpaceProtectedResource(uri, request);
     }
 
-    protected void deleteProtectedResource(SpaceModel space, HttpServletRequest request) {
+    protected void deleteSpaceProtectedResource(SpaceModel space, HttpServletRequest request) {
         String uri = "/space/" + space.getId();
-        deleteProtectedResource(uri, request);
+        deleteSpaceProtectedResource(uri, request);
     }
 
-    protected void deleteProtectedResource(String uri, HttpServletRequest request) {
+    protected void deleteSpaceProtectedResource(String uri, HttpServletRequest request) {
         try {
             ProtectionResource protection = getAuthzClient(request).protection();
             Set<String> search = protection.resource().findByFilter("uri=" + uri);
