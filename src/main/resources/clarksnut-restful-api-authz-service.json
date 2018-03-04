@@ -14,7 +14,7 @@
     },
     {
       "name": "User Resource",
-      "uri": "/api/users",
+      "uri": "/api/users/*",
       "type": "http://clarksnut.com/users",
       "scopes": [
         {
@@ -27,7 +27,7 @@
     },
     {
       "name": "Space Resource",
-      "uri": "/api/spaces",
+      "uri": "/api/spaces/*",
       "type": "http://clarksnut.com/spaces",
       "scopes": [
         {
