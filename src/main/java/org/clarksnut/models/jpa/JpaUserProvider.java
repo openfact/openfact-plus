@@ -33,11 +33,12 @@ public class JpaUserProvider implements UserProvider {
     private EntityManager em;
 
     @Override
-    public UserModel addUser(String username, String providerType) {
+    public UserModel addUser(String username, String providerType, String identityId) {
         UserEntity entity = new UserEntity();
         entity.setId(UUID.randomUUID().toString());
-        entity.setProviderType(providerType);
         entity.setUsername(username);
+        entity.setProviderType(providerType);
+        entity.setIdentityId(identityId);
         entity.setRegistrationCompleted(false);
         em.persist(entity);
         return new UserAdapter(em, entity);

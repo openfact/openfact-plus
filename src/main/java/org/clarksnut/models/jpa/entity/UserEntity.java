@@ -16,7 +16,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "cl_user", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username")
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "identity_id")
 }, indexes = {
         @Index(columnList = "username", unique = true)
 })
@@ -40,6 +41,12 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @NotNull
     @Column(name = "username")
     private String username;
+
+    @Column(name = "identity_id")
+    private String identityId;
+
+    @Column(name = "external_id")
+    private String externalId;
 
     @Size(max = 255)
     @Column(name = "full_name")
@@ -236,5 +243,21 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     public void setDefaultLanguage(String defaultLanguage) {
         this.defaultLanguage = defaultLanguage;
+    }
+
+    public String getIdentityId() {
+        return identityId;
+    }
+
+    public void setIdentityId(String identityId) {
+        this.identityId = identityId;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 }

@@ -48,6 +48,11 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     }
 
     @Override
+    public String getIdentityId() {
+        return user.getIdentityId();
+    }
+
+    @Override
     public String getUsername() {
         return user.getUsername();
     }
@@ -209,6 +214,16 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public void setFavoriteSpaces(Set<String> spaces) {
         user.setFavoriteSpaces(spaces);
+    }
+
+    @Override
+    public String getExternalId() {
+        return user.getExternalId();
+    }
+
+    @Override
+    public void setExternalId(String externalId) {
+        user.setIdentityId(externalId);
     }
 
     @Override
