@@ -533,8 +533,9 @@ public class UsersService extends AbstractResource {
 
         Set<SpaceModel> spaces = filterAllowedSpaces(user, spaceIds);
 
+        Optional<String> optionalFilterText = Optional.ofNullable(filterText);
         List<DocumentRepresentation.DocumentData> documents = documentProvider
-                .getDocuments(filterText, offset, limit, spaces.toArray(new SpaceModel[spaces.size()]))
+                .getDocuments(optionalFilterText.orElse(""), offset, limit, spaces.toArray(new SpaceModel[spaces.size()]))
                 .stream()
                 .map(document -> modelToRepresentation.toRepresentation(user, document, uriInfo))
                 .collect(Collectors.toList());
@@ -627,8 +628,9 @@ public class UsersService extends AbstractResource {
             orderBy = DocumentModel.ISSUE_DATE;
         }
 
+        Optional<String> optionalFilterText = Optional.ofNullable(queryAttributes.getFilterText());
         DocumentQueryModel.Builder builder = DocumentQueryModel.builder()
-                .filterText(queryAttributes.getFilterText())
+                .filterText(optionalFilterText.orElse(""))
                 .orderBy(orderBy, queryAttributes.isAsc())
                 .offset(queryAttributes.getOffset() != null ? queryAttributes.getOffset() : 0)
                 .limit(queryAttributes.getLimit() != null ? queryAttributes.getLimit() : 10);
@@ -849,7 +851,8 @@ public class UsersService extends AbstractResource {
 
         Set<SpaceModel> spaces = filterAllowedSpaces(user, spaceIds);
 
-        List<PartyRepresentation.PartyData> parties = partyProvider.getParties(filterText, limit, spaces.toArray(new SpaceModel[spaces.size()]))
+        Optional<String> optionalFilterText = Optional.ofNullable(filterText);
+        List<PartyRepresentation.PartyData> parties = partyProvider.getParties(optionalFilterText.orElse(""), limit, spaces.toArray(new SpaceModel[spaces.size()]))
                 .stream()
                 .map(party -> modelToRepresentation.toRepresentation(party))
                 .collect(Collectors.toList());

@@ -2,8 +2,10 @@ package org.clarksnut.services.resources;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.representations.idm.UserRepresentation;
+import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
 import org.keycloak.KeycloakPrincipal;
@@ -13,12 +15,10 @@ import org.keycloak.representations.AccessToken;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.security.Principal;
 import java.util.Map;
@@ -56,6 +56,49 @@ public class ProfileService extends AbstractResource {
         }
 
         mergeUserInfo(user, accessToken);
+        return modelToRepresentation.toRepresentation(user, uriInfo, true).toUserRepresentation();
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Update User")
+    public UserRepresentation updateProfile(
+            @Context final HttpServletRequest request,
+            final UserRepresentation userRepresentation
+    ) throws ErrorResponseException {
+        UserModel user = getUserSession(request);
+
+        UserRepresentation.UserAttributesRepresentation attributes = userRepresentation.getData().getAttributes();
+
+        if (attributes != null) {
+            // Is registration completed
+            Boolean registrationCompleted = attributes.getRegistrationCompleted();
+            if (registrationCompleted != null) {
+                user.setRegistrationCompleted(registrationCompleted);
+            }
+
+            // Profile
+            if (attributes.getFullName() != null) {
+                user.setFullName(attributes.getFullName());
+            }
+            if (attributes.getCompany() != null) {
+                user.setCompany(attributes.getCompany());
+            }
+            if (attributes.getImageURL() != null) {
+                user.setImageURL(attributes.getImageURL());
+            }
+            if (attributes.getUrl() != null) {
+                user.setUrl(attributes.getUrl());
+            }
+            if (attributes.getBio() != null) {
+                user.setBio(attributes.getBio());
+            }
+
+            if (attributes.getDefaultLanguage() != null) {
+                user.setDefaultLanguage(attributes.getDefaultLanguage());
+            }
+        }
+
         return modelToRepresentation.toRepresentation(user, uriInfo, true).toUserRepresentation();
     }
 

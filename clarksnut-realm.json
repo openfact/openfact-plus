@@ -1,0 +1,79 @@
+{
+  "realm": "clarksnut",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "requiredCredentials": [
+    "password"
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "collector"
+      },
+      {
+        "name": "user"
+      }
+    ]
+  },
+  "defaultRoles": [
+    "offline_access",
+    "uma_authorization",
+    "user"
+  ],
+  "clients": [
+    {
+      "clientId": "clarksnut-restful-api",
+      "enabled": true,
+      "adminUrl": "/clarksnut-restful-api",
+      "baseUrl": "/clarksnut-restful-api",
+      "bearerOnly": true
+    },
+    {
+      "clientId": "clarksnut-mail-collector-rest-api",
+      "enabled": true,
+      "adminUrl": "/clarksnut-mail-collector-rest-api",
+      "baseUrl": "/clarksnut-mail-collector-rest-api",
+      "secret": "secret",
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "redirectUris": [
+        "http://localhost:8080/*",
+        "http://localhost:4200/*"
+      ],
+      "consentRequired": false
+    },
+    {
+      "clientId": "clarksnut-html5-client",
+      "enabled": true,
+      "baseUrl": "/clarksnut-html5-client/index.html",
+      "redirectUris": [
+        "http://localhost:4200/*"
+      ],
+      "webOrigins": [
+        "http://localhost:4200"
+      ],
+      "publicClient": true
+    }
+  ],
+  "identityProviders": [
+    {
+      "alias": "google",
+      "providerId": "google",
+      "enabled": true,
+      "updateProfileFirstLoginMode": "on",
+      "trustEmail": true,
+      "storeToken": true,
+      "addReadTokenRoleOnCreate": true,
+      "authenticateByDefault": false,
+      "linkOnly": false,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "clientId": "577687350229-jp38adc5t650kc9pjbqjif8ngajvcctl.apps.googleusercontent.com",
+        "clientSecret": "**********",
+        "useJwksUrl": "true"
+      }
+    }
+  ],
+  "keycloakVersion": "3.4.3.Final"
+}

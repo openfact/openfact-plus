@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,9 +44,13 @@ public abstract class AbstractResource {
     }
 
     protected Set<SpaceModel> filterAllowedSpaces(UserModel user, Collection<String> spaceIds) {
-        return user.getAllPermittedSpaces().stream()
-                .filter(p -> spaceIds.contains(p.getAssignedId()))
-                .collect(Collectors.toSet());
+        if (spaceIds.isEmpty()) {
+            return new HashSet<>(user.getAllPermittedSpaces());
+        } else {
+            return user.getAllPermittedSpaces().stream()
+                    .filter(p -> spaceIds.contains(p.getAssignedId()))
+                    .collect(Collectors.toSet());
+        }
     }
 
     protected UserModel getUserById(String id) {

@@ -18,17 +18,29 @@
 
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>All Resources</web-resource-name>
-            <url-pattern>/api/*</url-pattern>
+            <web-resource-name>Import Document</web-resource-name>
+            <url-pattern>/api/documents</url-pattern>
+            <http-method>POST</http-method>
         </web-resource-collection>
         <auth-constraint>
             <role-name>collector</role-name>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Documents</web-resource-name>
+            <url-pattern>/api/documents</url-pattern>
+            <http-method-omission>POST</http-method-omission>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
         </auth-constraint>
     </security-constraint>
 
     <login-config>
         <auth-method>KEYCLOAK</auth-method>
-        <realm-name>${sso.realm:clarksnut}</realm-name>
+        <realm-name>clarksnut</realm-name>
     </login-config>
 
     <security-role>

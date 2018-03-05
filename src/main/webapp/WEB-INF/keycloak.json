@@ -4,9 +4,5 @@
   "auth-server-url": "${sso.auth.server.url:http://localhost:8081/auth}",
   "ssl-required": "external",
   "resource": "${sso.clientId:clarksnut-restful-api}",
-  "credentials": {
-    "secret": "${sso.clientSecret:secret}"
-  },
-  "use-resource-role-mappings": true,
   "enable-cors": true
 }
