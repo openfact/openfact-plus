@@ -31,24 +31,10 @@ public class RequestsService extends AbstractResource {
     private UriInfo uriInfo;
 
     @Inject
-    private SpaceProvider spaceProvider;
-
-    @Inject
-    private UserProvider userProvider;
-
-    @Inject
     private RequestProvider requestProvider;
 
     @Inject
     private ModelToRepresentation modelToRepresentation;
-
-    private SpaceModel getSpaceById(String spaceId) {
-        SpaceModel space = spaceProvider.getSpace(spaceId);
-        if (space == null) {
-            throw new NotFoundException();
-        }
-        return space;
-    }
 
     private RequestModel getRequestById(String requestId) {
         RequestModel request = requestProvider.getRequest(requestId);
@@ -58,13 +44,6 @@ public class RequestsService extends AbstractResource {
         return request;
     }
 
-    private UserModel getUserById(String userId) {
-        UserModel user = userProvider.getUser(userId);
-        if (user == null) {
-            throw new NotFoundException();
-        }
-        return user;
-    }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -84,25 +63,6 @@ public class RequestsService extends AbstractResource {
         RequestModel request = requestProvider.addRequest(space, user, permissionType, message);
         RequestRepresentation.RequestData createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(request);
         return Response.status(Response.Status.CREATED).entity(createdRequestAccessRepresentation.toRequestAccessSpaceToRepresentation()).build();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Get Request accesses")
-    public GenericDataRepresentation<List<RequestRepresentation.RequestData>> getRequestAccess(
-            @ApiParam(value = "Space Ids") @QueryParam("space") List<String> spaceIds,
-            @ApiParam(value = "Status", allowableValues = "pending, accepted, rejected") @DefaultValue("pending") @QueryParam("status") String status,
-            @Context final HttpServletRequest httpServletRequest
-    ) {
-        UserModel sessionUser = getUserSession(httpServletRequest);
-        Set<SpaceModel> spaces = filterAllowedSpaces(sessionUser, spaceIds);
-        RequestStatus requestStatus = RequestStatus.valueOf(status.toUpperCase());
-
-        List<RequestRepresentation.RequestData> requests = requestProvider.getRequests(requestStatus, spaces.toArray(new SpaceModel[spaces.size()]))
-                .stream()
-                .map(f -> modelToRepresentation.toRepresentation(f))
-                .collect(Collectors.toList());
-        return new GenericDataRepresentation<>(requests);
     }
 
     @PUT

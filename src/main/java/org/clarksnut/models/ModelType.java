@@ -14,7 +14,9 @@ public enum ModelType {
 
     REQUEST_ACCESS("request-access"),
 
-    PARTIES("parties");
+    PARTIES("parties"),
+
+    NOTIFICATIONS("notifications");
 
     private String alias;
 

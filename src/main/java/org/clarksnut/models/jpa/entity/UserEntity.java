@@ -46,9 +46,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "identity_id")
     private String identityId;
 
-    @Column(name = "external_id")
-    private String externalId;
-
     @Size(max = 255)
     @Column(name = "full_name")
     private String fullName;
@@ -254,11 +251,4 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.identityId = identityId;
     }
 
-    public String getExternalId() {
-        return externalId;
-    }
-
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
-    }
 }

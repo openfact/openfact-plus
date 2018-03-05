@@ -2,9 +2,7 @@ package org.clarksnut.services.resources;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
-import org.clarksnut.models.UserProvider;
 import org.clarksnut.representations.idm.UserRepresentation;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
@@ -15,7 +13,10 @@ import org.keycloak.representations.AccessToken;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
@@ -28,16 +29,10 @@ import java.util.Map;
 @Api(value = "Profile", description = "Profile REST API", consumes = "application/json")
 public class ProfileService extends AbstractResource {
 
-    private static final String PROFILE_VIEW = "urn:clarksnut.com:scopes:profile:view";
-    private static final String PROFILE_EDIT = "urn:clarksnut.com:scopes:profile:edit";
-
     private static final Logger logger = Logger.getLogger(ProfileService.class);
 
     @Context
     private UriInfo uriInfo;
-
-    @Inject
-    private UserProvider userProvider;
 
     @Inject
     private ModelToRepresentation modelToRepresentation;
@@ -54,29 +49,17 @@ public class ProfileService extends AbstractResource {
         String username = accessToken.getPreferredUsername();
         String providerIdentityId = userPrincipal.getName();
 
+        // Get user from DB
         UserModel user = this.userProvider.getUserByUsername(username);
         if (user == null) {
-            // Authz
-            try {
-                user = this.userProvider.addUser(username, "kc", providerIdentityId);
-                createUserProtectedResource(user, request);
-            } catch (Throwable e) {
-                if (user != null) {
-                    getAuthzClient(request).protection().resource().delete(user.getExternalId());
-                }
-            }
-
-            logger.debug("New User added, username:" + username);
+            user = this.userProvider.addUser(username, "kc", providerIdentityId);
         }
 
-        mergeUserInfo(user, request);
+        mergeUserInfo(user, accessToken);
         return modelToRepresentation.toRepresentation(user, uriInfo, true).toUserRepresentation();
     }
 
-    private void mergeUserInfo(UserModel user, HttpServletRequest request) {
-        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) request.getUserPrincipal();
-        AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
-
+    private void mergeUserInfo(UserModel user, AccessToken accessToken) {
         if (accessToken.getEmail() != null && !accessToken.getEmail().equals(user.getEmail())) {
             user.setEmail(accessToken.getEmail());
         }

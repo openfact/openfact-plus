@@ -51,10 +51,4 @@ public interface UserModel {
 
     Set<String> getFavoriteSpaces();
     void setFavoriteSpaces(Set<String> spaces);
-
-    /*
-     * Authz
-     * */
-    String getExternalId();
-    void setExternalId(String externalId);
 }

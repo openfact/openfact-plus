@@ -111,7 +111,7 @@ public class ModelToRepresentation {
         return rep;
     }
 
-    public DocumentRepresentation.DocumentData toRepresentation(UserModel user, DocumentModel model, UriInfo uriInfo) {
+    public DocumentRepresentation.DocumentData toRepresentation(DocumentModel model, UriInfo uriInfo) {
         DocumentRepresentation.DocumentData rep = new DocumentRepresentation.DocumentData();
 
         List<DocumentVersionModel> documentVersions = model.getVersions();
@@ -155,16 +155,25 @@ public class ModelToRepresentation {
         attributes.setCustomerCity(model.getCustomerCity());
         attributes.setCustomerCountry(model.getCustomerCountry());
 
-        attributes.setViewed(model.getUserViews().contains(user.getId()));
-        attributes.setStarred(model.getUserStars().contains(user.getId()));
-        attributes.setChecked(model.getUserChecks().contains(user.getId()));
-
         attributes.setCreatedAt(model.getCreatedAt());
         attributes.setUpdatedAt(model.getUpdatedAt());
 
         attributes.setVersions(documentVersions.stream().map(DocumentVersionModel::getId).collect(Collectors.toSet()));
 
         return rep;
+    }
+
+
+    public DocumentRepresentation.DocumentData toRepresentation(UserModel user, DocumentModel model, UriInfo uriInfo) {
+        DocumentRepresentation.DocumentData representation = toRepresentation(model, uriInfo);
+
+        DocumentRepresentation.DocumentAttributes attributes = representation.getAttributes();
+
+        attributes.setViewed(model.getUserViews().contains(user.getId()));
+        attributes.setStarred(model.getUserStars().contains(user.getId()));
+        attributes.setChecked(model.getUserChecks().contains(user.getId()));
+
+        return representation;
     }
 
     public RequestRepresentation.RequestData toRepresentation(RequestModel model) {

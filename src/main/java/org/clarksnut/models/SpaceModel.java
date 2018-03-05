@@ -28,10 +28,4 @@ public interface SpaceModel {
 
     Date getCreatedAt();
     Date getUpdatedAt();
-
-    /*
-     * Authz
-     * */
-    String getExternalId();
-    void setExternalId(String externalId);
 }

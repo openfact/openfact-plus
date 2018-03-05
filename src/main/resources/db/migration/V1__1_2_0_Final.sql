@@ -99,6 +99,7 @@
         default_language varchar(255),
         email varchar(255),
         full_name varchar(255),
+        identity_id varchar(255) not null,
         image_url varchar(255),
         provider_type varchar(255) not null,
         registration_complete char(255) not null,
@@ -148,6 +149,9 @@
 
     alter table cl_user
        add constraint UKo2u1kvk0249ki7q84ggorljc6 unique (username);
+
+    alter table cl_user
+       add constraint UKj02cpo2pptija0ujdlickuyoa unique (identity_id);
 
     alter table cl_collaborator
        add constraint FKrp82c2i571lmhouy8orvurueb

@@ -217,16 +217,6 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     }
 
     @Override
-    public String getExternalId() {
-        return user.getExternalId();
-    }
-
-    @Override
-    public void setExternalId(String externalId) {
-        user.setExternalId(externalId);
-    }
-
-    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
