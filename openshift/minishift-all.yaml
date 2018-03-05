@@ -1,7 +1,35 @@
----
 apiVersion: v1
 kind: List
 items:
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: clarksnut
+    labels:
+      app: clarksnut
+  data:
+    cn.hibernate.index_manager: "directory-based"
+    cn.hibernate.lucene_index_directory: "/var/lucene/indexes"
+    cn.elasticsearch.host: "http://elasticsearch:9200"
+    cn.elasticsearch.index_schema_management_strategy: "create"
+    cn.elasticsearch.required_index_status: "green"
+    cn.elasticsearch.aws.enabled: "false"
+    cn.elasticsearch.aws.region: "us-east-1"
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: clarksnut
+    labels:
+      app: clarksnut
+  type: Opaque
+  data:
+    db.user: "Y2xhcmtzbnV0"
+    db.password: "Y2xhcmtzbnV0"
+    db.admin.password: "Y2xhcmtzbnV0"
+    cn.elasticsearch.user: "ZWxhc3RpYw=="
+    cn.elasticsearch.password: "Y2hhbmdlbWU="
+    cn.elasticsearch.aws.access_key: "bXlhY2Nlc3NrZXk="
+    cn.elasticsearch.aws.secret_key: "bXlzZWNyZXRrZXk="
 - apiVersion: v1
   kind: Service
   metadata:
@@ -111,3 +139,24 @@ items:
             claimName: clarksnut-db-postgresql-data
     triggers:
     - type: ConfigChange
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      app: clarksnut
+    name: clarksnut-fs-lucene-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: Secret
+  type: Opaque
+  metadata:
+    name: clarksnut-config
+    labels:
+      app: clarksnut
+  data:
+    clarksnut-stages.yml: cHJvamVjdDoKICBzdGFnZTogcHJvZHVjdGlvbi1wZXJ1CnN3YXJtOgogIGVlOgogICAgc3BlYy1kZXNjcmlwdG9yLXByb3BlcnR5LXJlcGxhY2VtZW50OiB0cnVlCiAgZGF0YXNvdXJjZXM6CiAgICBkYXRhLXNvdXJjZXM6CiAgICAgIENsYXJrc251dERTOgogICAgICAgIGRyaXZlci1uYW1lOiBwb3N0Z3Jlc3FsCiAgICAgICAgdXNlci1uYW1lOiBjbGFya3NudXQKICAgICAgICBwYXNzd29yZDogY2xhcmtzbnV0CiAgICAgICAgY29ubmVjdGlvbi11cmw6IGpkYmM6cG9zdGdyZXNxbDovL2NsYXJrc251dC1kYjo1NDMyL2NsYXJrc251dApjbGFya3NudXQ6CiAgcmVwb3J0OgogICAgZGVmYXVsdDogY2xhcmtzbnV0CiAgICBjYWNoZVJlcG9ydHM6IHRydWUKICAgIGNhY2hlVGVtcGxhdGVzOiB0cnVlCiAgICBmb2xkZXI6CiAgICAgIGRpcjogL3JlcG9ydHMKICBkb2N1bWVudDoKICAgIG1hcHBlcjoKICAgICAgZGVmYXVsdDogcGVydQ==
