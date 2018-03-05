@@ -314,7 +314,6 @@
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-authz-client</artifactId>
             <version>${version.keycloak}</version>
-            <scope>provided</scope>
         </dependency>
 
         <!--Elasticsearch-->
