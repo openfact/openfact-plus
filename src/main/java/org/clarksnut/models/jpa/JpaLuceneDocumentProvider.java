@@ -74,6 +74,10 @@ public class JpaLuceneDocumentProvider extends JpaAbstractDocumentProvider imple
                 .onField("assignedId").boostedTo(5)
                 .andField("nGramAssignedId")
                 .andField("edgeNGramAssignedId")
+                .andField("nGramSupplierName")
+                .andField("edgeNGramSupplierName")
+                .andField("nGramCustomerName")
+                .andField("edgeNGramCustomerName")
                 .sentence(filterText.toLowerCase())
                 .createQuery();
 

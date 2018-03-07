@@ -26,6 +26,8 @@ public class DocumentSearchMappingFactory {
                  * Supplier */
                 .property("supplierName", ElementType.FIELD)
                 .field().name("supplierName").index(Index.YES).store(Store.YES).analyze(Analyze.YES).analyzer("standardAnalyzer")
+                .field().name("nGramSupplierName").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteNGramAnalyzer")
+                .field().name("edgeNGramSupplierName").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteEdgeAnalyzer")
 
                 .property("supplierAssignedId", ElementType.FIELD)
                 .field().name("supplierAssignedId").index(Index.YES).store(Store.YES).analyze(Analyze.YES).analyzer("standardAnalyzer")
@@ -33,6 +35,8 @@ public class DocumentSearchMappingFactory {
                  * Customer */
                 .property("customerName", ElementType.FIELD)
                 .field().name("customerName").index(Index.YES).store(Store.YES).analyze(Analyze.YES).analyzer("standardAnalyzer")
+                .field().name("nGramCustomerName").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteNGramAnalyzer")
+                .field().name("edgeNGramCustomerName").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteEdgeAnalyzer")
 
                 .property("customerAssignedId", ElementType.FIELD)
                 .field().name("customerAssignedId").index(Index.YES).store(Store.YES).analyze(Analyze.YES).analyzer("standardAnalyzer")
