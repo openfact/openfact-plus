@@ -79,10 +79,11 @@ public class RequestsService extends AbstractResource {
             final RequestRepresentation representation
     ) {
         RequestModel request = getRequestById(requestId);
-        SpaceModel space = request.getSpace();
+        SpaceModel requestedSpace = request.getSpace();
+        UserModel requestedUser = request.getUser();
 
         UserModel sessionUser = getUserSession(httpServletRequest);
-        if (!sessionUser.getOwnedSpaces().contains(space)) {
+        if (!sessionUser.getOwnedSpaces().contains(requestedSpace)) {
             throw new ForbiddenException();
         }
 
@@ -95,7 +96,10 @@ public class RequestsService extends AbstractResource {
                 case PENDING:
                     return ErrorResponse.error("Could not change to this status", Response.Status.BAD_REQUEST);
                 case ACCEPTED:
-                    space.addCollaborators(request.getUser());
+                    if (!requestedSpace.getCollaborators().contains(requestedUser)) {
+                        requestedSpace.addCollaborators(request.getUser());
+                    }
+                    request.setStatus(RequestStatus.ACCEPTED);
                     break;
                 case REJECTED:
                     request.setStatus(RequestStatus.REJECTED);

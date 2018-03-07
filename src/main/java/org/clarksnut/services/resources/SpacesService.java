@@ -7,11 +7,13 @@ import org.clarksnut.models.SpaceModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.representations.idm.SpaceRepresentation;
+import org.clarksnut.services.ErrorResponse;
 import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.utils.ModelToRepresentation;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -103,5 +105,31 @@ public class SpacesService extends AbstractResource {
         return modelToRepresentation.toRepresentation(space, uriInfo, false).toSpaceRepresentation();
     }
 
+    @POST
+    @Path("{spaceId}/collaborators/{userId}/leave")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Leave Space")
+    public Response leaveSpace(
+            @ApiParam(value = "Space Id") @PathParam("spaceId") String spaceId,
+            @ApiParam(value = "User Id") @PathParam("userId") String userId,
+            @Context HttpServletRequest request
+    ) throws ErrorResponseException {
+        SpaceModel space = getSpaceById(spaceId);
+
+        UserModel user;
+        if (userId.equals("me")) {
+            user = getUserSession(request);
+        } else {
+            return ErrorResponse.error("Error", Response.Status.NOT_IMPLEMENTED);
+        }
+
+        List<UserModel> spaceCollaborators = space.getCollaborators();
+        if (!spaceCollaborators.contains(user)) {
+            return ErrorResponse.error("You are not a collaborator of this space", Response.Status.BAD_REQUEST);
+        }
+
+        space.removeCollaborators(user);
+        return Response.ok().build();
+    }
 
 }
