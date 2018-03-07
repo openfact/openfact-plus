@@ -60,6 +60,10 @@ public class RequestsService extends AbstractResource {
         PermissionType permissionType = PermissionType.valueOf(attributes.getScope().toUpperCase());
         String message = attributes.getMessage();
 
+        if (space.getCollaborators().contains(user)) {
+            return ErrorResponse.error("User is already a collaborator of Space", Response.Status.CONFLICT);
+        }
+
         RequestModel request = requestProvider.addRequest(space, user, permissionType, message);
         RequestRepresentation.RequestData createdRequestAccessRepresentation = modelToRepresentation.toRepresentation(request);
         return Response.status(Response.Status.CREATED).entity(createdRequestAccessRepresentation.toRequestAccessSpaceToRepresentation()).build();

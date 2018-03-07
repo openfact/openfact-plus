@@ -12,8 +12,15 @@
             <property name="jboss.as.jpa.providerModule" value="org.hibernate:${version.hibernate}"/>
 
             <property name="hibernate.hbm2ddl.auto" value="none"/>
-            <property name="hibernate.show_sql" value="false"/>
-            <property name="hibernate.format_sql" value="false"/>
+            <property name="hibernate.show_sql" value="${env.CN_HIBERNATE_SHOW_SQL:true}"/>
+            <property name="hibernate.format_sql" value="${env.CN_HIBERNATE_FORMAT_SQL:true}"/>
+            <property name="hibernate.use_sql_comments" value="${env.CN_HIBERNATE_SHOW_SQL:true}" />
+
+            <property name="hibernate.jdbc.batch_size" value="5"/>
+            <property name="hibernate.order_inserts" value="true"/>
+            <property name="hibernate.order_updates" value="true"/>
+
+            <property name="hibernate.generate_statistics" value="true"/>
 
             <!--Hibernate SEARCH-->
             <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>

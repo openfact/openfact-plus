@@ -1,6 +1,11 @@
 swarm:
   ee:
     spec-descriptor-property-replacement: true
+  logging:
+    loggers:
+      hibernate_statistics:
+        category: org.hibernate.stat
+        level: INFO
   datasources:
     data-sources:
       ClarksnutDS:

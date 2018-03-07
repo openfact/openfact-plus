@@ -36,7 +36,7 @@ public class DocumentVersionEntity implements CreatableEntity, UpdatableEntity, 
 
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "imported_document_id", foreignKey = @ForeignKey)
+    @MapsId
     private ImportedDocumentEntity importedDocument;
 
     @NotNull(message = "createdAt should not be null")

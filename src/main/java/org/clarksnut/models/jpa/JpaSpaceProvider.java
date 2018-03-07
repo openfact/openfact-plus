@@ -74,7 +74,7 @@ public class JpaSpaceProvider implements SpaceProvider {
         if (entity == null) return false;
 
         em.createNamedQuery("deleteCollaboratorsBySpaceId").setParameter("spaceId", space.getId()).executeUpdate();
-        em.remove(entity);
+        em.createNamedQuery("deleteSpaceById").setParameter("spaceId", space.getId()).executeUpdate();
         return true;
     }
 

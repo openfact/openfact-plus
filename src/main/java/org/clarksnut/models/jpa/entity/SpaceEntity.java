@@ -22,7 +22,8 @@ import java.util.Set;
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getSpaceByAssignedId", query = "select s from SpaceEntity s where s.assignedId = :assignedId"),
-        @NamedQuery(name = "searchSpacesByFilterText", query = "select s from SpaceEntity s where s.name like :filterText or s.assignedId like :assignedId")
+        @NamedQuery(name = "searchSpacesByFilterText", query = "select s from SpaceEntity s where s.name like :filterText or s.assignedId like :filterText"),
+        @NamedQuery(name = "deleteSpaceById", query = "delete SpaceEntity s where s.id =:spaceId")
 })
 public class SpaceEntity implements CreatableEntity, UpdatableEntity, Serializable {
 

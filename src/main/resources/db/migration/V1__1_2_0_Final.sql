@@ -30,13 +30,12 @@
     );
 
     create table cl_document_version (
-       id varchar(36) not null,
-        created_at timestamp not null,
+       created_at timestamp not null,
         is_current_version integer not null,
         updated_at timestamp not null,
+        importedDocument_id varchar(36) not null,
         document_id varchar(36) not null,
-        imported_document_id varchar(36) not null,
-        primary key (id)
+        primary key (importedDocument_id)
     );
 
     create table cl_file (
@@ -169,8 +168,8 @@
        references cl_document;
 
     alter table cl_document_version
-       add constraint FKp3yu95xfvlsdayiuhjqg5ipog
-       foreign key (imported_document_id)
+       add constraint FKv8l5ddy51iailp4sqdum4ab6
+       foreign key (importedDocument_id)
        references cl_imported_document;
 
     alter table cl_imported_document
