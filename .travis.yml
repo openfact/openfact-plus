@@ -1,7 +1,8 @@
 language: java
-
 env:
   global:
-    - MAVEN_OPTS="-Xms4096m -Xmx4096m"
-
+  - MAVEN_OPTS="-Xms4096m -Xmx4096m"
 script: mvn clean test
+notifications:
+  slack:
+    secure: GU0eRdLzDHEoqWNlWE9csMHkxmZJ5+xgQdNDp2phE7zpTYcnzw/ulwBWEljP3jw3HaLHK3S0RhqQnphCnZpJ1Jusenhde9rN28+IdXraTmNipOpFnhVpT3j4719tWjwiWxx1+4VwbM6IRLwciDYJGmfMvfbDiveRt9d1JiXGWmlt7wo9Pgj32Ke0JNE1sNooCHsuBFHi60xQ9oCGBeptR4fAxEK2uF9BlAqHPlXZe9NPuMUSiUc119xTp+jtcXtBY+NqvI9eU7OCOhf+kBD6/cVGg+WIb4hP6vGrtqTIlAe4/4yDNbpq0hC1tvGkY3v7AmotHzqp6r4tGrFrI+Ie0RvFzKthExSmYXcC57UL+coTqD2s5rXcUssaveqX9axPDYwTTSbnWC1POdKO2vFrRHeGqq+rooYyXxboPgDPsAxjSNhnXQHIVFHBl/pQWv7OKIXOjUWQWDQlhmW6FdD7QBE1hWFTTVupd9z/ZBGFrUK3LzHb3GOc25Xq2KyuUFQy61gnfjdk3CxBFbN8bvco42+ZySywVKeTYMBU4Ir9f+H7Hn34tWpamNz6zWQPpQW/iR6d+3CHx+a9MNH8t3Gav6ay98kipKmy6hCYn6F4jUACZBCJe5b3Ijsn1VsooRz10Nkebopc4uDUwUfLRHp1FSKpKymLN9ojwXvo/wEaI9I=
