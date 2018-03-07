@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/clarksnut/clarksnut.svg?branch=master)](https://travis-ci.org/clarksnut/clarksnut)
+
 # Clarksnut
 Clarksnut allows you to centralize all your XML-UBL Documents on one site.
 
