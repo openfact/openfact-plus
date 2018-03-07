@@ -193,7 +193,6 @@ public class UsersService extends AbstractResource {
     @ApiOperation(value = "Get Notifications")
     public NotificationsRepresentation getNotifications(
             @ApiParam(value = "User Id") @PathParam("userId") String userId,
-            @ApiParam(value = "Space Ids") @QueryParam("space") List<String> spaceIds,
             @ApiParam(value = "Status", allowableValues = "pending, accepted, rejected") @DefaultValue("pending") @QueryParam("status") String status,
             @Context final HttpServletRequest request
     ) throws ErrorResponseException {
@@ -204,7 +203,7 @@ public class UsersService extends AbstractResource {
             throw new ErrorResponseException("Error", Response.Status.NOT_IMPLEMENTED);
         }
 
-        Set<SpaceModel> spaces = filterAllowedSpaces(user, spaceIds);
+        List<SpaceModel> spaces = user.getOwnedSpaces();
         RequestStatus requestStatus = RequestStatus.valueOf(status.toUpperCase());
 
         List<RequestRepresentation.RequestData> requests = requestProvider.getRequests(requestStatus, spaces.toArray(new SpaceModel[spaces.size()]))
