@@ -118,7 +118,17 @@ public class UsersDocumentsService extends AbstractResource {
 
         TermQuery starQuery = null;
         if (queryAttributes.getStarred() != null) {
-            starQuery = new TermQuery(DocumentModel.STARRED, queryAttributes.getStarred());
+            starQuery = new TermQuery(DocumentModel.STARRED, user.getId());
+        }
+
+        TermQuery viewQuery = null;
+        if (queryAttributes.getViewed() != null) {
+            viewQuery = new TermQuery(DocumentModel.VIEWED, user.getId());
+        }
+
+        TermQuery checkQuery = null;
+        if (queryAttributes.getChecked() != null) {
+            checkQuery = new TermQuery(DocumentModel.CHECKED, user.getId());
         }
 
         RangeQuery amountQuery = null;
@@ -179,9 +189,29 @@ public class UsersDocumentsService extends AbstractResource {
         if (tagSQuery != null) {
             builder.addFilter(tagSQuery);
         }
+
         if (starQuery != null) {
-            builder.addFilter(starQuery);
+            if (queryAttributes.getStarred()) {
+                builder.addFilter(starQuery);
+            } else {
+                builder.addNegativeFilter(starQuery);
+            }
         }
+        if (viewQuery != null) {
+            if (queryAttributes.getViewed()) {
+                builder.addFilter(viewQuery);
+            } else {
+                builder.addNegativeFilter(viewQuery);
+            }
+        }
+        if (checkQuery != null) {
+            if (queryAttributes.getChecked()) {
+                builder.addFilter(checkQuery);
+            } else {
+                builder.addNegativeFilter(checkQuery);
+            }
+        }
+
         if (amountQuery != null) {
             builder.addFilter(amountQuery);
         }

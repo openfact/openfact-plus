@@ -60,9 +60,17 @@ public class DocumentSearchMappingFactory {
                 /*
                  * User interactions
                  * */
-                .property("userViews", ElementType.FIELD).indexEmbedded()
-                .property("userStarts", ElementType.FIELD).indexEmbedded()
-                .property("userChecks", ElementType.FIELD).indexEmbedded();
+                .property("userViews", ElementType.FIELD)
+                .field().name("userViews")
+                .bridge(BuiltinIterableBridge.class)
+
+                .property("userStarts", ElementType.FIELD)
+                .field().name("userStarts")
+                .bridge(BuiltinIterableBridge.class)
+
+                .property("userChecks", ElementType.FIELD)
+                .field().name("userChecks")
+                .bridge(BuiltinIterableBridge.class);
 
         mapping.entity(PartyEntity.class).indexed()
                 .property("id", ElementType.FIELD).documentId().name("id")

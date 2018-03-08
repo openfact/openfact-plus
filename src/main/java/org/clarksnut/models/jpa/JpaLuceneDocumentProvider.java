@@ -54,6 +54,9 @@ public class JpaLuceneDocumentProvider extends JpaAbstractDocumentProvider imple
         for (org.clarksnut.query.Query q : query.getFilters()) {
             boolQueryBuilder.must(LuceneQueryParser.toLuceneQuery(q, new DocumentFieldMapper(), queryBuilder));
         }
+        for (org.clarksnut.query.Query q : query.getNegativeFilters()) {
+            boolQueryBuilder.must(LuceneQueryParser.toLuceneQuery(q, new DocumentFieldMapper(), queryBuilder)).not();
+        }
 
         String spaceAssignedIds = Stream.of(space).map(SpaceModel::getAssignedId).collect(Collectors.joining(" "));
         Query spaceFilterQuery = queryBuilder.bool()

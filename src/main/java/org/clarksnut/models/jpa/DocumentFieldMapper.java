@@ -35,9 +35,10 @@ public class DocumentFieldMapper implements Function<String, String> {
         map.put(DocumentModel.CUSTOMER_ASSIGNED_ID, "customerAssignedId");
 
         // Document User
-        map.put(DocumentModel.CHECKED, "starred");
-        map.put(DocumentModel.VIEWED, "viewed");
-        map.put(DocumentModel.CHECKED, "checked");
+        map.put(DocumentModel.STARRED, "userStarts");
+        map.put(DocumentModel.VIEWED, "userViews");
+        map.put(DocumentModel.CHECKED, "userChecks");
+
         map.put(DocumentModel.TAGS, "tags");
 
         return map;

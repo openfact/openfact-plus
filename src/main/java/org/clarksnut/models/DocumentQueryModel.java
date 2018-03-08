@@ -9,6 +9,7 @@ public class DocumentQueryModel {
 
     private final String filterText;
     private final Set<SimpleQuery> filters;
+    private final Set<SimpleQuery> negativeFilters;
 
     private final String orderBy;
     private final boolean asc;
@@ -19,6 +20,7 @@ public class DocumentQueryModel {
     private DocumentQueryModel(Builder builder) {
         this.filterText = builder.filterText;
         this.filters = builder.filters;
+        this.negativeFilters = builder.negativeFilters;
 
         this.orderBy = builder.orderBy;
         this.asc = builder.asc;
@@ -55,10 +57,15 @@ public class DocumentQueryModel {
         return limit;
     }
 
+    public Set<SimpleQuery> getNegativeFilters() {
+        return negativeFilters;
+    }
+
     public static class Builder {
 
         private String filterText;
         private Set<SimpleQuery> filters = new HashSet<>();
+        private Set<SimpleQuery> negativeFilters = new HashSet<>();
 
         private boolean asc;
         private String orderBy;
@@ -73,6 +80,11 @@ public class DocumentQueryModel {
 
         public Builder addFilter(SimpleQuery SimpleQuery) {
             this.filters.add(SimpleQuery);
+            return this;
+        }
+
+        public Builder addNegativeFilter(SimpleQuery SimpleQuery) {
+            this.negativeFilters.add(SimpleQuery);
             return this;
         }
 
