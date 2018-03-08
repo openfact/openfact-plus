@@ -15,12 +15,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "cl_party", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"assignedId", "supplier_customer_assigned_id"})
+        @UniqueConstraint(columnNames = "assignedId")
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getIndexedPartyById", query = "select d from PartyEntity d where d.id=:partyId"),
-        @NamedQuery(name = "getIndexedPartyByAssignedIdAndSupplierCustomerAssignedId", query = "select d from PartyEntity d where d.assignedId=:assignedId and d.supplierCustomerAssignedId=:supplierCustomerAssignedId")
+        @NamedQuery(name = "getIndexedPartyByAssignedId", query = "select d from PartyEntity d where d.assignedId=:assignedId"),
+        @NamedQuery(name = "getIndexedPartyByAssignedIdAndSpaceId", query = "select distinct p from PartyEntity p join p.spaceIds s where p.assignedId=:assignedId and s=:spaceAssignedId")
 })
 public class PartyEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
@@ -41,11 +42,12 @@ public class PartyEntity implements CreatableEntity, UpdatableEntity, Serializab
     @ElementCollection
     @Column(name = "value")
     @CollectionTable(name = "party_names", joinColumns = {@JoinColumn(name = "party_id")})
-    private Set<String> partyNames = new HashSet<>();
+    private Set<String> names = new HashSet<>();
 
-    @NotNull
-    @Column(name = "supplier_customer_assigned_id")
-    private String supplierCustomerAssignedId;
+    @ElementCollection
+    @Column(name = "value")
+    @CollectionTable(name = "party_space_ids", joinColumns = {@JoinColumn(name = "party_id")})
+    private Set<String> spaceIds = new HashSet<>();
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -85,20 +87,20 @@ public class PartyEntity implements CreatableEntity, UpdatableEntity, Serializab
         this.name = name;
     }
 
-    public Set<String> getPartyNames() {
-        return partyNames;
+    public Set<String> getNames() {
+        return names;
     }
 
-    public void setPartyNames(Set<String> partyNames) {
-        this.partyNames = partyNames;
+    public void setNames(Set<String> names) {
+        this.names = names;
     }
 
-    public String getSupplierCustomerAssignedId() {
-        return supplierCustomerAssignedId;
+    public Set<String> getSpaceIds() {
+        return spaceIds;
     }
 
-    public void setSupplierCustomerAssignedId(String supplierCustomerAssignedId) {
-        this.supplierCustomerAssignedId = supplierCustomerAssignedId;
+    public void setSpaceIds(Set<String> spaceIds) {
+        this.spaceIds = spaceIds;
     }
 
     public Date getCreatedAt() {

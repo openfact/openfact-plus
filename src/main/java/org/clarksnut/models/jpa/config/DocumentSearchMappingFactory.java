@@ -3,6 +3,7 @@ package org.clarksnut.models.jpa.config;
 import org.clarksnut.models.jpa.entity.DocumentEntity;
 import org.clarksnut.models.jpa.entity.PartyEntity;
 import org.hibernate.search.annotations.*;
+import org.hibernate.search.bridge.builtin.impl.BuiltinIterableBridge;
 import org.hibernate.search.cfg.SearchMapping;
 
 import java.lang.annotation.ElementType;
@@ -66,22 +67,24 @@ public class DocumentSearchMappingFactory {
         mapping.entity(PartyEntity.class).indexed()
                 .property("id", ElementType.FIELD).documentId().name("id")
 
-                .property("name", ElementType.FIELD)
-                .field().name("name").index(Index.YES).store(Store.YES).analyze(Analyze.YES).analyzer("standardAnalyzer")
-                .field().name("nGramName").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteNGramAnalyzer")
-                .field().name("edgeNGramName").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteEdgeAnalyzer")
-
                 .property("assignedId", ElementType.FIELD)
                 .field().name("assignedId").index(Index.YES).store(Store.YES).analyze(Analyze.YES).analyzer("standardAnalyzer")
                 .field().name("nGramPartyAssignedId").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteNGramAnalyzer")
                 .field().name("edgeNGramAssignedId").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteEdgeAnalyzer")
 
-                .property("partyNames", ElementType.FIELD).indexEmbedded()
-                .field().name("partyNames").index(Index.YES).store(Store.YES).analyze(Analyze.YES).analyzer("standardAnalyzer")
-                .field().name("nGramPartyNames").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteNGramAnalyzer")
-                .field().name("edgeNGramPartyNames").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteEdgeAnalyzer")
+                .property("name", ElementType.FIELD)
+                .field().name("name").index(Index.YES).store(Store.YES).analyze(Analyze.YES).analyzer("standardAnalyzer")
+                .field().name("nGramName").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteNGramAnalyzer")
+                .field().name("edgeNGramName").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteEdgeAnalyzer")
 
-                .property("supplierCustomerAssignedId", ElementType.FIELD).field().name("supplierCustomerAssignedId");
+                .property("names", ElementType.FIELD).indexEmbedded()
+                .field().name("names").index(Index.YES).store(Store.YES).analyze(Analyze.YES).analyzer("standardAnalyzer")
+                .field().name("nGramNames").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteNGramAnalyzer")
+                .field().name("edgeNGramNames").index(Index.YES).store(Store.NO).analyze(Analyze.YES).analyzer("autocompleteEdgeAnalyzer")
+
+                .property("spaceIds", ElementType.FIELD)
+                .field().name("spaceIds")
+                .bridge(BuiltinIterableBridge.class);
 
         return mapping;
     }

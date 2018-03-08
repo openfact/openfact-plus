@@ -61,7 +61,6 @@
         assignedId varchar(255) not null,
         created_at timestamp not null,
         name varchar(255) not null,
-        supplier_customer_assigned_id varchar(255) not null,
         updated_at timestamp not null,
         version integer,
         primary key (id)
@@ -119,6 +118,11 @@
         value varchar(255)
     );
 
+    create table party_space_ids (
+       party_id varchar(36) not null,
+        value varchar(255)
+    );
+
     create table user_checks (
        document_id varchar(36) not null,
         value varchar(255)
@@ -138,10 +142,7 @@
        add constraint UK1g8cna9wmjf7rvym5de8otj5j unique (type, assigned_id, supplier_assigned_id);
 
     alter table cl_party
-       add constraint UK_qsn66cs7jft3nmms4n0no3p8j unique (assignedId);
-
-    alter table cl_party
-       add constraint UK895ssg8gxbua49mjkjfuirydo unique (assignedId, supplier_customer_assigned_id);
+       add constraint UKlbhowa4pjy8y18dto6qn6sw0h unique (assignedId);
 
     alter table cl_space
        add constraint UKsdrlysemmnh3bs7q5rky8bbq2 unique (assigned_id);
@@ -194,6 +195,11 @@
 
     alter table party_names
        add constraint FKexpsenj4kq537hkji9csf7pkh
+       foreign key (party_id)
+       references cl_party;
+
+    alter table party_space_ids
+       add constraint FK90u3crgakw86yv1fr3byr9o4s
        foreign key (party_id)
        references cl_party;
 

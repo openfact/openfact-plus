@@ -24,9 +24,9 @@ import java.util.stream.Stream;
 public class JpaPartyProvider implements PartyProvider {
 
     public static final String[] AUTOCOMPLETE_FIELDS = {
-            "nGramName", "edgeNGramName",
             "nGramPartyAssignedId", "edgeNGramAssignedId",
-            "nGramPartyNames", "edgeNGramPartyNames"
+            "nGramName", "edgeNGramName",
+            "nGramNames", "edgeNGramNames"
     };
 
     @PersistenceContext
@@ -52,8 +52,8 @@ public class JpaPartyProvider implements PartyProvider {
 
         String spaceAssignedIds = Stream.of(space).map(SpaceModel::getAssignedId).collect(Collectors.joining(" "));
         Query spaceFilterQuery = queryBuilder.bool()
-                .should(queryBuilder.keyword().onField("supplierCustomerAssignedId").matching(spaceAssignedIds).createQuery())
-                .should(queryBuilder.keyword().onField("supplierCustomerAssignedId").matching(spaceAssignedIds).createQuery())
+                .should(queryBuilder.keyword().onField("spaceIds").matching(spaceAssignedIds).createQuery())
+                .should(queryBuilder.keyword().onField("spaceIds").matching(spaceAssignedIds).createQuery())
                 .createQuery();
 
         boolQueryBuilder.must(filterTextQuery);
@@ -62,10 +62,9 @@ public class JpaPartyProvider implements PartyProvider {
     }
 
     @Override
-    public PartyModel getPartyByAssignedId(String assignedId, String supplierCustomerAssignedId) {
-        TypedQuery<PartyEntity> query = em.createNamedQuery("getIndexedPartyByAssignedIdAndSupplierCustomerAssignedId", PartyEntity.class);
+    public PartyModel getPartyByAssignedId(String assignedId) {
+        TypedQuery<PartyEntity> query = em.createNamedQuery("getIndexedPartyByAssignedId", PartyEntity.class);
         query.setParameter("assignedId", assignedId);
-        query.setParameter("supplierCustomerAssignedId", supplierCustomerAssignedId);
         List<PartyEntity> entities = query.getResultList();
         if (entities.size() == 0) return null;
         return new IndexedPartyAdapter(em, entities.get(0));
