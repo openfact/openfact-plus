@@ -15,11 +15,10 @@ public class NumericRangeFacetAdapter implements FacetModel<RangeModel<Long>> {
     @Override
     public RangeModel<Long> getValue() {
         String[] split = facet.getValue()
-                .replaceAll("\"", "")
                 .replaceAll("[\\[\\]()]", "")
                 .split(",");
-        Long from = Long.parseLong(split[0]);
-        Long to = Long.parseLong(split[1]);
+        Long from = !split[0].trim().isEmpty() ? Long.parseLong(split[0].trim()) : 0;
+        Long to = !split[1].trim().isEmpty() ? Long.parseLong(split[1].trim()) : 0;
 
         return new RangeModel<Long>() {
             @Override
