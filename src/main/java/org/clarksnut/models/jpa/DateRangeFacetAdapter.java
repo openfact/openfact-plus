@@ -3,6 +3,7 @@ package org.clarksnut.models.jpa;
 import org.clarksnut.models.FacetModel;
 import org.clarksnut.models.RangeModel;
 import org.hibernate.search.query.facet.Facet;
+import org.hibernate.search.query.facet.RangeFacet;
 
 import java.util.Date;
 
@@ -16,20 +17,16 @@ public class DateRangeFacetAdapter implements FacetModel<RangeModel<Date>> {
 
     @Override
     public RangeModel<Date> getValue() {
-        String[] split = facet.getValue()
-                .replaceAll("\"", "")
-                .replaceAll("[\\[\\]()]", "")
-                .split(",");
-
+        RangeFacet<Date> range = (RangeFacet<Date>) facet;
         return new RangeModel<Date>() {
             @Override
             public Date getFrom() {
-                return null;
+                return range.getMin();
             }
 
             @Override
             public Date getTo() {
-                return null;
+                return range.getMax();
             }
         };
     }

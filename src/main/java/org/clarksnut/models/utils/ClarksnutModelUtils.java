@@ -78,6 +78,11 @@ public class ClarksnutModelUtils {
         // set DATE to 1, so first date of previous month
         aCalendar.set(Calendar.DATE, 1);
 
+        aCalendar.set(Calendar.HOUR, 0);
+        aCalendar.set(Calendar.MINUTE, 0);
+        aCalendar.set(Calendar.SECOND, 0);
+        aCalendar.set(Calendar.MILLISECOND, 0);
+
         return aCalendar.getTime();
     }
 

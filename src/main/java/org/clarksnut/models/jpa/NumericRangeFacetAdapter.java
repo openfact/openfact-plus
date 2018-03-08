@@ -3,8 +3,11 @@ package org.clarksnut.models.jpa;
 import org.clarksnut.models.FacetModel;
 import org.clarksnut.models.RangeModel;
 import org.hibernate.search.query.facet.Facet;
+import org.hibernate.search.query.facet.RangeFacet;
 
-public class NumericRangeFacetAdapter implements FacetModel<RangeModel<Long>> {
+import java.util.Date;
+
+public class NumericRangeFacetAdapter implements FacetModel<RangeModel<Integer>> {
 
     private final Facet facet;
 
@@ -13,22 +16,18 @@ public class NumericRangeFacetAdapter implements FacetModel<RangeModel<Long>> {
     }
 
     @Override
-    public RangeModel<Long> getValue() {
-        String[] split = facet.getValue()
-                .replaceAll("[\\[\\]()]", "")
-                .split(",");
-        Long from = !split[0].trim().isEmpty() ? Long.parseLong(split[0].trim()) : 0;
-        Long to = !split[1].trim().isEmpty() ? Long.parseLong(split[1].trim()) : 0;
+    public RangeModel<Integer> getValue() {
+        RangeFacet<Integer> range = (RangeFacet<Integer>) facet;
 
-        return new RangeModel<Long>() {
+        return new RangeModel<Integer>() {
             @Override
-            public Long getFrom() {
-                return from;
+            public Integer getFrom() {
+                return range.getMin();
             }
 
             @Override
-            public Long getTo() {
-                return to;
+            public Integer getTo() {
+                return range.getMax();
             }
         };
     }

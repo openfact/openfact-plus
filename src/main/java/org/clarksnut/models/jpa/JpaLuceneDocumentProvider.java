@@ -193,6 +193,7 @@ public class JpaLuceneDocumentProvider extends JpaAbstractDocumentProvider imple
                 .name("issueDateFacet")
                 .onField("issueDateFacet")
                 .range()
+                .below(ClarksnutModelUtils.getFirstDateOfPlusNMonth(-2))
                 .from(ClarksnutModelUtils.getFirstDateOfPlusNMonth(-2))
                 .to(ClarksnutModelUtils.getLastDateOfPlusNMonth(-2))
                 .from(ClarksnutModelUtils.getFirstDateOfPlusNMonth(-1))
