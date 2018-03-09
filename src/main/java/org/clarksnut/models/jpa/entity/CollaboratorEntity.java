@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "cl_collaborator", uniqueConstraints = {
+@Table(name = "cn_collaborator", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"user_id", "space_id"})
 })
 @IdClass(CollaboratorEntity.Key.class)

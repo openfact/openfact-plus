@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "cl_file")
+@Table(name = "cn_file")
 @NamedQueries({
         @NamedQuery(name = "removeFileByImportedDocumentId", query = "delete from FileEntity f where f in (select f from FileEntity f inner join f.importedDocuments d where d.id=:importedDocumentId)")
 })

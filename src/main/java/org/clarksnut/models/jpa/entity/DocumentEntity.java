@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.*;
 
 @Entity
-@Table(name = "cl_document", uniqueConstraints = {
+@Table(name = "cn_document", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"type", "assigned_id", "supplier_assigned_id"})
 })
 @NamedQueries({

@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "cl_party", uniqueConstraints = {
+@Table(name = "cn_party", uniqueConstraints = {
         @UniqueConstraint(columnNames = "assignedId")
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})

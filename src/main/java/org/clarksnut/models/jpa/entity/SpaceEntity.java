@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "cl_space", uniqueConstraints = {
+@Table(name = "cn_space", uniqueConstraints = {
         @UniqueConstraint(columnNames = "assigned_id")
 }, indexes = {
         @Index(columnList = "assigned_id", unique = true)

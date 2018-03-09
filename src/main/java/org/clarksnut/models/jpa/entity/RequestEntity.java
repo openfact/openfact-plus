@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "cl_request")
+@Table(name = "cn_request")
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getRequestsByStatusAndSpaces", query = "select r from RequestEntity r inner join r.space s where r.status =:status and r.space in :spaces")

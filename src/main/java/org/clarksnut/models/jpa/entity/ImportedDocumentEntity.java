@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "cl_imported_document")
+@Table(name = "cn_imported_document")
 @NamedQueries({
         @NamedQuery(name = "removeImportedDocumentById", query = "delete from ImportedDocumentEntity i where i.id =:importedDocumentId")
 })
