@@ -42,8 +42,8 @@ public class BasicDebitNoteParsedDocumentProviderTest {
         DocumentBean skeleton = parsedDocument.getBean();
 
         assertThat(skeleton.getAssignedId()).isEqualTo("FF11-5");
-        assertThat(skeleton.getAmount()).isEqualTo(375.24F);
-        assertThat(skeleton.getTax()).isEqualTo(57.24F);
+        assertThat(skeleton.getAmount()).isEqualTo(375.24d);
+        assertThat(skeleton.getTax()).isEqualTo(57.24d);
         assertThat(skeleton.getCurrency()).isEqualTo("PEN");
 
         Calendar calendar = Calendar.getInstance();

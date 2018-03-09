@@ -14,13 +14,13 @@ public class PeruPerceptionDatasource implements Datasource {
     private Date fechaEmision;
 
     private String regimen;
-    private Float tasa;
+    private Double tasa;
     private String observaciones;
 
-    private Float importeTotalPercibido;
+    private Double importeTotalPercibido;
     private String monedaImporteTotalPercibido;
 
-    private Float importeTotalCobrado;
+    private Double importeTotalCobrado;
     private String monedaImporteTotalCobrado;
 
     private ProveedorBean emisor;
@@ -68,11 +68,11 @@ public class PeruPerceptionDatasource implements Datasource {
         this.regimen = regimen;
     }
 
-    public Float getTasa() {
+    public Double getTasa() {
         return tasa;
     }
 
-    public void setTasa(Float tasa) {
+    public void setTasa(Double tasa) {
         this.tasa = tasa;
     }
 
@@ -84,19 +84,19 @@ public class PeruPerceptionDatasource implements Datasource {
         this.observaciones = observaciones;
     }
 
-    public Float getImporteTotalPercibido() {
+    public Double getImporteTotalPercibido() {
         return importeTotalPercibido;
     }
 
-    public void setImporteTotalPercibido(Float importeTotalPercibido) {
+    public void setImporteTotalPercibido(Double importeTotalPercibido) {
         this.importeTotalPercibido = importeTotalPercibido;
     }
 
-    public Float getImporteTotalCobrado() {
+    public Double getImporteTotalCobrado() {
         return importeTotalCobrado;
     }
 
-    public void setImporteTotalCobrado(Float importeTotalCobrado) {
+    public void setImporteTotalCobrado(Double importeTotalCobrado) {
         this.importeTotalCobrado = importeTotalCobrado;
     }
 

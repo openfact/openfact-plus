@@ -18,7 +18,7 @@ public class BasicInvoiceDatasource implements Datasource {
     private CustomerBean customer;
     private MonetaryTotalBean monetaryTotal;
 
-    private Float totalTax;
+    private Double totalTax;
     private List<LineBean> lines;
 
     public Date getIssueDate() {
@@ -77,11 +77,11 @@ public class BasicInvoiceDatasource implements Datasource {
         this.monetaryTotal = monetaryTotal;
     }
 
-    public Float getTotalTax() {
+    public Double getTotalTax() {
         return totalTax;
     }
 
-    public void setTotalTax(Float totalTax) {
+    public void setTotalTax(Double totalTax) {
         this.totalTax = totalTax;
     }
 

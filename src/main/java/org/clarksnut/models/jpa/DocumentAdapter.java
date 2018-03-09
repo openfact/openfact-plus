@@ -62,12 +62,12 @@ public class DocumentAdapter implements DocumentModel, JpaModel<DocumentEntity> 
     }
 
     @Override
-    public Float getAmount() {
+    public Double getAmount() {
         return entity.getAmount();
     }
 
     @Override
-    public Float getTax() {
+    public Double getTax() {
         return entity.getTax();
     }
 

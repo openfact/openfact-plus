@@ -61,22 +61,22 @@ public class BasicDebitNoteDatasourceProvider implements DatasourceProvider {
         MonetaryTotalType legalMonetaryTotalType = debitNoteType.getRequestedMonetaryTotal();
         if (legalMonetaryTotalType != null) {
             if (legalMonetaryTotalType.getPayableAmountValue() != null) {
-                bean.setPayableAmount(legalMonetaryTotalType.getPayableAmountValue().floatValue());
+                bean.setPayableAmount(legalMonetaryTotalType.getPayableAmountValue().doubleValue());
             }
             if (legalMonetaryTotalType.getAllowanceTotalAmountValue() != null) {
-                bean.setAllowanceTotal(legalMonetaryTotalType.getAllowanceTotalAmountValue().floatValue());
+                bean.setAllowanceTotal(legalMonetaryTotalType.getAllowanceTotalAmountValue().doubleValue());
             }
             if (legalMonetaryTotalType.getChargeTotalAmountValue() != null) {
-                bean.setChargeTotal(legalMonetaryTotalType.getChargeTotalAmountValue().floatValue());
+                bean.setChargeTotal(legalMonetaryTotalType.getChargeTotalAmountValue().doubleValue());
             }
         }
 
         // Total tax
-        float totalTax = debitNoteType.getTaxTotal().stream()
+        double totalTax = debitNoteType.getTaxTotal().stream()
                 .map(TaxTotalType::getTaxAmountValue)
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .floatValue();
+                .doubleValue();
         bean.setTotalTax(totalTax);
 
         // Lines
@@ -96,7 +96,7 @@ public class BasicDebitNoteDatasourceProvider implements DatasourceProvider {
 
             // Quantity and unit code
             if (debitNoteLineType.getDebitedQuantityValue() != null) {
-                lineBean.setQuantity(debitNoteLineType.getDebitedQuantityValue().floatValue());
+                lineBean.setQuantity(debitNoteLineType.getDebitedQuantityValue().doubleValue());
             }
             if (debitNoteLineType.getDebitedQuantity() != null) {
                 lineBean.setUnitCode(debitNoteLineType.getDebitedQuantity().getUnitCode());
@@ -105,30 +105,30 @@ public class BasicDebitNoteDatasourceProvider implements DatasourceProvider {
             // Price amount
             if (debitNoteLineType.getPrice() != null) {
                 if (debitNoteLineType.getPrice().getPriceAmountValue() != null) {
-                    lineBean.setPriceAmount(debitNoteLineType.getPrice().getPriceAmountValue().floatValue());
+                    lineBean.setPriceAmount(debitNoteLineType.getPrice().getPriceAmountValue().doubleValue());
                 }
             }
 
             // Allowance charges
             List<AllowanceChargeType> allowanceChargeTypes = debitNoteLineType.getAllowanceCharge();
-            float totalAllowanceCharge = allowanceChargeTypes.stream()
+            double totalAllowanceCharge = allowanceChargeTypes.stream()
                     .map(AllowanceChargeType::getAmountValue)
                     .filter(Objects::nonNull)
                     .reduce(BigDecimal.ZERO, BigDecimal::add)
-                    .floatValue();
+                    .doubleValue();
             lineBean.setTotalAllowanceCharge(totalAllowanceCharge);
 
             // Total Price
             if (debitNoteLineType.getLineExtensionAmountValue() != null) {
-                lineBean.setExtensionAmount(debitNoteLineType.getLineExtensionAmountValue().floatValue());
+                lineBean.setExtensionAmount(debitNoteLineType.getLineExtensionAmountValue().doubleValue());
             }
 
             // Total tax
-            float totalTax = debitNoteLineType.getTaxTotal().stream()
+            double totalTax = debitNoteLineType.getTaxTotal().stream()
                     .map(TaxTotalType::getTaxAmountValue)
                     .filter(Objects::nonNull)
                     .reduce(BigDecimal.ZERO, BigDecimal::add)
-                    .floatValue();
+                    .doubleValue();
             lineBean.setTotalTax(totalTax);
 
 

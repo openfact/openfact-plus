@@ -56,8 +56,8 @@ public class ModelTest {
 //        model1.setId(UUID.randomUUID().toString());
 //        model1.setType("Invoice");
 //        model1.setAssignedId("BB12-3");
-//        model1.setTax(10F);
-//        model1.setAmount(100F);
+//        model1.setTax(10d);
+//        model1.setAmount(100d);
 //        model1.setCurrency("PEN");
 //        model1.setIssueDate(Calendar.getInstance().getTime());
 //        model1.setSupplierName("Sistcoop S.A.C.");
@@ -76,7 +76,7 @@ public class ModelTest {
 //        model2.setId(UUID.randomUUID().toString());
 //        model2.setType("Credit Note");
 //        model2.setAssignedId("CN12-3");
-//        model2.setAmount(1000F);
+//        model2.setAmount(1000d);
 //        model2.setCurrency("PEN");
 //        model2.setIssueDate(Calendar.getInstance().getTime());
 //        model2.setSupplierName("Sistcoop S.A.C.");

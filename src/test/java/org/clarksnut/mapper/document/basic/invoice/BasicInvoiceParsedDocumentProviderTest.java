@@ -42,8 +42,8 @@ public class BasicInvoiceParsedDocumentProviderTest {
         DocumentBean skeleton = parsedDocument.getBean();
 
         assertThat(skeleton.getAssignedId()).isEqualTo("FF11-00000003");
-        assertThat(skeleton.getAmount()).isEqualTo(138.65F);
-        assertThat(skeleton.getTax()).isEqualTo(21.15F);
+        assertThat(skeleton.getAmount()).isEqualTo(138.65d);
+        assertThat(skeleton.getTax()).isEqualTo(21.15d);
         assertThat(skeleton.getCurrency()).isEqualTo("PEN");
 
         Calendar calendar = Calendar.getInstance();

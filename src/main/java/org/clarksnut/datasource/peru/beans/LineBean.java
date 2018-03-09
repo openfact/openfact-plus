@@ -2,25 +2,25 @@ package org.clarksnut.datasource.peru.beans;
 
 public class LineBean {
 
-    private Float cantidad;
+    private Double cantidad;
     private String unidadMedida;
     private String codidoProducto;
     private String descripcion;
 
-    private Float precioUnitario; // Sin impuestos y sin cantidad
-    private Float precioVentaUnitario; // Con impuestos y sin cantidad
-    private Float valorReferencialUnitarioEnOperacionesNoOnerosas;
-    private Float totalValorVenta; // con cantidad
-    private Float totalDescuento;
+    private Double precioUnitario; // Sin impuestos y sin cantidad
+    private Double precioVentaUnitario; // Con impuestos y sin cantidad
+    private Double valorReferencialUnitarioEnOperacionesNoOnerosas;
+    private Double totalValorVenta; // con cantidad
+    private Double totalDescuento;
 
-    private Float totalIgv;
-    private Float totalIsc;
+    private Double totalIgv;
+    private Double totalIsc;
 
-    public Float getCantidad() {
+    public Double getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Float cantidad) {
+    public void setCantidad(Double cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -49,59 +49,59 @@ public class LineBean {
         this.descripcion = descripcion;
     }
 
-    public Float getPrecioUnitario() {
+    public Double getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(Float precioUnitario) {
+    public void setPrecioUnitario(Double precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
-    public Float getTotalValorVenta() {
+    public Double getTotalValorVenta() {
         return totalValorVenta;
     }
 
-    public void setTotalValorVenta(Float totalValorVenta) {
+    public void setTotalValorVenta(Double totalValorVenta) {
         this.totalValorVenta = totalValorVenta;
     }
 
-    public Float getValorReferencialUnitarioEnOperacionesNoOnerosas() {
+    public Double getValorReferencialUnitarioEnOperacionesNoOnerosas() {
         return valorReferencialUnitarioEnOperacionesNoOnerosas;
     }
 
-    public void setValorReferencialUnitarioEnOperacionesNoOnerosas(Float valorReferencialUnitarioEnOperacionesNoOnerosas) {
+    public void setValorReferencialUnitarioEnOperacionesNoOnerosas(Double valorReferencialUnitarioEnOperacionesNoOnerosas) {
         this.valorReferencialUnitarioEnOperacionesNoOnerosas = valorReferencialUnitarioEnOperacionesNoOnerosas;
     }
 
-    public Float getTotalIgv() {
+    public Double getTotalIgv() {
         return totalIgv;
     }
 
-    public void setTotalIgv(Float totalIgv) {
+    public void setTotalIgv(Double totalIgv) {
         this.totalIgv = totalIgv;
     }
 
-    public Float getTotalIsc() {
+    public Double getTotalIsc() {
         return totalIsc;
     }
 
-    public void setTotalIsc(Float totalIsc) {
+    public void setTotalIsc(Double totalIsc) {
         this.totalIsc = totalIsc;
     }
 
-    public Float getTotalDescuento() {
+    public Double getTotalDescuento() {
         return totalDescuento;
     }
 
-    public void setTotalDescuento(Float totalDescuento) {
+    public void setTotalDescuento(Double totalDescuento) {
         this.totalDescuento = totalDescuento;
     }
 
-    public Float getPrecioVentaUnitario() {
+    public Double getPrecioVentaUnitario() {
         return precioVentaUnitario;
     }
 
-    public void setPrecioVentaUnitario(Float precioVentaUnitario) {
+    public void setPrecioVentaUnitario(Double precioVentaUnitario) {
         this.precioVentaUnitario = precioVentaUnitario;
     }
 }

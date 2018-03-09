@@ -57,16 +57,16 @@ public class PeruSummaryDocumentsBeanProviderTest extends PeruBeanUtilsTest {
         assertThat(line.getDocumentoNumeroInicio()).isEqualTo("1");
         assertThat(line.getDocumentoNumeroFin()).isEqualTo("1");
 
-        assertThat(line.getInformacionAdicional().getTotalGravada()).isEqualTo(0F);
-        assertThat(line.getInformacionAdicional().getTotalExonerada()).isEqualTo(250F);
-        assertThat(line.getInformacionAdicional().getTotalInafecta()).isEqualTo(0F);
+        assertThat(line.getInformacionAdicional().getTotalGravada()).isEqualTo(0d);
+        assertThat(line.getInformacionAdicional().getTotalExonerada()).isEqualTo(250d);
+        assertThat(line.getInformacionAdicional().getTotalInafecta()).isEqualTo(0d);
 
-        assertThat(line.getTributos().getTotalIgv()).isEqualTo(0F);
-        assertThat(line.getTributos().getTotalIsc()).isEqualTo(0F);
+        assertThat(line.getTributos().getTotalIgv()).isEqualTo(0d);
+        assertThat(line.getTributos().getTotalIsc()).isEqualTo(0d);
         assertThat(line.getTributos().getTotalOtrosTributos()).isEqualTo(null);
 
-        assertThat(line.getTotalVenta()).isEqualTo(250F);
-        assertThat(line.getTotalOtrosCargos()).isEqualTo(0F);
+        assertThat(line.getTotalVenta()).isEqualTo(250d);
+        assertThat(line.getTotalOtrosCargos()).isEqualTo(0d);
         assertThat(line.getMoneda()).isEqualTo("PEN");
     }
 

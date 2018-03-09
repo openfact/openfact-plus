@@ -7,22 +7,22 @@ public class RetentionLineBean {
     private String documentoRelacionado;
     private String tipoDocumentoRelacionado;
     private Date fechaEmisionDocumentoRelacionado;
-    private Float importeTotalDocumentoRelacionado;
+    private Double importeTotalDocumentoRelacionado;
     private String monedaDocumentoRelacionado;
 
     private Date fechaPago;
-    private Float importePagoSinRetencion;
+    private Double importePagoSinRetencion;
     private String monedaPagoSinRetencion;
 
-    private Float importeRetenido;
+    private Double importeRetenido;
     private String monedaImporteRetenido;
     private Date fechaRetencion;
-    private Float importeTotalAPagar;
+    private Double importeTotalAPagar;
     private String monedaImporteTotalAPagar;
 
     private String monedaReferencia;
     private String monedaObjetivo;
-    private Float tipoCambio;
+    private Double tipoCambio;
     private Date fechaCambio;
 
     public String getDocumentoRelacionado() {
@@ -49,11 +49,11 @@ public class RetentionLineBean {
         this.fechaEmisionDocumentoRelacionado = fechaEmisionDocumentoRelacionado;
     }
 
-    public Float getImporteTotalDocumentoRelacionado() {
+    public Double getImporteTotalDocumentoRelacionado() {
         return importeTotalDocumentoRelacionado;
     }
 
-    public void setImporteTotalDocumentoRelacionado(Float importeTotalDocumentoRelacionado) {
+    public void setImporteTotalDocumentoRelacionado(Double importeTotalDocumentoRelacionado) {
         this.importeTotalDocumentoRelacionado = importeTotalDocumentoRelacionado;
     }
 
@@ -73,11 +73,11 @@ public class RetentionLineBean {
         this.fechaPago = fechaPago;
     }
 
-    public Float getImportePagoSinRetencion() {
+    public Double getImportePagoSinRetencion() {
         return importePagoSinRetencion;
     }
 
-    public void setImportePagoSinRetencion(Float importePagoSinRetencion) {
+    public void setImportePagoSinRetencion(Double importePagoSinRetencion) {
         this.importePagoSinRetencion = importePagoSinRetencion;
     }
 
@@ -89,11 +89,11 @@ public class RetentionLineBean {
         this.monedaPagoSinRetencion = monedaPagoSinRetencion;
     }
 
-    public Float getImporteRetenido() {
+    public Double getImporteRetenido() {
         return importeRetenido;
     }
 
-    public void setImporteRetenido(Float importeRetenido) {
+    public void setImporteRetenido(Double importeRetenido) {
         this.importeRetenido = importeRetenido;
     }
 
@@ -113,11 +113,11 @@ public class RetentionLineBean {
         this.fechaRetencion = fechaRetencion;
     }
 
-    public Float getImporteTotalAPagar() {
+    public Double getImporteTotalAPagar() {
         return importeTotalAPagar;
     }
 
-    public void setImporteTotalAPagar(Float importeTotalAPagar) {
+    public void setImporteTotalAPagar(Double importeTotalAPagar) {
         this.importeTotalAPagar = importeTotalAPagar;
     }
 
@@ -145,11 +145,11 @@ public class RetentionLineBean {
         this.monedaObjetivo = monedaObjetivo;
     }
 
-    public Float getTipoCambio() {
+    public Double getTipoCambio() {
         return tipoCambio;
     }
 
-    public void setTipoCambio(Float tipoCambio) {
+    public void setTipoCambio(Double tipoCambio) {
         this.tipoCambio = tipoCambio;
     }
 

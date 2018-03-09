@@ -11,7 +11,7 @@
             <!--Hibernate ORM-->
             <property name="jboss.as.jpa.providerModule" value="org.hibernate:${version.hibernate}"/>
 
-            <property name="hibernate.hbm2ddl.auto" value="none"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
             <property name="hibernate.show_sql" value="${env.CN_HIBERNATE_SHOW_SQL:true}"/>
             <property name="hibernate.format_sql" value="${env.CN_HIBERNATE_FORMAT_SQL:true}"/>
             <property name="hibernate.use_sql_comments" value="${env.CN_HIBERNATE_SHOW_SQL:true}" />

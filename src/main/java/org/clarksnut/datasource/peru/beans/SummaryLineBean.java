@@ -10,8 +10,8 @@ public class SummaryLineBean {
     private InformacionAdicionalBean informacionAdicional;
     private TributosBean tributos;
 
-    private Float totalVenta;
-    private Float totalOtrosCargos;
+    private Double totalVenta;
+    private Double totalOtrosCargos;
 
     private String moneda;
 
@@ -63,19 +63,19 @@ public class SummaryLineBean {
         this.tributos = tributos;
     }
 
-    public Float getTotalVenta() {
+    public Double getTotalVenta() {
         return totalVenta;
     }
 
-    public void setTotalVenta(Float totalVenta) {
+    public void setTotalVenta(Double totalVenta) {
         this.totalVenta = totalVenta;
     }
 
-    public Float getTotalOtrosCargos() {
+    public Double getTotalOtrosCargos() {
         return totalOtrosCargos;
     }
 
-    public void setTotalOtrosCargos(Float totalOtrosCargos) {
+    public void setTotalOtrosCargos(Double totalOtrosCargos) {
         this.totalOtrosCargos = totalOtrosCargos;
     }
 

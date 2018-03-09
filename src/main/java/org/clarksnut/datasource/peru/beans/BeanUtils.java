@@ -157,13 +157,13 @@ public class BeanUtils {
             TipoTributo.getFromCode(taxTotalType.getTaxSubtotal().get(0).getTaxCategory().getTaxScheme().getID().getValue()).ifPresent(c -> {
                 switch (c) {
                     case IGV:
-                        bean.setTotalIgv(taxTotalType.getTaxAmount().getValue().floatValue());
+                        bean.setTotalIgv(taxTotalType.getTaxAmount().getValue().doubleValue());
                         break;
                     case ISC:
-                        bean.setTotalIsc(taxTotalType.getTaxAmount().getValue().floatValue());
+                        bean.setTotalIsc(taxTotalType.getTaxAmount().getValue().doubleValue());
                         break;
                     case OTROS:
-                        bean.setTotalOtrosTributos(taxTotalType.getTaxAmount().getValue().floatValue());
+                        bean.setTotalOtrosTributos(taxTotalType.getTaxAmount().getValue().doubleValue());
                         break;
                 }
             });
@@ -183,19 +183,19 @@ public class BeanUtils {
                     optional.ifPresent(c -> {
                         switch (c) {
                             case TOTAL_VALOR_VENTA_OPERACIONES_GRAVADAS:
-                                bean.setTotalGravada(additionalMonetaryTotalType.getPayableAmount().getValue().floatValue());
+                                bean.setTotalGravada(additionalMonetaryTotalType.getPayableAmount().getValue().doubleValue());
                                 break;
                             case TOTAL_VALOR_VENTA_OPERACIONES_INAFECTAS:
-                                bean.setTotalInafecta(additionalMonetaryTotalType.getPayableAmount().getValue().floatValue());
+                                bean.setTotalInafecta(additionalMonetaryTotalType.getPayableAmount().getValue().doubleValue());
                                 break;
                             case TOTAL_VALOR_VENTA_OPERACIONES_EXONERADAS:
-                                bean.setTotalExonerada(additionalMonetaryTotalType.getPayableAmount().getValue().floatValue());
+                                bean.setTotalExonerada(additionalMonetaryTotalType.getPayableAmount().getValue().doubleValue());
                                 break;
                             case TOTAL_VALOR_VENTA_OPERACIONES_GRATUITAS:
-                                bean.setTotalGratuita(additionalMonetaryTotalType.getPayableAmount().getValue().floatValue());
+                                bean.setTotalGratuita(additionalMonetaryTotalType.getPayableAmount().getValue().doubleValue());
                                 break;
                             case TOTAL_VALOR_DESCUENTOS:
-                                bean.setTotalDescuentos(additionalMonetaryTotalType.getPayableAmount().getValue().floatValue());
+                                bean.setTotalDescuentos(additionalMonetaryTotalType.getPayableAmount().getValue().doubleValue());
                                 break;
                         }
                     });
@@ -237,10 +237,10 @@ public class BeanUtils {
                 TipoPrecioVentaUnitario.getByCode(priceType.getPriceTypeCode().getValue()).ifPresent(c -> {
                     switch (c) {
                         case PRECIO_UNITARIO:
-                            lineBean.setPrecioVentaUnitario(priceType.getPriceAmount().getValue().floatValue());
+                            lineBean.setPrecioVentaUnitario(priceType.getPriceAmount().getValue().doubleValue());
                             break;
                         case VALOR_REFERENCIAL_UNITARIO_EN_OPERACIONES_NO_ONEROSAS:
-                            lineBean.setValorReferencialUnitarioEnOperacionesNoOnerosas(priceType.getPriceAmount().getValue().floatValue());
+                            lineBean.setValorReferencialUnitarioEnOperacionesNoOnerosas(priceType.getPriceAmount().getValue().doubleValue());
                             break;
                     }
                 });
@@ -265,10 +265,10 @@ public class BeanUtils {
                 TipoTributo.getFromCode(taxTotalType.getTaxSubtotal().get(0).getTaxCategory().getTaxScheme().getID().getValue()).ifPresent(c -> {
                     switch (c) {
                         case IGV:
-                            lineBean.setTotalIgv(taxTotalType.getTaxAmount().getValue().floatValue());
+                            lineBean.setTotalIgv(taxTotalType.getTaxAmount().getValue().doubleValue());
                             break;
                         case ISC:
-                            lineBean.setTotalIsc(taxTotalType.getTaxAmount().getValue().floatValue());
+                            lineBean.setTotalIsc(taxTotalType.getTaxAmount().getValue().doubleValue());
                             break;
                     }
                 });

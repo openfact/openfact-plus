@@ -84,13 +84,13 @@ public class BasicDatasourceUtils {
         MonetaryTotalBean bean = new MonetaryTotalBean();
 
         if (monetaryTotalType.getPayableAmountValue() != null) {
-            bean.setPayableAmount(monetaryTotalType.getPayableAmountValue().floatValue());
+            bean.setPayableAmount(monetaryTotalType.getPayableAmountValue().doubleValue());
         }
         if (monetaryTotalType.getAllowanceTotalAmountValue() != null) {
-            bean.setAllowanceTotal(monetaryTotalType.getAllowanceTotalAmountValue().floatValue());
+            bean.setAllowanceTotal(monetaryTotalType.getAllowanceTotalAmountValue().doubleValue());
         }
         if (monetaryTotalType.getChargeTotalAmountValue() != null) {
-            bean.setChargeTotal(monetaryTotalType.getChargeTotalAmountValue().floatValue());
+            bean.setChargeTotal(monetaryTotalType.getChargeTotalAmountValue().doubleValue());
         }
 
         return bean;

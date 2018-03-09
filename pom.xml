@@ -21,7 +21,7 @@
         <version.arquillian.cube>1.9.2</version.arquillian.cube>
         <version.resteasy>3.0.19.Final</version.resteasy>
         <version.override.jackson>2.7.7</version.override.jackson>
-        <version.wildfly.swarm>2018.3.1</version.wildfly.swarm>
+        <version.wildfly.swarm>2018.3.3</version.wildfly.swarm>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -209,10 +209,6 @@
         </dependency>
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
-            <artifactId>flyway</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
             <artifactId>swagger</artifactId>
         </dependency>
 
@@ -292,6 +288,13 @@
             <artifactId>hibernate-search-elasticsearch-aws</artifactId>
             <version>${version.hibernate-search}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!--Flywaydb-->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>5.0.7</version>
         </dependency>
 
         <!--Keycloak-->

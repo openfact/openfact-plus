@@ -35,12 +35,12 @@ public class PEVoidedDocumentsBeanAdapter implements DocumentBean {
     }
 
     @Override
-    public Float getAmount() {
+    public Double getAmount() {
         return null;
     }
 
     @Override
-    public Float getTax() {
+    public Double getTax() {
         return null;
     }
 

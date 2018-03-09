@@ -54,12 +54,12 @@ public class PeruSummaryDocumentsDatasourceProvider implements DatasourceProvide
             TipoDocumento.getFromCode(summaryDocumentsLineType.getDocumentTypeCode().getValue()).ifPresent(c -> {
                 lineBean.setTipoDocumento(c.getDenominacion());
             });
-            lineBean.setTotalVenta(summaryDocumentsLineType.getTotalAmount().getValue().floatValue());
+            lineBean.setTotalVenta(summaryDocumentsLineType.getTotalAmount().getValue().doubleValue());
             lineBean.setMoneda(summaryDocumentsLineType.getTotalAmount().getCurrencyID().value());
 
             List<AllowanceChargeType> allowanceChargeTypes = summaryDocumentsLineType.getAllowanceCharge();
             if (allowanceChargeTypes != null && !allowanceChargeTypes.isEmpty()) {
-                lineBean.setTotalOtrosCargos(allowanceChargeTypes.get(0).getAmount().getValue().floatValue());
+                lineBean.setTotalOtrosCargos(allowanceChargeTypes.get(0).getAmount().getValue().doubleValue());
             }
 
             // Tributos
@@ -73,13 +73,13 @@ public class PeruSummaryDocumentsDatasourceProvider implements DatasourceProvide
                     TipoPagoResumen.getFromCode(paymentType.getInstructionID().getValue()).ifPresent(c -> {
                         switch (c) {
                             case TOTAL_VENTA_OPERACIONES_GRAVADAS:
-                                informacionAdicionalBean.setTotalGravada(paymentType.getPaidAmount().getValue().floatValue());
+                                informacionAdicionalBean.setTotalGravada(paymentType.getPaidAmount().getValue().doubleValue());
                                 break;
                             case TOTAL_VENTA_OPERACIONES_EXONERADAS:
-                                informacionAdicionalBean.setTotalExonerada(paymentType.getPaidAmount().getValue().floatValue());
+                                informacionAdicionalBean.setTotalExonerada(paymentType.getPaidAmount().getValue().doubleValue());
                                 break;
                             case TOTAL_VENTA_OPERACIONES_INAFECTAS:
-                                informacionAdicionalBean.setTotalInafecta(paymentType.getPaidAmount().getValue().floatValue());
+                                informacionAdicionalBean.setTotalInafecta(paymentType.getPaidAmount().getValue().doubleValue());
                                 break;
                         }
                     });

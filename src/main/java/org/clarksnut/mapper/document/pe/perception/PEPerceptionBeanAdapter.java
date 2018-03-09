@@ -45,19 +45,19 @@ public class PEPerceptionBeanAdapter implements DocumentBean {
     }
 
     @Override
-    public Float getAmount() {
+    public Double getAmount() {
         AmountType sunatTotalCashed = type.getSunatTotalCashed();
         if (sunatTotalCashed != null) {
             BigDecimal value = sunatTotalCashed.getValue();
             if (value != null) {
-                return value.floatValue();
+                return value.doubleValue();
             }
         }
         return null;
     }
 
     @Override
-    public Float getTax() {
+    public Double getTax() {
         return null;
     }
 

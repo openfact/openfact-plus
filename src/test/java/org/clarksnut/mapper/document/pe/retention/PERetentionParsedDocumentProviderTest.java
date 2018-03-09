@@ -42,7 +42,7 @@ public class PERetentionParsedDocumentProviderTest {
         DocumentBean skeleton = parsedDocument.getBean();
 
         assertThat(skeleton.getAssignedId()).isEqualTo("R001-123");
-        assertThat(skeleton.getAmount()).isEqualTo(1_144.60F);
+        assertThat(skeleton.getAmount()).isEqualTo(1_144.60d);
         assertThat(skeleton.getTax()).isNull();
         assertThat(skeleton.getCurrency()).isEqualTo("PEN");
 

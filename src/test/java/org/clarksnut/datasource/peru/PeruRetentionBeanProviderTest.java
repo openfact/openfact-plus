@@ -72,15 +72,15 @@ public class PeruRetentionBeanProviderTest extends PeruBeanUtilsTest {
 
         assertThat(line.getTipoDocumentoRelacionado()).isEqualTo("FACTURA");
         assertThat(line.getDocumentoRelacionado()).isEqualTo("F001-540");
-        assertThat(line.getImporteTotalDocumentoRelacionado()).isEqualTo(1_180F);
+        assertThat(line.getImporteTotalDocumentoRelacionado()).isEqualTo(1_180d);
         assertThat(line.getMonedaDocumentoRelacionado()).isEqualTo("PEN");
 
-        assertThat(line.getImporteTotalAPagar()).isEqualTo(1_144.60F);
+        assertThat(line.getImporteTotalAPagar()).isEqualTo(1_144.60d);
         assertThat(line.getMonedaImporteTotalAPagar()).isEqualTo("PEN");
 
-        assertThat(line.getImporteRetenido()).isEqualTo(35.40F);
+        assertThat(line.getImporteRetenido()).isEqualTo(35.40d);
         assertThat(line.getMonedaImporteRetenido()).isEqualTo("PEN");
-        assertThat(line.getImporteTotalAPagar()).isEqualTo(1_144.60F);
+        assertThat(line.getImporteTotalAPagar()).isEqualTo(1_144.60d);
         assertThat(line.getMonedaImporteTotalAPagar()).isEqualTo("PEN");
     }
 

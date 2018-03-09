@@ -86,8 +86,8 @@ public class DocumentRepresentation {
 
         private Date issueDate;
         private String currency;
-        private Float amount;
-        private Float tax;
+        private Double amount;
+        private Double tax;
 
         private String supplierName;
         private String supplierStreetAddress;
@@ -147,11 +147,11 @@ public class DocumentRepresentation {
             this.updatedAt = updatedAt;
         }
 
-        public void setAmount(Float amount) {
+        public void setAmount(Double amount) {
             this.amount = amount;
         }
 
-        public Float getAmount() {
+        public Double getAmount() {
             return amount;
         }
 
@@ -211,11 +211,11 @@ public class DocumentRepresentation {
             this.starred = starred;
         }
 
-        public Float getTax() {
+        public Double getTax() {
             return tax;
         }
 
-        public void setTax(Float tax) {
+        public void setTax(Double tax) {
             this.tax = tax;
         }
 

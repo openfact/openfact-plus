@@ -75,14 +75,14 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     private Date issueDate;
 
     @Digits(integer = 10, fraction = 4, message = "amount has incorrect number of integer/fraction")
-    @Type(type = "org.hibernate.type.FloatType")
+    @Type(type = "org.hibernate.type.DoubleType")
     @Column(name = "amount")
-    private Float amount;
+    private Double amount;
 
     @Digits(integer = 10, fraction = 4, message = "tax has incorrect number of integer/fraction")
-    @Type(type = "org.hibernate.type.FloatType")
+    @Type(type = "org.hibernate.type.DoubleType")
     @Column(name = "tax")
-    private Float tax;
+    private Double tax;
 
     @ElementCollection
     @Column(name = "value")
@@ -232,19 +232,19 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
         this.issueDate = issueDate;
     }
 
-    public Float getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
-    public Float getTax() {
+    public Double getTax() {
         return tax;
     }
 
-    public void setTax(Float tax) {
+    public void setTax(Double tax) {
         this.tax = tax;
     }
 

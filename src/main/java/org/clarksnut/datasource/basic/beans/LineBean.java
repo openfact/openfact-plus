@@ -2,20 +2,20 @@ package org.clarksnut.datasource.basic.beans;
 
 public class LineBean {
 
-    private Float quantity;
+    private Double quantity;
     private String unitCode;
     private String description;
     private String productCode;
-    private Float totalTax;
-    private Float totalAllowanceCharge;
-    private float extensionAmount;
-    private float priceAmount;
+    private Double totalTax;
+    private Double totalAllowanceCharge;
+    private Double extensionAmount;
+    private Double priceAmount;
 
-    public Float getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Float quantity) {
+    public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
 
@@ -43,35 +43,35 @@ public class LineBean {
         this.productCode = productCode;
     }
 
-    public void setTotalTax(Float totalTax) {
-        this.totalTax = totalTax;
-    }
-
-    public Float getTotalTax() {
+    public Double getTotalTax() {
         return totalTax;
     }
 
-    public void setTotalAllowanceCharge(Float totalAllowanceCharge) {
-        this.totalAllowanceCharge = totalAllowanceCharge;
+    public void setTotalTax(Double totalTax) {
+        this.totalTax = totalTax;
     }
 
-    public Float getTotalAllowanceCharge() {
+    public Double getTotalAllowanceCharge() {
         return totalAllowanceCharge;
     }
 
-    public void setExtensionAmount(float extensionAmount) {
-        this.extensionAmount = extensionAmount;
+    public void setTotalAllowanceCharge(Double totalAllowanceCharge) {
+        this.totalAllowanceCharge = totalAllowanceCharge;
     }
 
-    public float getExtensionAmount() {
+    public Double getExtensionAmount() {
         return extensionAmount;
     }
 
-    public void setPriceAmount(float priceAmount) {
-        this.priceAmount = priceAmount;
+    public void setExtensionAmount(Double extensionAmount) {
+        this.extensionAmount = extensionAmount;
     }
 
-    public float getPriceAmount() {
+    public Double getPriceAmount() {
         return priceAmount;
+    }
+
+    public void setPriceAmount(Double priceAmount) {
+        this.priceAmount = priceAmount;
     }
 }

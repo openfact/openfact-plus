@@ -83,12 +83,12 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
         AllowanceTotalAmountType allowanceTotalAmountType = legalMonetaryTotalType.getAllowanceTotalAmount();
         ChargeTotalAmountType chargeTotalAmountType = legalMonetaryTotalType.getChargeTotalAmount();
 
-        bean.setTotalVenta(legalMonetaryTotalType.getPayableAmount().getValue().floatValue());
+        bean.setTotalVenta(legalMonetaryTotalType.getPayableAmount().getValue().doubleValue());
         if (allowanceTotalAmountType != null) {
-            bean.setTotalDescuentoGlobal(allowanceTotalAmountType.getValue().floatValue());
+            bean.setTotalDescuentoGlobal(allowanceTotalAmountType.getValue().doubleValue());
         }
         if (chargeTotalAmountType != null) {
-            bean.setTotalOtrosCargos(chargeTotalAmountType.getValue().floatValue());
+            bean.setTotalOtrosCargos(chargeTotalAmountType.getValue().doubleValue());
         }
 
         // Taxs
@@ -117,10 +117,10 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
         for (InvoiceLineType invoiceLineType : invoiceLineTypes) {
             LineBean lineBean = new LineBean();
 
-            lineBean.setCantidad(invoiceLineType.getInvoicedQuantity().getValue().floatValue());
+            lineBean.setCantidad(invoiceLineType.getInvoicedQuantity().getValue().doubleValue());
             lineBean.setUnidadMedida(invoiceLineType.getInvoicedQuantity().getUnitCode());
-            lineBean.setPrecioUnitario(invoiceLineType.getPrice().getPriceAmount().getValue().floatValue());
-            lineBean.setTotalValorVenta(invoiceLineType.getLineExtensionAmount().getValue().floatValue());
+            lineBean.setPrecioUnitario(invoiceLineType.getPrice().getPriceAmount().getValue().doubleValue());
+            lineBean.setTotalValorVenta(invoiceLineType.getLineExtensionAmount().getValue().doubleValue());
 
             // Precio de venta unitario
             BeanUtils.agregarPrecioUnitario(lineBean, Optional.ofNullable(invoiceLineType.getPricingReference().getAlternativeConditionPrice()));
@@ -128,7 +128,7 @@ public class PeruInvoiceDatasourceProvider implements DatasourceProvider {
             // Descuentos por item
             List<AllowanceChargeType> allowanceChargeTypes = invoiceLineType.getAllowanceCharge();
             if (allowanceChargeTypes != null && !allowanceChargeTypes.isEmpty()) {
-                lineBean.setTotalDescuento(allowanceChargeTypes.get(0).getAmount().getValue().floatValue());
+                lineBean.setTotalDescuento(allowanceChargeTypes.get(0).getAmount().getValue().doubleValue());
             }
 
             // Descripcion y codigo de producto

@@ -12,9 +12,9 @@ public interface DocumentMapped {
 
         String getAssignedId();
 
-        Float getAmount();
+        Double getAmount();
 
-        Float getTax();
+        Double getTax();
 
         String getCurrency();
 

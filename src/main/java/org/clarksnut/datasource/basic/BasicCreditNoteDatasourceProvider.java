@@ -64,11 +64,11 @@ public class BasicCreditNoteDatasourceProvider implements DatasourceProvider {
         }
 
         // Total tax
-        float totalTax = creditNoteType.getTaxTotal().stream()
+        double totalTax = creditNoteType.getTaxTotal().stream()
                 .map(TaxTotalType::getTaxAmountValue)
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .floatValue();
+                .doubleValue();
         bean.setTotalTax(totalTax);
 
         // Lines
@@ -88,7 +88,7 @@ public class BasicCreditNoteDatasourceProvider implements DatasourceProvider {
 
             // Quantity and unit code
             if (creditNoteLineType.getCreditedQuantityValue() != null) {
-                lineBean.setQuantity(creditNoteLineType.getCreditedQuantityValue().floatValue());
+                lineBean.setQuantity(creditNoteLineType.getCreditedQuantityValue().doubleValue());
             }
             if (creditNoteLineType.getCreditedQuantity() != null) {
                 lineBean.setUnitCode(creditNoteLineType.getCreditedQuantity().getUnitCode());
@@ -97,30 +97,30 @@ public class BasicCreditNoteDatasourceProvider implements DatasourceProvider {
             // Price amount
             if (creditNoteLineType.getPrice() != null) {
                 if (creditNoteLineType.getPrice().getPriceAmountValue() != null) {
-                    lineBean.setPriceAmount(creditNoteLineType.getPrice().getPriceAmountValue().floatValue());
+                    lineBean.setPriceAmount(creditNoteLineType.getPrice().getPriceAmountValue().doubleValue());
                 }
             }
 
             // Allowance charges
             List<AllowanceChargeType> allowanceChargeTypes = creditNoteLineType.getAllowanceCharge();
-            float totalAllowanceCharge = allowanceChargeTypes.stream()
+            double totalAllowanceCharge = allowanceChargeTypes.stream()
                     .map(AllowanceChargeType::getAmountValue)
                     .filter(Objects::nonNull)
                     .reduce(BigDecimal.ZERO, BigDecimal::add)
-                    .floatValue();
+                    .doubleValue();
             lineBean.setTotalAllowanceCharge(totalAllowanceCharge);
 
             // Total Price
             if (creditNoteLineType.getLineExtensionAmountValue() != null) {
-                lineBean.setExtensionAmount(creditNoteLineType.getLineExtensionAmountValue().floatValue());
+                lineBean.setExtensionAmount(creditNoteLineType.getLineExtensionAmountValue().doubleValue());
             }
 
             // Total tax
-            float totalTax = creditNoteLineType.getTaxTotal().stream()
+            double totalTax = creditNoteLineType.getTaxTotal().stream()
                     .map(TaxTotalType::getTaxAmountValue)
                     .filter(Objects::nonNull)
                     .reduce(BigDecimal.ZERO, BigDecimal::add)
-                    .floatValue();
+                    .doubleValue();
             lineBean.setTotalTax(totalTax);
 
 

@@ -65,11 +65,11 @@ public class BasicInvoiceDatasourceProvider implements DatasourceProvider {
         }
 
         // Total tax
-        float totalTax = invoiceType.getTaxTotal().stream()
+        double totalTax = invoiceType.getTaxTotal().stream()
                 .map(TaxTotalType::getTaxAmountValue)
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .floatValue();
+                .doubleValue();
         bean.setTotalTax(totalTax);
 
         // Lines
@@ -89,7 +89,7 @@ public class BasicInvoiceDatasourceProvider implements DatasourceProvider {
 
             // Quantity and unit code
             if (invoiceLineType.getInvoicedQuantityValue() != null) {
-                lineBean.setQuantity(invoiceLineType.getInvoicedQuantityValue().floatValue());
+                lineBean.setQuantity(invoiceLineType.getInvoicedQuantityValue().doubleValue());
             }
             if (invoiceLineType.getInvoicedQuantity() != null) {
                 lineBean.setUnitCode(invoiceLineType.getInvoicedQuantity().getUnitCode());
@@ -98,30 +98,30 @@ public class BasicInvoiceDatasourceProvider implements DatasourceProvider {
             // Price amount
             if (invoiceLineType.getPrice() != null) {
                 if (invoiceLineType.getPrice().getPriceAmountValue() != null) {
-                    lineBean.setPriceAmount(invoiceLineType.getPrice().getPriceAmountValue().floatValue());
+                    lineBean.setPriceAmount(invoiceLineType.getPrice().getPriceAmountValue().doubleValue());
                 }
             }
 
             // Allowance charges
             List<AllowanceChargeType> allowanceChargeTypes = invoiceLineType.getAllowanceCharge();
-            float totalAllowanceCharge = allowanceChargeTypes.stream()
+            double totalAllowanceCharge = allowanceChargeTypes.stream()
                     .map(AllowanceChargeType::getAmountValue)
                     .filter(Objects::nonNull)
                     .reduce(BigDecimal.ZERO, BigDecimal::add)
-                    .floatValue();
+                    .doubleValue();
             lineBean.setTotalAllowanceCharge(totalAllowanceCharge);
 
             // Total Price
             if (invoiceLineType.getLineExtensionAmountValue() != null) {
-                lineBean.setExtensionAmount(invoiceLineType.getLineExtensionAmountValue().floatValue());
+                lineBean.setExtensionAmount(invoiceLineType.getLineExtensionAmountValue().doubleValue());
             }
 
             // Total tax
-            float totalTax = invoiceLineType.getTaxTotal().stream()
+            double totalTax = invoiceLineType.getTaxTotal().stream()
                     .map(TaxTotalType::getTaxAmountValue)
                     .filter(Objects::nonNull)
                     .reduce(BigDecimal.ZERO, BigDecimal::add)
-                    .floatValue();
+                    .doubleValue();
             lineBean.setTotalTax(totalTax);
 
 

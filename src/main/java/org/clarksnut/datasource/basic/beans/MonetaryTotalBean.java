@@ -2,31 +2,31 @@ package org.clarksnut.datasource.basic.beans;
 
 public class MonetaryTotalBean {
 
-    private Float payableAmount;
-    private Float allowanceTotal;
-    private Float chargeTotal;
+    private Double payableAmount;
+    private Double allowanceTotal;
+    private Double chargeTotal;
 
-    public Float getPayableAmount() {
+    public Double getPayableAmount() {
         return payableAmount;
     }
 
-    public void setPayableAmount(Float payableAmount) {
+    public void setPayableAmount(Double payableAmount) {
         this.payableAmount = payableAmount;
     }
 
-    public Float getAllowanceTotal() {
+    public Double getAllowanceTotal() {
         return allowanceTotal;
     }
 
-    public void setAllowanceTotal(Float allowanceTotal) {
+    public void setAllowanceTotal(Double allowanceTotal) {
         this.allowanceTotal = allowanceTotal;
     }
 
-    public Float getChargeTotal() {
+    public Double getChargeTotal() {
         return chargeTotal;
     }
 
-    public void setChargeTotal(Float chargeTotal) {
+    public void setChargeTotal(Double chargeTotal) {
         this.chargeTotal = chargeTotal;
     }
 }

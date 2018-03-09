@@ -72,15 +72,15 @@ public class PeruPerceptionBeanProviderTest extends PeruBeanUtilsTest {
 
         assertThat(line.getTipoDocumentoRelacionado()).isEqualTo("FACTURA");
         assertThat(line.getDocumentoRelacionado()).isEqualTo("E001-540");
-        assertThat(line.getImporteTotalDocumentoRelacionado()).isEqualTo(1_000F);
+        assertThat(line.getImporteTotalDocumentoRelacionado()).isEqualTo(1_000d);
         assertThat(line.getMonedaDocumentoRelacionado()).isEqualTo("PEN");
 
-        assertThat(line.getImporteCobro()).isEqualTo(1_000F);
+        assertThat(line.getImporteCobro()).isEqualTo(1_000d);
         assertThat(line.getMonedaCobro()).isEqualTo("PEN");
 
-        assertThat(line.getImportePercibido()).isEqualTo(20F);
+        assertThat(line.getImportePercibido()).isEqualTo(20d);
         assertThat(line.getMonedaImportePercibido()).isEqualTo("PEN");
-        assertThat(line.getImporteTotalACobrar()).isEqualTo(1_020F);
+        assertThat(line.getImporteTotalACobrar()).isEqualTo(1_020d);
         assertThat(line.getMonedaImporteTotalACobrar()).isEqualTo("PEN");
     }
 

@@ -14,13 +14,13 @@ public class PeruRetentionDatasource implements Datasource {
     private Date fechaEmision;
 
     private String regimen;
-    private Float tasa;
+    private Double tasa;
     private String observaciones;
 
-    private Float importeTotalRetenido;
+    private Double importeTotalRetenido;
     private String monedaImporteTotalRetenido;
 
-    private Float importeTotalPagado;
+    private Double importeTotalPagado;
     private String monedaImporteTotalPagado;
 
     private ProveedorBean emisor;
@@ -52,11 +52,11 @@ public class PeruRetentionDatasource implements Datasource {
         this.regimen = regimen;
     }
 
-    public Float getTasa() {
+    public Double getTasa() {
         return tasa;
     }
 
-    public void setTasa(Float tasa) {
+    public void setTasa(Double tasa) {
         this.tasa = tasa;
     }
 
@@ -68,11 +68,11 @@ public class PeruRetentionDatasource implements Datasource {
         this.observaciones = observaciones;
     }
 
-    public Float getImporteTotalRetenido() {
+    public Double getImporteTotalRetenido() {
         return importeTotalRetenido;
     }
 
-    public void setImporteTotalRetenido(Float importeTotalRetenido) {
+    public void setImporteTotalRetenido(Double importeTotalRetenido) {
         this.importeTotalRetenido = importeTotalRetenido;
     }
 
@@ -84,11 +84,11 @@ public class PeruRetentionDatasource implements Datasource {
         this.monedaImporteTotalRetenido = monedaImporteTotalRetenido;
     }
 
-    public Float getImporteTotalPagado() {
+    public Double getImporteTotalPagado() {
         return importeTotalPagado;
     }
 
-    public void setImporteTotalPagado(Float importeTotalPagado) {
+    public void setImporteTotalPagado(Double importeTotalPagado) {
         this.importeTotalPagado = importeTotalPagado;
     }
 

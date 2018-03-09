@@ -86,12 +86,12 @@ public class PeruCreditNoteDatasourceProvider implements DatasourceProvider {
         AllowanceTotalAmountType allowanceTotalAmountType = legalMonetaryTotalType.getAllowanceTotalAmount();
         ChargeTotalAmountType chargeTotalAmountType = legalMonetaryTotalType.getChargeTotalAmount();
 
-        bean.setTotalVenta(legalMonetaryTotalType.getPayableAmount().getValue().floatValue());
+        bean.setTotalVenta(legalMonetaryTotalType.getPayableAmount().getValue().doubleValue());
         if (allowanceTotalAmountType != null) {
-            bean.setTotalDescuentoGlobal(allowanceTotalAmountType.getValue().floatValue());
+            bean.setTotalDescuentoGlobal(allowanceTotalAmountType.getValue().doubleValue());
         }
         if (chargeTotalAmountType != null) {
-            bean.setTotalOtrosCargos(chargeTotalAmountType.getValue().floatValue());
+            bean.setTotalOtrosCargos(chargeTotalAmountType.getValue().doubleValue());
         }
 
         // Taxs
@@ -120,10 +120,10 @@ public class PeruCreditNoteDatasourceProvider implements DatasourceProvider {
         for (CreditNoteLineType creditNoteLineType : creditNoteLineTypes) {
             LineBean lineBean = new LineBean();
 
-            lineBean.setCantidad(creditNoteLineType.getCreditedQuantity().getValue().floatValue());
+            lineBean.setCantidad(creditNoteLineType.getCreditedQuantity().getValue().doubleValue());
             lineBean.setUnidadMedida(creditNoteLineType.getCreditedQuantity().getUnitCode());
-            lineBean.setPrecioUnitario(creditNoteLineType.getPrice().getPriceAmount().getValue().floatValue());
-            lineBean.setTotalValorVenta(creditNoteLineType.getLineExtensionAmount().getValue().floatValue());
+            lineBean.setPrecioUnitario(creditNoteLineType.getPrice().getPriceAmount().getValue().doubleValue());
+            lineBean.setTotalValorVenta(creditNoteLineType.getLineExtensionAmount().getValue().doubleValue());
 
             // Precio de venta unitario
             BeanUtils.agregarPrecioUnitario(lineBean, Optional.ofNullable(creditNoteLineType.getPricingReference().getAlternativeConditionPrice()));

@@ -2,31 +2,31 @@ package org.clarksnut.datasource.peru.beans;
 
 public class TributosBean {
 
-    private Float totalIgv;
-    private Float totalIsc;
-    private Float totalOtrosTributos;
+    private Double totalIgv;
+    private Double totalIsc;
+    private Double totalOtrosTributos;
 
-    public Float getTotalIgv() {
+    public Double getTotalIgv() {
         return totalIgv;
     }
 
-    public void setTotalIgv(Float totalIgv) {
+    public void setTotalIgv(Double totalIgv) {
         this.totalIgv = totalIgv;
     }
 
-    public Float getTotalIsc() {
+    public Double getTotalIsc() {
         return totalIsc;
     }
 
-    public void setTotalIsc(Float totalIsc) {
+    public void setTotalIsc(Double totalIsc) {
         this.totalIsc = totalIsc;
     }
 
-    public Float getTotalOtrosTributos() {
+    public Double getTotalOtrosTributos() {
         return totalOtrosTributos;
     }
 
-    public void setTotalOtrosTributos(Float totalOtrosTributos) {
+    public void setTotalOtrosTributos(Double totalOtrosTributos) {
         this.totalOtrosTributos = totalOtrosTributos;
     }
 }

@@ -50,18 +50,18 @@ public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
         assertThat(debitNote.getTipoDocumentoModifica()).isEqualTo("FACTURA");
         assertThat(debitNote.getMotivoSustento()).isEqualTo("SIN OBSERVACIONES");
 
-        assertThat(debitNote.getTributos().getTotalIgv()).isEqualTo(57.24F);
+        assertThat(debitNote.getTributos().getTotalIgv()).isEqualTo(57.24d);
         assertThat(debitNote.getTributos().getTotalIsc()).isNull();
         assertThat(debitNote.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(debitNote.getInformacionAdicional().getTotalGravada()).isEqualTo(318F);
+        assertThat(debitNote.getInformacionAdicional().getTotalGravada()).isEqualTo(318d);
         assertThat(debitNote.getInformacionAdicional().getTotalInafecta()).isNull();
         assertThat(debitNote.getInformacionAdicional().getTotalExonerada()).isNull();
         assertThat(debitNote.getInformacionAdicional().getTotalGratuita()).isNull();
 
-        assertThat(debitNote.getTotalVenta()).isEqualTo(375.24F);
+        assertThat(debitNote.getTotalVenta()).isEqualTo(375.24d);
         assertThat(debitNote.getTotalOtrosCargos()).isNull();
-        assertThat(debitNote.getTotalDescuentoGlobal()).isEqualTo(0F);
+        assertThat(debitNote.getTotalDescuentoGlobal()).isEqualTo(0d);
 
         assertSupplier(debitNote.getProveedor(),
                 "20494637074",
@@ -86,16 +86,16 @@ public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
         LineBean line = debitNote.getDetalle().get(1);
 
         assertLine(line,
-                1F,
+                1d,
                 "NIU",
                 null,
                 "MALETIN",
-                236F,
-                236F,
+                236d,
+                236d,
                 null,
-                200F,
+                200d,
                 null,
-                36F,
+                36d,
                 null
         );
     }
@@ -136,10 +136,10 @@ public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
 
         assertThat(debitNote.getInformacionAdicional().getTotalGravada()).isNull();
         assertThat(debitNote.getInformacionAdicional().getTotalInafecta()).isNull();
-        assertThat(debitNote.getInformacionAdicional().getTotalExonerada()).isEqualTo(1_800F);
+        assertThat(debitNote.getInformacionAdicional().getTotalExonerada()).isEqualTo(1_800d);
         assertThat(debitNote.getInformacionAdicional().getTotalGratuita()).isNull();
 
-        assertThat(debitNote.getTotalVenta()).isEqualTo(1_800F);
+        assertThat(debitNote.getTotalVenta()).isEqualTo(1_800d);
         assertThat(debitNote.getTotalOtrosCargos()).isNull();
         assertThat(debitNote.getTotalDescuentoGlobal()).isNull();
 
@@ -166,16 +166,16 @@ public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
         LineBean line = debitNote.getDetalle().get(0);
 
         assertLine(line,
-                1F,
+                1d,
                 "NIU",
                 null,
                 "CELULAR",
-                1_800F,
-                1_800F,
+                1_800d,
+                1_800d,
                 null,
-                1_800F,
+                1_800d,
                 null,
-                0F,
+                0d,
                 null
         );
     }
@@ -210,16 +210,16 @@ public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
         assertThat(debitNote.getTipoDocumentoModifica()).isEqualTo("FACTURA");
         assertThat(debitNote.getMotivoSustento()).isEqualTo("SIN OBSERVACIONES");
 
-        assertThat(debitNote.getTributos().getTotalIgv()).isEqualTo(324F);
+        assertThat(debitNote.getTributos().getTotalIgv()).isEqualTo(324d);
         assertThat(debitNote.getTributos().getTotalIsc()).isNull();
         assertThat(debitNote.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(debitNote.getInformacionAdicional().getTotalGravada()).isEqualTo(1_800F);
+        assertThat(debitNote.getInformacionAdicional().getTotalGravada()).isEqualTo(1_800d);
         assertThat(debitNote.getInformacionAdicional().getTotalInafecta()).isNull();
         assertThat(debitNote.getInformacionAdicional().getTotalExonerada()).isNull();
         assertThat(debitNote.getInformacionAdicional().getTotalGratuita()).isNull();
 
-        assertThat(debitNote.getTotalVenta()).isEqualTo(2_124F);
+        assertThat(debitNote.getTotalVenta()).isEqualTo(2_124d);
         assertThat(debitNote.getTotalOtrosCargos()).isNull();
         assertThat(debitNote.getTotalDescuentoGlobal()).isNull();
 
@@ -246,16 +246,16 @@ public class PeruDebitNoteBeanProviderTest extends PeruBeanUtilsTest {
         LineBean line = debitNote.getDetalle().get(0);
 
         assertLine(line,
-                1F,
+                1d,
                 "NIU",
                 null,
                 "CARRO",
-                2_124F,
-                2_124F,
+                2_124d,
+                2_124d,
                 null,
-                1_800F,
+                1_800d,
                 null,
-                324F,
+                324d,
                 null
         );
     }

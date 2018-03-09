@@ -7,8 +7,8 @@ public class ModelBean {
     private String id;
     private String type;
     private String assignedId;
-    private Float tax;
-    private Float amount;
+    private Double tax;
+    private Double amount;
     private String currency;
     private Date issueDate;
     private String supplierName;
@@ -42,19 +42,19 @@ public class ModelBean {
         this.assignedId = assignedId;
     }
 
-    public Float getTax() {
+    public Double getTax() {
         return tax;
     }
 
-    public void setTax(Float tax) {
+    public void setTax(Double tax) {
         this.tax = tax;
     }
 
-    public Float getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

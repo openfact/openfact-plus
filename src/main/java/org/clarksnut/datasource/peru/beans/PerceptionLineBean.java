@@ -7,22 +7,22 @@ public class PerceptionLineBean {
     private String documentoRelacionado;
     private String tipoDocumentoRelacionado;
     private Date fechaEmisionDocumentoRelacionado;
-    private Float importeTotalDocumentoRelacionado;
+    private Double importeTotalDocumentoRelacionado;
     private String monedaDocumentoRelacionado;
 
     private Date fechaCobro;
-    private Float importeCobro;
+    private Double importeCobro;
     private String monedaCobro;
 
-    private Float importePercibido;
+    private Double importePercibido;
     private String monedaImportePercibido;
     private Date fechaPercepcion;
-    private Float importeTotalACobrar;
+    private Double importeTotalACobrar;
     private String monedaImporteTotalACobrar;
 
     private String monedaReferencia;
     private String monedaObjetivo;
-    private Float tipoCambio;
+    private Double tipoCambio;
     private Date fechaCambio;
 
     public String getDocumentoRelacionado() {
@@ -49,11 +49,11 @@ public class PerceptionLineBean {
         this.fechaEmisionDocumentoRelacionado = fechaEmisionDocumentoRelacionado;
     }
 
-    public Float getImporteTotalDocumentoRelacionado() {
+    public Double getImporteTotalDocumentoRelacionado() {
         return importeTotalDocumentoRelacionado;
     }
 
-    public void setImporteTotalDocumentoRelacionado(Float importeTotalDocumentoRelacionado) {
+    public void setImporteTotalDocumentoRelacionado(Double importeTotalDocumentoRelacionado) {
         this.importeTotalDocumentoRelacionado = importeTotalDocumentoRelacionado;
     }
 
@@ -73,11 +73,11 @@ public class PerceptionLineBean {
         this.fechaCobro = fechaCobro;
     }
 
-    public Float getImporteCobro() {
+    public Double getImporteCobro() {
         return importeCobro;
     }
 
-    public void setImporteCobro(Float importeCobro) {
+    public void setImporteCobro(Double importeCobro) {
         this.importeCobro = importeCobro;
     }
 
@@ -89,11 +89,11 @@ public class PerceptionLineBean {
         this.monedaCobro = monedaCobro;
     }
 
-    public Float getImportePercibido() {
+    public Double getImportePercibido() {
         return importePercibido;
     }
 
-    public void setImportePercibido(Float importePercibido) {
+    public void setImportePercibido(Double importePercibido) {
         this.importePercibido = importePercibido;
     }
 
@@ -113,11 +113,11 @@ public class PerceptionLineBean {
         this.fechaPercepcion = fechaPercepcion;
     }
 
-    public Float getImporteTotalACobrar() {
+    public Double getImporteTotalACobrar() {
         return importeTotalACobrar;
     }
 
-    public void setImporteTotalACobrar(Float importeTotalACobrar) {
+    public void setImporteTotalACobrar(Double importeTotalACobrar) {
         this.importeTotalACobrar = importeTotalACobrar;
     }
 
@@ -145,11 +145,11 @@ public class PerceptionLineBean {
         this.monedaObjetivo = monedaObjetivo;
     }
 
-    public Float getTipoCambio() {
+    public Double getTipoCambio() {
         return tipoCambio;
     }
 
-    public void setTipoCambio(Float tipoCambio) {
+    public void setTipoCambio(Double tipoCambio) {
         this.tipoCambio = tipoCambio;
     }
 

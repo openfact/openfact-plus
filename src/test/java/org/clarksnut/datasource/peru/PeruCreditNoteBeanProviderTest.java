@@ -50,18 +50,18 @@ public class PeruCreditNoteBeanProviderTest extends PeruBeanUtilsTest {
         assertThat(creditNote.getTipoDocumentoModifica()).isEqualTo("FACTURA");
         assertThat(creditNote.getMotivoSustento()).isEqualTo("SIN OBSERVACIONES");
 
-        assertThat(creditNote.getTributos().getTotalIgv()).isEqualTo(57.24F);
+        assertThat(creditNote.getTributos().getTotalIgv()).isEqualTo(57.24d);
         assertThat(creditNote.getTributos().getTotalIsc()).isNull();
         assertThat(creditNote.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(creditNote.getInformacionAdicional().getTotalGravada()).isEqualTo(318F);
+        assertThat(creditNote.getInformacionAdicional().getTotalGravada()).isEqualTo(318d);
         assertThat(creditNote.getInformacionAdicional().getTotalInafecta()).isNull();
         assertThat(creditNote.getInformacionAdicional().getTotalExonerada()).isNull();
         assertThat(creditNote.getInformacionAdicional().getTotalGratuita()).isNull();
 
-        assertThat(creditNote.getTotalVenta()).isEqualTo(375.24F);
+        assertThat(creditNote.getTotalVenta()).isEqualTo(375.24d);
         assertThat(creditNote.getTotalOtrosCargos()).isNull();
-        assertThat(creditNote.getTotalDescuentoGlobal()).isEqualTo(0F);
+        assertThat(creditNote.getTotalDescuentoGlobal()).isEqualTo(0d);
 
         assertSupplier(creditNote.getProveedor(),
                 "20494637074",
@@ -86,16 +86,16 @@ public class PeruCreditNoteBeanProviderTest extends PeruBeanUtilsTest {
         LineBean line = creditNote.getDetalle().get(1);
 
         assertLine(line,
-                1F,
+                1d,
                 "NIU",
                 null,
                 "MALETIN",
-                236F,
-                236F,
+                236d,
+                236d,
                 null,
-                200F,
+                200d,
                 null,
-                36F,
+                36d,
                 null
         );
     }
@@ -136,10 +136,10 @@ public class PeruCreditNoteBeanProviderTest extends PeruBeanUtilsTest {
 
         assertThat(creditNote.getInformacionAdicional().getTotalGravada()).isNull();
         assertThat(creditNote.getInformacionAdicional().getTotalInafecta()).isNull();
-        assertThat(creditNote.getInformacionAdicional().getTotalExonerada()).isEqualTo(1_800F);
+        assertThat(creditNote.getInformacionAdicional().getTotalExonerada()).isEqualTo(1_800d);
         assertThat(creditNote.getInformacionAdicional().getTotalGratuita()).isNull();
 
-        assertThat(creditNote.getTotalVenta()).isEqualTo(1_800F);
+        assertThat(creditNote.getTotalVenta()).isEqualTo(1_800d);
         assertThat(creditNote.getTotalOtrosCargos()).isNull();
         assertThat(creditNote.getTotalDescuentoGlobal()).isNull();
 
@@ -166,16 +166,16 @@ public class PeruCreditNoteBeanProviderTest extends PeruBeanUtilsTest {
         LineBean line = creditNote.getDetalle().get(0);
 
         assertLine(line,
-                1F,
+                1d,
                 "NIU",
                 null,
                 "CELULAR",
-                1_800F,
-                1_800F,
+                1_800d,
+                1_800d,
                 null,
-                1_800F,
+                1_800d,
                 null,
-                0F,
+                0d,
                 null
         );
     }
@@ -210,16 +210,16 @@ public class PeruCreditNoteBeanProviderTest extends PeruBeanUtilsTest {
         assertThat(creditNote.getTipoDocumentoModifica()).isEqualTo("FACTURA");
         assertThat(creditNote.getMotivoSustento()).isEqualTo("SIN OBSERVACIONES");
 
-        assertThat(creditNote.getTributos().getTotalIgv()).isEqualTo(324F);
+        assertThat(creditNote.getTributos().getTotalIgv()).isEqualTo(324d);
         assertThat(creditNote.getTributos().getTotalIsc()).isNull();
         assertThat(creditNote.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(creditNote.getInformacionAdicional().getTotalGravada()).isEqualTo(1_800F);
+        assertThat(creditNote.getInformacionAdicional().getTotalGravada()).isEqualTo(1_800d);
         assertThat(creditNote.getInformacionAdicional().getTotalInafecta()).isNull();
         assertThat(creditNote.getInformacionAdicional().getTotalExonerada()).isNull();
         assertThat(creditNote.getInformacionAdicional().getTotalGratuita()).isNull();
 
-        assertThat(creditNote.getTotalVenta()).isEqualTo(2_124F);
+        assertThat(creditNote.getTotalVenta()).isEqualTo(2_124d);
         assertThat(creditNote.getTotalOtrosCargos()).isNull();
         assertThat(creditNote.getTotalDescuentoGlobal()).isNull();
 
@@ -246,16 +246,16 @@ public class PeruCreditNoteBeanProviderTest extends PeruBeanUtilsTest {
         LineBean line = creditNote.getDetalle().get(0);
 
         assertLine(line,
-                1F,
+                1d,
                 "NIU",
                 null,
                 "CARRO",
-                2_124F,
-                2_124F,
+                2_124d,
+                2_124d,
                 null,
-                1_800F,
+                1_800d,
                 null,
-                324F,
+                324d,
                 null
         );
     }

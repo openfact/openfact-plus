@@ -37,17 +37,17 @@ public class PeruBeanUtilsTest {
     }
 
     public void assertLine(LineBean line,
-                            Float cantidad,
+                            Double cantidad,
                             String unidadMedida,
                             String codigoProducto,
                             String descripcion,
-                            Float precioUnitario,
-                            Float precioVentaUnitario,
-                            Float valorReferencialUnitarioEnOperacionesNoOnerosas,
-                            Float totalValorVenta,
-                            Float totalDescuento,
-                            Float totalIgv,
-                            Float totalIsc) {
+                           Double precioUnitario,
+                           Double precioVentaUnitario,
+                           Double valorReferencialUnitarioEnOperacionesNoOnerosas,
+                           Double totalValorVenta,
+                           Double totalDescuento,
+                           Double totalIgv,
+                           Double totalIsc) {
         assertThat(line.getCantidad()).isEqualTo(cantidad);
         assertThat(line.getUnidadMedida()).isEqualTo(unidadMedida);
         assertThat(line.getCodidoProducto()).isEqualTo(codigoProducto);

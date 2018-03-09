@@ -47,9 +47,9 @@ public interface DocumentModel {
 
     String getCurrency();
 
-    Float getAmount();
+    Double getAmount();
 
-    Float getTax();
+    Double getTax();
 
     String getSupplierName();
 

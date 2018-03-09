@@ -48,11 +48,11 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(270F);
+        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(270d);
         assertThat(invoice.getTributos().getTotalIsc()).isNull();
         assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(1_500F);
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(1_500d);
         assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isNull();
         assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isNull();
         assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isNull();
@@ -80,16 +80,16 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         LineBean line = invoice.getDetalle().get(3);
 
         assertLine(line,
-                4F,
+                4d,
                 "NIU",
                 null,
                 "MALETIN",
-                200F,
-                0F,
-                236F,
-                800F,
+                200d,
+                0d,
+                236d,
+                800d,
                 null,
-                144F,
+                144d,
                 null
         );
     }
@@ -128,7 +128,7 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
 
         assertThat(invoice.getInformacionAdicional().getTotalGravada()).isNull();
         assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isNull();
-        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isEqualTo(250F);
+        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isEqualTo(250d);
         assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isNull();
 
         assertSupplier(invoice.getProveedor(),
@@ -154,16 +154,16 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         LineBean line = invoice.getDetalle().get(1);
 
         assertLine(line,
-                2F,
+                2d,
                 "NIU",
                 null,
                 "CINSTA AISLANTE",
-                100F,
-                100F,
+                100d,
+                100d,
                 null,
-                200F,
+                200d,
                 null,
-                0F,
+                0d,
                 null
         );
     }
@@ -203,7 +203,7 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         assertThat(invoice.getInformacionAdicional().getTotalGravada()).isNull();
         assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isNull();
         assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isNull();
-        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isEqualTo(7_819F);
+        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isEqualTo(7_819d);
 
         assertSupplier(invoice.getProveedor(),
                 "20494637074",
@@ -228,16 +228,16 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         LineBean line = invoice.getDetalle().get(0);
 
         assertLine(line,
-                1F,
+                1d,
                 "NIU",
                 null,
                 "PRODUCTO1",
-                50F,
-                0F,
-                59F,
-                50F,
+                50d,
+                0d,
+                59d,
+                50d,
                 null,
-                9F,
+                9d,
                 null
         );
     }
@@ -270,11 +270,11 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(3_118.5F);
+        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(3_118.5d);
         assertThat(invoice.getTributos().getTotalIsc()).isNull();
         assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(17_325F);
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(17_325d);
         assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isNull();
         assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isNull();
         assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isNull();
@@ -302,16 +302,16 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         LineBean line = invoice.getDetalle().get(4);
 
         assertLine(line,
-                5F,
+                5d,
                 "NIU",
                 null,
                 "PRODUCTO5",
-                250F,
-                295F,
+                250d,
+                295d,
                 null,
-                1_250F,
+                1_250d,
                 null,
-                225F,
+                225d,
                 null
         );
     }
@@ -344,14 +344,14 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(21.15F);
+        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(21.15d);
         assertThat(invoice.getTributos().getTotalIsc()).isNull();
         assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(117.5F);
-        assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isEqualTo(0F);
-        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isEqualTo(0F);
-        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isEqualTo(0F);
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(117.5d);
+        assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isEqualTo(0d);
+        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isEqualTo(0d);
+        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isEqualTo(0d);
 
         assertSupplier(invoice.getProveedor(),
                 "20494637074",
@@ -376,16 +376,16 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         LineBean line = invoice.getDetalle().get(2);
 
         assertLine(line,
-                12F,
+                12d,
                 "NIU",
                 null,
                 "RESALTADOR",
-                5F,
-                5.9F,
+                5d,
+                5.9d,
                 null,
-                60F,
+                60d,
                 null,
-                10.8F,
+                10.8d,
                 null
         );
     }
@@ -418,14 +418,14 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(0F);
+        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(0d);
         assertThat(invoice.getTributos().getTotalIsc()).isNull();
         assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(0F);
-        assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isEqualTo(0F);
-        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isEqualTo(1_800F);
-        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isEqualTo(0F);
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(0d);
+        assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isEqualTo(0d);
+        assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isEqualTo(1_800d);
+        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isEqualTo(0d);
 
         assertSupplier(invoice.getProveedor(),
                 "20494637074",
@@ -450,16 +450,16 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         LineBean line = invoice.getDetalle().get(0);
 
         assertLine(line,
-                1F,
+                1d,
                 "NIU",
                 null,
                 "CELULAR",
-                1800F,
-                1800F,
+                1800d,
+                1800d,
                 null,
-                1800F,
+                1800d,
                 null,
-                0F,
+                0d,
                 null
         );
     }
@@ -499,7 +499,7 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         assertThat(invoice.getInformacionAdicional().getTotalGravada()).isNull();
         assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isNull();
         assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isNull();
-        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isEqualTo(7_819F);
+        assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isEqualTo(7_819d);
 
         assertSupplier(invoice.getProveedor(),
                 "20494637074",
@@ -524,16 +524,16 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         LineBean line = invoice.getDetalle().get(6);
 
         assertLine(line,
-                7F,
+                7d,
                 "NIU",
                 null,
                 "PAPEL BOND",
-                350F,
-                0F,
-                350F,
-                2_450F,
+                350d,
+                0d,
+                350d,
+                2_450d,
                 null,
-                0F,
+                0d,
                 null
         );
     }
@@ -566,11 +566,11 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         assertThat(invoice.getFechaEmision()).isEqualTo(calendar.getTime());
         assertThat(invoice.getFechaVencimiento()).isNull();
 
-        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(40.5F);
+        assertThat(invoice.getTributos().getTotalIgv()).isEqualTo(40.5d);
         assertThat(invoice.getTributos().getTotalIsc()).isNull();
         assertThat(invoice.getTributos().getTotalOtrosTributos()).isNull();
 
-        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(225F);
+        assertThat(invoice.getInformacionAdicional().getTotalGravada()).isEqualTo(225d);
         assertThat(invoice.getInformacionAdicional().getTotalInafecta()).isNull();
         assertThat(invoice.getInformacionAdicional().getTotalExonerada()).isNull();
         assertThat(invoice.getInformacionAdicional().getTotalGratuita()).isNull();
@@ -598,16 +598,16 @@ public class PeruInvoiceDatasourceProviderTest extends PeruBeanUtilsTest {
         LineBean line = invoice.getDetalle().get(1);
 
         assertLine(line,
-                2F,
+                2d,
                 "NIU",
                 null,
                 "CARTAPASIO",
-                100F,
-                118F,
+                100d,
+                118d,
                 null,
-                200F,
+                200d,
                 null,
-                36F,
+                36d,
                 null
         );
     }

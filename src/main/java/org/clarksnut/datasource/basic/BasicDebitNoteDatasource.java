@@ -21,11 +21,11 @@ public class BasicDebitNoteDatasource implements Datasource {
 
     private String note;
 
-    private Float payableAmount;
-    private Float allowanceTotal;
-    private Float chargeTotal;
+    private Double payableAmount;
+    private Double allowanceTotal;
+    private Double chargeTotal;
 
-    private Float totalTax;
+    private Double totalTax;
     private List<LineBean> lines;
 
     public Date getIssueDate() {
@@ -84,35 +84,35 @@ public class BasicDebitNoteDatasource implements Datasource {
         this.note = note;
     }
 
-    public Float getPayableAmount() {
+    public Double getPayableAmount() {
         return payableAmount;
     }
 
-    public void setPayableAmount(Float payableAmount) {
+    public void setPayableAmount(Double payableAmount) {
         this.payableAmount = payableAmount;
     }
 
-    public Float getAllowanceTotal() {
+    public Double getAllowanceTotal() {
         return allowanceTotal;
     }
 
-    public void setAllowanceTotal(Float allowanceTotal) {
+    public void setAllowanceTotal(Double allowanceTotal) {
         this.allowanceTotal = allowanceTotal;
     }
 
-    public Float getChargeTotal() {
+    public Double getChargeTotal() {
         return chargeTotal;
     }
 
-    public void setChargeTotal(Float chargeTotal) {
+    public void setChargeTotal(Double chargeTotal) {
         this.chargeTotal = chargeTotal;
     }
 
-    public Float getTotalTax() {
+    public Double getTotalTax() {
         return totalTax;
     }
 
-    public void setTotalTax(Float totalTax) {
+    public void setTotalTax(Double totalTax) {
         this.totalTax = totalTax;
     }
 

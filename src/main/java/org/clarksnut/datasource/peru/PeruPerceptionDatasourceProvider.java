@@ -43,16 +43,16 @@ public class PeruPerceptionDatasourceProvider implements DatasourceProvider {
         TipoRegimenPercepcion.getFromCode(perceptionType.getSunatPerceptionSystemCode().getValue()).ifPresent(c -> {
             bean.setRegimen(c.getDenominacion());
         });
-        bean.setTasa(perceptionType.getSunatPerceptionPercent().getValue().floatValue());
+        bean.setTasa(perceptionType.getSunatPerceptionPercent().getValue().doubleValue());
 
         List<NoteType> noteTypes = perceptionType.getNote();
         if (noteTypes != null && !noteTypes.isEmpty()) {
             bean.setObservaciones(noteTypes.get(0).getValue());
         }
 
-        bean.setImporteTotalPercibido(perceptionType.getTotalInvoiceAmount().getValue().floatValue());
+        bean.setImporteTotalPercibido(perceptionType.getTotalInvoiceAmount().getValue().doubleValue());
         bean.setMonedaImporteTotalPercibido(perceptionType.getTotalInvoiceAmount().getCurrencyID());
-        bean.setImporteTotalCobrado(perceptionType.getSunatTotalCashed().getValue().floatValue());
+        bean.setImporteTotalCobrado(perceptionType.getSunatTotalCashed().getValue().doubleValue());
         bean.setMonedaImporteTotalCobrado(perceptionType.getSunatTotalCashed().getCurrencyID());
 
         // Detalle
@@ -68,24 +68,24 @@ public class PeruPerceptionDatasourceProvider implements DatasourceProvider {
                 lineBean.setTipoDocumentoRelacionado(c.getDenominacion());
             });
             lineBean.setFechaEmisionDocumentoRelacionado(sunatPerceptionDocumentReferenceType.getIssueDate().getValue().toGregorianCalendar().getTime());
-            lineBean.setImporteTotalDocumentoRelacionado(sunatPerceptionDocumentReferenceType.getTotalInvoiceAmount().getValue().floatValue());
+            lineBean.setImporteTotalDocumentoRelacionado(sunatPerceptionDocumentReferenceType.getTotalInvoiceAmount().getValue().doubleValue());
             lineBean.setMonedaDocumentoRelacionado(sunatPerceptionDocumentReferenceType.getTotalInvoiceAmount().getCurrencyID());
 
             lineBean.setFechaCobro(sunatPerceptionDocumentReferenceType.getPayment().getPaidDate().getValue().toGregorianCalendar().getTime());
-            lineBean.setImporteCobro(sunatPerceptionDocumentReferenceType.getPayment().getPaidAmount().getValue().floatValue());
+            lineBean.setImporteCobro(sunatPerceptionDocumentReferenceType.getPayment().getPaidAmount().getValue().doubleValue());
             lineBean.setMonedaCobro(sunatPerceptionDocumentReferenceType.getPayment().getPaidAmount().getCurrencyID());
 
-            lineBean.setImportePercibido(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatPerceptionAmount().getValue().floatValue());
+            lineBean.setImportePercibido(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatPerceptionAmount().getValue().doubleValue());
             lineBean.setMonedaImportePercibido(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatPerceptionAmount().getCurrencyID());
             lineBean.setFechaPercepcion(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatPerceptionDate().getValue().toGregorianCalendar().getTime());
-            lineBean.setImporteTotalACobrar(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatNetTotalCashed().getValue().floatValue());
+            lineBean.setImporteTotalACobrar(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatNetTotalCashed().getValue().doubleValue());
             lineBean.setMonedaImporteTotalACobrar(sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getSunatNetTotalCashed().getCurrencyID());
 
             ExchangeRateType exchangeRateType = sunatPerceptionDocumentReferenceType.getSunatPerceptionInformation().getExchangeRate();
             if (exchangeRateType != null) {
                 lineBean.setMonedaReferencia(exchangeRateType.getSourceCurrencyCodeValue());
                 lineBean.setMonedaObjetivo(exchangeRateType.getTargetCurrencyCodeValue());
-                lineBean.setTipoCambio(exchangeRateType.getCalculationRateValue().floatValue());
+                lineBean.setTipoCambio(exchangeRateType.getCalculationRateValue().doubleValue());
                 lineBean.setFechaCambio(exchangeRateType.getDate().getValue().toGregorianCalendar().getTime());
             }
 

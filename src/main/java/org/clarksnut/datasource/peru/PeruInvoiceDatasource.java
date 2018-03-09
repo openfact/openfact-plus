@@ -25,9 +25,9 @@ public class PeruInvoiceDatasource implements Datasource {
 
     private InformacionAdicionalBean informacionAdicional;
 
-    private Float totalVenta;
-    private Float totalDescuentoGlobal;
-    private Float totalOtrosCargos;
+    private Double totalVenta;
+    private Double totalDescuentoGlobal;
+    private Double totalOtrosCargos;
 
     private TributosBean tributos;
 
@@ -113,27 +113,27 @@ public class PeruInvoiceDatasource implements Datasource {
         this.otroDocumentoRelacionadoId = otroDocumentoRelacionadoId;
     }
 
-    public Float getTotalVenta() {
+    public Double getTotalVenta() {
         return totalVenta;
     }
 
-    public void setTotalVenta(Float totalVenta) {
+    public void setTotalVenta(Double totalVenta) {
         this.totalVenta = totalVenta;
     }
 
-    public Float getTotalDescuentoGlobal() {
+    public Double getTotalDescuentoGlobal() {
         return totalDescuentoGlobal;
     }
 
-    public void setTotalDescuentoGlobal(Float totalDescuentoGlobal) {
+    public void setTotalDescuentoGlobal(Double totalDescuentoGlobal) {
         this.totalDescuentoGlobal = totalDescuentoGlobal;
     }
 
-    public Float getTotalOtrosCargos() {
+    public Double getTotalOtrosCargos() {
         return totalOtrosCargos;
     }
 
-    public void setTotalOtrosCargos(Float totalOtrosCargos) {
+    public void setTotalOtrosCargos(Double totalOtrosCargos) {
         this.totalOtrosCargos = totalOtrosCargos;
     }
 

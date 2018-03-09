@@ -54,24 +54,24 @@ public class BasicInvoiceBeanAdapter implements DocumentBean {
     }
 
     @Override
-    public Float getAmount() {
+    public Double getAmount() {
         Optional<PayableAmountType> payableAmount = getPayableAmount();
         if (payableAmount.isPresent()) {
             PayableAmountType payableAmountType = payableAmount.get();
             BigDecimal value = payableAmountType.getValue();
             if (value != null) {
-                return value.floatValue();
+                return value.doubleValue();
             }
         }
         return null;
     }
 
     @Override
-    public Float getTax() {
+    public Double getTax() {
         return type.getTaxTotal().stream()
                 .map(TaxTotalType::getTaxAmountValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .floatValue();
+                .doubleValue();
     }
 
     @Override

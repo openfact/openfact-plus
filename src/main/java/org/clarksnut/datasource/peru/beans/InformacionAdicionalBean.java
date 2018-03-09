@@ -2,50 +2,50 @@ package org.clarksnut.datasource.peru.beans;
 
 public class InformacionAdicionalBean {
 
-    private Float totalGravada;
-    private Float totalGratuita;
-    private Float totalExonerada;
-    private Float totalInafecta;
+    private Double totalGravada;
+    private Double totalGratuita;
+    private Double totalExonerada;
+    private Double totalInafecta;
 
-    private Float totalDescuentos;
+    private Double totalDescuentos;
 
-    public Float getTotalGravada() {
+    public Double getTotalGravada() {
         return totalGravada;
     }
 
-    public void setTotalGravada(Float totalGravada) {
+    public void setTotalGravada(Double totalGravada) {
         this.totalGravada = totalGravada;
     }
 
-    public Float getTotalGratuita() {
+    public Double getTotalGratuita() {
         return totalGratuita;
     }
 
-    public void setTotalGratuita(Float totalGratuita) {
+    public void setTotalGratuita(Double totalGratuita) {
         this.totalGratuita = totalGratuita;
     }
 
-    public Float getTotalExonerada() {
+    public Double getTotalExonerada() {
         return totalExonerada;
     }
 
-    public void setTotalExonerada(Float totalExonerada) {
+    public void setTotalExonerada(Double totalExonerada) {
         this.totalExonerada = totalExonerada;
     }
 
-    public Float getTotalInafecta() {
+    public Double getTotalInafecta() {
         return totalInafecta;
     }
 
-    public void setTotalInafecta(Float totalInafecta) {
+    public void setTotalInafecta(Double totalInafecta) {
         this.totalInafecta = totalInafecta;
     }
 
-    public Float getTotalDescuentos() {
+    public Double getTotalDescuentos() {
         return totalDescuentos;
     }
 
-    public void setTotalDescuentos(Float totalDescuentos) {
+    public void setTotalDescuentos(Double totalDescuentos) {
         this.totalDescuentos = totalDescuentos;
     }
 }

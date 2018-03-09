@@ -8,7 +8,7 @@
 
     create table cl_document (
        id varchar(36) not null,
-        amount float,
+        amount double,
         assigned_id varchar(255) not null,
         created_at timestamp not null,
         currency varchar(255),
@@ -23,7 +23,7 @@
         supplier_country varchar(255),
         supplier_name varchar(255),
         supplier_street_address varchar(255),
-        tax float,
+        tax double,
         type varchar(255) not null,
         updated_at timestamp not null,
         primary key (id)

@@ -83,12 +83,12 @@ public class PeruDebitNoteDatasourceProvider implements DatasourceProvider {
         AllowanceTotalAmountType allowanceTotalAmountType = legalMonetaryTotalType.getAllowanceTotalAmount();
         ChargeTotalAmountType chargeTotalAmountType = legalMonetaryTotalType.getChargeTotalAmount();
 
-        bean.setTotalVenta(legalMonetaryTotalType.getPayableAmount().getValue().floatValue());
+        bean.setTotalVenta(legalMonetaryTotalType.getPayableAmount().getValue().doubleValue());
         if (allowanceTotalAmountType != null) {
-            bean.setTotalDescuentoGlobal(allowanceTotalAmountType.getValue().floatValue());
+            bean.setTotalDescuentoGlobal(allowanceTotalAmountType.getValue().doubleValue());
         }
         if (chargeTotalAmountType != null) {
-            bean.setTotalOtrosCargos(chargeTotalAmountType.getValue().floatValue());
+            bean.setTotalOtrosCargos(chargeTotalAmountType.getValue().doubleValue());
         }
 
         // Taxs
@@ -117,10 +117,10 @@ public class PeruDebitNoteDatasourceProvider implements DatasourceProvider {
         for (DebitNoteLineType debitNoteLineType : debitNoteLineTypes) {
             LineBean lineBean = new LineBean();
 
-            lineBean.setCantidad(debitNoteLineType.getDebitedQuantity().getValue().floatValue());
+            lineBean.setCantidad(debitNoteLineType.getDebitedQuantity().getValue().doubleValue());
             lineBean.setUnidadMedida(debitNoteLineType.getDebitedQuantity().getUnitCode());
-            lineBean.setPrecioUnitario(debitNoteLineType.getPrice().getPriceAmount().getValue().floatValue());
-            lineBean.setTotalValorVenta(debitNoteLineType.getLineExtensionAmount().getValue().floatValue());
+            lineBean.setPrecioUnitario(debitNoteLineType.getPrice().getPriceAmount().getValue().doubleValue());
+            lineBean.setTotalValorVenta(debitNoteLineType.getLineExtensionAmount().getValue().doubleValue());
 
             // Precio de venta unitario
             BeanUtils.agregarPrecioUnitario(lineBean, Optional.ofNullable(debitNoteLineType.getPricingReference().getAlternativeConditionPrice()));

@@ -42,7 +42,7 @@ public class PEPerceptionParsedDocumentProviderTest {
         DocumentBean skeleton = parsedDocument.getBean();
 
         assertThat(skeleton.getAssignedId()).isEqualTo("P001-123");
-        assertThat(skeleton.getAmount()).isEqualTo(17_544F);
+        assertThat(skeleton.getAmount()).isEqualTo(17_544d);
         assertThat(skeleton.getTax()).isNull();
         assertThat(skeleton.getCurrency()).isEqualTo("PEN");
 

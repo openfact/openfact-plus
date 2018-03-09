@@ -22,7 +22,7 @@ public class BasicCreditNoteDatasource implements Datasource {
 
     private MonetaryTotalBean monetaryTotal;
 
-    private Float totalTax;
+    private Double totalTax;
     private List<LineBean> lines;
 
     public Date getIssueDate() {
@@ -82,11 +82,11 @@ public class BasicCreditNoteDatasource implements Datasource {
         this.monetaryTotal = monetaryTotal;
     }
 
-    public Float getTotalTax() {
+    public Double getTotalTax() {
         return totalTax;
     }
 
-    public void setTotalTax(Float totalTax) {
+    public void setTotalTax(Double totalTax) {
         this.totalTax = totalTax;
     }
 
