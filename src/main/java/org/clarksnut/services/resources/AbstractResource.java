@@ -48,7 +48,7 @@ public abstract class AbstractResource {
             return new HashSet<>(user.getAllPermittedSpaces());
         } else {
             return user.getAllPermittedSpaces().stream()
-                    .filter(p -> spaceIds.contains(p.getAssignedId()))
+                    .filter(p -> spaceIds.contains(p.getId()))
                     .collect(Collectors.toSet());
         }
     }
