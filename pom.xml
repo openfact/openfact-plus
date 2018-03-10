@@ -637,7 +637,7 @@
 
     <profiles>
         <profile>
-            <id>flywaydb</id>
+            <id>flywaydb-h2</id>
             <build>
                 <plugins>
                     <plugin>
@@ -646,9 +646,43 @@
                         <version>0.9.11</version>
                         <extensions>true</extensions> <!-- required to run automatically -->
                         <configuration>
+                            <outputPath>${project.build.directory}/generated-sources/h2/database.sql</outputPath>
                             <packages>
                                 <package>org.clarksnut</package>
                             </packages>
+                            <jpaProperties>
+                                <property>
+                                    <name>hibernate.dialect</name>
+                                    <value>org.hibernate.dialect.H2Dialect</value>
+                                </property>
+                            </jpaProperties>
+                            <formatOutput>true</formatOutput>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>flywaydb-postgresql</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.devskiller.jpa2ddl</groupId>
+                        <artifactId>jpa2ddl-maven-plugin</artifactId>
+                        <version>0.9.11</version>
+                        <extensions>true</extensions> <!-- required to run automatically -->
+                        <configuration>
+                            <outputPath>${project.build.directory}/generated-sources/postgresql/database.sql</outputPath>
+                            <packages>
+                                <package>org.clarksnut</package>
+                            </packages>
+                            <jpaProperties>
+                                <property>
+                                    <name>hibernate.dialect</name>
+                                    <value>org.hibernate.dialect.PostgreSQL9Dialect</value>
+                                </property>
+                            </jpaProperties>
+                            <formatOutput>true</formatOutput>
                         </configuration>
                     </plugin>
                 </plugins>

@@ -2,6 +2,9 @@ package org.clarksnut.migration;
 
 import org.flywaydb.core.Flyway;
 import org.hibernate.boot.Metadata;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.H2Dialect;
+import org.hibernate.dialect.PostgreSQL9Dialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.integrator.spi.Integrator;
 import org.hibernate.service.spi.SessionFactoryServiceRegistry;
@@ -29,6 +32,15 @@ public class FlywayIntegrator implements Integrator {
             logger.error("Error while looking up DataSource", ex);
             // Do not proceed
             return;
+        }
+
+        Dialect dialect = sessionFactory.getJdbcServices().getDialect();
+        if (dialect instanceof H2Dialect) {
+            flyway.setLocations("classpath:db/migration/h2");
+        } else if (dialect instanceof PostgreSQL9Dialect) {
+            flyway.setLocations("classpath:db/migration/postgresql");
+        } else {
+            throw new IllegalStateException("Not supported Dialect");
         }
 
         flyway.migrate();

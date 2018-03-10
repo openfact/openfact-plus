@@ -139,81 +139,81 @@
     );
 
     alter table cn_document
-       add constraint UK1g8cna9wmjf7rvym5de8otj5j unique (type, assigned_id, supplier_assigned_id);
+       add constraint UKawubnbop2ucyh7b4ty92y1u76 unique (type, assigned_id, supplier_assigned_id);
 
     alter table cn_party
-       add constraint UKlbhowa4pjy8y18dto6qn6sw0h unique (assignedId);
+       add constraint UK8ad1rtqs4v86jy8ccbuwt5t7i unique (assignedId);
 
     alter table cn_space
-       add constraint UKsdrlysemmnh3bs7q5rky8bbq2 unique (assigned_id);
+       add constraint UKgbhk5oavmtev0gw0t8ntybrpd unique (assigned_id);
 
     alter table cn_user
-       add constraint UKo2u1kvk0249ki7q84ggorljc6 unique (username);
+       add constraint UK5wtbbbk9glk087qucfky5sfu9 unique (username);
 
     alter table cn_user
-       add constraint UKj02cpo2pptija0ujdlickuyoa unique (identity_id);
+       add constraint UKdo3rrt9o142kgb3m9nhkt8pp7 unique (identity_id);
 
     alter table cn_collaborator
-       add constraint FKrp82c2i571lmhouy8orvurueb
+       add constraint FKnr72rb1n095hpodgidcig96u6
        foreign key (space_id)
        references cn_space;
 
     alter table cn_collaborator
-       add constraint FKa1et8kcht137s1ugxy5o29bwa
+       add constraint FKouusi44ya3fn5wduy8wt0x6fl
        foreign key (user_id)
        references cn_user;
 
     alter table cn_document_version
-       add constraint FKsdhniwfe4777yxgjeqeu1f9t3
+       add constraint FK50roi3nln8ckvt08r3ab5p0m1
        foreign key (document_id)
        references cn_document;
 
     alter table cn_document_version
-       add constraint FKv8l5ddy51iailp4sqdum4ab6
+       add constraint FKft90haapk8yrwqymo7hj3mr5r
        foreign key (importedDocument_id)
        references cn_imported_document;
 
     alter table cn_imported_document
-       add constraint FKradvm1a0nxiw43dnhj1lq4kho
+       add constraint FK6akkeg77t8min2f48696jblpq
        foreign key (file_id)
        references cn_file;
 
     alter table cn_request
-       add constraint FKj13h6esgslepp53yqggtc47ve
+       add constraint FKk05gvkwnou6ih6sebk28fjxjp
        foreign key (space_id)
        references cn_space;
 
     alter table cn_request
-       add constraint FK895blhlaeni7aui0msi384qa8
+       add constraint FKgxkool5a6l2fy2e0c22i534s7
        foreign key (user_id)
        references cn_user;
 
     alter table favorite_spaces
-       add constraint FK8r5h03fqx6pli9928pdfuxgiw
+       add constraint FKius5et5hipwo4eu1cbuc49erg
        foreign key (user_id)
        references cn_user;
 
     alter table party_names
-       add constraint FKexpsenj4kq537hkji9csf7pkh
+       add constraint FKtedp0ok09g8v4astyc4kvdjlp
        foreign key (party_id)
        references cn_party;
 
     alter table party_space_ids
-       add constraint FK90u3crgakw86yv1fr3byr9o4s
+       add constraint FKtfda6q5athdvxev8irpc9rl2m
        foreign key (party_id)
        references cn_party;
 
     alter table user_checks
-       add constraint FKrmuxciolt09o5lrpcs749ie6v
+       add constraint FKej20a44rajppr0cw8mpty091u
        foreign key (document_id)
        references cn_document;
 
     alter table user_starts
-       add constraint FKo1uskfejr4nvf5o7vkeuj1k3t
+       add constraint FKg6ysj70hpmddqe55u2rb47te
        foreign key (document_id)
        references cn_document;
 
     alter table user_views
-       add constraint FKi71fggatfbea87cnlinjkns7s
+       add constraint FKghymygvc6g2cp86kufvw9uv8n
        foreign key (document_id)
        references cn_document;
