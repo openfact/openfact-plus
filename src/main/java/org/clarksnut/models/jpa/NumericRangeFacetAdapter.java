@@ -5,8 +5,6 @@ import org.clarksnut.models.RangeModel;
 import org.hibernate.search.query.facet.Facet;
 import org.hibernate.search.query.facet.RangeFacet;
 
-import java.util.Date;
-
 public class NumericRangeFacetAdapter implements FacetModel<RangeModel<Integer>> {
 
     private final Facet facet;

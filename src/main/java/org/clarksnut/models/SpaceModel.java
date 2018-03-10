@@ -9,23 +9,30 @@ public interface SpaceModel {
     String ASSIGNED_ID = "assignedId";
 
     String getId();
+
     String getAssignedId();
 
     String getName();
+
     void setName(String name);
 
     String getDescription();
+
     void setDescription(String description);
 
     UserModel getOwner();
+
     boolean setOwner(UserModel user);
 
     List<UserModel> getCollaborators();
+
     List<UserModel> getCollaborators(int offset, int limit);
 
     void addCollaborators(UserModel user);
+
     boolean removeCollaborators(UserModel user);
 
     Date getCreatedAt();
+
     Date getUpdatedAt();
 }

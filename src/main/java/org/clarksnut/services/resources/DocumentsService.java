@@ -6,19 +6,14 @@ import io.swagger.annotations.ApiParam;
 import org.clarksnut.files.FileModel;
 import org.clarksnut.files.uncompress.exceptions.NotReadableCompressFileException;
 import org.clarksnut.managers.ImportedDocumentManager;
-import org.clarksnut.models.*;
+import org.clarksnut.models.DocumentModel;
+import org.clarksnut.models.DocumentProviderType;
 import org.clarksnut.models.exceptions.IsNotXmlOrCompressedFileDocumentException;
-import org.clarksnut.query.RangeQuery;
-import org.clarksnut.query.TermQuery;
-import org.clarksnut.query.TermsQuery;
 import org.clarksnut.report.ExportFormat;
 import org.clarksnut.report.ReportTemplateConfiguration;
 import org.clarksnut.report.ReportTemplateProvider;
 import org.clarksnut.report.exceptions.ReportException;
-import org.clarksnut.representations.idm.DocumentQueryRepresentation;
 import org.clarksnut.representations.idm.DocumentRepresentation;
-import org.clarksnut.representations.idm.FacetRepresentation;
-import org.clarksnut.representations.idm.GenericDataRepresentation;
 import org.clarksnut.services.ErrorResponse;
 import org.clarksnut.services.ErrorResponseException;
 import org.clarksnut.utils.ModelToRepresentation;
@@ -33,8 +28,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @Stateless
 @Path("/api/documents")

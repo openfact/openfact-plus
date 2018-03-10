@@ -50,7 +50,7 @@ public class JpaPartyObservers {
             }
 
             Set<String> spaceIds = entity.getSpaceIds();
-            if (supplierAssignedId!= null && !supplierAssignedId.trim().isEmpty() && !spaceIds.contains(supplierAssignedId)) {
+            if (supplierAssignedId != null && !supplierAssignedId.trim().isEmpty() && !spaceIds.contains(supplierAssignedId)) {
                 spaceIds.add(supplierAssignedId);
             }
             if (customerAssignedId != null && !customerAssignedId.trim().isEmpty() && !spaceIds.contains(customerAssignedId)) {

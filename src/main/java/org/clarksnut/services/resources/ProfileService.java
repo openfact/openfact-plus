@@ -2,7 +2,6 @@ package org.clarksnut.services.resources;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.representations.idm.UserRepresentation;
 import org.clarksnut.services.ErrorResponseException;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.security.Principal;
 import java.util.Map;

@@ -13,7 +13,6 @@ import org.jboss.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.util.logging.Level;
 
 public class FlywayIntegrator implements Integrator {
 

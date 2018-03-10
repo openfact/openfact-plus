@@ -31,5 +31,6 @@ public interface UserProvider {
     List<UserModel> getUsers(QueryModel query);
 
     List<UserModel> getUsers(String filterText);
+
     List<UserModel> getUsers(String filterText, int offset, int limit);
 }
