@@ -51,7 +51,7 @@ public class BoolQuery implements ComposedQuery {
     }
 
     public List<Query> getMustNot() {
-        return must;
+        return mustNot;
     }
 
     public List<Query> getShould() {
