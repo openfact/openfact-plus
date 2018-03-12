@@ -23,7 +23,7 @@
             <property name="hibernate.order_inserts" value="true"/>
             <property name="hibernate.order_updates" value="true"/>
 
-            <property name="hibernate.generate_statistics" value="true"/>
+            <property name="hibernate.generate_statistics" value="false"/>
 
             <!--Hibernate SEARCH-->
             <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>
