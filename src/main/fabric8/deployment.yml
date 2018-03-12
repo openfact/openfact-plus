@@ -23,7 +23,7 @@ spec:
         - name: JAVA_OPTIONS
           value: -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.project.stage=production-peru
         - name: GC_MAX_METASPACE_SIZE
-          value: 200
+          value: 150
         - name: CN_HIBERNATE_FORMAT_SQL
           value: false
         - name: CN_HIBERNATE_SHOW_SQL

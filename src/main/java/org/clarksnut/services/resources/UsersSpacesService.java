@@ -256,24 +256,24 @@ public class UsersSpacesService extends AbstractResource {
         // Links
         Map<String, String> links = new HashMap<>();
         links.put("first", uriInfo.getBaseUriBuilder()
-                .path(SpacesService.class)
-                .path(SpacesService.class, "getUserSpaceCollaborators")
-                .build(spaceId).toString() +
+                .path(UsersSpacesService.class)
+                .path(UsersSpacesService.class, "getUserSpaceCollaborators")
+                .build(userId, spaceId).toString() +
                 "?offset=0" +
                 "&limit=" + limit);
 
         links.put("last", uriInfo.getBaseUriBuilder()
-                .path(SpacesService.class)
-                .path(SpacesService.class, "getUserSpaceCollaborators")
-                .build(spaceId).toString() +
+                .path(UsersSpacesService.class)
+                .path(UsersSpacesService.class, "getUserSpaceCollaborators")
+                .build(userId, spaceId).toString() +
                 "?offset=" + (totalCount > 0 ? (((totalCount - 1) % limit) * limit) : 0) +
                 "&limit=" + limit);
 
         if (collaborators.size() > limit) {
             links.put("next", uriInfo.getBaseUriBuilder()
-                    .path(SpacesService.class)
-                    .path(SpacesService.class, "getUserSpaceCollaborators")
-                    .build(spaceId).toString() +
+                    .path(UsersSpacesService.class)
+                    .path(UsersSpacesService.class, "getUserSpaceCollaborators")
+                    .build(userId, spaceId).toString() +
                     "?offset=" + (offset + limit) +
                     "&limit=" + limit);
 
