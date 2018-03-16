@@ -205,10 +205,6 @@
         </dependency>
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
-            <artifactId>hibernate-search</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
             <artifactId>batch-jberet</artifactId>
         </dependency>
         <dependency>
@@ -290,6 +286,12 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-search-elasticsearch-aws</artifactId>
+            <version>${version.hibernate-search}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-serialization-avro</artifactId>
             <version>${version.hibernate-search}</version>
             <scope>provided</scope>
         </dependency>

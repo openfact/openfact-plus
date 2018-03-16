@@ -8,30 +8,9 @@ services:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin
     ports:
-      - 8180:8080
+      - 8081:8080
     networks:
       - sso
-
-  # username: elastic
-  # password: changeme
-  elasticsearch:
-      image: docker.elastic.co/elasticsearch/elasticsearch:5.6.5
-      container_name: elasticsearch
-      environment:
-        - cluster.name=docker-cluster
-        - bootstrap.memory_lock=true
-        - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      ulimits:
-        memlock:
-          soft: -1
-          hard: -1
-      mem_limit: 1g
-      volumes:
-        - esdata:/usr/share/elasticsearch/data
-      ports:
-        - 9200:9200
-      networks:
-        - elk
 
 volumes:
   esdata:
@@ -39,4 +18,3 @@ volumes:
 
 networks:
   sso:
-  elk:
