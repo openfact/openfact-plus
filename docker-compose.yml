@@ -9,12 +9,3 @@ services:
       - KEYCLOAK_PASSWORD=admin
     ports:
       - 8081:8080
-    networks:
-      - sso
-
-volumes:
-  esdata:
-    driver: local
-
-networks:
-  sso:
