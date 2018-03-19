@@ -6,7 +6,7 @@ jdk:
 
 addons:
   sonarcloud:
-    organization: w4tracking
+    organization: clarksnut
     token:
       secure: $SONAR_TOKEN
 
