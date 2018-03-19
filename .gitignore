@@ -1,3 +1,5 @@
+org.clarksnut.models/*
+
 target
 *.iml
 *.ipr
