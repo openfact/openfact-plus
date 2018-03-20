@@ -8,7 +8,10 @@ import org.clarksnut.files.uncompress.exceptions.NotReadableCompressFileExceptio
 import org.clarksnut.managers.ImportedDocumentManager;
 import org.clarksnut.models.DocumentModel;
 import org.clarksnut.models.DocumentProviderType;
+import org.clarksnut.models.exceptions.AlreadyImportedDocumentException;
+import org.clarksnut.models.exceptions.IsNotUBLDocumentException;
 import org.clarksnut.models.exceptions.IsNotXmlOrCompressedFileDocumentException;
+import org.clarksnut.models.exceptions.UnsupportedDocumentTypeException;
 import org.clarksnut.report.ExportFormat;
 import org.clarksnut.report.ReportTemplateConfiguration;
 import org.clarksnut.report.ReportTemplateProvider;
@@ -86,6 +89,12 @@ public class DocumentsService extends AbstractResource {
                 throw new ErrorResponseException("File should be .xml or compressed e.x. .zip, .tag.gz, .rar", Response.Status.BAD_REQUEST);
             } catch (NotReadableCompressFileException e) {
                 throw new ErrorResponseException("Could not uncompress file, corrupted file", Response.Status.BAD_REQUEST);
+            } catch (AlreadyImportedDocumentException e) {
+                return Response.status(Response.Status.CONFLICT).build();
+            } catch (IsNotUBLDocumentException e) {
+                return ErrorResponse.error("Document is not a valid document", Response.Status.BAD_REQUEST);
+            } catch (UnsupportedDocumentTypeException e) {
+                return ErrorResponse.error("Document is not supported", Response.Status.BAD_REQUEST);
             }
 
             // Return result

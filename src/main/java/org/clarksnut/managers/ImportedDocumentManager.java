@@ -36,7 +36,7 @@ public class ImportedDocumentManager {
     private DocumentManager documentManager;
 
     public void importDocument(byte[] bytes, String filename, DocumentProviderType providerType)
-            throws IsNotXmlOrCompressedFileDocumentException, NotReadableCompressFileException {
+            throws IsNotXmlOrCompressedFileDocumentException, NotReadableCompressFileException, UnsupportedDocumentTypeException, IsNotUBLDocumentException, AlreadyImportedDocumentException {
         if (!FileModelUtils.isXmlOrCompressedFilename(filename)) {
             throw new IsNotXmlOrCompressedFileDocumentException("Could not read files that are not xml or compressed");
         }
@@ -59,22 +59,20 @@ public class ImportedDocumentManager {
             try {
                 documentManager.addDocument(importedDocument);
                 importedDocument.setStatus(ImportedDocumentStatus.IMPORTED);
-            } catch (UnsupportedDocumentTypeException e) {
-                logger.warn("Unsupported Document Type, Keeping it for future versions");
-            } catch (AlreadyImportedDocumentException e) {
-                logger.warn("Already imported document, clearing imported document and attached files");
+            } catch (UnsupportedDocumentTypeException | IsNotUBLDocumentException | AlreadyImportedDocumentException e) {
+                logger.warn(e.getMessage());
                 importedDocumentProvider.removeImportedDocument(importedDocument);
-            } catch (IsNotUBLDocumentException e) {
-                logger.error("Document is not a valid UBL Xml File, clearing imported document and attached files");
-                importedDocumentProvider.removeImportedDocument(importedDocument);
+                throw e;
             } catch (ImpossibleToUnmarshallException e) {
+                logger.error(e.getMessage());
                 logger.warn("Impossible to map Document, Keeping it for future versions");
             }
         }
     }
 
     public void importDocument(InputStream inputStream, String filename, DocumentProviderType providerType)
-            throws IOException, IsNotXmlOrCompressedFileDocumentException, NotReadableCompressFileException {
+            throws IOException, IsNotXmlOrCompressedFileDocumentException, NotReadableCompressFileException,
+            UnsupportedDocumentTypeException, AlreadyImportedDocumentException, IsNotUBLDocumentException {
         importDocument(IOUtils.toByteArray(inputStream), filename, providerType);
     }
 }
