@@ -17,14 +17,17 @@
             <property name="hibernate.format_sql" value="${env.CN_HIBERNATE_FORMAT_SQL:false}"/>
             <property name="hibernate.use_sql_comments" value="${env.CN_HIBERNATE_USE_SQL_COMMENTS:false}" />
 
-            <property name="hibernate.cache.use_query_cache" value="false"/>
-            <property name="hibernate.cache.use_second_level_cache" value="false"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
 
             <property name="hibernate.jdbc.batch_size" value="10"/>
             <property name="hibernate.order_inserts" value="true"/>
             <property name="hibernate.order_updates" value="true"/>
 
             <property name="hibernate.generate_statistics" value="${env.CN_HIBERNATE_GENERATE_STATISTICS:false}"/>
+
+            <!--<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.infinispan.JndiInfinispanRegionFactory" />-->
+            <!--<property name="hibernate.cache.infinispan.cachemanager" value="java:jboss/infinispan/container/hibernate52" />-->
 
             <!--Hibernate SEARCH-->
             <property name="wildfly.jpa.hibernate.search.module" value="org.hibernate.search.orm:${version.hibernate-search}"/>

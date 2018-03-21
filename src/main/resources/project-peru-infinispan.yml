@@ -1,0 +1,42 @@
+swarm:
+  ee:
+    spec-descriptor-property-replacement: true
+  datasources:
+    data-sources:
+      ClarksnutDS:
+        jndi-name: java:jboss/datasources/ClarksnutDS
+        driver-name: h2
+        connection-url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        user-name: sa
+        password: sa
+  infinispan:
+    cache-containers:
+      hibernate52:
+        jndi-name: java:jboss/infinispan/container/hibernate52
+        module: org.hibernate.infinispan:5.2
+        local-caches:
+          entity:
+            transaction-component:
+              mode: NON_XA
+            eviction-component:
+              strategy: LRU
+              max-entries: 10000
+            expiration-component:
+              max-idle: 100000
+          local-query:
+            eviction-component:
+              strategy: LRU
+              max-entries: 10000
+            expiration-component:
+              max-idle: 100000
+          timestamps:
+clarksnut:
+  report:
+    default: clarksnut
+    cacheReports: false
+    cacheTemplates: false
+    folder:
+      dir: "/reports"
+  document:
+      mapper:
+        default: peru

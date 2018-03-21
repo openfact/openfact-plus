@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+@Cacheable
 @Entity
 @Table(name = "cn_collaborator", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"user_id", "space_id"})

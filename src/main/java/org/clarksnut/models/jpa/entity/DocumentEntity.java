@@ -4,6 +4,7 @@ import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
+@Cacheable
 @Entity
 @Table(name = "cn_document", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"type", "assigned_id", "supplier_assigned_id"})
@@ -91,21 +93,25 @@ public class DocumentEntity implements CreatableEntity, UpdatableEntity, Seriali
     @Column(name = "tax")
     private Double tax;
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
     @ElementCollection
     @Column(name = "value")
     @CollectionTable(name = "user_starts", joinColumns = {@JoinColumn(name = "document_id")})
     private Set<String> userStarts = new HashSet<>();
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
     @ElementCollection
     @Column(name = "value")
     @CollectionTable(name = "user_views", joinColumns = {@JoinColumn(name = "document_id")})
     private Set<String> userViews = new HashSet<>();
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
     @ElementCollection
     @Column(name = "value")
     @CollectionTable(name = "user_checks", joinColumns = {@JoinColumn(name = "document_id")})
     private Set<String> userChecks = new HashSet<>();
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
     @OneToMany(mappedBy = "document", fetch = FetchType.LAZY)
     private List<DocumentVersionEntity> versions = new ArrayList<>();
 

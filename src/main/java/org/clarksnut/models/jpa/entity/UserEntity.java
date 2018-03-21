@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@Cacheable
 @Entity
 @Table(name = "cn_user", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),

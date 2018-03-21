@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
+@Cacheable
 @Entity
 @Table(name = "cn_request")
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
