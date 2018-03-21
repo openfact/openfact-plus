@@ -37,8 +37,8 @@
 	<field name="model_type" class="java.lang.String"/>
 	<field name="model_assignedId" class="java.lang.String"/>
 	<field name="model_issueDate" class="java.util.Date"/>
-	<field name="model_tax" class="java.lang.Float"/>
-	<field name="model_amount" class="java.lang.Float"/>
+	<field name="model_tax" class="java.lang.Double"/>
+	<field name="model_amount" class="java.lang.Double"/>
 	<field name="model_currency" class="java.lang.String"/>
 	<field name="model_id" class="java.lang.String"/>
 	<field name="model_location" class="java.lang.String"/>
