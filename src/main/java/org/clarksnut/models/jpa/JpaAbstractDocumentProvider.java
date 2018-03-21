@@ -10,9 +10,11 @@ import org.jboss.logging.Logger;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -89,6 +91,17 @@ public abstract class JpaAbstractDocumentProvider {
 
     public DocumentModel getDocument(String id) {
         DocumentEntity entity = em.find(DocumentEntity.class, id);
+        if (entity == null) return null;
+        return new DocumentAdapter(em, entity);
+    }
+
+    public DocumentModel getDocumentViewAndChecksAndStarts(String id) {
+        EntityGraph<?> graph = em.getEntityGraph("graph.DocumentViewsAndChecks");
+
+        HashMap<String, Object> properties = new HashMap<>();
+        properties.put("javax.persistence.fetchgraph", graph);
+
+        DocumentEntity entity = em.find(DocumentEntity.class, id, properties);
         if (entity == null) return null;
         return new DocumentAdapter(em, entity);
     }

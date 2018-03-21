@@ -289,7 +289,11 @@ public class UsersDocumentsService extends AbstractResource {
             throw new ErrorResponseException("Error", Response.Status.NOT_IMPLEMENTED);
         }
 
-        DocumentModel document = getDocumentById(documentId);
+        DocumentModel document = documentProvider.getDocumentViewAndChecksAndStarts(documentId);
+        if (document == null) {
+            throw new NotFoundException();
+        }
+
         if (!isUserAllowedToViewDocument(user, document)) {
             throw new ForbiddenException();
         }

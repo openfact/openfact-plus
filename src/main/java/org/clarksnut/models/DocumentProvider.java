@@ -18,6 +18,8 @@ public interface DocumentProvider {
      */
     DocumentModel getDocument(String id);
 
+    DocumentModel getDocumentViewAndChecksAndStarts(String id);
+
     /**
      * @param type       document type
      * @param assignedId document assigned id

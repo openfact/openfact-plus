@@ -21,6 +21,13 @@ import java.util.*;
         @NamedQuery(name = "getDocumentByTypeAssignedIdAndSupplierAssignedId", query = "select d from DocumentEntity d where d.type = :type and d.assignedId = :assignedId and d.supplierAssignedId =:supplierAssignedId")
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
+@NamedEntityGraphs(value = {
+        @NamedEntityGraph(name = "graph.DocumentViewsAndChecks", attributeNodes = {
+                @NamedAttributeNode(value = "userStarts"),
+                @NamedAttributeNode(value = "userChecks"),
+                @NamedAttributeNode(value = "userViews")
+        })
+})
 public class DocumentEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
     @Id
