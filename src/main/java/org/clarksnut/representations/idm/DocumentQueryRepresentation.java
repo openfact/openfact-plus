@@ -57,8 +57,8 @@ public class DocumentQueryRepresentation {
         private Date after;
         private Date before;
 
-        private Float lessThan;
-        private Float greaterThan;
+        private Double lessThan;
+        private Double greaterThan;
 
         private Set<String> tags;
         private Set<String> spaces;
@@ -121,19 +121,19 @@ public class DocumentQueryRepresentation {
             this.before = before;
         }
 
-        public Float getLessThan() {
+        public Double getLessThan() {
             return lessThan;
         }
 
-        public void setLessThan(Float lessThan) {
+        public void setLessThan(Double lessThan) {
             this.lessThan = lessThan;
         }
 
-        public Float getGreaterThan() {
+        public Double getGreaterThan() {
             return greaterThan;
         }
 
-        public void setGreaterThan(Float greaterThan) {
+        public void setGreaterThan(Double greaterThan) {
             this.greaterThan = greaterThan;
         }
 

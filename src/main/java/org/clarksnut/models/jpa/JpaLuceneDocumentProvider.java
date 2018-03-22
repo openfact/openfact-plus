@@ -186,7 +186,7 @@ public class JpaLuceneDocumentProvider extends JpaAbstractDocumentProvider imple
                 .onField("amountFacet")
                 .range()
                 .below(1_000)
-                .from(1_001).to(10_000)
+                .from(1_000).to(10_000)
                 .above(10_000).excludeLimit()
                 .createFacetingRequest();
         FacetingRequest issueDateFacet = queryBuilder.facet()

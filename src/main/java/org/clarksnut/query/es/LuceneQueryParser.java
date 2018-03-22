@@ -4,6 +4,7 @@ import org.clarksnut.query.*;
 import org.hibernate.search.query.dsl.BooleanJunction;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.hibernate.search.query.dsl.RangeMatchingContext;
+import org.hibernate.search.query.dsl.RangeTerminationExcludable;
 import org.jboss.logging.Logger;
 
 import java.util.Arrays;
@@ -49,22 +50,32 @@ public class LuceneQueryParser {
                     .onField(fieldMapper.apply(q.getName()));
 
             if (q.getFrom() != null && q.getTo() != null) {
-                return rangeMatchingContext
-                        .from(q.getFrom())
-                        .to(q.getTo())
-                        .createQuery();
+                RangeMatchingContext.FromRangeContext<Object> range = rangeMatchingContext.from(q.getFrom());
+                if (!q.isIncludeFrom()) {
+                    range = range.excludeLimit();
+                }
+
+                RangeTerminationExcludable to = range.to(q.getTo());
+                if (!q.isIncludeTo()) {
+                    to = to.excludeLimit();
+                }
+                return to.createQuery();
             }
 
             if (q.getFrom() != null) {
-                return rangeMatchingContext
-                        .above(q.getFrom())
-                        .createQuery();
+                RangeTerminationExcludable range = rangeMatchingContext.above(q.getFrom());
+                if (!q.isIncludeFrom()) {
+                    range = range.excludeLimit();
+                }
+                return range.createQuery();
             }
 
             if (q.getTo() != null) {
-                return rangeMatchingContext
-                        .below(q.getTo())
-                        .createQuery();
+                RangeTerminationExcludable range = rangeMatchingContext.below(q.getTo());
+                if (!q.isIncludeTo()) {
+                    range = range.excludeLimit();
+                }
+                return range.createQuery();
             }
         }
         if (query instanceof BoolQuery) {
