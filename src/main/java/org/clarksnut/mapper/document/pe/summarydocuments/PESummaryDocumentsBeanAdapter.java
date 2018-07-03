@@ -63,7 +63,7 @@ public class PESummaryDocumentsBeanAdapter implements DocumentBean {
     public String getSupplierAssignedId() {
         SupplierPartyType accountingSupplierParty = type.getAccountingSupplierParty();
         if (accountingSupplierParty != null) {
-            return accountingSupplierParty.getCustomerAssignedAccountID().getValue();
+            return PEUtils.getSupplierAssignedId(accountingSupplierParty);
         }
         return null;
     }
@@ -73,7 +73,7 @@ public class PESummaryDocumentsBeanAdapter implements DocumentBean {
         Optional<AddressType> supplierPostalAddress = getSupplierPostalAddress();
         if (supplierPostalAddress.isPresent()) {
             AddressType addressType = supplierPostalAddress.get();
-            return addressType.getStreetName().getValue();
+            return PEUtils.getStreetName(addressType);
         }
         return null;
     }

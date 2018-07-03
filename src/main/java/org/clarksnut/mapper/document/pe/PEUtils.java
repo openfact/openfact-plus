@@ -6,6 +6,7 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.Part
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.SupplierPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueTimeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.LineType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -122,5 +123,44 @@ public class PEUtils {
             city.add(addressType.getCountrySubentity().getValue());
         }
         return String.join(", ", city);
+    }
+
+    public static String getStreetName(AddressType addressType) {
+        if (addressType.getStreetName() != null) {
+            return PEUtils.getStreetName(addressType);
+        } else if (addressType.getAddressLine() != null && !addressType.getAddressLine().isEmpty()) {
+            return addressType.getAddressLine().get(0).getLine().getValue();
+        }
+        return null;
+    }
+
+    public static String getStreetName(oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType addressType) {
+        if (addressType.getStreetName() != null) {
+            return PEUtils.getStreetName(addressType);
+        } else if (!addressType.getAddressLine().isEmpty()) {
+            LineType lineType = addressType.getAddressLine().get(0).getLine();
+            if (lineType != null) {
+                return lineType.getValue();
+            }
+        }
+        return null;
+    }
+
+    public static String getCustomerAssignedId(CustomerPartyType customerPartyType) {
+        if (customerPartyType.getCustomerAssignedAccountID() != null) {
+            return customerPartyType.getCustomerAssignedAccountID().getValue();
+        } else if (customerPartyType.getParty() != null && !customerPartyType.getParty().getPartyIdentification().isEmpty()) {
+            return customerPartyType.getParty().getPartyIdentification().get(0).getID().getValue();
+        }
+        return null;
+    }
+
+    public static String getSupplierAssignedId(SupplierPartyType supplierPartyType) {
+        if (supplierPartyType.getCustomerAssignedAccountID() != null) {
+            return supplierPartyType.getCustomerAssignedAccountID().getValue();
+        } else if (supplierPartyType.getParty() != null && !supplierPartyType.getParty().getPartyIdentification().isEmpty()) {
+            return supplierPartyType.getParty().getPartyIdentification().get(0).getID().getValue();
+        }
+        return null;
     }
 }

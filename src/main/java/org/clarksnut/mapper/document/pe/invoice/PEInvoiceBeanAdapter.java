@@ -98,7 +98,7 @@ public class PEInvoiceBeanAdapter implements DocumentBean {
     public String getSupplierAssignedId() {
         SupplierPartyType accountingSupplierParty = type.getAccountingSupplierParty();
         if (accountingSupplierParty != null) {
-            return accountingSupplierParty.getCustomerAssignedAccountID().getValue();
+            return PEUtils.getSupplierAssignedId(accountingSupplierParty);
         }
         return null;
     }
@@ -108,7 +108,7 @@ public class PEInvoiceBeanAdapter implements DocumentBean {
         Optional<AddressType> supplierPostalAddress = getSupplierPostalAddress();
         if (supplierPostalAddress.isPresent()) {
             AddressType addressType = supplierPostalAddress.get();
-            return addressType.getStreetName().getValue();
+            return PEUtils.getStreetName(addressType);
         }
         return null;
     }
@@ -144,7 +144,7 @@ public class PEInvoiceBeanAdapter implements DocumentBean {
     public String getCustomerAssignedId() {
         CustomerPartyType accountingCustomerParty = type.getAccountingCustomerParty();
         if (accountingCustomerParty != null) {
-            return accountingCustomerParty.getCustomerAssignedAccountID().getValue();
+            return PEUtils.getCustomerAssignedId(accountingCustomerParty);
         }
         return null;
     }
@@ -154,7 +154,7 @@ public class PEInvoiceBeanAdapter implements DocumentBean {
         Optional<AddressType> customerPostalAddress = getCustomerPostalAddress();
         if (customerPostalAddress.isPresent()) {
             AddressType addressType = customerPostalAddress.get();
-            return addressType.getStreetName().getValue();
+            return PEUtils.getStreetName(addressType);
         }
         return null;
     }

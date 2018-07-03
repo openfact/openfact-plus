@@ -104,7 +104,7 @@ public class PERetentionBeanAdapter implements DocumentBean {
         Optional<AddressType> supplierPostalAddress = getSupplierPostalAddress();
         if (supplierPostalAddress.isPresent()) {
             AddressType addressType = supplierPostalAddress.get();
-            return addressType.getStreetNameValue();
+            return PEUtils.getStreetName(addressType);
         }
         return null;
     }
@@ -160,7 +160,7 @@ public class PERetentionBeanAdapter implements DocumentBean {
         Optional<AddressType> customerPostalAddress = getCustomerPostalAddress();
         if (customerPostalAddress.isPresent()) {
             AddressType addressType = customerPostalAddress.get();
-            return addressType.getStreetNameValue();
+            return PEUtils.getStreetName(addressType);
         }
         return null;
     }
