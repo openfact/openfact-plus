@@ -127,7 +127,7 @@ public class PEUtils {
 
     public static String getStreetName(AddressType addressType) {
         if (addressType.getStreetName() != null) {
-            return PEUtils.getStreetName(addressType);
+            return addressType.getStreetName().getValue();
         } else if (addressType.getAddressLine() != null && !addressType.getAddressLine().isEmpty()) {
             return addressType.getAddressLine().get(0).getLine().getValue();
         }
@@ -136,7 +136,7 @@ public class PEUtils {
 
     public static String getStreetName(oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType addressType) {
         if (addressType.getStreetName() != null) {
-            return PEUtils.getStreetName(addressType);
+            return addressType.getStreetName().getValue();
         } else if (!addressType.getAddressLine().isEmpty()) {
             LineType lineType = addressType.getAddressLine().get(0).getLine();
             if (lineType != null) {
