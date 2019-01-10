@@ -12,8 +12,8 @@ git clone https://github.com/clarksnut/clarksnut.git
 ```
 
 Inside project root folder execute:
-```
-mvn clean wildfly-swarm:run
+``` 
+mvn clean wildfly-swarm:run --holaaaaaa
 ```
 
 Wait until the server starts, and then go to: <http://localhost:8080>
